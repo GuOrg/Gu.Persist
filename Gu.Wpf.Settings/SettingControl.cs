@@ -2,16 +2,17 @@
 {
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Data;
 
     using Gu.Settings;
 
     public class SettingControl : HeaderedContentControl
     {
         public static readonly DependencyProperty SettingProperty = DependencyProperty.Register(
-            "Setting", 
+            "Setting",
             typeof(ISetting),
-            typeof(SettingControl), 
-            new PropertyMetadata(default(ISetting), OnSettingChanged));
+            typeof(SettingControl),
+            new PropertyMetadata(null, OnSettingChanged));
 
         static SettingControl()
         {

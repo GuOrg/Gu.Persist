@@ -7,7 +7,7 @@ namespace Gu.Settings
     using Gu.Reactive;
     using Gu.Settings.Annotations;
 
-    public abstract class ValidatingSetting<T> : INotifyPropertyChanged
+    public abstract class ValidatingSetting<T> : ISetting
     {
         private bool _isValid;
         private Setting<T> _setting;
