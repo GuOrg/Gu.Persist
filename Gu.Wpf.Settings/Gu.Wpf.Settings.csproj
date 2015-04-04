@@ -79,9 +79,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GenericType.cs" />
     <Compile Include="SettingTemplateSelector.cs" />
-    <Compile Include="TypeNameExtension.cs" />
+    <Compile Include="Types.cs" />
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

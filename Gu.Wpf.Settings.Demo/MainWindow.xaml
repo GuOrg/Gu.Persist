@@ -13,6 +13,10 @@
     <Grid>
         <ItemsControl>
             <settings:SettingControl Header="DoubleMinMax" Setting="{Binding Setting.DoubleMinMax}" />
+            <settings:SettingControl Header="IntMinMax" Setting="{Binding Setting.IntMinMax}" />
+            <settings:SettingControl Header="Bool" Setting="{Binding Setting.SettingBool}" />
+            <settings:SettingControl Header="Int" Setting="{Binding Setting.SettingInt}" />
+            <settings:SettingControl Header="Double" Setting="{Binding Setting.SettingDouble}" />
         </ItemsControl>
     </Grid>
 </Window>
