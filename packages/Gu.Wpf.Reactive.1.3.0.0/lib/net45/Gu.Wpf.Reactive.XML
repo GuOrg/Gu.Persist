@@ -1,0 +1,756 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gu.Wpf.Reactive</name>
+    </assembly>
+    <members>
+        <member name="T:Gu.Wpf.Reactive.BooleanToVisibilityConverter">
+            <summary>
+            Usage:
+            Visibility="{Binding SomeProperty, Converter={common:BooleanToVisibilityConverter WhenTrue=Visible, WhenFalse=Collapsed}}"
+            No resource declaration is necessary
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.BooleanToXConverter`1">
+            <summary>
+            Base class for boolean to X converter
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.MarkupConverter`2">
+            <summary>
+            Class implements a base for a typed value converter used as a markup extension. Override the Convert method in the inheriting class
+            </summary>
+            <typeparam name="TInput">Type of the expected input - value to be converted</typeparam>
+            <typeparam name="TResult">Type of the result of the conversion</typeparam>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.BooleanToXConverter`1.WhenTrue">
+            <summary>
+            Gets or sets the value to be returned when the converted value is true
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.BooleanToXConverter`1.WhenFalse">
+            <summary>
+            Gets or sets the value to be returned when the converted value is false
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.BooleanToXConverter`1.WhenNull">
+            <summary>
+            Gets or sets the value to be returned when the converted value is null
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.BooleanToVisibilityConverter.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gu.Wpf.Reactive.BooleanToVisibilityConverter"/> class
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.ITypeConverter`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.TypeConverterFactory.IsEnumOrNullableEnum(System.Type)">
+            <summary>
+            http://msdn.microsoft.com/en-us/library/ms366789.aspx
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.FilteredView`1">
+            <summary>
+            Typed CollectionView for intellisense in xaml
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.FilteredView`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Func{`0,System.Boolean},System.TimeSpan,System.IObservable{System.Object}[])">
+            <summary>
+            For manual Refresh()
+            </summary>
+            <param name="collection">The collection to wrap</param>
+            <param name="filter"></param>
+            <param name="deferTime">The time to defer updates, useful if many triggers fire in short time. Then it will be only one Reset</param>
+            <param name="triggers">Triggers when to re evaluate the filter</param>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.FilteredView`1.Dispose">
+            <summary>
+            Dispose(true); //I am calling you from Dispose, it's safe
+            GC.SuppressFinalize(this); //Hey, GC: don't bother calling finalize later
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.FilteredView`1.Dispose(System.Boolean)">
+            <summary>
+            Protected implementation of Dispose pattern. 
+            </summary>
+            <param name="disposing">true: safe to free managed resources</param>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.DeferredView`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.DeferredView`1.Dispose">
+            <summary>
+            Dispose(true); //I am calling you from Dispose, it's safe
+            GC.SuppressFinalize(this); //Hey, GC: don't bother calling finalize later
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.DeferredView`1.Dispose(System.Boolean)">
+            <summary>
+            Protected implementation of Dispose pattern. 
+            </summary>
+            <param name="disposing">true: safe to free managed resources</param>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could be <c>null</c> sometimes,
+            so the check for <c>null</c> is necessary before its usage
+            </summary>
+            <example><code>
+            [CanBeNull] public object Test() { return null; }
+            public void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.NotNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could never be <c>null</c>
+            </summary>
+            <example><code>
+            [NotNull] public object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.StringFormatMethodAttribute">
+            <summary>
+            Indicates that the marked method builds string by format pattern and (optional) arguments.
+            Parameter, which contains format string, should be given in constructor. The format string
+            should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/>-like form
+            </summary>
+            <example><code>
+            [StringFormatMethod("message")]
+            public void ShowError(string message, params object[] args) { /* do something */ }
+            public void Foo() {
+              ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+            }
+            </code></example>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.Annotations.StringFormatMethodAttribute.#ctor(System.String)">
+            <param name="formatParameterName">
+            Specifies which parameter of an annotated method should be treated as format-string
+            </param>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.InvokerParameterNameAttribute">
+            <summary>
+            Indicates that the function argument should be string literal and match one
+            of the parameters of the caller function. For example, ReSharper annotates
+            the parameter of <see cref="T:System.ArgumentNullException"/>
+            </summary>
+            <example><code>
+            public void Foo(string param) {
+              if (param == null)
+                throw new ArgumentNullException("par"); // Warning: Cannot resolve symbol
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.NotifyPropertyChangedInvocatorAttribute">
+             <summary>
+             Indicates that the method is contained in a type that implements
+             <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> interface
+             and this method is used to notify that some property value changed
+             </summary>
+             <remarks>
+             The method should be non-static and conform to one of the supported signatures:
+             <list>
+             <item><c>NotifyChanged(string)</c></item>
+             <item><c>NotifyChanged(params string[])</c></item>
+             <item><c>NotifyChanged{T}(Expression{Func{T}})</c></item>
+             <item><c>NotifyChanged{T,U}(Expression{Func{T,U}})</c></item>
+             <item><c>SetProperty{T}(ref T, T, string)</c></item>
+             </list>
+             </remarks>
+             <example><code>
+             public class Foo : INotifyPropertyChanged {
+               public event PropertyChangedEventHandler PropertyChanged;
+               [NotifyPropertyChangedInvocator]
+               protected virtual void NotifyChanged(string propertyName) { ... }
+            
+               private string _name;
+               public string Name {
+                 get { return _name; }
+                 set { _name = value; NotifyChanged("LastName"); /* Warning */ }
+               }
+             }
+             </code>
+             Examples of generated notifications:
+             <list>
+             <item><c>NotifyChanged("Property")</c></item>
+             <item><c>NotifyChanged(() =&gt; Property)</c></item>
+             <item><c>NotifyChanged((VM x) =&gt; x.Property)</c></item>
+             <item><c>SetProperty(ref myField, value, "Property")</c></item>
+             </list>
+             </example>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.ContractAnnotationAttribute">
+            <summary>
+            Describes dependency between method input and output
+            </summary>
+            <syntax>
+            <p>Function Definition Table syntax:</p>
+            <list>
+            <item>FDT      ::= FDTRow [;FDTRow]*</item>
+            <item>FDTRow   ::= Input =&gt; Output | Output &lt;= Input</item>
+            <item>Input    ::= ParameterName: Value [, Input]*</item>
+            <item>Output   ::= [ParameterName: Value]* {halt|stop|void|nothing|Value}</item>
+            <item>Value    ::= true | false | null | notnull | canbenull</item>
+            </list>
+            If method has single input parameter, it's name could be omitted.<br/>
+            Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same)
+            for method output means that the methos doesn't return normally.<br/>
+            <c>canbenull</c> annotation is only applicable for output parameters.<br/>
+            You can use multiple <c>[ContractAnnotation]</c> for each FDT row,
+            or use single attribute with rows separated by semicolon.<br/>
+            </syntax>
+            <examples><list>
+            <item><code>
+            [ContractAnnotation("=> halt")]
+            public void TerminationMethod()
+            </code></item>
+            <item><code>
+            [ContractAnnotation("halt &lt;= condition: false")]
+            public void Assert(bool condition, string text) // regular assertion method
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null => true")]
+            public bool IsNullOrEmpty(string s) // string.IsNullOrEmpty()
+            </code></item>
+            <item><code>
+            // A method that returns null if the parameter is null, and not null if the parameter is not null
+            [ContractAnnotation("null => null; notnull => notnull")]
+            public object Transform(object data) 
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null=>false; =>true,result:notnull; =>false, result:null")]
+            public bool TryParse(string s, out Person result)
+            </code></item>
+            </list></examples>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.LocalizationRequiredAttribute">
+            <summary>
+            Indicates that marked element should be localized or not
+            </summary>
+            <example><code>
+            [LocalizationRequiredAttribute(true)]
+            public class Foo {
+              private string str = "my string"; // Warning: Localizable string
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.CannotApplyEqualityOperatorAttribute">
+            <summary>
+            Indicates that the value of the marked type (or its derivatives)
+            cannot be compared using '==' or '!=' operators and <c>Equals()</c>
+            should be used instead. However, using '==' or '!=' for comparison
+            with <c>null</c> is always permitted.
+            </summary>
+            <example><code>
+            [CannotApplyEqualityOperator]
+            class NoEquality { }
+            class UsesNoEquality {
+              public void Test() {
+                var ca1 = new NoEquality();
+                var ca2 = new NoEquality();
+                if (ca1 != null) { // OK
+                  bool condition = ca1 == ca2; // Warning
+                }
+              }
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.BaseTypeRequiredAttribute">
+            <summary>
+            When applied to a target attribute, specifies a requirement for any type marked
+            with the target attribute to implement or inherit specific type or types.
+            </summary>
+            <example><code>
+            [BaseTypeRequired(typeof(IComponent)] // Specify requirement
+            public class ComponentAttribute : Attribute { }
+            [Component] // ComponentAttribute requires implementing IComponent interface
+            public class MyComponent : IComponent { }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.UsedImplicitlyAttribute">
+            <summary>
+            Indicates that the marked symbol is used implicitly
+            (e.g. via reflection, in external library), so this symbol
+            will not be marked as unused (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.MeansImplicitUseAttribute">
+            <summary>
+            Should be used on attributes and causes ReSharper
+            to not mark symbols marked with such attributes as unused
+            (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.Reactive.Annotations.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used</summary>
+        </member>
+        <member name="F:Gu.Wpf.Reactive.Annotations.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member</summary>
+        </member>
+        <member name="F:Gu.Wpf.Reactive.Annotations.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+            Indicates implicit instantiation of a type with fixed constructor signature.
+            That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.Reactive.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type</summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.ImplicitUseTargetFlags">
+            <summary>
+            Specify what is considered used implicitly
+            when marked with <see cref="T:Gu.Wpf.Reactive.Annotations.MeansImplicitUseAttribute"/>
+            or <see cref="T:Gu.Wpf.Reactive.Annotations.UsedImplicitlyAttribute"/>
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.Reactive.Annotations.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used</summary>
+        </member>
+        <member name="F:Gu.Wpf.Reactive.Annotations.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used</summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.PublicAPIAttribute">
+            <summary>
+            This attribute is intended to mark publicly available API
+            which should not be removed and so is treated as used
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.InstantHandleAttribute">
+            <summary>
+            Tells code analysis engine if the parameter is completely handled
+            when the invoked method is on stack. If the parameter is a delegate,
+            indicates that delegate is executed while the method is executed.
+            If the parameter is an enumerable, indicates that it is enumerated
+            while the method is executed
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.PureAttribute">
+            <summary>
+            Indicates that a method does not make any observable state changes.
+            The same as <c>System.Diagnostics.Contracts.PureAttribute</c>
+            </summary>
+            <example><code>
+            [Pure] private int Multiply(int x, int y) { return x * y; }
+            public void Foo() {
+              const int a = 2, b = 2;
+              Multiply(a, b); // Waring: Return value of pure method is not used
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.PathReferenceAttribute">
+            <summary>
+            Indicates that a parameter is a path to a file or a folder
+            within a web project. Path can be relative or absolute,
+            starting from web root (~)
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcActionAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC action. If applied to a method, the MVC action name is calculated
+            implicitly from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcAreaAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC area.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcControllerAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC controller. If applied to a method,
+            the MVC controller name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcMasterAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC Master.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcModelTypeAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC model type.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, Object)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcPartialViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC partial view. If applied to a method,
+            the MVC partial view name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcSupressViewErrorAttribute">
+            <summary>
+            ASP.NET MVC attribute. Allows disabling all inspections
+            for MVC views within a class or a method.
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcDisplayTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcEditorTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC editor template.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC template.
+            Use this attribute for custom wrappers similar to
+            <c>System.ComponentModel.DataAnnotations.UIHintAttribute(System.String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC view. If applied to a method, the MVC view name is calculated implicitly
+            from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(Object)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.AspMvcActionSelectorAttribute">
+            <summary>
+            ASP.NET MVC attribute. When applied to a parameter of an attribute,
+            indicates that this parameter is an MVC action name
+            </summary>
+            <example><code>
+            [ActionName("Foo")]
+            public ActionResult Login(string returnUrl) {
+              ViewBag.ReturnUrl = Url.Action("Foo"); // OK
+              return RedirectToAction("Bar"); // Error: Cannot resolve action
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Annotations.RazorSectionAttribute">
+            <summary>
+            Razor attribute. Indicates that a parameter or a method is a Razor section.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.NinjaBinding">
+            <summary>
+            Binds to the datacontext of the current root object or elementname
+            Us this for things that are not in the visual tree such as DataGridColumn
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Schedulers">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.Schedulers.ObserveOnDispatcherOrCurrentThread``1(System.IObservable{``0})">
+            <summary>
+            Observs on DispatcherScheduler.Current id not null
+            Falls back to DispatcherScheduler.Current (for tests)
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="observable"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.Schedulers.DispatcherOrCurrentThread">
+            <summary>
+            Observs on DispatcherScheduler.Current id not null
+            Falls back to DispatcherScheduler.Current (for tests)
+            </summary>
+            <returns>The scheduler</returns>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.AsyncCommand">
+            <summary>
+            http://msdn.microsoft.com/en-us/magazine/dn630647.aspx
+            An async command that does not use commandparameter
+            Returns a Task
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.AsyncCommandBase`1">
+            <summary>
+            http://msdn.microsoft.com/en-us/magazine/dn630647.aspx
+            An async command that does not use command parameter
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.ManualRelayCommand">
+            <summary>
+            A command that does not use the CommandParameter
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.ManualCommandBase`1.RaiseCanExecuteChanged">
+            <summary>
+            Raises the event on the Dispatcher if present. Safe to call from any thread.
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.ManualRelayCommand.#ctor(System.Action,System.Func{System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="action"></param>
+            <param name="condition"></param>
+            <param name="raiseCanExecuteOnDispatcher">Default true, use false in tests</param>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.ManualRelayCommand.#ctor(System.Action)">
+            <summary>
+            
+            </summary>
+            <param name="action"></param>
+            <param name="raiseCanExecuteOnDispatcher">Default true, use false in tests</param>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.AsyncCommand`1">
+            <summary>
+            http://msdn.microsoft.com/en-us/magazine/dn630647.aspx
+            An async command that uses command parameter
+            Returns a Task
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.AsyncParameterCommandBase`2">
+            <summary>
+            http://msdn.microsoft.com/en-us/magazine/dn630647.aspx
+            An async command that uses a command parameter of type <typeparam name="TParameter"></typeparam>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.ManualRelayCommand`1">
+            <summary>
+            A command with CommandParameter of type <typeparam name="T"></typeparam>
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.ManualRelayCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="action"></param>
+            <param name="condition"></param>
+            <param name="raiseCanExecuteOnDispatcher">Default true, use false in tests</param>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.ManualRelayCommand`1.#ctor(System.Action{`0})">
+            <summary>
+            
+            </summary>
+            <param name="action"></param>
+            <param name="raiseCanExecuteOnDispatcher">Default true, use false in tests</param>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.AsyncResultCommand`2">
+            <summary>
+            http://msdn.microsoft.com/en-us/magazine/dn630647.aspx
+            An async command that uses commandparameter <typeparam name="TParameter"></typeparam>
+            Returns a Task<typeparam name="TResult"></typeparam>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.AsyncResultCommand`1">
+            <summary>
+            http://msdn.microsoft.com/en-us/magazine/dn630647.aspx
+            An async command that does not use command parameter
+            Returns a Task<typeparam name="TResult"></typeparam>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.CanExecuteChangedEventManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.CanExecuteChangedEventManager.AddListener(System.Windows.Input.ICommand,System.Windows.IWeakEventListener)">
+            <summary>
+            Adds the specified listener to the list of listeners on the specified source.
+            </summary>
+            <param name="source">The object with the event.</param>
+            <param name="listener">The object to add as a listener.</param>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.CanExecuteChangedEventManager.RemoveListener(System.Windows.Input.ICommand,System.Windows.IWeakEventListener)">
+            <summary>
+            Removes the specified listener from the list of listeners on the provided source.
+            </summary>
+            <param name="source">The object to remove the listener from.</param>
+            <param name="listener">The listener to remove.</param>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.CanExecuteChangedEventManager.AddHandler(System.Windows.Input.ICommand,System.EventHandler)">
+            <summary>
+            Adds the specified event handler
+            </summary>
+            <param name="source">The source object that the raises the event.</param>
+            <param name="handler">The delegate that handles the event.</param>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.CanExecuteChangedEventManager.RemoveHandler(System.Windows.Input.ICommand,System.EventHandler)">
+            <summary>
+            Removes the specified event handler from the specified source.
+            </summary>
+            <param name="source">The source object that the raises the event.</param>
+            <param name="handler">The delegate that handles the event.</param>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.CanExecuteChangedEventManager.StartListening(System.Object)">
+            <summary>
+            Begins listening for the event on the provided source.
+            </summary>
+            <param name="source">The object on which to start listening to.</param>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.CanExecuteChangedEventManager.StopListening(System.Object)">
+            <summary>
+            Stops listening for the event on the provided source.
+            </summary>
+            <param name="source">The source object on which to stop listening to.</param>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.VoidTypeStruct">
+            <summary>
+            Dummy for generics
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.NotifyTaskCompletion`1">
+            <summary>
+            Awaits a Task<typeparam name="TResult"/> and makes the result bindable.
+            http://msdn.microsoft.com/en-us/magazine/dn605875.aspx
+            </summary>
+            <typeparam name="TResult"></typeparam>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.CommandToolTip">
+            <summary>
+            Exposes AdornedElement and sets DataContext to the CommandProxy of the adorned element
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.CommandToolTip.Condition">
+            <summary>
+            The condition if the command is a ConditionRelayCommand null otherwise
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.CommandToolTip.CommandType">
+            <summary>
+            The type of command
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.CommandToolTip.CommandProxy">
+            <summary>
+            This is used for binding the command
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.ConditionRelayCommand`1">
+            <summary>
+            A command with CommandParameter of type <typeparam name="T"></typeparam>
+            Signals CanExecuteChanged when conditions changes
+            CanExcecute() returns condition.IsSatisfied == true 
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.ObservingRelayCommand`1">
+            <summary>
+            A command with CommandParameter of type <typeparam name="T"></typeparam>
+            Signals CanExecuteChanged when observable signals
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.ConditionRelayCommand`1.#ctor(System.Action{`0},Gu.Reactive.ICondition)">
+            <summary>
+            
+            </summary>
+            <param name="action">o => CallSomeMethod()</param>
+            <param name="condition"></param>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.ConditionRelayCommand">
+            <summary>
+            A command that does not use the CommandParameter
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.ObservingRelayCommand">
+            <summary>
+            A command that does not use the CommandParameter
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.ConditionRelayCommand.#ctor(System.Action,Gu.Reactive.ICondition)">
+            <summary>
+            
+            </summary>
+            <param name="action">o => CallSomeMethod()</param>
+            <param name="condition"></param>
+        </member>
+        <member name="E:Gu.Wpf.Reactive.RelayCommand`1.CanExecuteChanged">
+            <summary>
+            http://stackoverflow.com/a/2588145/1069200
+            </summary>
+        </member>
+        <member name="E:Gu.Wpf.Reactive.RelayCommand.CanExecuteChanged">
+            <summary>
+            http://stackoverflow.com/a/2588145/1069200
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.ConditionControl">
+            <summary>
+            A control for displaying conditions
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.ConditionControl.Dispose">
+            <summary>
+            Dispose(true); //I am calling you from Dispose, it's safe
+            GC.SuppressFinalize(this); //Hey, GC: don't bother calling finalize later
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.Reactive.ConditionControl.Dispose(System.Boolean)">
+            <summary>
+            Protected implementation of Dispose pattern. 
+            </summary>
+            <param name="disposing">true: safe to free managed resources</param>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.ConditionControl.Prerequisites">
+            <summary>
+            The conditions that must be met for the root condition to be satisfied
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.ConditionControl.RootCondition">
+            <summary>
+            The root condition :)
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.ConditionControl.FlatList">
+            <summary>
+            A flat list of all conditions
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.ConditionControl.NotSatisfiedOnly">
+            <summary>
+            A filtered view with all conditions where .IsSatisfied != true 
+            and not due top a prerequisite.
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.Reactive.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.Reactive.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+    </members>
+</doc>

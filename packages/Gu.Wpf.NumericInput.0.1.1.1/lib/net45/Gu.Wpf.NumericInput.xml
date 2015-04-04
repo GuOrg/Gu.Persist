@@ -1,0 +1,585 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gu.Wpf.NumericInput</name>
+    </assembly>
+    <members>
+        <member name="P:Gu.Wpf.NumericInput.INumericBox.StringFormat">
+            <summary>
+            The stringformat is set using the Decimals property, exposed for binding in template.
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.INumericBox.IncreaseCommand">
+            <summary>
+            Increases the value by increment
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.INumericBox.DecreaseCommand">
+            <summary>
+            Decreases the value by increment
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.NumericInput.ManualRelayCommand.#ctor(System.Action{System.Object},System.Func{System.Object,System.Boolean})">
+            <summary>
+            
+            </summary>
+            <param name="action"></param>
+            <param name="condition"></param>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.BaseBox">
+            <summary>
+            Base class that adds a couple of dependency properties to TextBox
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.BaseBox.SuffixProperty">
+            <summary>
+            Identifies the Suffix property
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.BaseBox.CultureProperty">
+            <summary>
+            Identifies the Culture property
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.BaseBox.RegexPatternProperty">
+            <summary>
+            Identifies the RegexPattern property
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.BaseBox.StringFormatProperty">
+            <summary>
+            Identifies the StringFormat property
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.BaseBox.AllowSpinnersProperty">
+            <summary>
+            Identifies the AllowSpinners property
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.BaseBox.IncreaseCommandProperty">
+            <summary>
+            Identifies the IncreaseCommand property
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.BaseBox.DecreaseCommandProperty">
+            <summary>
+            Identifies the DecreaseCommand property
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.NumericInput.BaseBox.Increase(System.Object)">
+            <summary>
+            Invoked when IncreaseCommand.Execute() is executed
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gu.Wpf.NumericInput.BaseBox.CanIncrease(System.Object)">
+            <summary>
+            Invoked when IncreaseCommand.CanExecute() is executed
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gu.Wpf.NumericInput.BaseBox.Decrease(System.Object)">
+            <summary>
+            Invoked when DecreaseCommand.Execute() is executed
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gu.Wpf.NumericInput.BaseBox.CanDecrease(System.Object)">
+            <summary>
+            Invoked when DecreaseCommand.CanExecute() is executed
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.BaseBox.Culture">
+            <summary>
+            The Culture used for T -> string
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.BaseBox.StringFormat">
+            <summary>
+            The stringformat is set using the Decimals property, exposed for binding in template.
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.BaseBox.RegexPattern">
+            <summary>
+            Regex pattern for validation
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.BaseBox.IncreaseCommand">
+            <summary>
+            Increases the value by increment
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.BaseBox.DecreaseCommand">
+            <summary>
+            Decreases the value by increment
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.NumericBox`1">
+            <summary>
+            Baseclass with common functionality for numeric textboxes
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.NumericBox`1.ValueChangedEvent">
+            <summary>
+            Identifies the ValueChanged event
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.NumericBox`1.ValueProperty">
+            <summary>
+            Identifies the Value property
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.NumericBox`1.IncrementProperty">
+            <summary>
+            Identifies the Increment property
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.NumericBox`1.MaxValueProperty">
+            <summary>
+            Identifies the MaxValue property
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.NumericBox`1.MinValueProperty">
+            <summary>
+            Identifies the MinValue property
+            </summary>
+        </member>
+        <member name="M:Gu.Wpf.NumericInput.NumericBox`1.#ctor(System.Func{`0,`0,`0},System.Func{`0,`0,`0})">
+            <summary>
+            
+            </summary>
+            <param name="add">How to add two values (x, y) => x + y</param>
+            <param name="subtract">How to subtract two values (x, y) => x - y</param>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.NumericBox`1.CurrentValue">
+            <summary>
+            The current value Parse(Text) will throw if bad format
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.DecimalBox.DecimalDigitsProperty">
+            <summary>
+            Identifies the Decimals property
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.DecimalBox.DecimalDigits">
+            <summary>
+            The number of decimals to display in the UI, null uses default.
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.DoubleBox.DecimalDigitsProperty">
+            <summary>
+            Identifies the Decimals property
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.DoubleBox.DecimalDigits">
+            <summary>
+            The number of decimals to display in the UI, null uses default.
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.FloatBox.DecimalDigitsProperty">
+            <summary>
+            Identifies the Decimals property
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.FloatBox.DecimalDigits">
+            <summary>
+            The number of decimals to display in the UI, null uses default.
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Validation.ExplicitBinding">
+            <summary>
+            Since we don't want text to be bindable we are binding to this attached property.
+            This will enable wpf validation using a binding to the TextProxy attached property.
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.Validation.ExplicitBinding.TextProxyProperty">
+            <summary>
+            A proxy since Text is not bindable (we want it like this)
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Validation.ExplicitBinding`1">
+            <summary>
+            This is a ~manual~ bidning with explicit two way updates.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.CanBeNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could be <c>null</c> sometimes,
+            so the check for <c>null</c> is necessary before its usage
+            </summary>
+            <example><code>
+            [CanBeNull] public object Test() { return null; }
+            public void UseTest() {
+              var p = Test();
+              var s = p.ToString(); // Warning: Possible 'System.NullReferenceException'
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.NotNullAttribute">
+            <summary>
+            Indicates that the value of the marked element could never be <c>null</c>
+            </summary>
+            <example><code>
+            [NotNull] public object Foo() {
+              return null; // Warning: Possible 'null' assignment
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.StringFormatMethodAttribute">
+            <summary>
+            Indicates that the marked method builds string by format pattern and (optional) arguments.
+            Parameter, which contains format string, should be given in constructor. The format string
+            should be in <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/>-like form
+            </summary>
+            <example><code>
+            [StringFormatMethod("message")]
+            public void ShowError(string message, params object[] args) { /* do something */ }
+            public void Foo() {
+              ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
+            }
+            </code></example>
+        </member>
+        <member name="M:Gu.Wpf.NumericInput.Annotations.StringFormatMethodAttribute.#ctor(System.String)">
+            <param name="formatParameterName">
+            Specifies which parameter of an annotated method should be treated as format-string
+            </param>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.InvokerParameterNameAttribute">
+            <summary>
+            Indicates that the function argument should be string literal and match one
+            of the parameters of the caller function. For example, ReSharper annotates
+            the parameter of <see cref="T:System.ArgumentNullException"/>
+            </summary>
+            <example><code>
+            public void Foo(string param) {
+              if (param == null)
+                throw new ArgumentNullException("par"); // Warning: Cannot resolve symbol
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.NotifyPropertyChangedInvocatorAttribute">
+             <summary>
+             Indicates that the method is contained in a type that implements
+             <see cref="T:System.ComponentModel.INotifyPropertyChanged"/> interface
+             and this method is used to notify that some property value changed
+             </summary>
+             <remarks>
+             The method should be non-static and conform to one of the supported signatures:
+             <list>
+             <item><c>NotifyChanged(string)</c></item>
+             <item><c>NotifyChanged(params string[])</c></item>
+             <item><c>NotifyChanged{T}(Expression{Func{T}})</c></item>
+             <item><c>NotifyChanged{T,U}(Expression{Func{T,U}})</c></item>
+             <item><c>SetProperty{T}(ref T, T, string)</c></item>
+             </list>
+             </remarks>
+             <example><code>
+             public class Foo : INotifyPropertyChanged {
+               public event PropertyChangedEventHandler PropertyChanged;
+               [NotifyPropertyChangedInvocator]
+               protected virtual void NotifyChanged(string propertyName) { ... }
+            
+               private string _name;
+               public string Name {
+                 get { return _name; }
+                 set { _name = value; NotifyChanged("LastName"); /* Warning */ }
+               }
+             }
+             </code>
+             Examples of generated notifications:
+             <list>
+             <item><c>NotifyChanged("Property")</c></item>
+             <item><c>NotifyChanged(() =&gt; Property)</c></item>
+             <item><c>NotifyChanged((VM x) =&gt; x.Property)</c></item>
+             <item><c>SetProperty(ref myField, value, "Property")</c></item>
+             </list>
+             </example>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.ContractAnnotationAttribute">
+            <summary>
+            Describes dependency between method input and output
+            </summary>
+            <syntax>
+            <p>Function Definition Table syntax:</p>
+            <list>
+            <item>FDT      ::= FDTRow [;FDTRow]*</item>
+            <item>FDTRow   ::= Input =&gt; Output | Output &lt;= Input</item>
+            <item>Input    ::= ParameterName: Value [, Input]*</item>
+            <item>Output   ::= [ParameterName: Value]* {halt|stop|void|nothing|Value}</item>
+            <item>Value    ::= true | false | null | notnull | canbenull</item>
+            </list>
+            If method has single input parameter, it's name could be omitted.<br/>
+            Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same)
+            for method output means that the methos doesn't return normally.<br/>
+            <c>canbenull</c> annotation is only applicable for output parameters.<br/>
+            You can use multiple <c>[ContractAnnotation]</c> for each FDT row,
+            or use single attribute with rows separated by semicolon.<br/>
+            </syntax>
+            <examples><list>
+            <item><code>
+            [ContractAnnotation("=> halt")]
+            public void TerminationMethod()
+            </code></item>
+            <item><code>
+            [ContractAnnotation("halt &lt;= condition: false")]
+            public void Assert(bool condition, string text) // regular assertion method
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null => true")]
+            public bool IsNullOrEmpty(string s) // string.IsNullOrEmpty()
+            </code></item>
+            <item><code>
+            // A method that returns null if the parameter is null, and not null if the parameter is not null
+            [ContractAnnotation("null => null; notnull => notnull")]
+            public object Transform(object data) 
+            </code></item>
+            <item><code>
+            [ContractAnnotation("s:null=>false; =>true,result:notnull; =>false, result:null")]
+            public bool TryParse(string s, out Person result)
+            </code></item>
+            </list></examples>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.LocalizationRequiredAttribute">
+            <summary>
+            Indicates that marked element should be localized or not
+            </summary>
+            <example><code>
+            [LocalizationRequiredAttribute(true)]
+            public class Foo {
+              private string str = "my string"; // Warning: Localizable string
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.CannotApplyEqualityOperatorAttribute">
+            <summary>
+            Indicates that the value of the marked type (or its derivatives)
+            cannot be compared using '==' or '!=' operators and <c>Equals()</c>
+            should be used instead. However, using '==' or '!=' for comparison
+            with <c>null</c> is always permitted.
+            </summary>
+            <example><code>
+            [CannotApplyEqualityOperator]
+            class NoEquality { }
+            class UsesNoEquality {
+              public void Test() {
+                var ca1 = new NoEquality();
+                var ca2 = new NoEquality();
+                if (ca1 != null) { // OK
+                  bool condition = ca1 == ca2; // Warning
+                }
+              }
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.BaseTypeRequiredAttribute">
+            <summary>
+            When applied to a target attribute, specifies a requirement for any type marked
+            with the target attribute to implement or inherit specific type or types.
+            </summary>
+            <example><code>
+            [BaseTypeRequired(typeof(IComponent)] // Specify requirement
+            public class ComponentAttribute : Attribute { }
+            [Component] // ComponentAttribute requires implementing IComponent interface
+            public class MyComponent : IComponent { }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.UsedImplicitlyAttribute">
+            <summary>
+            Indicates that the marked symbol is used implicitly
+            (e.g. via reflection, in external library), so this symbol
+            will not be marked as unused (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.MeansImplicitUseAttribute">
+            <summary>
+            Should be used on attributes and causes ReSharper
+            to not mark symbols marked with such attributes as unused
+            (as well as by other usage inspections)
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.Annotations.ImplicitUseKindFlags.Access">
+            <summary>Only entity marked with attribute considered used</summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.Annotations.ImplicitUseKindFlags.Assign">
+            <summary>Indicates implicit assignment to a member</summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.Annotations.ImplicitUseKindFlags.InstantiatedWithFixedConstructorSignature">
+            <summary>
+            Indicates implicit instantiation of a type with fixed constructor signature.
+            That means any unused constructor parameters won't be reported as such.
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature">
+            <summary>Indicates implicit instantiation of a type</summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.ImplicitUseTargetFlags">
+            <summary>
+            Specify what is considered used implicitly
+            when marked with <see cref="T:Gu.Wpf.NumericInput.Annotations.MeansImplicitUseAttribute"/>
+            or <see cref="T:Gu.Wpf.NumericInput.Annotations.UsedImplicitlyAttribute"/>
+            </summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.Annotations.ImplicitUseTargetFlags.Members">
+            <summary>Members of entity marked with attribute are considered used</summary>
+        </member>
+        <member name="F:Gu.Wpf.NumericInput.Annotations.ImplicitUseTargetFlags.WithMembers">
+            <summary>Entity marked with attribute and all its members considered used</summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.PublicAPIAttribute">
+            <summary>
+            This attribute is intended to mark publicly available API
+            which should not be removed and so is treated as used
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.InstantHandleAttribute">
+            <summary>
+            Tells code analysis engine if the parameter is completely handled
+            when the invoked method is on stack. If the parameter is a delegate,
+            indicates that delegate is executed while the method is executed.
+            If the parameter is an enumerable, indicates that it is enumerated
+            while the method is executed
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.PureAttribute">
+            <summary>
+            Indicates that a method does not make any observable state changes.
+            The same as <c>System.Diagnostics.Contracts.PureAttribute</c>
+            </summary>
+            <example><code>
+            [Pure] private int Multiply(int x, int y) { return x * y; }
+            public void Foo() {
+              const int a = 2, b = 2;
+              Multiply(a, b); // Waring: Return value of pure method is not used
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.PathReferenceAttribute">
+            <summary>
+            Indicates that a parameter is a path to a file or a folder
+            within a web project. Path can be relative or absolute,
+            starting from web root (~)
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcActionAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC action. If applied to a method, the MVC action name is calculated
+            implicitly from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcAreaAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC area.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcControllerAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC controller. If applied to a method,
+            the MVC controller name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcMasterAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC Master.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcModelTypeAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC model type.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(String, Object)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcPartialViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that
+            the parameter is an MVC partial view. If applied to a method,
+            the MVC partial view name is calculated implicitly from the context.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcSupressViewErrorAttribute">
+            <summary>
+            ASP.NET MVC attribute. Allows disabling all inspections
+            for MVC views within a class or a method.
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcDisplayTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcEditorTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC editor template.
+            Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcTemplateAttribute">
+            <summary>
+            ASP.NET MVC attribute. Indicates that a parameter is an MVC template.
+            Use this attribute for custom wrappers similar to
+            <c>System.ComponentModel.DataAnnotations.UIHintAttribute(System.String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcViewAttribute">
+            <summary>
+            ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter
+            is an MVC view. If applied to a method, the MVC view name is calculated implicitly
+            from the context. Use this attribute for custom wrappers similar to
+            <c>System.Web.Mvc.Controller.View(Object)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.AspMvcActionSelectorAttribute">
+            <summary>
+            ASP.NET MVC attribute. When applied to a parameter of an attribute,
+            indicates that this parameter is an MVC action name
+            </summary>
+            <example><code>
+            [ActionName("Foo")]
+            public ActionResult Login(string returnUrl) {
+              ViewBag.ReturnUrl = Url.Action("Foo"); // OK
+              return RedirectToAction("Bar"); // Error: Cannot resolve action
+            }
+            </code></example>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Annotations.RazorSectionAttribute">
+            <summary>
+            Razor attribute. Indicates that a parameter or a method is a Razor section.
+            Use this attribute for custom wrappers similar to 
+            <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>
+            </summary>
+        </member>
+        <member name="T:Gu.Wpf.NumericInput.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gu.Wpf.NumericInput.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+    </members>
+</doc>
