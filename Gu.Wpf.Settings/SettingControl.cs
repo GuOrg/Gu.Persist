@@ -7,12 +7,6 @@
 
     public class SettingControl : HeaderedContentControl
     {
-        //public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(
-        //    "IsReadOnly",
-        //    typeof(bool),
-        //    typeof(SettingControl),
-        //    new PropertyMetadata(false));
-
         public static readonly DependencyProperty SettingProperty = DependencyProperty.Register(
             "Setting", 
             typeof(ISetting),
@@ -29,18 +23,6 @@
                 typeof(SettingControl),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.NotDataBindable));
         }
-
-        //public bool IsReadOnly
-        //{
-        //    get
-        //    {
-        //        return (bool)GetValue(IsReadOnlyProperty);
-        //    }
-        //    set
-        //    {
-        //        SetValue(IsReadOnlyProperty, value);
-        //    }
-        //}
 
         public ISetting Setting
         {

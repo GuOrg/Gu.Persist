@@ -4,50 +4,28 @@
                     xmlns:numeric="http://gu.se/NumericInput"
                     xmlns:settings="clr-namespace:Gu.Settings;assembly=Gu.Settings">
 
-    <DataTemplate DataType="{x:Type settings:MinMaxSetting}">
-        <numeric:DoubleBox Grid.Column="1"
-                                               Width="{Binding ValueWidth,
-                                                               RelativeSource={RelativeSource TemplatedParent}}"
-                                               Margin="25,10,25,10"
-                                               HorizontalAlignment="Right"
-                                               VerticalAlignment="Center"
-                                               HorizontalContentAlignment="Right"
-                                               AllowSpinners="False"
-                                               DecimalDigits="{Binding Decimals,
-                                                                       RelativeSource={RelativeSource TemplatedParent}}"
-                                               FontSize="{TemplateBinding FontSize}"
-                                               IsReadOnly="{Binding ReadOnly,
-                                                                    RelativeSource={RelativeSource TemplatedParent}}"
-                                               MaxValue="{Binding MaxValue,
-                                                                  RelativeSource={RelativeSource TemplatedParent}}"
-                                               MinValue="{Binding MinValue,
-                                                                  RelativeSource={RelativeSource TemplatedParent}}"
-                                               Suffix="{Binding Suffix,
-                                                                RelativeSource={RelativeSource TemplatedParent}}"
-                                               Value="{Binding Value,
-                                                               RelativeSource={RelativeSource TemplatedParent},
-                                                               UpdateSourceTrigger=PropertyChanged}" />
-    </DataTemplate>
-    
+
+    <local:SettingTemplateSelector x:Key="SettingTemplateSelector">
+        <local:SettingTemplateSelector.DoubleMinMaxTemplate>
+            <DataTemplate DataType="{x:Static local:SettingTemplateSelector.DoubleMinMaxType}">
+                <numeric:DoubleBox AllowSpinners="False"
+                                   MinValue="{Binding Min}"
+                                   Value="{Binding Setting.EditValue}" />
+            </DataTemplate>
+        </local:SettingTemplateSelector.DoubleMinMaxTemplate>
+    </local:SettingTemplateSelector>
+
     <Style TargetType="{x:Type local:SettingControl}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="FontSize" Value="24" />
+        <!--<Setter Property="FontSize" Value="24" />-->
         <Setter Property="HeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBlock Margin="25,10,25,10"
-                               VerticalAlignment="Center"
-                               Text="{Binding}" />
+                    <TextBlock Text="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="ContentTemplateSelector" Value="{StaticResource SettingTemplateSelector}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SettingControl}">
@@ -60,6 +38,16 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
+                            <ContentPresenter Grid.Column="0"
+                                              Content="{TemplateBinding Header}"
+                                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" />
+
+                            <ContentPresenter Grid.Column="1"
+                                              ContentSource="{Binding Setting,
+                                                                      RelativeSource={RelativeSource TemplatedParent}}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
