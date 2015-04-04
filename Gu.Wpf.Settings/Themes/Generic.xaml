@@ -3,18 +3,33 @@
                     xmlns:local="clr-namespace:Gu.Wpf.Settings"
                     xmlns:numeric="http://gu.se/NumericInput"
                     xmlns:settings="clr-namespace:Gu.Settings;assembly=Gu.Settings"
-                    >
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
 
 
     <local:SettingTemplateSelector x:Key="SettingTemplateSelector">
-        <local:SettingTemplateSelector.DoubleMinMaxTemplate>
-            <DataTemplate DataType="{local:GenericType BaseType={x:Type TypeName=settings:MinMaxSetting`1}}>
-                <numeric:DoubleBox AllowSpinners="False"
-                                   MinValue="{Binding Min}"
-                                   Value="{Binding Setting.EditValue}"
-                                   />
-            </DataTemplate>
-        </local:SettingTemplateSelector.DoubleMinMaxTemplate>
+        <DataTemplate DataType="{x:Static local:Types.MinMaxDouble}">
+            <numeric:DoubleBox MaxValue="{Binding Max}"
+                               MinValue="{Binding Min}"
+                               Value="{Binding Setting.EditValue}" />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Static local:Types.MinMaxInt}">
+            <numeric:IntBox MaxValue="{Binding Max}"
+                            MinValue="{Binding Min}"
+                            Value="{Binding Setting.EditValue}" />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Static local:Types.SettingBool}">
+            <CheckBox IsChecked="{Binding Setting.EditValue}" />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Static local:Types.SettingInt}">
+            <numeric:IntBox Value="{Binding Setting.EditValue}" />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Static local:Types.SettingDouble}">
+            <numeric:DoubleBox Value="{Binding Setting.EditValue}" />
+        </DataTemplate>
     </local:SettingTemplateSelector>
 
     <Style TargetType="{x:Type local:SettingControl}">
@@ -34,24 +49,21 @@
                     <Border x:Name="DirtyBorder"
                             BorderBrush="{x:Null}"
                             BorderThickness="2"
-                            CornerRadius="5"
-                            >
+                            CornerRadius="5">
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition MinWidth="50"/>
                                 <ColumnDefinition />
-                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <ContentPresenter Grid.Column="0"
                                               Content="{TemplateBinding Header}"
                                               ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-                                              />
+                                              ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" />
 
                             <ContentPresenter Grid.Column="1"
                                               Content="{TemplateBinding Setting}"
                                               ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
-                                              />
+                                              ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>

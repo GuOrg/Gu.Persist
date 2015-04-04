@@ -1,11 +1,6 @@
 ﻿namespace Gu.Settings.Tests
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     using NUnit.Framework;
 
     public class MinMaxSettingTests
@@ -36,6 +31,13 @@
             setting.Min = min;
             setting.Setting.EditValue = value;
             Assert.AreEqual(expected, setting.IsValid);
+        }
+
+        [Test]
+        public void TestName()
+        {
+            var name = typeof (MinMaxSetting<double>).Name;
+            Console.WriteLine(name);
         }
     }
 }
