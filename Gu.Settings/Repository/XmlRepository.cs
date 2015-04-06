@@ -1,8 +1,7 @@
-﻿namespace Gu.Settings.Repositories
+﻿namespace Gu.Settings
 {
     using System;
     using System.Collections.Concurrent;
-    using System.IO;
 
     public class XmlRepository : IRepository
     {
@@ -41,7 +40,7 @@
             }
             if (Setting.CreateBackupOnSave)
             {
-                FileHelper.SaveBackup(fileInfos);
+                FileHelper.Backup(fileInfos);
             }
             try
             {
@@ -54,7 +53,7 @@
             {
                 if (Setting.CreateBackupOnSave)
                 {
-                    FileHelper.RestoreBackup(fileInfos);
+                    FileHelper.Restore(fileInfos);
                 }
                 throw;
             }

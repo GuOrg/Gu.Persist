@@ -5,8 +5,6 @@ namespace Gu.Settings
     using System.Threading;
     using System.Threading.Tasks;
 
-    using Gu.Settings.Repositories;
-
     internal static class FileHelper
     {
         private static readonly SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
@@ -125,7 +123,7 @@ namespace Gu.Settings
         /// </summary>
         /// <param name="files"></param>
         /// <returns>The name of the backed upp file</returns>
-        internal static void SaveBackup(FileInfos files)
+        internal static void Backup(FileInfos files)
         {
             if (files.Backup == null)
             {
@@ -141,7 +139,7 @@ namespace Gu.Settings
             }
         }
 
-        internal static void RestoreBackup(FileInfos files)
+        internal static void Restore(FileInfos files)
         {
             if (files.Backup == null)
             {
@@ -153,12 +151,6 @@ namespace Gu.Settings
             }
             files.File.Delete();
             files.Backup.MoveTo(files.File.FullName);
-        }
-
-        internal static FileInfo BackupFileName(FileInfo file, string backupExtension = ".old")
-        {
-            var backupFile = new FileInfo(file.FullName.Replace(file.Extension, backupExtension));
-            return backupFile;
         }
     }
 }
