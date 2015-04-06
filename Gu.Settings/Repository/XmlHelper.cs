@@ -27,6 +27,14 @@
             return ms;
         }
 
+        public static T DeepClone<T>(T item)
+        {
+            using (var stream = ToStream(item))
+            {
+                return FromStream<T>(stream);
+            }
+        }
+
         /// <summary>
         /// Reads an xml file and deserialize the contents
         /// </summary>
