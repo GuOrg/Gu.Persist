@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using System.Xml.Serialization;
 
-    internal static class XmlSerializerRepository
+    internal static class XmlHelper
     {
         internal static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();
 
@@ -32,12 +32,10 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="fullFileName">The filename including path and extension</param>
-        /// <param name="throwIfNotExists">Throws and exception if file is missing when true.
-        /// If false it returns default(T)</param>
         /// <returns></returns>
-        internal static T ReadXml<T>(string fullFileName, bool throwIfNotExists)
+        internal static T ReadXml<T>(string fullFileName)
         {
-            return FileHelper.Read(fullFileName, FromXmlStream<T>, throwIfNotExists);
+            return FileHelper.Read(fullFileName, FromXmlStream<T>);
         }
 
         /// <summary>
@@ -45,12 +43,10 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="fullFileName">The filename including path and extension</param>
-        /// <param name="throwIfNotExists">Throws and exception if file is missing when true.
-        /// If false it returns default(T)</param>
         /// <returns></returns>
-        internal static Task<T> ReadXmlAsync<T>(string fullFileName, bool throwIfNotExists)
+        internal static Task<T> ReadXmlAsync<T>(string fullFileName)
         {
-            return FileHelper.ReadAsync(fullFileName, FromXmlStream<T>, throwIfNotExists);
+            return FileHelper.ReadAsync(fullFileName, FromXmlStream<T>);
         }
 
         /// <summary>
