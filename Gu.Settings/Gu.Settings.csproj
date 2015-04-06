@@ -61,10 +61,12 @@
     <Compile Include="Repository\BinaryHelper.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="MinMaxSetting.cs" />
+    <Compile Include="Repository\BinaryRepository.cs" />
     <Compile Include="Repository\FileHelper.cs" />
     <Compile Include="Repository\FileInfos.cs" />
     <Compile Include="Repository\RepositorySetting.cs" />
     <Compile Include="Repository\XmlHelper.cs" />
+    <Compile Include="Repository\Repository.cs" />
     <Compile Include="Repository\XmlRepository.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="Properties\Annotations.cs" />
