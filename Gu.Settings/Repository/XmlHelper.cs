@@ -10,14 +10,14 @@
     {
         internal static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();
 
-        internal static T FromXmlStream<T>(Stream stream)
+        internal static T FromStream<T>(Stream stream)
         {
             var serializer = Serializers.GetOrAdd(typeof(T), x => new XmlSerializer(typeof(T)));
             var setting = (T)serializer.Deserialize(stream);
             return setting;
         }
 
-        internal static MemoryStream ToXmlStream<T>(T o)
+        internal static MemoryStream ToStream<T>(T o)
         {
             var serializer = Serializers.GetOrAdd(o.GetType(), x => new XmlSerializer(o.GetType()));
             var ms = new MemoryStream();
@@ -35,7 +35,7 @@
         /// <returns></returns>
         internal static T ReadXml<T>(FileInfo file)
         {
-            return FileHelper.Read(file, FromXmlStream<T>);
+            return FileHelper.Read(file, FromStream<T>);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@
         /// <returns></returns>
         internal static Task<T> ReadXmlAsync<T>(FileInfo file)
         {
-            return FileHelper.ReadAsync(file, FromXmlStream<T>);
+            return FileHelper.ReadAsync(file, FromStream<T>);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@
         /// <returns></returns>
         internal static Task SaveXmlAsync<T>(T o, FileInfo file)
         {
-            using (var stream = ToXmlStream(o))
+            using (var stream = ToStream(o))
             {
                 return FileHelper.SaveAsync(file, stream);
             }
@@ -66,7 +66,7 @@
 
         internal static void SaveXml<T>(T o, FileInfo file)
         {
-            using (var stream = ToXmlStream(o))
+            using (var stream = ToStream(o))
             {
                 FileHelper.Save(file, stream);
             }

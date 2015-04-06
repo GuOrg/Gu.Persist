@@ -2,21 +2,21 @@ namespace Gu.Settings
 {
     using System.IO;
 
-    public class XmlRepository : Repository
+    public class BinaryRepository : Repository
     {
-        public XmlRepository(RepositorySetting setting) 
+        public BinaryRepository(RepositorySetting setting)
             : base(setting)
         {
         }
 
         protected override T FromStream<T>(Stream stream)
         {
-            return XmlHelper.FromStream<T>(stream);
+            return BinaryHelper.FromStream<T>(stream);
         }
 
         protected override Stream ToStream<T>(T item)
         {
-            return XmlHelper.ToStream(item);
+            return BinaryHelper.ToStream(item);
         }
     }
 }
