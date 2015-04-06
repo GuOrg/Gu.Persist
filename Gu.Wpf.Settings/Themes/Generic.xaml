@@ -39,7 +39,6 @@
             <Setter.Value>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" />
-                </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="ContentTemplateSelector" Value="{StaticResource SettingTemplateSelector}" />

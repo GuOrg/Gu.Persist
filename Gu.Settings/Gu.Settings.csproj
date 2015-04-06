@@ -47,23 +47,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IBackup.cs" />
-    <Compile Include="IRepository.cs" />
     <Compile Include="ISetting.cs" />
-    <Compile Include="Repositories\BinaryRepository.cs" />
-    <Compile Include="Repositories\FileHelper.cs" />
-    <Compile Include="Repositories\XmlSerializerRepository.cs" />
+    <Compile Include="Internals\BinaryRepository.cs" />
+    <Compile Include="Internals\FileHelper.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="Internals\XmlSerializerRepository.cs" />
     <Compile Include="MinMaxSetting.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="Properties\Annotations.cs" />
