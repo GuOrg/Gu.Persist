@@ -1,10 +1,10 @@
-﻿namespace Gu.Settings
+﻿namespace Gu.Settings.Repositories
 {
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Threading.Tasks;
 
-    public static class BinaryRepository
+    public static class BinaryHelper
     {
         public static T FromBinaryStream<T>(Stream stream)
         {
@@ -28,12 +28,10 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="fullFileName"></param>
-        /// <param name="throwIfNotExists">Throws and exception if file is missing when true.
-        /// If false it returns default(T)</param>
         /// <returns></returns>
-        public static T ReadBinary<T>(string fullFileName, bool throwIfNotExists)
+        public static T ReadBinary<T>(string fullFileName)
         {
-            return FileHelper.Read(fullFileName, FromBinaryStream<T>, throwIfNotExists);
+            return FileHelper.Read(fullFileName, FromBinaryStream<T>);
         }
 
         /// <summary>
@@ -41,12 +39,10 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="fullFileName">The filename including path and extension</param>
-        /// <param name="throwIfNotExists">Throws and exception if file is missing when true.
-        /// If false it returns default(T)</param>
         /// <returns></returns>
-        public static Task<T> ReadBinaryAsync<T>(string fullFileName, bool throwIfNotExists)
+        public static Task<T> ReadBinaryAsync<T>(string fullFileName)
         {
-            return FileHelper.ReadAsync(fullFileName, FromBinaryStream<T>, throwIfNotExists);
+            return FileHelper.ReadAsync(fullFileName, FromBinaryStream<T>);
         }
 
         /// <summary>
