@@ -1,4 +1,4 @@
-﻿namespace Gu.Settings.Repositories
+﻿namespace Gu.Settings
 {
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
@@ -27,22 +27,22 @@
         /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="fullFileName"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        public static T ReadBinary<T>(string fullFileName)
+        public static T ReadBinary<T>(FileInfo file)
         {
-            return FileHelper.Read(fullFileName, FromBinaryStream<T>);
+            return FileHelper.Read(file, FromBinaryStream<T>);
         }
 
         /// <summary>
         /// Reads an xml file and deserializes the contents
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="fullFileName">The filename including path and extension</param>
+        /// <param name="file">The filename including path and extension</param>
         /// <returns></returns>
-        public static Task<T> ReadBinaryAsync<T>(string fullFileName)
+        public static Task<T> ReadBinaryAsync<T>(FileInfo file)
         {
-            return FileHelper.ReadAsync(fullFileName, FromBinaryStream<T>);
+            return FileHelper.ReadAsync(file, FromBinaryStream<T>);
         }
 
         /// <summary>
@@ -50,16 +50,22 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="o"></param>
-        /// <param name="fullFileName">The filename including path and extension</param>
+        /// <param name="file">The filename including path and extension</param>
         /// <returns></returns>
-        public static Task SaveBinaryAsync<T>(T o, string fullFileName)
+        public static Task SaveBinaryAsync<T>(T o, FileInfo file)
         {
-            return FileHelper.SaveAsync(o, fullFileName, ToBinaryStream);
+            using (var stream = ToBinaryStream(o))
+            {
+                return FileHelper.SaveAsync(file, stream);
+            }
         }
 
-        public static void SaveBinary<T>(T o, string fullFileName)
+        public static void SaveBinary<T>(T o, FileInfo file)
         {
-            FileHelper.Save(o, fullFileName, ToBinaryStream);
+            using (var stream = ToBinaryStream(o))
+            {
+                FileHelper.Save(file, stream);
+            }
         }
     }
 }

@@ -19,18 +19,18 @@
                 case AutoSaveMode.OnChanged:
                     item.ObservePropertyChanged()
                         .ObserveOn(_scheduler)
-                        .Subscribe(_ => repository.Save(item, setting.FileName));
+                        .Subscribe(_ => repository.Save(item, setting.CreateBackup, setting.FileName));
                     break;
                 case AutoSaveMode.Deferred:
                     item.ObservePropertyChanged()
                         .ObserveOn(_scheduler)
                         .Throttle(setting.Time)
-                        .Subscribe(_ => repository.Save(item, setting.FileName));
+                        .Subscribe(_ => repository.Save(item, setting.CreateBackup, setting.FileName));
                     break;
                 case AutoSaveMode.OnSchedule:
                     Observable.Timer(setting.Time, setting.Time)
                               .ObserveOn(_scheduler)
-                              .Subscribe(_ => repository.Save(item, setting.FileName));
+                              .Subscribe(_ => repository.Save(item, setting.CreateBackup, setting.FileName));
                     break;
                 case AutoSaveMode.None:
                 default:

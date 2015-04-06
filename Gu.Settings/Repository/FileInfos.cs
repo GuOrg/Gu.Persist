@@ -1,4 +1,4 @@
-﻿namespace Gu.Settings.Repositories
+﻿namespace Gu.Settings
 {
     using System;
     using System.IO;
@@ -19,21 +19,29 @@
 
         internal static FileInfos CreateFileInfos(DirectoryInfo directory, string fileName, bool hasBackup, string extension, string backupExtension)
         {
-
             var fileInfo = CreateFileInfo(directory, fileName, extension);
             if (!hasBackup)
             {
                 return new FileInfos(fileInfo, null);
             }
-            var backup = CreateFileInfo(directory, fileName, backupExtension);
+            var backup = BackupFile(fileInfo, backupExtension);
             return new FileInfos(fileInfo, backup);
         }
 
-        private FileInfo CreateFileInfo(DirectoryInfo directory, string fileName, string extension)
+        private static FileInfo CreateFileInfo(DirectoryInfo directory, string fileName, string extension)
         {
-            throw new NotImplementedException("Check and append extension if needed");
+            if (!fileName.EndsWith(extension))
+            {
+                fileName += extension;
+            }
             var fullFileName = System.IO.Path.Combine(directory.FullName, fileName);
             return new FileInfo(fullFileName);
+        }
+
+        internal static FileInfo BackupFile(FileInfo file, string backupExtension = ".old")
+        {
+            var backupFile = new FileInfo(file.FullName.Replace(file.Extension, backupExtension));
+            return backupFile;
         }
     }
 }

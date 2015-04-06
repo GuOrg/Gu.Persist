@@ -31,22 +31,22 @@
         /// Reads an xml file and deserialize the contents
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="fullFileName">The filename including path and extension</param>
+        /// <param name="file">The filename including path and extension</param>
         /// <returns></returns>
-        internal static T ReadXml<T>(string fullFileName)
+        internal static T ReadXml<T>(FileInfo file)
         {
-            return FileHelper.Read(fullFileName, FromXmlStream<T>);
+            return FileHelper.Read(file, FromXmlStream<T>);
         }
 
         /// <summary>
         /// Reads an xml file and deserialize the contents
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="fullFileName">The filename including path and extension</param>
+        /// <param name="file">The filename including path and extension</param>
         /// <returns></returns>
-        internal static Task<T> ReadXmlAsync<T>(string fullFileName)
+        internal static Task<T> ReadXmlAsync<T>(FileInfo file)
         {
-            return FileHelper.ReadAsync(fullFileName, FromXmlStream<T>);
+            return FileHelper.ReadAsync(file, FromXmlStream<T>);
         }
 
         /// <summary>
@@ -54,16 +54,22 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="o"></param>
-        /// <param name="fullFileName">The filename including path and extension</param>
+        /// <param name="file">The filename including path and extension</param>
         /// <returns></returns>
-        internal static Task SaveXmlAsync<T>(T o, string fullFileName)
+        internal static Task SaveXmlAsync<T>(T o, FileInfo file)
         {
-            return FileHelper.SaveAsync(o, fullFileName, ToXmlStream);
+            using (var stream = ToXmlStream(o))
+            {
+                return FileHelper.SaveAsync(file, stream);
+            }
         }
 
-        internal static void SaveXml<T>(T o, string fullFileName)
+        internal static void SaveXml<T>(T o, FileInfo file)
         {
-            FileHelper.Save(o, fullFileName, ToXmlStream);
+            using (var stream = ToXmlStream(o))
+            {
+                FileHelper.Save(file, stream);
+            }
         }
     }
 }
