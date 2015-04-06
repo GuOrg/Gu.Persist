@@ -4,5 +4,6 @@
 
     public interface ISetting : INotifyPropertyChanged
     {
+        bool IsDirty { get; }
     }
 }
