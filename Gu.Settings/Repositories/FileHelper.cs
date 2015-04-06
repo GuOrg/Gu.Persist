@@ -5,6 +5,8 @@ namespace Gu.Settings
     using System.Threading;
     using System.Threading.Tasks;
 
+    using Gu.Settings.Repositories;
+
     internal static class FileHelper
     {
         private static readonly SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
@@ -13,28 +15,18 @@ namespace Gu.Settings
         /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="fullFileName"></param>
-        /// <param name="fromStream">Deserialization from stream to T</param>
-        /// <param name="throwIfNotExists">Throws and exception if file is missing when true.
-        /// If false it returns default(T)</param>
+        /// <param name="file"></param>
+        /// <param name="fromStream">Reading from from file to T</param>
         /// <returns></returns>
-        internal static T Read<T>(string fullFileName, Func<Stream, T> fromStream, bool throwIfNotExists)
+        internal static T Read<T>(FileInfo file, Func<Stream, T> fromStream)
         {
             SemaphoreSlim.Wait();
             try
             {
-                using (var stream = File.OpenRead(fullFileName))
+                using (var stream = File.OpenRead(file.FullName))
                 {
                     return fromStream(stream);
                 }
-            }
-            catch (Exception)
-            {
-                if (throwIfNotExists)
-                {
-                    throw;
-                }
-                return default(T);
             }
             finally
             {
@@ -45,31 +37,22 @@ namespace Gu.Settings
         /// <summary>
         /// Reads the contents of the file to a memorystream
         /// </summary>
-        /// <param name="fullFileName"></param>
-        /// <param name="fromStream">Deserialization from stream to T</param>
-        /// <param name="throwIfNotExists">Throws and exception if file is missing when true.
-        /// If false it returns default(T)</param>
+        /// <param name="file"></param>
+        /// <param name="fromStream">Reading from stream to T</param>
         /// <returns></returns>
-        internal static async Task<T> ReadAsync<T>(string fullFileName, Func<Stream, T> fromStream, bool throwIfNotExists)
+        internal static async Task<T> ReadAsync<T>(FileInfo file, Func<Stream, T> fromStream)
         {
-            await SemaphoreSlim.WaitAsync().ConfigureAwait(false);
+            await SemaphoreSlim.WaitAsync()
+                               .ConfigureAwait(false);
             using (var ms = new MemoryStream())
             {
                 try
                 {
-                    using (var stream = File.OpenRead(fullFileName))
+                    using (var stream = File.OpenRead(file.FullName))
                     {
                         await stream.CopyToAsync(ms)
                                     .ConfigureAwait(false);
                     }
-                }
-                catch (Exception)
-                {
-                    if (throwIfNotExists)
-                    {
-                        throw;
-                    }
-                    return default(T);
                 }
                 finally
                 {
@@ -83,61 +66,41 @@ namespace Gu.Settings
         /// <summary>
         /// Generic method for saving a file async
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="o"></param>
-        /// <param name="fullFileName"></param>
-        /// <param name="toStream">The function to convert o to a stream</param>
+        /// <param name="file"></param>
+        /// <param name="stream"></param>
         /// <returns></returns>
-        internal static async Task SaveAsync<T>(T o, string fullFileName, Func<T, Stream> toStream)
+        internal static async Task SaveAsync(FileInfo file, Stream stream)
         {
-            using (var ms = toStream(o))
+            await SemaphoreSlim.WaitAsync()
+                               .ConfigureAwait(false);
+            try
             {
-                await SemaphoreSlim.WaitAsync().ConfigureAwait(false);
-                try
+                using (var fileStream = file.OpenWrite())
                 {
-                    CreateDirectoryIfNotExists(fullFileName);
-                    var oldFile = SaveBackup(fullFileName);
-                    try
-                    {
-                        using (var stream = File.OpenWrite(fullFileName))
-                        {
-                            await ms.CopyToAsync(stream)
-                                    .ConfigureAwait(false);
-                        }
-
-                        File.Delete(oldFile);
-                    }
-                    catch (Exception)
-                    {
-                        RestoreBackup(fullFileName, oldFile);
-                        throw;
-                    }
+                    await stream.CopyToAsync(fileStream)
+                                .ConfigureAwait(false);
                 }
-                finally
-                {
-                    SemaphoreSlim.Release();
-                }
+            }
+            finally
+            {
+                SemaphoreSlim.Release();
             }
         }
 
-        internal static void Save<T>(T o, string fullFileName, Func<T, Stream> toStream)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="stream"></param>
+        internal static void Save(FileInfo file, Stream stream)
         {
             SemaphoreSlim.Wait();
-            CreateDirectoryIfNotExists(fullFileName);
-            var oldFile = SaveBackup(fullFileName);
             try
             {
-                var ms = toStream(o);
-                using (var stream = File.OpenWrite(fullFileName))
+                using (var fileStream = File.OpenWrite(file.FullName))
                 {
-                    ms.CopyTo(stream);
+                    stream.CopyTo(fileStream);
                 }
-                File.Delete(oldFile);
-            }
-            catch (Exception)
-            {
-                RestoreBackup(fullFileName, oldFile);
-                throw;
             }
             finally
             {
@@ -148,52 +111,54 @@ namespace Gu.Settings
         /// <summary>
         /// Creates the directory if not exists
         /// </summary>
-        /// <param name="fullFileName"></param>
-        internal static void CreateDirectoryIfNotExists(string fullFileName)
+        /// <param name="directory"></param>
+        internal static void CreateDirectoryIfNotExists(DirectoryInfo directory)
         {
-            var directoryName = Path.GetDirectoryName(fullFileName);
-            // ReSharper disable AssignNullToNotNullAttribute
-            // Better to get system error message if null?
-            if (!Directory.Exists(directoryName))
+            if (!directory.Exists)
             {
-                Directory.CreateDirectory(directoryName);
+                directory.Create();
             }
-            // ReSharper restore AssignNullToNotNullAttribute
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fullFileName"></param>
-        /// <returns></returns>
-        internal static string SaveBackup(string fullFileName, string oldExtension = ".old")
+        /// <param name="files"></param>
+        /// <returns>The name of the backed upp file</returns>
+        internal static void SaveBackup(FileInfos files)
         {
-            if (string.IsNullOrEmpty(fullFileName))
+            if (files.Backup == null)
             {
-                throw new ArgumentException("Filename cannot be null", "fullFileName");
+                return;
             }
-            if (string.IsNullOrEmpty(oldExtension))
+            if (files.File.Exists)
             {
-                throw new ArgumentException("Extension cannot be null","oldExtension");
-            }
-            var extension = System.IO.Path.GetExtension(fullFileName);
-            var oldFile = fullFileName.Replace(extension, oldExtension);
-
-            if (File.Exists(fullFileName))
-            {
-                if (File.Exists(oldFile))
+                if (files.Backup.Exists)
                 {
-                    File.Delete(oldFile);
+                    files.Backup.Delete();
                 }
-                File.Move(fullFileName, oldFile);
+                files.File.MoveTo(files.Backup.FullName);
             }
-            return oldFile;
         }
 
-        internal static void RestoreBackup(string fullFileName, string oldFile)
+        internal static void RestoreBackup(FileInfos files)
         {
-            File.Delete(fullFileName);
-            File.Move(oldFile, fullFileName);
+            if (files.Backup == null)
+            {
+                return;
+            }
+            if (!files.Backup.Exists)
+            {
+                return;
+            }
+            files.File.Delete();
+            files.Backup.MoveTo(files.File.FullName);
+        }
+
+        internal static FileInfo BackupFileName(FileInfo file, string backupExtension = ".old")
+        {
+            var backupFile = new FileInfo(file.FullName.Replace(file.Extension, backupExtension));
+            return backupFile;
         }
     }
 }
