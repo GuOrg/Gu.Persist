@@ -4,15 +4,14 @@
 
     using NUnit.Framework;
 
-    public class FileHelperTests
+    public class FileInfosTests
     {
-        [TestCase(".old")]
-        [TestCase("old")]
-        public void TestNameTest(string extension)
+        [Test]
+        public void CreateFileInfosWithBackup()
         {
-            var fileInfo = new FileInfo(@"C:\Temp\Setting.cfg");
-            var backupFileName = FileHelper.BackupFileName(fileInfo, extension);
-            Assert.AreEqual(@"C:\Temp\Setting.old", backupFileName.FullName);
+            var fileInfos = FileInfos.CreateFileInfos(new DirectoryInfo(@"C:\Temp"), "Setting", true, ".cfg", ".old");
+            Assert.AreEqual(@"C:\Temp\Setting.cfg", fileInfos.File.FullName);
+            Assert.AreEqual(@"C:\Temp\Setting.old", fileInfos.Backup.FullName);
         }
     }
 }
