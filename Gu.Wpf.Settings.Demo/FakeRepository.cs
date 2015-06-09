@@ -30,6 +30,13 @@
             throw new System.NotImplementedException();
         }
 
+        public void Save<T>(T setting, bool createBackup, string fileName = null)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public RepositorySetting Setting { get; private set; }
+
         public void Save<T>(T setting, string fileName)
         {
             throw new System.NotImplementedException();
