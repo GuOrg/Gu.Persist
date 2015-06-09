@@ -62,6 +62,7 @@
         }
 
         protected abstract T FromStream<T>(Stream stream);
+        
         protected abstract Stream ToStream<T>(T item);
 
         private FileInfos GetFileInfos<T>(string fileName)

@@ -5,6 +5,7 @@
         None,
         OnChanged,
         Deferred,
-        OnSchedule
+        OnSchedule,
+        Explicit
     }
 }

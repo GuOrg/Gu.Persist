@@ -16,9 +16,9 @@
 
         public TimeSpan Time { get; private set; }
 
-        public string FileName { get; set; }
+        public string FileName { get; private set; }
 
-        public bool CreateBackup { get; set; }
+        public bool CreateBackup { get; private set; }
 
         /// <summary>
         /// Saves automatically every x seconds
