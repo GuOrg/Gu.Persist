@@ -17,7 +17,7 @@ namespace Gu.Settings
        
         public T? Max { get; set; }
 
-        public override bool IsValidCore(T value)
+        protected override bool IsValidCore(T value)
         {
             if (Min.HasValue && Comparer<T>.Default.Compare(value, Min.Value) < 0)
             {

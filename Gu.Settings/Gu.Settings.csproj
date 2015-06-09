@@ -54,12 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoSaveMode.cs" />
-    <Compile Include="AutoSaver.cs" />
-    <Compile Include="AutoSaveSetting.cs" />
-    <Compile Include="ISetting.cs" />
+    <Compile Include="AutoSave\AutoSaveMode.cs" />
+    <Compile Include="AutoSave\AutoSaver.cs" />
+    <Compile Include="AutoSave\AutoSaveSetting.cs" />
+    <Compile Include="Contracts\ISetting.cs" />
     <Compile Include="Repository\BinaryHelper.cs" />
-    <Compile Include="IRepository.cs" />
+    <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="MinMaxSetting.cs" />
     <Compile Include="Repository\BinaryRepository.cs" />
     <Compile Include="Repository\FileHelper.cs" />

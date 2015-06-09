@@ -47,7 +47,9 @@ namespace Gu.Settings
             }
         }
 
-        public abstract bool IsValidCore(T value);
+        public bool IsDirty { get; private set; }
+
+        protected abstract bool IsValidCore(T value);
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
