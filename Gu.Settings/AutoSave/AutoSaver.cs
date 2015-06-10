@@ -15,10 +15,12 @@
         private readonly CompositeDisposable _subscriptions = new CompositeDisposable();
         private bool _disposed = false;
 
-        public void Add<T>(T item, IRepository repository, AutoSaveSetting setting) 
+        public IDisposable Add<T>(T item, IRepository repository, AutoSaveSetting setting) 
             where T : INotifyPropertyChanged
         {
-            _subscriptions.Add(CreateSubscription(item, repository, setting));
+            var subscription = CreateSubscription(item, repository, setting);
+            _subscriptions.Add(subscription);
+            return subscription;
         }
 
         /// <summary>
@@ -73,16 +75,16 @@
                 case AutoSaveMode.OnChanged:
                     return item.ObservePropertyChanged()
                                .ObserveOn(_scheduler)
-                               .Subscribe(_ => repository.Save(item, setting.CreateBackup, setting.FileName));
+                               .Subscribe(_ => repository.Save(item, setting.Files));
                 case AutoSaveMode.Deferred:
                     return item.ObservePropertyChanged()
                                .ObserveOn(_scheduler)
                                .Throttle(setting.Time)
-                               .Subscribe(_ => repository.Save(item, setting.CreateBackup, setting.FileName));
+                               .Subscribe(_ => repository.Save(item, setting.Files));
                 case AutoSaveMode.OnSchedule:
                     return Observable.Timer(setting.Time, setting.Time)
                                      .ObserveOn(_scheduler)
-                                     .Subscribe(_ => repository.Save(item, setting.CreateBackup, setting.FileName));
+                                     .Subscribe(_ => repository.Save(item, setting.Files));
                 case AutoSaveMode.None:
                 default:
                     throw new ArgumentOutOfRangeException();

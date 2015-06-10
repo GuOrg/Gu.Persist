@@ -6,18 +6,18 @@
     using System.Threading.Tasks;
     using System.Xml.Serialization;
 
-    internal static class XmlHelper
+    public static class XmlHelper
     {
         internal static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();
 
-        internal static T FromStream<T>(Stream stream)
+        public static T FromStream<T>(Stream stream)
         {
             var serializer = Serializers.GetOrAdd(typeof(T), x => new XmlSerializer(typeof(T)));
             var setting = (T)serializer.Deserialize(stream);
             return setting;
         }
 
-        internal static MemoryStream ToStream<T>(T o)
+        public static MemoryStream ToStream<T>(T o)
         {
             var serializer = Serializers.GetOrAdd(o.GetType(), x => new XmlSerializer(o.GetType()));
             var ms = new MemoryStream();
@@ -27,6 +27,12 @@
             return ms;
         }
 
+        /// <summary>
+        /// Serializes to memorystream, then returns the deserialized object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static T DeepClone<T>(T item)
         {
             using (var stream = ToStream(item))
@@ -41,7 +47,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="file">The filename including path and extension</param>
         /// <returns></returns>
-        internal static T ReadXml<T>(FileInfo file)
+        public static T Read<T>(FileInfo file)
         {
             return FileHelper.Read(file, FromStream<T>);
         }
@@ -52,19 +58,12 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="file">The filename including path and extension</param>
         /// <returns></returns>
-        internal static Task<T> ReadXmlAsync<T>(FileInfo file)
+        public static Task<T> ReadAsync<T>(FileInfo file)
         {
             return FileHelper.ReadAsync(file, FromStream<T>);
         }
 
-        /// <summary>
-        /// Saves as xml
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="o"></param>
-        /// <param name="file">The filename including path and extension</param>
-        /// <returns></returns>
-        internal static Task SaveXmlAsync<T>(T o, FileInfo file)
+        public static Task SaveAsync<T>(T o, FileInfo file)
         {
             using (var stream = ToStream(o))
             {
@@ -72,7 +71,7 @@
             }
         }
 
-        internal static void SaveXml<T>(T o, FileInfo file)
+        public static void Save<T>(T o, FileInfo file)
         {
             using (var stream = ToStream(o))
             {

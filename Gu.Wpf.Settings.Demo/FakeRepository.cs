@@ -1,6 +1,7 @@
 ﻿namespace Gu.Wpf.Settings.Demo
 {
     using System.ComponentModel;
+    using System.IO;
     using System.Runtime.CompilerServices;
 
     using Gu.Settings;
@@ -35,7 +36,22 @@
             throw new System.NotImplementedException();
         }
 
-        public RepositorySetting Setting { get; private set; }
+        public IRepositorySetting Setting { get; private set; }
+
+        public T Read<T>(FileInfo file)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Save<T>(T setting, FileInfo file)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Save<T>(T setting, FileInfos fileInfos)
+        {
+            throw new System.NotImplementedException();
+        }
 
         public void Save<T>(T setting, string fileName)
         {

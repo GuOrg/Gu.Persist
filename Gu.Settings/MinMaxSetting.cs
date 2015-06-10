@@ -7,7 +7,7 @@ namespace Gu.Settings
 
     using Gu.Settings.Annotations;
 
-    public class MinMaxSetting<T> : ValidatingSetting<T>
+    internal class MinMaxSetting<T> : ValidatingSetting<T>
         where T : struct, IComparable<T>
     {
 

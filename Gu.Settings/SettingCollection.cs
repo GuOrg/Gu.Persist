@@ -9,7 +9,7 @@
     using Annotations;
     using Reactive;
 
-    public class SettingCollection : IEnumerable<ISetting>, INotifyPropertyChanged
+    internal class SettingCollection : IEnumerable<ISetting>, INotifyPropertyChanged
     {
         private readonly List<ISetting> _inner = new List<ISetting>();
 
