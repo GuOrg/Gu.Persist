@@ -4,55 +4,51 @@
 
     public sealed class AutoSaveSetting
     {
-        private AutoSaveSetting(AutoSaveMode mode, TimeSpan time, bool createBackup, string fileName)
+        private AutoSaveSetting(AutoSaveMode mode, TimeSpan time, FileInfos files)
         {
+            Ensure.NotNull(files, "files");
+            Ensure.NotNull(files.File, "files");
             Mode = mode;
             Time = time;
-            CreateBackup = createBackup;
-            FileName = fileName;
+            Files = files;
         }
 
         public AutoSaveMode Mode { get; private set; }
 
         public TimeSpan Time { get; private set; }
 
-        public string FileName { get; private set; }
-
-        public bool CreateBackup { get; private set; }
+        public FileInfos Files { get; private set; }
 
         /// <summary>
         /// Saves automatically every x seconds
         /// </summary>
         /// <param name="saveEvery"></param>
-        /// <param name="createBackup">Creates a backup when saving</param>
-        /// <param name="fileName">If left empty the filename is the name of the type</param>
+        /// <param name="fileInfos">Information about file to save and backup</param> 
         /// <returns></returns>
-        public static AutoSaveSetting OnSchedule(TimeSpan saveEvery, bool createBackup, string fileName = null)
+        public static AutoSaveSetting OnSchedule(TimeSpan saveEvery, FileInfos fileInfos)
         {
-            return new AutoSaveSetting(AutoSaveMode.OnSchedule, saveEvery, createBackup, fileName);
+            return new AutoSaveSetting(AutoSaveMode.OnSchedule, saveEvery, fileInfos);
         }
 
         /// <summary>
         /// Saves on propertychange
         /// </summary>
-        /// <param name="createBackup">Creates a backup when saving</param>
-        /// <param name="fileName">If left empty the filename is the name of the type</param>
+        /// <param name="fileInfos">Information about file to save and backup</param>
         /// <returns></returns>
-        public static AutoSaveSetting OnChanged(bool createBackup, string fileName = null)
+        public static AutoSaveSetting OnChanged(FileInfos fileInfos)
         {
-            return new AutoSaveSetting(AutoSaveMode.OnChanged, TimeSpan.Zero, createBackup, fileName);
+            return new AutoSaveSetting(AutoSaveMode.OnChanged, TimeSpan.Zero, fileInfos);
         }
 
         /// <summary>
         /// Saves on propertychange but waits buffertime after last change before saving.
         /// </summary>
         /// <param name="bufferTime"></param>
-        /// <param name="createBackup">Creates a backup when saving</param> 
-        /// <param name="fileName">If left empty the filename is the name of the type</param>
+        /// <param name="fileInfos">Information about file to save and backup</param> 
         /// <returns></returns>
-        public static AutoSaveSetting Deferred(TimeSpan bufferTime, bool createBackup, string fileName = null)
+        public static AutoSaveSetting Deferred(TimeSpan bufferTime, FileInfos fileInfos)
         {
-            return new AutoSaveSetting(AutoSaveMode.Deferred, bufferTime, createBackup, fileName);
+            return new AutoSaveSetting(AutoSaveMode.Deferred, bufferTime, fileInfos);
         }
     }
 }

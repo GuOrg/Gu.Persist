@@ -7,7 +7,7 @@
     using Gu.Settings.Annotations;
 
     [Serializable]
-    public class Setting<T> : ISetting
+    internal class Setting<T> : ISetting
     {
         private T _editValue;
         private T _value;

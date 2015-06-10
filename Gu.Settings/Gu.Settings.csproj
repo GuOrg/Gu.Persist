@@ -57,17 +57,23 @@
     <Compile Include="AutoSave\AutoSaveMode.cs" />
     <Compile Include="AutoSave\AutoSaver.cs" />
     <Compile Include="AutoSave\AutoSaveSetting.cs" />
+    <Compile Include="Contracts\IAsyncRepository.cs" />
+    <Compile Include="Contracts\IAutoAsyncRepository.cs" />
+    <Compile Include="Contracts\IAutoRepository.cs" />
     <Compile Include="Contracts\ISetting.cs" />
-    <Compile Include="Repository\BinaryHelper.cs" />
+    <Compile Include="Ensure.cs" />
+    <Compile Include="IO\BinaryHelper.cs" />
     <Compile Include="Contracts\IRepository.cs" />
+    <Compile Include="Contracts\IRepositorySetting.cs" />
     <Compile Include="MinMaxSetting.cs" />
-    <Compile Include="Repository\BinaryRepository.cs" />
-    <Compile Include="Repository\FileHelper.cs" />
-    <Compile Include="Repository\FileInfos.cs" />
-    <Compile Include="Repository\RepositorySetting.cs" />
-    <Compile Include="Repository\XmlHelper.cs" />
-    <Compile Include="Repository\Repository.cs" />
-    <Compile Include="Repository\XmlRepository.cs" />
+    <Compile Include="IO\BinaryRepository.cs" />
+    <Compile Include="IO\FileHelper.cs" />
+    <Compile Include="IO\FileInfoComparer.cs" />
+    <Compile Include="IO\FileInfos.cs" />
+    <Compile Include="IO\RepositorySetting.cs" />
+    <Compile Include="IO\XmlHelper.cs" />
+    <Compile Include="IO\Repository.cs" />
+    <Compile Include="IO\XmlRepository.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Internals\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
