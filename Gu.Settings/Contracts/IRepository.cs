@@ -15,5 +15,8 @@
         void Save<T>(T item, FileInfo file);
 
         void Save<T>(T item, IFileInfos fileInfos);
+        bool Exists<T>();
+        bool Exists<T>(string fileName);
+        bool Exists<T>(FileInfo file);
     }
 }
