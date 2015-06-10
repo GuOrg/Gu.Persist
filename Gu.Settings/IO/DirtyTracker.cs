@@ -1,6 +1,5 @@
 ﻿namespace Gu.Settings
 {
-    using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.IO;
@@ -32,7 +31,7 @@
             {
                 return !comparer.Equals((T)clone, item);
             }
-            return false;
+            return item != null;
         }
     }
 }
