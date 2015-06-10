@@ -44,6 +44,7 @@
         /// Saves on propertychange but waits buffertime after last change before saving.
         /// </summary>
         /// <param name="bufferTime"></param>
+        /// <param name="maxTime"></param>
         /// <param name="fileInfos">Information about file to save and backup</param> 
         /// <returns></returns>
         public static AutoSaveSetting Deferred(TimeSpan bufferTime, TimeSpan maxTime, FileInfos fileInfos)
