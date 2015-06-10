@@ -33,7 +33,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static T DeepClone<T>(T item)
+        public static T Clone<T>(T item)
         {
             using (var stream = ToStream(item))
             {

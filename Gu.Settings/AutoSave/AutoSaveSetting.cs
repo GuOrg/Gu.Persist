@@ -46,7 +46,7 @@
         /// <param name="bufferTime"></param>
         /// <param name="fileInfos">Information about file to save and backup</param> 
         /// <returns></returns>
-        public static AutoSaveSetting Deferred(TimeSpan bufferTime, FileInfos fileInfos)
+        public static AutoSaveSetting Deferred(TimeSpan bufferTime, TimeSpan maxTime, FileInfos fileInfos)
         {
             return new AutoSaveSetting(AutoSaveMode.Deferred, bufferTime, fileInfos);
         }

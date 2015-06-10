@@ -15,6 +15,6 @@ namespace Gu.Settings
 
         Task SaveAsync<T>(T item, FileInfo file);
 
-        Task SaveAsync<T>(T item, FileInfos fileInfos);
+        Task SaveAsync<T>(T item, IFileInfos fileInfos);
     }
 }

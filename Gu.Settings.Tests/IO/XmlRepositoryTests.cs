@@ -18,7 +18,7 @@
         {
             _file = new FileInfo(@"C:\Temp\XmlRepositoryTests.tmp");
             _backup = new FileInfo(@"C:\Temp\XmlRepositoryTests.bak");
-            _setting = new RepositorySetting(true, _file.Directory, ".tmp", ".bak");
+            _setting = new RepositorySetting(true, true, _file.Directory, ".tmp", ".bak");
             _autoFile = new FileInfo(@"C:\Temp\DummySerializable.tmp");
             _file.Delete();
             _backup.Delete();
@@ -108,6 +108,20 @@
             repository.Save(dummy, _file);
             var read = repository.Read<DummySerializable>(_file);
             Assert.AreSame(dummy, read);
+        }
+
+        [Test]
+        public void IsDirty()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = new XmlRepository(_setting);
+            Assert.IsFalse(repository.IsDirty(dummy));
+
+            repository.Save(dummy);
+            Assert.IsFalse(repository.IsDirty(dummy));
+
+            dummy.Value++;
+            Assert.IsTrue(repository.IsDirty(dummy));
         }
 
         public static void AssertExists(bool expected, FileInfo fileInfo)

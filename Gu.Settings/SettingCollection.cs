@@ -6,8 +6,8 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Runtime.CompilerServices;
-    using Annotations;
-    using Reactive;
+
+    using Gu.Settings.Annotations;
 
     internal class SettingCollection : IEnumerable<ISetting>, INotifyPropertyChanged
     {
@@ -39,9 +39,10 @@
 
         public void Add(ISetting item)
         {
-            item.ObservePropertyChanged(x => x.IsDirty)
-                .Subscribe(_ => IsDirty = this.Any(x => x.IsDirty));
-            _inner.Add(item);
+            throw new NotImplementedException("message");
+            //item.ObservePropertyChanged(x => x.IsDirty)
+            //    .Subscribe(_ => IsDirty = this.Any(x => x.IsDirty));
+            //_inner.Add(item);
         }
 
         [NotifyPropertyChangedInvocator]
