@@ -10,9 +10,6 @@ namespace Gu.Settings
     internal class MinMaxSetting<T> : ValidatingSetting<T>
         where T : struct, IComparable<T>
     {
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public T? Min { get; set; }
        
         public T? Max { get; set; }
@@ -29,16 +26,6 @@ namespace Gu.Settings
                 return false;
             }
             return true;
-        }
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

@@ -14,6 +14,6 @@
 
         void Save<T>(T item, FileInfo file);
 
-        void Save<T>(T item, FileInfos fileInfos);
+        void Save<T>(T item, IFileInfos fileInfos);
     }
 }

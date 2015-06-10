@@ -5,11 +5,11 @@ namespace Gu.Settings
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal static class FileHelper
+    internal class FileHelper
     {
         internal static readonly SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
 
-        public static void Delete(FileInfo fileInfo)
+        internal static void Delete(FileInfo fileInfo)
         {
             fileInfo.Delete();
         }
@@ -153,7 +153,7 @@ namespace Gu.Settings
         /// </summary>
         /// <param name="files"></param>
         /// <returns>The name of the backed upp file</returns>
-        internal static void Backup(FileInfos files, bool @lock = true)
+        internal static void Backup(IFileInfos files, bool @lock = true)
         {
             if (@lock)
             {
@@ -165,6 +165,7 @@ namespace Gu.Settings
                 {
                     return;
                 }
+                files.File.Refresh();
                 if (files.File.Exists)
                 {
                     files.Backup.Delete();
@@ -180,7 +181,7 @@ namespace Gu.Settings
             }
         }
 
-        internal static void Restore(FileInfos files, bool @lock = true)
+        internal static void Restore(IFileInfos files, bool @lock = true)
         {
             if (@lock)
             {
@@ -192,6 +193,7 @@ namespace Gu.Settings
                 {
                     return;
                 }
+                files.Backup.Refresh();
                 if (!files.Backup.Exists)
                 {
                     return;

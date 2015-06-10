@@ -7,6 +7,7 @@
     {
         public RepositorySetting(
             bool createBackupOnSave,
+            bool isTrackingDirty,
             DirectoryInfo directory,
             string extension = ".cfg",
             string backupExtension = ".old")
@@ -19,6 +20,7 @@
             }
 
             CreateBackupOnSave = createBackupOnSave;
+            IsTrackingDirty = isTrackingDirty;
             Directory = directory;
             if (!extension.StartsWith("."))
             {
@@ -39,5 +41,7 @@
         public string Extension { get; private set; }
 
         public string BackupExtension { get; private set; }
+        
+        public bool IsTrackingDirty { get; private set; }
     }
 }

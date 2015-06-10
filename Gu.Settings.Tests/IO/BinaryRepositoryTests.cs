@@ -18,7 +18,7 @@ namespace Gu.Settings.Tests.IO
         {
             _file = new FileInfo(@"C:\Temp\BinaryRepositoryTests.tmp");
             _backup = new FileInfo(@"C:\Temp\BinaryRepositoryTests.bak");
-            _setting = new RepositorySetting(true, _file.Directory, ".tmp", ".bak");
+            _setting = new RepositorySetting(true, true, _file.Directory, ".tmp", ".bak");
             _autoFile = new FileInfo(@"C:\Temp\DummySerializable.tmp");
             _file.Delete();
             _backup.Delete();

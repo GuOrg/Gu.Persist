@@ -1,27 +1,38 @@
 ﻿namespace Gu.Settings
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Reactive.Concurrency;
-    using System.Reactive.Disposables;
-    using System.Reactive.Linq;
-    using System.Threading;
-
-    using Gu.Reactive;
+    using System.Threading.Tasks;
 
     public class AutoSaver : IDisposable
     {
-        private readonly EventLoopScheduler _scheduler = new EventLoopScheduler(CreateThread);
-        private readonly CompositeDisposable _subscriptions = new CompositeDisposable();
+        private static readonly TaskFactory TaskFactory = new TaskFactory(new ConcurrentExclusiveSchedulerPair().ExclusiveScheduler);
+        private readonly List<IDisposable> _subscriptions = new List<IDisposable>();
+        private readonly IRepository _repository;
         private bool _disposed = false;
 
-        public IDisposable Add<T>(T item, IRepository repository, AutoSaveSetting setting) 
-            where T : INotifyPropertyChanged
+        public AutoSaver(IRepository repository)
         {
-            var subscription = CreateSubscription(item, repository, setting);
-            _subscriptions.Add(subscription);
-            return subscription;
+            _repository = repository;
         }
+
+        public virtual IDisposable Add<T>(T item, IFileInfos fileInfos, IObservable<object> trigger)
+            where T : class, INotifyPropertyChanged
+        {
+            var reference = new WeakReference<T>(item);
+            var saver = new Saver(this, () => Save(reference, fileInfos));
+            var subscription = trigger.Subscribe(saver);
+            saver.Subscription = subscription;
+            _subscriptions.Add(saver);
+            return saver;
+        }
+
+        public event EventHandler<SaveEventArgs> Saving;
+
+        public event EventHandler<SaveEventArgs> Saved;
+
+        public event EventHandler<SaveErrorEventArgs> Error;
 
         /// <summary>
         /// Dispose(true); //I am calling you from Dispose, it's safe
@@ -46,12 +57,41 @@
 
             if (disposing)
             {
-                _scheduler.Dispose();
-                _subscriptions.Dispose();
+                foreach (var subscription in _subscriptions.ToArray())
+                {
+                    if (subscription != null)
+                    {
+                        subscription.Dispose();
+                    }
+                }
             }
 
             // Free any unmanaged objects here. 
             _disposed = true;
+        }
+
+        protected virtual void Save<T>(WeakReference<T> itemReference, IFileInfos fileInfos)
+            where T : class
+        {
+            T item;
+            if (itemReference.TryGetTarget(out item))
+            {
+                OnSaving(new SaveEventArgs(item, fileInfos));
+                TaskFactory.StartNew(() => Save(item, fileInfos));
+            }
+        }
+
+        protected virtual void Save<T>(T item, IFileInfos fileInfos)
+        {
+            try
+            {
+                _repository.Save(item, fileInfos);
+                OnSaved(new SaveEventArgs(item, fileInfos));
+            }
+            catch (Exception e)
+            {
+                OnError(new SaveErrorEventArgs(item, fileInfos, e));
+            }
         }
 
         protected void VerifyDisposed()
@@ -62,32 +102,65 @@
             }
         }
 
-        private static Thread CreateThread(ThreadStart threadStart)
+        protected virtual void OnSaving(SaveEventArgs e)
         {
-            return new Thread(threadStart) { Name = "Autosaver thread", IsBackground = true };
+            var handler = Saving;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
-        private IDisposable CreateSubscription<T>(T item, IRepository repository, AutoSaveSetting setting)
-            where T : INotifyPropertyChanged
+        protected virtual void OnSaved(SaveEventArgs e)
         {
-            switch (setting.Mode)
+            var handler = Saved;
+            if (handler != null)
             {
-                case AutoSaveMode.OnChanged:
-                    return item.ObservePropertyChanged()
-                               .ObserveOn(_scheduler)
-                               .Subscribe(_ => repository.Save(item, setting.Files));
-                case AutoSaveMode.Deferred:
-                    return item.ObservePropertyChanged()
-                               .ObserveOn(_scheduler)
-                               .Throttle(setting.Time)
-                               .Subscribe(_ => repository.Save(item, setting.Files));
-                case AutoSaveMode.OnSchedule:
-                    return Observable.Timer(setting.Time, setting.Time)
-                                     .ObserveOn(_scheduler)
-                                     .Subscribe(_ => repository.Save(item, setting.Files));
-                case AutoSaveMode.None:
-                default:
-                    throw new ArgumentOutOfRangeException();
+                handler(this, e);
+            }
+        }
+
+        protected virtual void OnError(SaveErrorEventArgs e)
+        {
+            var handler = Error;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        private sealed class Saver : IObserver<object>, IDisposable
+        {
+            private readonly AutoSaver _saver;
+            private readonly Action _saveAction;
+
+            public Saver(AutoSaver saver, Action saveAction)
+            {
+                _saver = saver;
+                _saveAction = saveAction;
+            }
+
+            public IDisposable Subscription { get; internal set; }
+
+            public void OnNext(object value)
+            {
+                _saveAction();
+            }
+
+            public void OnError(Exception error)
+            {
+                _saver._subscriptions.Remove(this);
+            }
+
+            public void OnCompleted()
+            {
+                _saver._subscriptions.Remove(this);
+            }
+
+            public void Dispose()
+            {
+                _saver._subscriptions.Remove(this);
+                Subscription.Dispose();
             }
         }
     }
