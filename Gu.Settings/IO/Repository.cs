@@ -2,10 +2,11 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
 
-    public abstract class Repository : IRepository, IAsyncRepository, IAutoAsyncRepository, IAutoRepository, ICloner
+    public abstract class Repository : IRepository, IAsyncRepository, IAutoAsyncRepository, IAutoRepository, ICloner, IDirtyTracker, IAutoSavingRepository
     {
         private readonly ConcurrentDictionary<string, FileInfo> _fileNamesMap = new ConcurrentDictionary<string, FileInfo>(StringComparer.OrdinalIgnoreCase);
         private readonly ConcurrentDictionary<FileInfo, IFileInfos> _fileInfosMap = new ConcurrentDictionary<FileInfo, IFileInfos>(FileInfoComparer.Default);
@@ -214,10 +215,20 @@
 
         public bool IsDirty<T>(T item)
         {
-            return IsDirty(item, typeof(T).Name);
+            return IsDirty(item, EqualityComparer<T>.Default);
+        }
+
+        public bool IsDirty<T>(T item, IEqualityComparer<T> comparer)
+        {
+            return IsDirty(item, typeof(T).Name, comparer);
         }
 
         public bool IsDirty<T>(T item, string fileName)
+        {
+            return IsDirty(item, fileName, EqualityComparer<T>.Default);
+        }
+
+        public bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer)
         {
             Ensure.NotNullOrEmpty(fileName, "fileName");
             var fileInfo = CreateFileInfo(fileName);
@@ -226,11 +237,16 @@
 
         public bool IsDirty<T>(T item, FileInfo file)
         {
+            return IsDirty(item, file, EqualityComparer<T>.Default);
+        }
+
+        public bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
+        {
             if (!Setting.IsTrackingDirty)
             {
                 throw new InvalidOperationException("Cannot check IsDirty if not Setting.IsTrackingDirty");
             }
-            return DirtyTracker.IsDirty(file, item);
+            return DirtyTracker.IsDirty(file, item, comparer);
         }
 
         protected abstract T FromStream<T>(Stream stream);
