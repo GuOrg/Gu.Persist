@@ -26,6 +26,23 @@
 
         public DirtyTracker DirtyTracker { get; private set; }
 
+        public bool Exists<T>()
+        {
+            return Exists<T>(typeof (T).Name);
+        }
+
+        public bool Exists<T>(string fileName)
+        {
+            var fileInfo = CreateFileInfo(fileName);
+            return Exists<T>(fileInfo);
+        }
+
+        public bool Exists<T>(FileInfo file)
+        {
+            file.Refresh();
+            return file.Exists;
+        }
+
         public Task<T> ReadAsync<T>()
         {
             return ReadAsync<T>(typeof(T).Name);
@@ -50,6 +67,11 @@
             return value;
         }
 
+        public T Read<T>()
+        {
+            return Read<T>(typeof(T).Name);
+        }
+
         /// <summary>
         /// Reads from file the first time. After that it returns returns cached value (singleton).
         /// </summary>
@@ -60,11 +82,6 @@
         {
             var fileInfo = CreateFileInfo(fileName);
             return Read<T>(fileInfo);
-        }
-
-        public T Read<T>()
-        {
-            return Read<T>(typeof(T).Name);
         }
 
         public T Read<T>(FileInfo file)

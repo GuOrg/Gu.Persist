@@ -19,6 +19,7 @@
         public void SetUp()
         {
             _file = new FileInfo(@"C:\Temp\BinaryHelperTests.tmp");
+            _file.Delete();
         }
 
         [Test]
@@ -33,13 +34,9 @@
         [Test]
         public void FileRoundtrip()
         {
-            if (_file.Exists)
-            {
-                _file.Delete();
-            }
             var dummy = new DummySerializable { Value = 1 };
             BinaryHelper.Save(dummy, _file);
-            Assert.IsTrue(_file.Exists);
+            AssertFile.Exists(true, _file);
 
             var read = BinaryHelper.Read<DummySerializable>(_file);
             Assert.AreEqual(dummy.Value, read.Value);
@@ -49,13 +46,9 @@
         [Test]
         public async Task FileAsyncRoundtrip()
         {
-            if (_file.Exists)
-            {
-                _file.Delete();
-            }
             var dummy = new DummySerializable { Value = 1 };
             await BinaryHelper.SaveAsync(dummy, _file);
-            Assert.IsTrue(_file.Exists);
+            AssertFile.Exists(true, _file);
 
             var read = await BinaryHelper.ReadAsync<DummySerializable>(_file);
             Assert.AreEqual(dummy.Value, read.Value);

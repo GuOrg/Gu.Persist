@@ -64,8 +64,8 @@ namespace Gu.Settings.Tests.IO
             var dummy = new DummySerializable(1);
             var repository = new BinaryRepository(_setting);
             repository.Save(dummy, _file);
-            AssertExists(true, _file);
-            AssertExists(false, _backup);
+            AssertFile.Exists(true, _file);
+            AssertFile.Exists(false, _backup);
             var read = BinaryHelper.Read<DummySerializable>(_file);
             Assert.AreEqual(dummy.Value, read.Value);
             Assert.AreNotSame(dummy, read);
@@ -78,14 +78,14 @@ namespace Gu.Settings.Tests.IO
             var repository = new BinaryRepository(_setting);
 
             repository.Save(dummy, _file);
-            AssertExists(true, _file);
-            AssertExists(false, _backup);
+            AssertFile.Exists(true, _file);
+            AssertFile.Exists(false, _backup);
 
             dummy.Value = 2;
             repository.Save(dummy, _file);
 
-            AssertExists(true, _file);
-            AssertExists(true, _backup);
+            AssertFile.Exists(true, _file);
+            AssertFile.Exists(true, _backup);
             var read = BinaryHelper.Read<DummySerializable>(_file);
             Assert.AreEqual(dummy.Value, read.Value);
             Assert.AreNotSame(dummy, read);
@@ -97,7 +97,7 @@ namespace Gu.Settings.Tests.IO
             var dummy = new DummySerializable(1);
             var repository = new BinaryRepository(_setting);
             repository.Save(dummy);
-            Assert.IsTrue(_autoFile.Exists);
+            AssertFile.Exists(true, _autoFile);
         }
 
         [Test]
@@ -108,12 +108,6 @@ namespace Gu.Settings.Tests.IO
             repository.Save(dummy, _file);
             var read = repository.Read<DummySerializable>(_file);
             Assert.AreSame(dummy, read);
-        }
-
-        public static void AssertExists(bool expected, FileInfo fileInfo)
-        {
-            fileInfo.Refresh();
-            Assert.AreEqual(expected, fileInfo.Exists);
         }
     }
 }

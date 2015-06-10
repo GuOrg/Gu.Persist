@@ -64,8 +64,8 @@
             var dummy = new DummySerializable(1);
             var repository = new XmlRepository(_setting);
             repository.Save(dummy, _file);
-            AssertExists(true, _file);
-            AssertExists(false, _backup);
+            AssertFile.Exists(true, _file);
+            AssertFile.Exists(false, _backup);
             var read = XmlHelper.Read<DummySerializable>(_file);
             Assert.AreEqual(dummy.Value, read.Value);
             Assert.AreNotSame(dummy, read);
@@ -78,14 +78,14 @@
             var repository = new XmlRepository(_setting);
 
             repository.Save(dummy, _file);
-            AssertExists(true, _file);
-            AssertExists(false, _backup);
+            AssertFile.Exists(true, _file);
+            AssertFile.Exists(false, _backup);
 
             dummy.Value = 2;
             repository.Save(dummy, _file);
 
-            AssertExists(true, _file);
-            AssertExists(true, _backup);
+            AssertFile.Exists(true, _file);
+            AssertFile.Exists(true, _backup);
             var read = XmlHelper.Read<DummySerializable>(_file);
             Assert.AreEqual(dummy.Value, read.Value);
             Assert.AreNotSame(dummy, read);
@@ -97,7 +97,7 @@
             var dummy = new DummySerializable(1);
             var repository = new XmlRepository(_setting);
             repository.Save(dummy);
-            Assert.IsTrue(_autoFile.Exists);
+            AssertFile.Exists(true, _autoFile);
         }
 
         [Test]
@@ -115,19 +115,13 @@
         {
             var dummy = new DummySerializable(1);
             var repository = new XmlRepository(_setting);
-            Assert.IsFalse(repository.IsDirty(dummy));
+            Assert.IsTrue(repository.IsDirty(dummy));
 
             repository.Save(dummy);
             Assert.IsFalse(repository.IsDirty(dummy));
 
             dummy.Value++;
             Assert.IsTrue(repository.IsDirty(dummy));
-        }
-
-        public static void AssertExists(bool expected, FileInfo fileInfo)
-        {
-            fileInfo.Refresh();
-            Assert.AreEqual(expected, fileInfo.Exists);
         }
     }
 }
