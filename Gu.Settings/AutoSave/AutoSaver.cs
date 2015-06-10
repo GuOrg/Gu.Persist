@@ -3,16 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Threading.Tasks;
 
     public class AutoSaver : IDisposable
     {
-        private static readonly TaskFactory TaskFactory = new TaskFactory(new ConcurrentExclusiveSchedulerPair().ExclusiveScheduler);
         private readonly List<IDisposable> _subscriptions = new List<IDisposable>();
-        private readonly IRepository _repository;
+        private readonly IAutoSavingRepository _repository;
         private bool _disposed = false;
 
-        public AutoSaver(IRepository repository)
+        public AutoSaver(IAutoSavingRepository repository)
         {
             _repository = repository;
         }
@@ -21,7 +19,18 @@
             where T : class, INotifyPropertyChanged
         {
             var reference = new WeakReference<T>(item);
-            var saver = new Saver(this, () => Save(reference, fileInfos));
+            var saver = new Saver(this, () => Save(reference, null, fileInfos));
+            var subscription = trigger.Subscribe(saver);
+            saver.Subscription = subscription;
+            _subscriptions.Add(saver);
+            return saver;
+        }
+
+        public virtual IDisposable Add<T>(T item, IEqualityComparer<T> isDirtyComparer, IFileInfos fileInfos, IObservable<object> trigger)
+    where T : class, INotifyPropertyChanged
+        {
+            var reference = new WeakReference<T>(item);
+            var saver = new Saver(this, () => Save(reference, isDirtyComparer, fileInfos));
             var subscription = trigger.Subscribe(saver);
             saver.Subscription = subscription;
             _subscriptions.Add(saver);
@@ -70,22 +79,29 @@
             _disposed = true;
         }
 
-        protected virtual void Save<T>(WeakReference<T> itemReference, IFileInfos fileInfos)
+        protected virtual void Save<T>(WeakReference<T> itemReference, IEqualityComparer<T> isDirtyComparer, IFileInfos fileInfos)
             where T : class
         {
             T item;
             if (itemReference.TryGetTarget(out item))
             {
+                if (isDirtyComparer != null)
+                {
+                    if (!_repository.IsDirty(item, fileInfos.File, isDirtyComparer))
+                    {
+                        return;
+                    }
+                }
                 OnSaving(new SaveEventArgs(item, fileInfos));
-                TaskFactory.StartNew(() => Save(item, fileInfos));
+                Save(item, fileInfos);
             }
         }
 
-        protected virtual void Save<T>(T item, IFileInfos fileInfos)
+        protected virtual async void Save<T>(T item, IFileInfos fileInfos)
         {
             try
             {
-                _repository.Save(item, fileInfos);
+                await _repository.SaveAsync(item, fileInfos);
                 OnSaved(new SaveEventArgs(item, fileInfos));
             }
             catch (Exception e)
