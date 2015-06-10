@@ -35,7 +35,7 @@
             }
             var dummy = new DummySerializable { Value = 1 };
             XmlHelper.Save(dummy, _file);
-            Assert.IsTrue(_file.Exists);
+            AssertFile.Exists(true, _file);
 
             var read = XmlHelper.Read<DummySerializable>(_file);
             Assert.AreEqual(dummy.Value, read.Value);
@@ -51,7 +51,7 @@
             }
             var dummy = new DummySerializable { Value = 1 };
             await XmlHelper.SaveAsync(dummy, _file);
-            Assert.IsTrue(_file.Exists);
+            AssertFile.Exists(true, _file);
 
             var read = await XmlHelper.ReadAsync<DummySerializable>(_file);
             Assert.AreEqual(dummy.Value, read.Value);

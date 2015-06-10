@@ -47,13 +47,13 @@
             _autoSaver.Add(_dummy, _fileInfos, _subject);
             _subject.OnNext(1);
             _resetEvent.WaitOne();
-            AssertExists(true, _file);
-            AssertExists(false, _backup);
+            AssertFile.Exists(true, _file);
+            AssertFile.Exists(false, _backup);
             _resetEvent.Reset();
             _subject.OnNext(2);
             _resetEvent.WaitOne();
-            AssertExists(true, _file);
-            AssertExists(true, _backup);
+            AssertFile.Exists(true, _file);
+            AssertFile.Exists(true, _backup);
             _autoSaver.Saved -= AutoSaverOnSaved;
         }
 
@@ -73,12 +73,6 @@
         private void AutoSaverOnSaved(object sender, SaveEventArgs saveEventArgs)
         {
             _resetEvent.Set();
-        }
-
-        public static void AssertExists(bool expected, FileInfo fileInfo)
-        {
-            fileInfo.Refresh();
-            Assert.AreEqual(expected, fileInfo.Exists);
         }
     }
 }
