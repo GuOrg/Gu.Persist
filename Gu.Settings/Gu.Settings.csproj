@@ -37,7 +37,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\CreateNugetPackages\Gu.Settings.XML</DocumentationFile>
+    <DocumentationFile>bin\CreateNugetPackage\Gu.Settings.XML</DocumentationFile>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <BuildPackage>true</BuildPackage>
   </PropertyGroup>
