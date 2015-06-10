@@ -23,6 +23,12 @@
             return ms;
         }
 
+        /// <summary>
+        /// Serializes to memorystream, then returns the deserialized object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static T DeepClone<T>(T item)
         {
             using (var stream = ToStream(item))
@@ -37,7 +43,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="file"></param>
         /// <returns></returns>
-        public static T ReadBinary<T>(FileInfo file)
+        public static T Read<T>(FileInfo file)
         {
             return FileHelper.Read(file, FromStream<T>);
         }
@@ -48,7 +54,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="file">The filename including path and extension</param>
         /// <returns></returns>
-        public static Task<T> ReadBinaryAsync<T>(FileInfo file)
+        public static Task<T> ReadAsync<T>(FileInfo file)
         {
             return FileHelper.ReadAsync(file, FromStream<T>);
         }
@@ -60,7 +66,7 @@
         /// <param name="o"></param>
         /// <param name="file">The filename including path and extension</param>
         /// <returns></returns>
-        public static Task SaveBinaryAsync<T>(T o, FileInfo file)
+        public static Task SaveAsync<T>(T o, FileInfo file)
         {
             using (var stream = ToStream(o))
             {
@@ -68,7 +74,7 @@
             }
         }
 
-        public static void SaveBinary<T>(T o, FileInfo file)
+        public static void Save<T>(T o, FileInfo file)
         {
             using (var stream = ToStream(o))
             {

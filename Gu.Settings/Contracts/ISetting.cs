@@ -2,7 +2,10 @@
 {
     using System.ComponentModel;
 
-    public interface ISetting : INotifyPropertyChanged
+    /// <summary>
+    /// Internal until done
+    /// </summary>
+    internal interface ISetting : INotifyPropertyChanged
     {
         bool IsDirty { get; }
     }

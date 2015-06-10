@@ -1,11 +1,19 @@
 ﻿namespace Gu.Settings
 {
+    using System.IO;
+
     public interface IRepository
     {
-        T Read<T>(string fileName = null);
+        IRepositorySetting Setting { get; }
 
-        void Save<T>(T setting, bool createBackup, string fileName = null);
+        T Read<T>(string fileName);
 
-        RepositorySetting Setting { get; }
+        void Save<T>(T item, string fileName);
+
+        T Read<T>(FileInfo file);
+
+        void Save<T>(T item, FileInfo file);
+
+        void Save<T>(T item, FileInfos fileInfos);
     }
 }

@@ -3,7 +3,7 @@
     using System;
     using System.IO;
 
-    public class RepositorySetting
+    public class RepositorySetting : IRepositorySetting
     {
         public RepositorySetting(
             bool createBackupOnSave,
@@ -11,18 +11,13 @@
             string extension = ".cfg",
             string backupExtension = ".old")
         {
-            if (string.IsNullOrEmpty(extension))
+            Ensure.NotNullOrEmpty(extension, "extension");
+            Ensure.NotNull(directory, "directory");
+            if (CreateBackupOnSave)
             {
-                throw new ArgumentException("Extension cannot be empty", "extension");
+                Ensure.NotNullOrEmpty(backupExtension, "backupExtension");
             }
-            if (CreateBackupOnSave && string.IsNullOrEmpty(backupExtension))
-            {
-                throw new ArgumentException("Extension cannot be empty", "backupExtension");
-            }
-            if (directory == null)
-            {
-                throw new ArgumentNullException("directory");
-            }
+
             CreateBackupOnSave = createBackupOnSave;
             Directory = directory;
             if (!extension.StartsWith("."))

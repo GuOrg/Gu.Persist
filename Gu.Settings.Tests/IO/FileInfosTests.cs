@@ -9,7 +9,7 @@
         [Test]
         public void CreateFileInfosWithBackup()
         {
-            var fileInfos = FileInfos.CreateFileInfos(new DirectoryInfo(@"C:\Temp"), "Setting", true, ".cfg", ".old");
+            var fileInfos = FileInfos.CreateFileInfos(new FileInfo(@"C:\Temp\Setting.cfg"), ".old");
             Assert.AreEqual(@"C:\Temp\Setting.cfg", fileInfos.File.FullName);
             Assert.AreEqual(@"C:\Temp\Setting.old", fileInfos.Backup.FullName);
         }
