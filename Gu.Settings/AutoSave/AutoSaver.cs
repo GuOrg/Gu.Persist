@@ -101,7 +101,7 @@
         {
             try
             {
-                await _repository.SaveAsync(item, fileInfos);
+                await _repository.SaveAsync(item, fileInfos).ConfigureAwait(false);
                 OnSaved(new SaveEventArgs(item, fileInfos));
             }
             catch (Exception e)
