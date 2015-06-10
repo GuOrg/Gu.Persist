@@ -8,5 +8,6 @@ namespace Gu.Settings
         DirectoryInfo Directory { get; }
         string Extension { get; }
         string BackupExtension { get; }
+        bool IsTrackingDirty { get; }
     }
 }

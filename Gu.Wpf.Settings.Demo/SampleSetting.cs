@@ -2,7 +2,7 @@
 {
     using Gu.Settings;
 
-    public class SampleSetting : SettingCollection
+    internal class SampleSetting : SettingCollection
     {
         public SampleSetting()
         {

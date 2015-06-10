@@ -4,7 +4,6 @@ namespace Gu.Settings
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
-    using Gu.Reactive;
     using Gu.Settings.Annotations;
 
     internal abstract class ValidatingSetting<T> : ISetting
@@ -34,16 +33,18 @@ namespace Gu.Settings
             get { return _setting; }
             set
             {
-                if (_isValidSubscription != null)
-                {
-                    _isValidSubscription.Dispose();
-                }
-                _setting = value;
-                if(_setting != null)
-                {
-                    _isValidSubscription = _setting.ObservePropertyChanged()
-                                               .Subscribe(_ => IsValid = IsValidCore(_setting.EditValue));
-                }
+                throw new NotImplementedException("message");
+                
+                //if (_isValidSubscription != null)
+                //{
+                //    _isValidSubscription.Dispose();
+                //}
+                //_setting = value;
+                //if(_setting != null)
+                //{
+                //    _isValidSubscription = _setting.ObservePropertyChanged()
+                //                               .Subscribe(_ => IsValid = IsValidCore(_setting.EditValue));
+                //}
             }
         }
 

@@ -25,7 +25,7 @@
         public void DeepClone()
         {
             var dummy = new DummySerializable { Value = 1 };
-            var clone = BinaryHelper.DeepClone(dummy);
+            var clone = BinaryHelper.Clone(dummy);
             Assert.AreEqual(dummy.Value, clone.Value);
             Assert.AreNotSame(dummy, clone);
         }

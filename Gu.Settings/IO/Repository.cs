@@ -5,19 +5,25 @@
     using System.IO;
     using System.Threading.Tasks;
 
-    public abstract class Repository : IRepository, IAsyncRepository, IAutoAsyncRepository, IAutoRepository
+    public abstract class Repository : IRepository, IAsyncRepository, IAutoAsyncRepository, IAutoRepository, ICloner
     {
         private readonly ConcurrentDictionary<string, FileInfo> _fileNamesMap = new ConcurrentDictionary<string, FileInfo>(StringComparer.OrdinalIgnoreCase);
-        private readonly ConcurrentDictionary<FileInfo, FileInfos> _fileInfosMap = new ConcurrentDictionary<FileInfo, FileInfos>(FileInfoComparer.Default);
+        private readonly ConcurrentDictionary<FileInfo, IFileInfos> _fileInfosMap = new ConcurrentDictionary<FileInfo, IFileInfos>(FileInfoComparer.Default);
         private readonly ConcurrentDictionary<FileInfo, WeakReference> _cache = new ConcurrentDictionary<FileInfo, WeakReference>(FileInfoComparer.Default);
 
         protected Repository(IRepositorySetting setting)
         {
             Setting = setting;
             FileHelper.CreateDirectoryIfNotExists(setting.Directory);
+            if (Setting.IsTrackingDirty)
+            {
+                DirtyTracker = new DirtyTracker(this);
+            }
         }
 
         public IRepositorySetting Setting { get; private set; }
+
+        public DirtyTracker DirtyTracker { get; private set; }
 
         public Task<T> ReadAsync<T>()
         {
@@ -83,23 +89,28 @@
             Save(item, typeof(T).Name);
         }
 
-        public void Save<T>(T setting, string fileName)
+        public void Save<T>(T item, string fileName)
         {
             var fileInfo = CreateFileInfo(fileName);
-            Save(setting, fileInfo);
+            Save(item, fileInfo);
         }
 
-        public void Save<T>(T setting, FileInfo file)
+        public void Save<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, "file");
             var fileInfos = GetFileInfos(file);
-            Save(setting, fileInfos);
+            Save(item, fileInfos);
         }
 
-        public virtual void Save<T>(T item, FileInfos fileInfos)
+        public virtual void Save<T>(T item, IFileInfos fileInfos)
         {
             Ensure.NotNull(fileInfos, "fileInfos");
+            Ensure.NotNull(fileInfos.File, "fileInfos");
             Cache(item, fileInfos);
+            if (Setting.IsTrackingDirty)
+            {
+                DirtyTracker.TrackOrUpdate(fileInfos.File, item);
+            }
             FileHelper.SemaphoreSlim.Wait();
             try
             {
@@ -155,11 +166,15 @@
             return SaveAsync(item, fileInfos);
         }
 
-        public async Task SaveAsync<T>(T item, FileInfos fileInfos)
+        public async Task SaveAsync<T>(T item, IFileInfos fileInfos)
         {
             Ensure.NotNull(fileInfos, "fileInfos");
+            Ensure.NotNull(fileInfos.File, "fileInfos");
             Cache(item, fileInfos);
-
+            if (Setting.IsTrackingDirty)
+            {
+                DirtyTracker.TrackOrUpdate(fileInfos.File, item);
+            }
             await FileHelper.SemaphoreSlim.WaitAsync().ConfigureAwait(false);
             try
             {
@@ -197,11 +212,40 @@
             }
         }
 
+        public bool IsDirty<T>(T item)
+        {
+            return IsDirty(item, typeof(T).Name);
+        }
+
+        public bool IsDirty<T>(T item, string fileName)
+        {
+            Ensure.NotNullOrEmpty(fileName, "fileName");
+            var fileInfo = CreateFileInfo(fileName);
+            return IsDirty(item, fileInfo);
+        }
+
+        public bool IsDirty<T>(T item, FileInfo file)
+        {
+            if (!Setting.IsTrackingDirty)
+            {
+                throw new InvalidOperationException("Cannot check IsDirty if not Setting.IsTrackingDirty");
+            }
+            return DirtyTracker.IsDirty(file, item);
+        }
+
         protected abstract T FromStream<T>(Stream stream);
 
         protected abstract Stream ToStream<T>(T item);
 
-        protected virtual void Cache<T>(T item, FileInfos fileInfos)
+        public virtual T Clone<T>(T item)
+        {
+            using (var stream  = ToStream(item))
+            {
+                return FromStream<T>(stream);
+            }
+        }
+
+        protected virtual void Cache<T>(T item, IFileInfos fileInfos)
         {
             WeakReference cached;
             if (_cache.TryGetValue(fileInfos.File, out cached))
@@ -230,7 +274,7 @@
             return fileInfo;
         }
 
-        private FileInfos GetFileInfos(FileInfo file)
+        private IFileInfos GetFileInfos(FileInfo file)
         {
             if (Setting.CreateBackupOnSave)
             {
