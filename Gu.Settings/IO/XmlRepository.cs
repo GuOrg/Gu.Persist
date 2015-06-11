@@ -4,7 +4,7 @@ namespace Gu.Settings
 
     public class XmlRepository : Repository
     {
-        public XmlRepository(RepositorySetting setting) 
+        public XmlRepository(IRepositorySetting setting) 
             : base(setting)
         {
         }
