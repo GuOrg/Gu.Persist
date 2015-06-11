@@ -6,6 +6,7 @@ namespace Gu.Settings
     {
         bool CreateBackupOnSave { get; }
         DirectoryInfo Directory { get; }
+        string TempExtension { get; }
         string Extension { get; }
         string BackupExtension { get; }
         bool IsTrackingDirty { get; }

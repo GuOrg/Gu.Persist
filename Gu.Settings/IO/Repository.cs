@@ -28,7 +28,7 @@
 
         public bool Exists<T>()
         {
-            return Exists<T>(typeof (T).Name);
+            return Exists<T>(typeof(T).Name);
         }
 
         public bool Exists<T>(string fileName)
@@ -146,8 +146,9 @@
                     {
                         using (var stream = ToStream(item))
                         {
-                            FileHelper.Save(fileInfos.File, stream, false);
+                            FileHelper.Save(fileInfos.TempFile, stream, false);
                         }
+                        fileInfos.TempFile.MoveTo(fileInfos.File);
                     }
                 }
                 catch (Exception)
@@ -210,9 +211,10 @@
                     {
                         using (var stream = ToStream(item))
                         {
-                            await FileHelper.SaveAsync(fileInfos.File, stream, false)
+                            await FileHelper.SaveAsync(fileInfos.TempFile, stream, false)
                                             .ConfigureAwait(false);
                         }
+                        fileInfos.TempFile.MoveTo(fileInfos.File);
                     }
                 }
                 catch (Exception)
@@ -272,7 +274,7 @@
 
         public virtual T Clone<T>(T item)
         {
-            using (var stream  = ToStream(item))
+            using (var stream = ToStream(item))
             {
                 return FromStream<T>(stream);
             }
@@ -311,9 +313,11 @@
         {
             if (Setting.CreateBackupOnSave)
             {
-                return _fileInfosMap.GetOrAdd(file, x => FileInfos.CreateFileInfos(file, Setting.BackupExtension));
+                return _fileInfosMap.GetOrAdd(
+                    file,
+                    x => FileInfos.CreateFileInfos(file, Setting.TempExtension, Setting.BackupExtension));
             }
-            return _fileInfosMap.GetOrAdd(file, x => FileInfos.CreateFileInfos(file));
+            return _fileInfosMap.GetOrAdd(file, x => FileInfos.CreateFileInfos(file, Setting.TempExtension, null));
         }
     }
 }

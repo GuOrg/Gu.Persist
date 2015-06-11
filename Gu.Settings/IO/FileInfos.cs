@@ -6,55 +6,44 @@
     [Serializable]
     public class FileInfos : IFileInfos
     {
-        public FileInfos(FileInfo file, FileInfo backup)
+        public FileInfos(FileInfo file, FileInfo tempFile, FileInfo backup)
         {
             Ensure.NotNull(file, "file");
             File = file;
+            TempFile = tempFile;
             Backup = backup;
         }
 
         public FileInfo File { get; private set; }
 
+        public FileInfo TempFile { get; private set; }
+
         public FileInfo Backup { get; private set; }
 
-        public static FileInfos CreateFileInfos(DirectoryInfo directory, string fileName, string extension)
-        {
-            Ensure.NotNull(directory, "directory");
-            Ensure.NotNullOrEmpty(fileName, "fileName");
-            Ensure.NotNullOrEmpty(extension, "extension");
-            var fileInfo = FileHelper.CreateFileInfo(directory, fileName, extension);
-            return CreateFileInfos(fileInfo);
-        }
-
-        public static FileInfos CreateFileInfos(DirectoryInfo directory, string fileName, string extension, string backupExtension)
+        public static FileInfos CreateFileInfos(
+            DirectoryInfo directory,
+            string fileName,
+            string extension,
+            string tempExtension,
+            string backupExtension)
         {
             Ensure.NotNull(directory, "directory");
             Ensure.NotNullOrEmpty(fileName, "fileName");
             Ensure.NotNullOrEmpty(extension, "extension");
             Ensure.NotNullOrEmpty(backupExtension, "backupExtension");
             var fileInfo = FileHelper.CreateFileInfo(directory, fileName, extension);
-            return CreateFileInfos(fileInfo, backupExtension);
+            return CreateFileInfos(fileInfo, tempExtension, backupExtension);
         }
 
-        public static FileInfos CreateFileInfos(FileInfo fileInfo)
+        public static FileInfos CreateFileInfos(FileInfo fileInfo, string tempExtension, string backupExtension)
         {
             Ensure.NotNull(fileInfo, "fileInfo");
-            return new FileInfos(fileInfo, null);
-        }
-
-        public static FileInfos CreateFileInfos(FileInfo fileInfo, string backupExtension)
-        {
-            Ensure.NotNull(fileInfo, "fileInfo");
-            Ensure.NotNull(backupExtension, "backupExtension");
-            var backup = BackupFile(fileInfo, backupExtension);
-            return new FileInfos(fileInfo, backup);
-        }
-
-        internal static FileInfo BackupFile(FileInfo file, string backupExtension = ".old")
-        {
-            var changeExtension = Path.ChangeExtension(file.FullName, backupExtension);
-            var backupFile = new FileInfo(changeExtension);
-            return backupFile;
+            Ensure.NotNullOrEmpty(tempExtension, "tempExtension");
+            var temp = FileHelper.ChangeExtension(fileInfo, tempExtension);
+            var backup = string.IsNullOrEmpty(backupExtension)
+                             ? null
+                             : FileHelper.ChangeExtension(fileInfo, backupExtension);
+            return new FileInfos(fileInfo, temp, backup);
         }
     }
 }

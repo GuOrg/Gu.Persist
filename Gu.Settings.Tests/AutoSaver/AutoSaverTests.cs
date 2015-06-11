@@ -26,9 +26,10 @@
         [SetUp]
         public void SetUp()
         {
-            _file = new FileInfo(@"C:\Temp\AutoSaverTests.tmp");
-            _backup = new FileInfo(@"C:\Temp\AutoSaverTests.bak");
-            _fileInfos = new FileInfos(_file, _backup);
+            _file = new FileInfo(string.Format(@"C:\Temp\{0}.cfg", GetType().Name));
+           var temp = new FileInfo(string.Format(@"C:\Temp\{0}.tmp", GetType().Name));
+           _backup = new FileInfo(string.Format(@"C:\Temp\{0}.bak", GetType().Name));
+            _fileInfos = new FileInfos(_file,temp, _backup);
 
             _setting = new RepositorySetting(true, false, _file.Directory, ".tmp", ".bak");
             _file.Delete();
@@ -67,7 +68,7 @@
             var subscriptions = (List<IDisposable>)fieldInfo.GetValue(_autoSaver);
             CollectionAssert.AreEqual(new[] { subscription }, subscriptions);
             subscription.Dispose();
-            CollectionAssert.IsEmpty( subscriptions);
+            CollectionAssert.IsEmpty(subscriptions);
         }
 
         private void AutoSaverOnSaved(object sender, SaveEventArgs saveEventArgs)
