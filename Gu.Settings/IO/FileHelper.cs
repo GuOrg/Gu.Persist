@@ -5,7 +5,7 @@ namespace Gu.Settings
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal class FileHelper
+    public static class FileHelper
     {
         internal static readonly SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
 
@@ -155,6 +155,11 @@ namespace Gu.Settings
         /// <returns>The name of the backed upp file</returns>
         internal static void Backup(IFileInfos files, bool @lock = true)
         {
+            files.File.Refresh();
+            if (!files.File.Exists)
+            {
+                return;
+            }
             if (@lock)
             {
                 SemaphoreSlim.Wait();
@@ -165,12 +170,9 @@ namespace Gu.Settings
                 {
                     return;
                 }
+                files.Backup.Delete();
+                files.File.MoveTo(files.Backup);
                 files.File.Refresh();
-                if (files.File.Exists)
-                {
-                    files.Backup.Delete();
-                    files.File.MoveTo(files.Backup.FullName);
-                }
             }
             finally
             {
@@ -199,7 +201,7 @@ namespace Gu.Settings
                     return;
                 }
                 files.File.Delete();
-                files.Backup.MoveTo(files.File.FullName);
+                files.Backup.MoveTo(files.File);
             }
             finally
             {
@@ -222,7 +224,7 @@ namespace Gu.Settings
                 if (Path.HasExtension(fileName))
                 {
                     var ext = Path.GetExtension(fileName);
-                    if (!string.Equals(ext, extension, StringComparison.OrdinalIgnoreCase))
+                    if (!String.Equals(ext, extension, StringComparison.OrdinalIgnoreCase))
                     {
                         fileName = Path.ChangeExtension(fileName, extension);
                     }
@@ -240,6 +242,23 @@ namespace Gu.Settings
 
             var fullFileName = Path.Combine(directory.FullName, fileName);
             return new FileInfo(fullFileName);
+        }
+
+        public static void MoveTo(this FileInfo source, FileInfo destination)
+        {
+            File.Move(source.FullName, destination.FullName);
+        }
+
+        public static FileInfo ChangeExtension(this FileInfo file, string newExtension)
+        {
+            Ensure.NotNullOrEmpty(newExtension, "newExtension");
+            if (!newExtension.StartsWith("."))
+            {
+                newExtension = "." + newExtension;
+            }
+            var newFileName = Path.ChangeExtension(file.FullName, newExtension);
+            var newFile = new FileInfo(newFileName);
+            return newFile;
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Gu.Settings
 
     public class BinaryRepository : Repository
     {
-        public BinaryRepository(RepositorySetting setting)
+        public BinaryRepository(IRepositorySetting setting)
             : base(setting)
         {
         }
