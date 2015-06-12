@@ -1,13 +1,16 @@
-namespace Gu.Settings.Tests.IO
+﻿namespace Gu.Settings.Json.Tests
 {
     using System.IO;
     using System.Threading.Tasks;
 
+    using Gu.Settings.Tests;
     using Gu.Settings.Tests.Helpers;
+
+    using Newtonsoft.Json;
 
     using NUnit.Framework;
 
-    public class BinaryRepositoryTests
+    public class JsonRepositoryTests
     {
         private FileInfo _file;
         private FileInfo _tempFile;
@@ -16,7 +19,7 @@ namespace Gu.Settings.Tests.IO
 
         private RepositorySetting _setting;
         private DummySerializable _dummy;
-        private BinaryRepository _repository;
+        private JsonRepository _repository;
 
         [SetUp]
         public void SetUp()
@@ -31,7 +34,7 @@ namespace Gu.Settings.Tests.IO
             _backup.Delete();
             _dummyFile.Delete();
             _dummy = new DummySerializable(1);
-            _repository = new BinaryRepository(_setting);
+            _repository = new JsonRepository(_setting);
         }
 
         [Test]
@@ -140,12 +143,14 @@ namespace Gu.Settings.Tests.IO
 
         private static void Save<T>(T item, FileInfo file)
         {
-            BinaryHelper.Save(item, file);
+            var json = JsonConvert.SerializeObject(item);
+            File.WriteAllText(file.FullName, json);
         }
 
         private static T Read<T>(FileInfo file)
         {
-            return BinaryHelper.Read<T>(file);
+            var json = File.ReadAllText(file.FullName);
+            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

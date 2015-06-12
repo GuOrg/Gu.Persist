@@ -37,7 +37,7 @@
         [Test]
         public void Read()
         {
-            XmlHelper.Save(_dummy, _file);
+            Save(_dummy, _file);
             var read = _repository.Read<DummySerializable>(_file);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
@@ -46,7 +46,7 @@
         [Test]
         public void ReadAuto()
         {
-            XmlHelper.Save(_dummy, _dummyFile);
+            Save(_dummy, _dummyFile);
             var read = _repository.Read<DummySerializable>();
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
@@ -55,7 +55,7 @@
         [Test]
         public void ReadCaches()
         {
-            XmlHelper.Save(_dummy, _file);
+            Save(_dummy, _file);
             var read1 = _repository.Read<DummySerializable>(_file);
             var read2 = _repository.Read<DummySerializable>(_file);
             Assert.AreSame(read1, read2);
@@ -67,7 +67,7 @@
             _repository.Save(_dummy, _file);
             AssertFile.Exists(true, _file);
             AssertFile.Exists(false, _backup);
-            var read = XmlHelper.Read<DummySerializable>(_file);
+            var read = Read<DummySerializable>(_file);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
         }
@@ -78,7 +78,7 @@
             await _repository.SaveAsync(_dummy, _file);
             AssertFile.Exists(true, _file);
             AssertFile.Exists(false, _backup);
-            var read = XmlHelper.Read<DummySerializable>(_file);
+            var read = Read<DummySerializable>(_file);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
         }
@@ -95,7 +95,7 @@
 
             AssertFile.Exists(true, _file);
             AssertFile.Exists(true, _backup);
-            var read = XmlHelper.Read<DummySerializable>(_file);
+            var read = Read<DummySerializable>(_file);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
         }
@@ -121,7 +121,7 @@
             _repository.Save(_dummy, _file);
             var read = _repository.Read<DummySerializable>(_file);
             Assert.AreSame(_dummy, read);
-            read = XmlHelper.Read<DummySerializable>(_file);
+            read = Read<DummySerializable>(_file);
             Assert.AreEqual(_dummy, read);
 
             for (int i = 2; i < 3; i++)
@@ -130,10 +130,10 @@
                 _repository.Save(_dummy, _file);
                 read = _repository.Read<DummySerializable>(_file);
                 Assert.AreSame(_dummy, read);
-                read = XmlHelper.Read<DummySerializable>(_file);
+                read = Read<DummySerializable>(_file);
                 Assert.AreEqual(_dummy, read);
 
-                read = XmlHelper.Read<DummySerializable>(_backup);
+                read = Read<DummySerializable>(_backup);
                 Assert.AreEqual(_dummy.Value - 1, read.Value);
             }
         }
@@ -148,6 +148,16 @@
 
             _dummy.Value++;
             Assert.IsTrue(_repository.IsDirty(_dummy));
+        }
+
+        private static void Save<T>(T item, FileInfo file)
+        {
+            XmlHelper.Save(item, file);
+        }
+
+        private static T Read<T>(FileInfo file)
+        {
+            return XmlHelper.Read<T>(file);
         }
     }
 }

@@ -12,6 +12,11 @@
         private readonly ConcurrentDictionary<FileInfo, IFileInfos> _fileInfosMap = new ConcurrentDictionary<FileInfo, IFileInfos>(FileInfoComparer.Default);
         private readonly ConcurrentDictionary<FileInfo, WeakReference> _cache = new ConcurrentDictionary<FileInfo, WeakReference>(FileInfoComparer.Default);
 
+        protected Repository(DirectoryInfo directory)
+            : this(new RepositorySetting(true,true,directory))
+        {
+        }
+
         protected Repository(IRepositorySetting setting)
         {
             Setting = setting;
