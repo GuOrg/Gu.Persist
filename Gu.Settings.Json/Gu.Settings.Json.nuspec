@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$id$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <description>$description$</description>
+    <copyright>Copyright 2014</copyright>
+    <dependencies>
+      <dependency id="Gu.Settings" version="1.0.4.0" />
+      <dependency id="Newtonsoft.Json" version="6.0.8" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="\bin\CreateNugetPackage\Gu.Settings.Json.dll" target="lib\net45" />
+    <file src="\bin\CreateNugetPackage\Gu.Settings.Json.pdb" target="lib\net45" />
+    <file src="\bin\CreateNugetPackage\Gu.Settings.Json.XML" target="lib\net45" />
+  </files>
+</package>

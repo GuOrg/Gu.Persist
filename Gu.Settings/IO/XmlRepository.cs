@@ -4,6 +4,11 @@ namespace Gu.Settings
 
     public class XmlRepository : Repository
     {
+        public XmlRepository(DirectoryInfo directory)
+            : base(directory)
+        {
+        }
+
         public XmlRepository(IRepositorySetting setting) 
             : base(setting)
         {

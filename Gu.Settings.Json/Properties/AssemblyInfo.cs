@@ -6,11 +6,11 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Gu.Settings")]
-[assembly: AssemblyDescription("Manages saving and reading xml and binary files.")]
+[assembly: AssemblyTitle("Gu.Settings.Json")]
+[assembly: AssemblyDescription("A repository using Newtonsoft.Json")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Johan Larsson")]
-[assembly: AssemblyProduct("Gu.Settings")]
+[assembly: AssemblyProduct("Gu.Settings.Json")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +21,7 @@ using System.Resources;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d254e6a5-a3a4-4a75-8ed1-41812208bca6")]
+[assembly: Guid("f01d25a5-6d87-4a06-aa95-a7d8cf565eef")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -33,8 +33,6 @@ using System.Resources;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.4.0")]
-[assembly: AssemblyFileVersion("1.0.4.0")]
-[assembly: InternalsVisibleTo("Gu.Settings.Tests", AllInternalsVisible = true)]
-[assembly: InternalsVisibleTo("Gu.Settings.Demo", AllInternalsVisible = true)]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en")]

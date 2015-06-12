@@ -4,6 +4,11 @@ namespace Gu.Settings
 
     public class BinaryRepository : Repository
     {
+        public BinaryRepository(DirectoryInfo directory)
+            : base(directory)
+        {
+        }
+
         public BinaryRepository(IRepositorySetting setting)
             : base(setting)
         {
