@@ -21,7 +21,7 @@ namespace Gu.Settings
         /// <param name="file"></param>
         /// <param name="fromStream">Reading from from file to T</param>
         /// <returns></returns>
-        internal static T Read<T>(FileInfo file, Func<Stream, T> fromStream, bool @lock = true)
+        public static T Read<T>(FileInfo file, Func<Stream, T> fromStream, bool @lock = true)
         {
             if (@lock)
             {
@@ -49,7 +49,7 @@ namespace Gu.Settings
         /// <param name="file"></param>
         /// <param name="fromStream">Reading from stream to T</param>
         /// <returns></returns>
-        internal static async Task<T> ReadAsync<T>(FileInfo file, Func<Stream, T> fromStream, bool @lock = true)
+        public static async Task<T> ReadAsync<T>(FileInfo file, Func<Stream, T> fromStream, bool @lock = true)
         {
             if (@lock)
             {
@@ -84,7 +84,7 @@ namespace Gu.Settings
         /// <param name="file"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
-        internal static async Task SaveAsync(FileInfo file, Stream stream, bool @lock = true)
+        public static async Task SaveAsync(FileInfo file, Stream stream, bool @lock = true)
         {
             if (@lock)
             {
@@ -114,7 +114,7 @@ namespace Gu.Settings
         /// </summary>
         /// <param name="file"></param>
         /// <param name="stream"></param>
-        internal static void Save(FileInfo file, Stream stream, bool @lock = true)
+        public static void Save(FileInfo file, Stream stream, bool @lock = true)
         {
             if (@lock)
             {
