@@ -1,7 +1,7 @@
 ﻿<Application x:Class="Gu.Settings.Demo.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:wpf="clr-namespace:Gu.Settings.Demo"
+             xmlns:demo="clr-namespace:Gu.Settings.Demo"
              StartupUri="MainWindow.xaml"
              >
     <Application.Resources>
@@ -24,7 +24,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"
-                                                  SharedSizeGroup="{x:Static wpf:SharedSizeGroups.LabelColumn}"
+                                                  SharedSizeGroup="{x:Static demo:SharedSizeGroups.LabelColumn}"
                                                   />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
@@ -49,7 +49,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"
-                                                  SharedSizeGroup="{x:Static wpf:SharedSizeGroups.LabelColumn}"
+                                                  SharedSizeGroup="{x:Static demo:SharedSizeGroups.LabelColumn}"
                                                   />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
@@ -59,20 +59,20 @@
                             <ContentPresenter Grid.Column="1"
                                               Margin="8,0"
                                               ContentSource="Content"
-                                              wpf:Settings.ContentProxy="{Binding Path=(wpf:Settings.ContentProxy),
+                                              demo:Settings.ContentProxy="{Binding Path=(demo:Settings.ContentProxy),
                                                                                   RelativeSource={RelativeSource TemplatedParent}}"
                                               />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="ContentTemplate">
+            <!--<Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <TextBox Text="{Binding (wpf:Settings.ContentProxy)}" />
+                        <TextBox Text="{Binding (demo:Settings.ContentProxy)}" />
                     </DataTemplate>
                 </Setter.Value>
-            </Setter>
+            </Setter>-->
             <Setter Property="HeaderTemplate">
                 <Setter.Value>
                     <DataTemplate>
