@@ -13,13 +13,13 @@
             _cloner = cloner;
         }
 
-        public void TrackOrUpdate<T>(FileInfo file, T item)
+        public virtual void TrackOrUpdate<T>(FileInfo file, T item)
         {
             var clone = _cloner.Clone(item);
             _cache.AddOrUpdate(file, clone, (f, o) => clone);
         }
 
-        public bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
+        public virtual bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
         {
             object clone;
             if (_cache.TryGetValue(file, out clone))

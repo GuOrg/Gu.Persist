@@ -69,5 +69,12 @@
         /// GC.SuppressFinalize(this); //Hey, GC: don't bother calling finalize later
         /// </summary>
         void Dispose();
+
+        /// <summary>
+        /// This gets the fileinfo used for reading & writing files of type T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        FileInfo GetFileInfo<T>();
     }
 }

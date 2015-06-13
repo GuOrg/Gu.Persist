@@ -62,44 +62,54 @@
 
         public RepositorySetting Setting { get; private set; }
 
-        public IDirtyTracker Tracker { get; private set; }
+        public virtual IDirtyTracker Tracker { get; private set; }
 
-        public IBackuper Backuper
+        public virtual IBackuper Backuper
         {
             get { return _backuper; }
         }
 
-        public bool Exists<T>()
+        /// <summary>
+        /// This gets the fileinfo used for reading & writing files of type T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public virtual FileInfo GetFileInfo<T>()
         {
-            var file = FileHelper.CreateFileInfo<T>(Setting);
+            return FileHelper.CreateFileInfo<T>(Setting);
+        }
+
+        public virtual bool Exists<T>()
+        {
+            var file = GetFileInfo<T>();
             return Exists<T>(file);
         }
 
-        public bool Exists<T>(string fileName)
+        public virtual bool Exists<T>(string fileName)
         {
             var fileInfo = FileHelper.CreateFileInfo(fileName, Setting);
             return Exists<T>(fileInfo);
         }
 
-        public bool Exists<T>(FileInfo file)
+        public virtual bool Exists<T>(FileInfo file)
         {
             file.Refresh();
             return file.Exists;
         }
 
-        public Task<T> ReadAsync<T>()
+        public virtual Task<T> ReadAsync<T>()
         {
-            var file = FileHelper.CreateFileInfo<T>(Setting);
+            var file = GetFileInfo<T>();
             return ReadAsync<T>(file);
         }
 
-        public Task<T> ReadAsync<T>(string fileName)
+        public virtual Task<T> ReadAsync<T>(string fileName)
         {
             var fileInfo = FileHelper.CreateFileInfo(fileName, Setting);
             return ReadAsync<T>(fileInfo);
         }
 
-        public async Task<T> ReadAsync<T>(FileInfo file)
+        public virtual async Task<T> ReadAsync<T>(FileInfo file)
         {
             VerifyDisposed();
             Ensure.NotNull(file, "file");
@@ -117,15 +127,15 @@
             return value;
         }
 
-        public T Read<T>()
+        public virtual T Read<T>()
         {
-            var file = FileHelper.CreateFileInfo<T>(Setting);
+            var file = GetFileInfo<T>();
             return Read<T>(file);
         }
 
-        public T ReadOrCreate<T>(Func<T> creator)
+        public virtual T ReadOrCreate<T>(Func<T> creator)
         {
-            var file = FileHelper.CreateFileInfo<T>(Setting);
+            var file = GetFileInfo<T>();
             return ReadOrCreate(file, creator);
         }
 
@@ -135,20 +145,20 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="fileName">Optional if blank a file with the name of the class is read.</param>
         /// <returns></returns>
-        public T Read<T>(string fileName)
+        public virtual T Read<T>(string fileName)
         {
             var fileInfo = FileHelper.CreateFileInfo(fileName, Setting);
             return Read<T>(fileInfo);
         }
 
-        public T ReadOrCreate<T>(string fileName, Func<T> creator)
+        public virtual T ReadOrCreate<T>(string fileName, Func<T> creator)
         {
             Ensure.NotNullOrEmpty(fileName, "fileName");
             var file = FileHelper.CreateFileInfo(fileName, Setting);
             return ReadOrCreate(file, creator);
         }
 
-        public T Read<T>(FileInfo file)
+        public virtual T Read<T>(FileInfo file)
         {
             VerifyDisposed();
             Ensure.NotNull(file, "file");
@@ -166,7 +176,7 @@
             return value;
         }
 
-        public T ReadOrCreate<T>(FileInfo file, Func<T> creator)
+        public virtual T ReadOrCreate<T>(FileInfo file, Func<T> creator)
         {
             Ensure.NotNull(file, "file");
             Ensure.NotNull(creator, "creator");
@@ -188,19 +198,19 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
-        public void Save<T>(T item)
+        public virtual void Save<T>(T item)
         {
-            var file = FileHelper.CreateFileInfo<T>(Setting);
+            var file = GetFileInfo<T>();
             Save(item, file);
         }
 
-        public void Save<T>(T item, string fileName)
+        public virtual void Save<T>(T item, string fileName)
         {
             var file = FileHelper.CreateFileInfo(fileName, Setting);
             Save(item, file);
         }
 
-        public void Save<T>(T item, FileInfo file)
+        public virtual void Save<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, "file");
             var tempFile = file.ChangeExtension(Setting.TempExtension);
@@ -242,27 +252,27 @@
             }
         }
 
-        public Task SaveAsync<T>(T item)
+        public virtual Task SaveAsync<T>(T item)
         {
-            var file = FileHelper.CreateFileInfo<T>(Setting);
+            var file = GetFileInfo<T>();
             return SaveAsync(item, file);
         }
 
-        public Task SaveAsync<T>(T item, string fileName)
+        public virtual Task SaveAsync<T>(T item, string fileName)
         {
             Ensure.NotNullOrEmpty(fileName, "fileName");
             var fileInfo = FileHelper.CreateFileInfo(fileName, Setting);
             return SaveAsync(item, fileInfo);
         }
 
-        public Task SaveAsync<T>(T item, FileInfo file)
+        public virtual Task SaveAsync<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, "file");
             var tempFile = file.ChangeExtension(Setting.TempExtension);
             return SaveAsync(item, file, tempFile);
         }
 
-        public async Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile)
+        public virtual async Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile)
         {
             VerifyDisposed();
             Ensure.NotNull(file, "file");
@@ -298,35 +308,35 @@
             }
         }
 
-        public bool IsDirty<T>(T item)
+        public virtual bool IsDirty<T>(T item)
         {
             return IsDirty(item, DefaultStructuralEqualityComparer<T>());
         }
 
-        public bool IsDirty<T>(T item, IEqualityComparer<T> comparer)
+        public virtual bool IsDirty<T>(T item, IEqualityComparer<T> comparer)
         {
-            var file = FileHelper.CreateFileInfo<T>(Setting);
+            var file = GetFileInfo<T>();
             return IsDirty(item, file, comparer);
         }
 
-        public bool IsDirty<T>(T item, string fileName)
+        public virtual bool IsDirty<T>(T item, string fileName)
         {
             return IsDirty(item, fileName, DefaultStructuralEqualityComparer<T>());
         }
 
-        public bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer)
+        public virtual bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer)
         {
             Ensure.NotNullOrEmpty(fileName, "fileName");
             var fileInfo = FileHelper.CreateFileInfo(fileName, Setting);
             return IsDirty(item, fileInfo);
         }
 
-        public bool IsDirty<T>(T item, FileInfo file)
+        public virtual bool IsDirty<T>(T item, FileInfo file)
         {
             return IsDirty(item, file, DefaultStructuralEqualityComparer<T>());
         }
 
-        public bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
+        public virtual bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
         {
             VerifyDisposed();
             if (!Setting.IsTrackingDirty)
