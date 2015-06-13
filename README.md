@@ -11,6 +11,12 @@ Features:
 - bool IsDirty<T>(T item, IEqualityComparer<T> comparer); check if an instance is dirty after last save.
 - Repository manages a singleton reference for each file.
 - EqualityComparers that checks structural equality by serializing and comparing bytes. If performance is an issue overloads with IEqualityComparer<T> are exposed.
+- Saves to .tmp file, on success it is renamed to .cfg extensions are configurable via settings.
+- Creates backups on save. Backurules configurable via setting.
+    - Extension
+    - Directory
+    - Number of backups
+    - Max age backups.
 
 
 Sample:
@@ -18,8 +24,8 @@ Sample:
     [Test]
     public void XmlSample()
     {
-        var repository = new XmlRepository();
-        var setting = repository.ReadOrCreate(() => new DummySerializable());
+        var repository = new XmlRepository(); // Uses %AppData%/Settings. 
+        var setting = repository.ReadOrCreate(() => new DummySerializable()); // Uses typeof(T).Name as filename
         setting.Value ++;
         Assert.IsTrue(repository.IsDirty(setting));
         repository.Save(setting);
