@@ -13,6 +13,7 @@
         void Restore(FileInfo file);
 
         void Restore(FileInfo file, FileInfo backup);
+        
         void PurgeBackups(FileInfo file);
     }
 }

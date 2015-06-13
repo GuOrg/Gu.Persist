@@ -25,6 +25,10 @@
                 <TextBox Text="{Binding Setting.Extension}" />
             </HeaderedContentControl>
 
+            <HeaderedContentControl Header="TempExtension">
+                <TextBox Text="{Binding Setting.TempExtension}" />
+            </HeaderedContentControl>
+
             <HeaderedContentControl Header="Tracking">
                 <CheckBox IsChecked="{Binding Setting.IsTrackingDirty}" />
             </HeaderedContentControl>

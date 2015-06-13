@@ -13,8 +13,13 @@
             <HeaderedContentControl Header="Value 1 long name">
                 <TextBox Text="{Binding Value1}" />
             </HeaderedContentControl>
-            <HeaderedContentControl Header="Value 2" >
+
+            <HeaderedContentControl Header="Value 2">
                 <TextBox Text="{Binding Value2}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="Value 2">
+                <ComboBox ItemsSource="{x:Static demo:AutoSaveSetting.AllComparisons}" SelectedItem="{Binding Comparison}" />
             </HeaderedContentControl>
         </ItemsControl>
     </Grid>
