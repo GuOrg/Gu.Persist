@@ -65,15 +65,27 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AutoSaveSetting.cs" />
+    <Compile Include="AutoSaveSetting.cs">
+      <DependentUpon>AutoSaveSettingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AutoSaveSettingView.xaml.cs">
       <DependentUpon>AutoSaveSettingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Repositories.cs" />
+    <Compile Include="RepositoriesView.xaml.cs">
+      <DependentUpon>RepositoriesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="SharedSizeGroups.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="RepositoriesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -101,6 +113,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gu.Settings.Json\Gu.Settings.Json.csproj">
+      <Project>{2710BB07-D45B-4F93-BB56-968F25D39C64}</Project>
+      <Name>Gu.Settings.Json</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gu.Settings\Gu.Settings.csproj">
+      <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
+      <Name>Gu.Settings</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

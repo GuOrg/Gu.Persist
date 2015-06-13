@@ -1,11 +1,12 @@
 namespace Gu.Settings
 {
     using System;
+    using System.IO;
 
     public class SaveErrorEventArgs : SaveEventArgs
     {
-        public SaveErrorEventArgs(object item, IFileInfos fileInfos, Exception e)
-            : base(item, fileInfos)
+        public SaveErrorEventArgs(object item, FileInfo file, Exception e)
+            : base(item, file)
         {
             Exception = e;
         }

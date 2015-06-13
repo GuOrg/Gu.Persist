@@ -2,10 +2,8 @@
 {
     using System.Threading.Tasks;
 
-    public interface IAutoAsyncRepository
+    public interface IAutoAsyncRepository : IAutoRepository
     {
-        IRepositorySetting Setting { get; }
-
         Task<T> ReadAsync<T>();
 
         Task SaveAsync<T>(T item);
