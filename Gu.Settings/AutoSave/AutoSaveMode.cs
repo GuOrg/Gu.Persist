@@ -1,6 +1,6 @@
 ﻿namespace Gu.Settings
 {
-    public enum AutoSaveMode
+    internal enum AutoSaveMode
     {
         None,
         OnChanged,

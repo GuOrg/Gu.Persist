@@ -1,15 +1,20 @@
 namespace Gu.Settings
 {
+    using System.Collections.Generic;
     using System.IO;
 
     public class XmlRepository : Repository
     {
+        public XmlRepository()
+        {
+        }
+
         public XmlRepository(DirectoryInfo directory)
             : base(directory)
         {
         }
 
-        public XmlRepository(IRepositorySetting setting) 
+        public XmlRepository(RepositorySetting setting) 
             : base(setting)
         {
         }
@@ -22,6 +27,11 @@ namespace Gu.Settings
         protected override Stream ToStream<T>(T item)
         {
             return XmlHelper.ToStream(item);
+        }
+
+        protected override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
+        {
+            return XmlEqualsComparer<T>.Default;
         }
     }
 }

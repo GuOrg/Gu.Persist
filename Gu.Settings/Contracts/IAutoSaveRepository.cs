@@ -1,6 +1,6 @@
 ﻿namespace Gu.Settings
 {
-    public interface IAutoSavingRepository : IAsyncRepository, IDirtyTracker
+    public interface IAutoSavingRepository : IAsyncRepository, IDirty
     {
     }
 }
