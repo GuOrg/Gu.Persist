@@ -61,21 +61,6 @@
             FileHelper.Restore(file, backup);
         }
 
-        [Obsolete("Implement")]
-        private void RenameBackups<T>()
-        {
-        }
-
-        [Obsolete("Implement")]
-        private void RemoveBackups<T>()
-        {
-        }
-
-        [Obsolete("Implement")]
-        private void MoveBackups<T>()
-        {
-        }
-
         public virtual void PurgeBackups(FileInfo file)
         {
             var allBackups = BackupFile.GetAllBackupsFor(file, Setting);
@@ -106,6 +91,11 @@
                     allBackups.Remove(backupFile);
                 }
             }
+        }
+
+        [Obsolete("Implement")]
+        private void MoveBackups<T>()
+        {
         }
     }
 }
