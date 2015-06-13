@@ -6,7 +6,7 @@
     public class SimpleSample
     {
         [Test]
-        public void TestName()
+        public void XmlSample()
         {
             var repository = new XmlRepository();
             var setting = repository.ReadOrCreate(() => new DummySerializable());
