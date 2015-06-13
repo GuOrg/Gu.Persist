@@ -25,6 +25,7 @@
         protected Repository(DirectoryInfo directory)
         {
             Ensure.NotNull(directory, "directory");
+            directory.CreateIfNotExists();
             Setting = RepositorySetting.DefaultFor(directory);
             if (Setting.IsTrackingDirty)
             {
@@ -40,7 +41,6 @@
             }
             _backuper = new Backuper(Setting.BackupSettings);
             Backuper.Repository = this;
-            FileHelper.CreateDirectoryIfNotExists(Setting.Directory);
         }
 
         protected Repository(RepositorySetting setting)
@@ -50,10 +50,10 @@
 
         public Repository(RepositorySetting setting, IBackuper backuper)
         {
+            setting.Directory.CreateIfNotExists();
             Setting = setting;
             _backuper = backuper;
             Backuper.Repository = this;
-            FileHelper.CreateDirectoryIfNotExists(setting.Directory);
             if (Setting.IsTrackingDirty)
             {
                 Tracker = new DirtyTracker(this);

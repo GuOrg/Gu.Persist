@@ -17,14 +17,37 @@
                   SelectedIndex="0"
                   SelectedItem="{Binding SelectedRepository}" />
         <ItemsControl Grid.Row="1" Style="{StaticResource SettingsListStyle}">
-            <HeaderedContentControl Content="{Binding Setting.DirectoryPath}" Header="Directory" />
-            <HeaderedContentControl Content="{Binding Setting.Extension}" Header="Extension" />
-            <HeaderedContentControl Content="{Binding Setting.IsTrackingDirty}" Header="Tracking" />
-            <HeaderedContentControl Content="{Binding Setting.BackupSettings.Extension}" Header="BackupExtension" />
-            <HeaderedContentControl Content="{Binding Setting.BackupSettings.TimeStampFormat}" Header="TimeStampFormat" />
-            <HeaderedContentControl Content="{Binding Setting.BackupSettings.CreateBackups}" Header="CreateBackups" />
-            <HeaderedContentControl Content="{Binding Setting.BackupSettings.NumberOfBackups}" Header="NumberOfBackups" />
-            <HeaderedContentControl Content="{Binding Setting.BackupSettings.MaxAgeInDays}" Header="MaxAgeInDays" />
+            <HeaderedContentControl Header="Directory">
+                <TextBox Text="{Binding Setting.DirectoryPath}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="Extension">
+                <TextBox Text="{Binding Setting.Extension}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="Tracking">
+                <CheckBox IsChecked="{Binding Setting.IsTrackingDirty}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="BackupExtension">
+                <TextBox Text="{Binding Setting.BackupSettings.Extension}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="TimeStampFormat">
+                <TextBox Text="{Binding Setting.BackupSettings.TimeStampFormat}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="CreateBackups">
+                <CheckBox IsChecked="{Binding Setting.BackupSettings.CreateBackups}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="NumberOfBackups">
+                <TextBox Text="{Binding Setting.BackupSettings.NumberOfBackups}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="MaxAgeInDays">
+                <TextBox Text="{Binding Setting.BackupSettings.MaxAgeInDays}" />
+            </HeaderedContentControl>
         </ItemsControl>
     </Grid>
 </UserControl>

@@ -6,23 +6,23 @@
 
     public static class Directories
     {
-        public static DirectoryInfo ExecutingDirectory = Create(Assembly.GetExecutingAssembly().Location);
+        public static DirectoryInfo ExecutingDirectory = CreateInfo(Assembly.GetExecutingAssembly().Location);
         
-        public static DirectoryInfo ApplicationData = Create(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-        public static DirectoryInfo LocalApplicationData = Create(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
-        public static DirectoryInfo CommonApplicationData = Create(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+        public static DirectoryInfo ApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+        public static DirectoryInfo LocalApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+        public static DirectoryInfo CommonApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
        
-        public static DirectoryInfo MyDocuments = Create(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-        public static DirectoryInfo CommonDocuments = Create(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
+        public static DirectoryInfo MyDocuments = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+        public static DirectoryInfo CommonDocuments = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
 
-        public static DirectoryInfo ProgramFiles = Create(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
-        public static DirectoryInfo ProgramFilesX86 = Create(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
+        public static DirectoryInfo ProgramFiles = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
+        public static DirectoryInfo ProgramFilesX86 = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
 
-        public static DirectoryInfo CommonProgramFiles = Create(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles));
-        public static DirectoryInfo CommonProgramFilesX86 = Create(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86));
+        public static DirectoryInfo CommonProgramFiles = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles));
+        public static DirectoryInfo CommonProgramFilesX86 = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86));
 
-        public static DirectoryInfo Desktop = Create(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-        public static DirectoryInfo DesktopDirectory = Create(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
+        public static DirectoryInfo Desktop = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+        public static DirectoryInfo DesktopDirectory = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
 
         public static DirectoryInfo Subdirectory(this DirectoryInfo directory, string name)
         {
@@ -36,10 +36,24 @@
             return new FileInfo(path);
         }
 
-        private static DirectoryInfo Create(string path)
+        private static DirectoryInfo CreateInfo(string path)
         {
             var directoryName = Path.GetDirectoryName(path);
             return new DirectoryInfo(directoryName);
         }
+
+
+        /// <summary>
+        /// Creates the directory if not exists
+        /// </summary>
+        /// <param name="directory"></param>
+        internal static void CreateIfNotExists(this DirectoryInfo directory)
+        {
+            if (!directory.Exists)
+            {
+                directory.Create();
+            }
+        }
+
     }
 }
