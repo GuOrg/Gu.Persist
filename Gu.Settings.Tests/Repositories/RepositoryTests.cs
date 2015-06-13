@@ -132,6 +132,16 @@ namespace Gu.Settings.Tests.Repositories
             Assert.AreSame(read1, read2);
         }
 
+
+        [Test]
+        public async Task ReadAsyncCaches()
+        {
+            Save(_dummy, _file);
+            var read1 = await _repository.ReadAsync<DummySerializable>(_file);
+            var read2 = await _repository.ReadAsync<DummySerializable>(_file);
+            Assert.AreSame(read1, read2);
+        }
+
         [Test]
         public void SaveFile()
         {
@@ -187,6 +197,23 @@ namespace Gu.Settings.Tests.Repositories
             AssertFile.Exists(true, _dummyBackup);
         }
 
+
+        [Test]
+        public async Task SaveAsyncType()
+        {
+            await _repository.SaveAsync(_dummy);
+            AssertFile.Exists(true, _dummyFile);
+            AssertFile.Exists(false, _dummyBackup);
+            var read = Read<DummySerializable>(_dummyFile);
+            Assert.AreEqual(_dummy.Value, read.Value);
+            Assert.AreNotSame(_dummy, read);
+
+            _dummy.Value++;
+            await _repository.SaveAsync(_dummy);
+            AssertFile.Exists(true, _dummyFile);
+            AssertFile.Exists(true, _dummyBackup);
+        }
+
         [Test]
         public void SaveCreatesBackup()
         {
@@ -205,10 +232,36 @@ namespace Gu.Settings.Tests.Repositories
         }
 
         [Test]
+        public async Task SaveAsyncCreatesBackup()
+        {
+            await _repository.SaveAsync(_dummy, _file);
+            AssertFile.Exists(true, _file);
+            AssertFile.Exists(false, _backup);
+
+            _dummy.Value++;
+            await _repository.SaveAsync(_dummy, _file);
+
+            AssertFile.Exists(true, _file);
+            AssertFile.Exists(true, _backup);
+            var read = Read<DummySerializable>(_file);
+            Assert.AreEqual(_dummy.Value, read.Value);
+            Assert.AreNotSame(_dummy, read);
+        }
+
+        [Test]
         public void SaveCaches()
         {
             _repository.Save(_dummy, _file);
             var read = _repository.Read<DummySerializable>(_file);
+            Assert.AreSame(_dummy, read);
+        }
+
+
+        [Test]
+        public async Task SaveAsyncCaches()
+        {
+            await _repository.SaveAsync(_dummy, _file);
+            var read = await _repository.ReadAsync<DummySerializable>(_file);
             Assert.AreSame(_dummy, read);
         }
 
