@@ -5,7 +5,7 @@ namespace Gu.Settings
 
     public interface IAsyncRepository
     {
-        IRepositorySetting Setting { get; }
+        RepositorySetting Setting { get; }
 
         Task<T> ReadAsync<T>(string fileName);
         
@@ -15,6 +15,14 @@ namespace Gu.Settings
 
         Task SaveAsync<T>(T item, FileInfo file);
 
-        Task SaveAsync<T>(T item, IFileInfos fileInfos);
+        /// <summary>
+        /// The file is saved to tempFile, if successful tempFile is renamed to file
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="file"></param>
+        /// <param name="tempFile"></param>
+        /// <returns></returns>
+        Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile);
     }
 }

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public sealed class AutoSaveSetting
+    internal sealed class AutoSaveSetting
     {
         private AutoSaveSetting(AutoSaveMode mode, TimeSpan time, FileInfos files)
         {

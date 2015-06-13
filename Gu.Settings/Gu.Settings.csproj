@@ -50,35 +50,44 @@
     <Compile Include="AutoSave\AutoSaveMode.cs" />
     <Compile Include="AutoSave\AutoSaver.cs" />
     <Compile Include="AutoSave\AutoSaveSetting.cs" />
-    <Compile Include="AutoSave\SaveErrorEventArgs.cs" />
-    <Compile Include="AutoSave\SaveEventArgs.cs" />
+    <Compile Include="Contracts\IDirty.cs" />
+    <Compile Include="Internals\EnumerableEx.cs" />
+    <Compile Include="Repositories\BackupFile.cs" />
+    <Compile Include="Repositories\NullBackuper.cs" />
+    <Compile Include="EventArgs\SaveErrorEventArgs.cs" />
+    <Compile Include="EventArgs\SaveEventArgs.cs" />
+    <Compile Include="Comparers\BinaryEqualsComparer`1.cs" />
     <Compile Include="Contracts\IAsyncRepository.cs" />
     <Compile Include="Contracts\IAutoAsyncRepository.cs" />
-    <Compile Include="Contracts\IAutoDirtyTracker.cs" />
     <Compile Include="Contracts\IAutoRepository.cs" />
     <Compile Include="Contracts\IAutoSaveRepository.cs" />
     <Compile Include="Contracts\ICloner.cs" />
+    <Compile Include="Contracts\IFileSettings.cs" />
     <Compile Include="Ensure.cs" />
+    <Compile Include="Internals\WaitHandleExtensions.cs" />
+    <Compile Include="Repositories\Backuper.cs" />
+    <Compile Include="Settings\BackupSettings.cs" />
     <Compile Include="IO\BinaryHelper.cs" />
     <Compile Include="Contracts\IRepository.cs" />
-    <Compile Include="Contracts\IRepositorySetting.cs" />
     <Compile Include="Contracts\IFileInfos.cs" />
-    <Compile Include="IO\DirtyTracker.cs" />
-    <Compile Include="IO\BinaryRepository.cs" />
+    <Compile Include="IO\Directories.cs" />
+    <Compile Include="Repositories\DirtyTracker.cs" />
+    <Compile Include="Repositories\BinaryRepository.cs" />
     <Compile Include="IO\FileHelper.cs" />
-    <Compile Include="IO\FileInfoComparer.cs" />
+    <Compile Include="Comparers\FileInfoComparer.cs" />
     <Compile Include="IO\FileInfos.cs" />
     <Compile Include="Contracts\IDirtyTracker.cs" />
-    <Compile Include="IO\RepositorySetting.cs" />
+    <Compile Include="Contracts\IBackuper.cs" />
+    <Compile Include="Settings\RepositorySetting.cs" />
     <Compile Include="IO\XmlHelper.cs" />
-    <Compile Include="IO\Repository.cs" />
-    <Compile Include="IO\XmlRepository.cs" />
+    <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Repositories\XmlRepository.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Comparers\SerializedEqualsComparer`1.cs" />
+    <Compile Include="Comparers\XmlEqualsComparer`1.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Internals\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

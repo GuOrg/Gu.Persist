@@ -13,15 +13,21 @@
         public static T FromStream<T>(Stream stream)
         {
             var serializer = Serializers.GetOrAdd(typeof(T), x => new XmlSerializer(typeof(T)));
-            var setting = (T)serializer.Deserialize(stream);
-            return setting;
+            lock (serializer)
+            {
+                var setting = (T)serializer.Deserialize(stream);
+                return setting;
+            }
         }
 
         public static MemoryStream ToStream<T>(T o)
         {
-            var serializer = Serializers.GetOrAdd(o.GetType(), x => new XmlSerializer(o.GetType()));
             var ms = new MemoryStream();
-            serializer.Serialize(ms, o);
+            var serializer = Serializers.GetOrAdd(o.GetType(), x => new XmlSerializer(o.GetType()));
+            lock (serializer)
+            {
+                serializer.Serialize(ms, o);
+            }
             ms.Flush();
             ms.Position = 0;
             return ms;

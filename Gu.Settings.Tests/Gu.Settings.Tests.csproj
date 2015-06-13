@@ -37,6 +37,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq, Version=4.2.1502.911, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
@@ -54,16 +58,28 @@
   <ItemGroup>
     <Compile Include="AssertFile.cs" />
     <Compile Include="AutoSaver\AutoSaverTests.cs" />
+    <Compile Include="BenchmarkTests.cs" />
+    <Compile Include="Comparers\ComparerTests.cs" />
     <Compile Include="Helpers\DummyObservable.cs" />
     <Compile Include="Helpers\DummySerializable.cs" />
+    <Compile Include="Helpers\FileInfoExt.cs" />
+    <Compile Include="Helpers\TypicalSetting.cs" />
+    <Compile Include="IO\BackuperTests.cs" />
+    <Compile Include="IO\BackupFileTests.cs" />
+    <Compile Include="Repositories\Binary.cs" />
     <Compile Include="IO\BinaryHelperTests.cs" />
-    <Compile Include="IO\BinaryRepositoryTests.cs" />
+    <Compile Include="Repositories\BinaryDefault.cs" />
+    <Compile Include="Repositories\XmlDefault.cs" />
     <Compile Include="IO\RepositorySettingTests.cs" />
+    <Compile Include="Repositories\RepositoryTests.cs" />
+    <Compile Include="Repositories\Xml.cs" />
     <Compile Include="IO\XmlHelperTests.cs" />
-    <Compile Include="IO\XmlRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\FileHelperTests.cs" />
     <Compile Include="IO\FileInfosTests.cs" />
+    <Compile Include="RemindersTests.cs" />
+    <Compile Include="Sandbox\FakesTests.cs" />
+    <Compile Include="Sandbox\SyncBoxTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -74,6 +90,7 @@
       <Name>Gu.Settings</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

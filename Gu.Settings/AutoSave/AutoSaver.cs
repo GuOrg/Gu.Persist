@@ -3,8 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.IO;
 
-    public class AutoSaver : IDisposable
+    /// <summary>
+    /// Internal until finished
+    /// </summary>
+    internal class AutoSaver : IDisposable
     {
         private readonly List<IDisposable> _subscriptions = new List<IDisposable>();
         private readonly IAutoSavingRepository _repository;
@@ -15,22 +19,22 @@
             _repository = repository;
         }
 
-        public virtual IDisposable Add<T>(T item, IFileInfos fileInfos, IObservable<object> trigger)
+        public virtual IDisposable Add<T>(T item, FileInfo file, FileInfo tempFile, IObservable<object> trigger)
             where T : class, INotifyPropertyChanged
         {
             var reference = new WeakReference<T>(item);
-            var saver = new Saver(this, () => Save(reference, null, fileInfos));
+            var saver = new Saver(this, () => Save(reference, null, file, tempFile));
             var subscription = trigger.Subscribe(saver);
             saver.Subscription = subscription;
             _subscriptions.Add(saver);
             return saver;
         }
 
-        public virtual IDisposable Add<T>(T item, IEqualityComparer<T> isDirtyComparer, IFileInfos fileInfos, IObservable<object> trigger)
-    where T : class, INotifyPropertyChanged
+        public virtual IDisposable Add<T>(T item, IEqualityComparer<T> isDirtyComparer, FileInfo file, FileInfo tempFile, IObservable<object> trigger)
+            where T : class, INotifyPropertyChanged
         {
             var reference = new WeakReference<T>(item);
-            var saver = new Saver(this, () => Save(reference, isDirtyComparer, fileInfos));
+            var saver = new Saver(this, () => Save(reference, isDirtyComparer, file, tempFile));
             var subscription = trigger.Subscribe(saver);
             saver.Subscription = subscription;
             _subscriptions.Add(saver);
@@ -79,7 +83,7 @@
             _disposed = true;
         }
 
-        protected virtual void Save<T>(WeakReference<T> itemReference, IEqualityComparer<T> isDirtyComparer, IFileInfos fileInfos)
+        protected virtual void Save<T>(WeakReference<T> itemReference, IEqualityComparer<T> isDirtyComparer, FileInfo file, FileInfo tempFile)
             where T : class
         {
             T item;
@@ -87,26 +91,26 @@
             {
                 if (isDirtyComparer != null)
                 {
-                    if (!_repository.IsDirty(item, fileInfos.File, isDirtyComparer))
+                    if (!_repository.IsDirty(item, file, isDirtyComparer))
                     {
                         return;
                     }
                 }
-                OnSaving(new SaveEventArgs(item, fileInfos));
-                Save(item, fileInfos);
+                OnSaving(new SaveEventArgs(item, file));
+                Save(item, file, tempFile);
             }
         }
 
-        protected virtual async void Save<T>(T item, IFileInfos fileInfos)
+        protected virtual async void Save<T>(T item, FileInfo file, FileInfo tempFile)
         {
             try
             {
-                await _repository.SaveAsync(item, fileInfos).ConfigureAwait(false);
-                OnSaved(new SaveEventArgs(item, fileInfos));
+                await _repository.SaveAsync(item, file, tempFile).ConfigureAwait(false);
+                OnSaved(new SaveEventArgs(item, file));
             }
             catch (Exception e)
             {
-                OnError(new SaveErrorEventArgs(item, fileInfos, e));
+                OnError(new SaveErrorEventArgs(item, file, e));
             }
         }
 

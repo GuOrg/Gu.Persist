@@ -1,7 +1,9 @@
 ﻿namespace Gu.Settings
 {
+    using System;
     using System.IO;
 
+    [Obsolete("Refactor away from fileinfos")]
     public interface IFileInfos
     {
         FileInfo File { get; }

@@ -52,6 +52,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JsonEqualsComparer`1.cs" />
     <Compile Include="JsonHelper.cs" />
     <Compile Include="JsonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

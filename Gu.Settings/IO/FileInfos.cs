@@ -4,7 +4,7 @@
     using System.IO;
 
     [Serializable]
-    public class FileInfos : IFileInfos
+    internal class FileInfos : IFileInfos
     {
         public FileInfos(FileInfo file, FileInfo tempFile, FileInfo backup)
         {
