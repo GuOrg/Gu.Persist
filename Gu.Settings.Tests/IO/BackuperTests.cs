@@ -76,6 +76,20 @@
         }
 
         [Test]
+        public void PurgeWhenNoFiles()
+        {
+            _setting.NumberOfBackups = 2;
+            _setting.MaxAgeInDays = 2;
+            _backuper.PurgeBackups(_file);
+            AssertFile.Exists(false, _backup1);
+            AssertFile.Exists(false, _backup2);
+            AssertFile.Exists(false, _backup3);
+            AssertFile.Exists(false, _backup4);
+            AssertFile.Exists(false, _backup5);
+            //AssertFile.Exists(false, _softDelete);
+        }
+
+        [Test]
         public void PurgeBasedOnNumbers()
         {
             foreach (var backup in _timestampedBackups)

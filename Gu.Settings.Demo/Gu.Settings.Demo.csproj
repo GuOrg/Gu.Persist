@@ -72,7 +72,9 @@
       <DependentUpon>AutoSaveSettingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Repositories.cs" />
+    <Compile Include="RepositoriesVm.cs">
+      <DependentUpon>RepositoriesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RepositoriesView.xaml.cs">
       <DependentUpon>RepositoriesView.xaml</DependentUpon>
     </Compile>

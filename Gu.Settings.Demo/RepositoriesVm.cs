@@ -32,14 +32,6 @@
             PropertyChanged += (_, __) => Save(autoSaveSetting);
         }
 
-        private void Save<T>(T item)
-        {
-            if (SelectedRepository != null)
-            {
-                SelectedRepository.Save(item);
-            }
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public IRepository SelectedRepository
@@ -79,6 +71,14 @@
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private void Save<T>(T item)
+        {
+            if (SelectedRepository != null)
+            {
+                SelectedRepository.Save(item);
             }
         }
     }

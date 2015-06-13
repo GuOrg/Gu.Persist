@@ -6,13 +6,14 @@
     using System.IO;
     using System.Linq;
     using Internals;
+    using IO;
 
     public class Backuper : IBackuper
     {
         public Backuper(BackupSettings setting)
         {
             Setting = setting;
-            FileHelper.CreateDirectoryIfNotExists(setting.Directory);
+            setting.Directory.CreateIfNotExists();
         }
 
         public static readonly IBackuper None = new NullBackuper();
@@ -78,6 +79,10 @@
         public virtual void PurgeBackups(FileInfo file)
         {
             var allBackups = BackupFile.GetAllBackupsFor(file, Setting);
+            if (allBackups.Count == 0)
+            {
+                return;
+            }
             if (Setting.NumberOfBackups > 0)
             {
                 while (allBackups.Count > Setting.NumberOfBackups) // this is not efficient but the number of backups should be low

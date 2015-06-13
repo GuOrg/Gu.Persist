@@ -85,18 +85,6 @@ namespace Gu.Settings
             File.Move(source.FullName, destination.FullName);
         }
 
-        /// <summary>
-        /// Creates the directory if not exists
-        /// </summary>
-        /// <param name="directory"></param>
-        internal static void CreateDirectoryIfNotExists(DirectoryInfo directory)
-        {
-            if (!directory.Exists)
-            {
-                directory.Create();
-            }
-        }
-
         internal static void Backup(FileInfo file, FileInfo backup)
         {
             if (backup == null)
