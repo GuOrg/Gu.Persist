@@ -6,8 +6,6 @@
 
     public interface IFileNameRepository
     {
-        RepositorySettings Settings { get; }
-
         bool Exists<T>(string fileName);
 
         Task<T> ReadAsync<T>(string fileName);

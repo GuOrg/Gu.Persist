@@ -14,7 +14,7 @@
             setting.Directory.CreateIfNotExists();
         }
 
-        public BackupSettings Setting { get; private set; }
+        public IBackupSettings Setting { get; private set; }
 
         public static IBackuper Create(BackupSettings setting)
         {

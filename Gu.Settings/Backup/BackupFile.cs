@@ -9,7 +9,7 @@
 
     public class BackupFile
     {
-        public BackupFile(FileInfo file, BackupSettings setting)
+        public BackupFile(FileInfo file, IBackupSettings setting)
         {
             File = file;
             TimeStamp = file.GetTimeStamp(setting);
@@ -24,13 +24,13 @@
             return string.Format("File: {0}, TimeStamp: {1}", File, TimeStamp);
         }
 
-        internal static FileInfo GetRestoreFileFor(FileInfo file, BackupSettings setting)
+        internal static FileInfo GetRestoreFileFor(FileInfo file, IBackupSettings setting)
         {
             var allBackups = GetAllBackupsFor(file, setting);
             return allBackups.MaxBy(x => x.TimeStamp).File;
         }
 
-        internal static IList<BackupFile> GetAllBackupsFor(FileInfo file, BackupSettings setting)
+        internal static IList<BackupFile> GetAllBackupsFor(FileInfo file, IBackupSettings setting)
         {
             var pattern = GetBackupFilePattern(file, setting);
             var backups = setting.Directory.EnumerateFiles(pattern)
@@ -40,7 +40,7 @@
             return backups;
         }
 
-        internal static FileInfo CreateFor(FileInfo file, BackupSettings setting)
+        internal static FileInfo CreateFor(FileInfo file, IBackupSettings setting)
         {
             var backup = file.ChangeExtension(setting.Extension);
             if (string.IsNullOrEmpty(setting.TimeStampFormat))
@@ -50,7 +50,7 @@
             return backup.AddTimeStamp(DateTime.Now, setting);
         }
 
-        internal static string GetBackupFilePattern(FileInfo file, BackupSettings setting)
+        internal static string GetBackupFilePattern(FileInfo file, IBackupSettings setting)
         {
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
             var pattern = String.Format("{0}*{1}", fileNameWithoutExtension, setting.Extension);
