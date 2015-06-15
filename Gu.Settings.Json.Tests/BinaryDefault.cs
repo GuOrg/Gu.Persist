@@ -15,7 +15,7 @@
             AssertFile.Exists(true, RepoSettingFile);
         }
 
-        protected override IRepository Create(RepositorySetting setting)
+        protected override IRepository Create(RepositorySettings setting)
         {
             return new JsonRepository(Directory);
         }
