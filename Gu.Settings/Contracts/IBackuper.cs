@@ -4,8 +4,6 @@
 
     public interface IBackuper
     {
-        IRepository Repository { get; set; }
-
         void Backup(FileInfo file);
 
         void Backup(FileInfo file, FileInfo backup);

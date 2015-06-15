@@ -11,7 +11,7 @@
         [SetUp]
         public override void SetUp()
         {
-            _backuper = new NullBackuper();
+            _backuper = NullBackuper.Default;
         }
 
         [Test]

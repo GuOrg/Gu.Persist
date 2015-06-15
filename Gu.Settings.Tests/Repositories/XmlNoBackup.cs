@@ -11,7 +11,7 @@ namespace Gu.Settings.Tests.Repositories
         [Test]
         public void BackuperIsNone()
         {
-            Assert.AreSame(Backuper.None, Repository.Backuper);
+            Assert.AreSame(NullBackuper.Default, Repository.Backuper);
         }
 
         protected override IRepository Create(RepositorySettings settings)
