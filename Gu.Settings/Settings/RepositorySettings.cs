@@ -15,6 +15,7 @@
         private string _extension;
         private string _tempExtension;
         private bool _isTrackingDirty;
+        private bool _isCaching;
 
         private RepositorySettings() // needed for XmlSerializer
         {
@@ -26,23 +27,24 @@
         }
 
         public RepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
-            : this(true, directory, backupSettings)
+            : this(directory, true, true, backupSettings)
         {
         }
 
         public RepositorySettings(
-            bool isTrackingDirty,
             DirectoryInfo directory,
+            bool isTrackingDirty,
+            bool isCaching,
             BackupSettings backupSettings,
             string extension = ".cfg",
-            string tempExtension = ".tmp"
-            )
+            string tempExtension = ".tmp")
         {
             Ensure.NotNullOrEmpty(extension, "extension");
             Ensure.NotNullOrEmpty(tempExtension, "tempExtension");
             Ensure.NotNull(directory, "directory");
 
             _isTrackingDirty = isTrackingDirty;
+            _isCaching = isCaching;
             _directoryPath = directory.FullName;
             _backupSettings = backupSettings;
 
@@ -107,6 +109,10 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the file extension used when saving files.
+        /// On successful save the file extension is replaced.
+        /// </summary>
         public string TempExtension
         {
             get { return _tempExtension; }
@@ -121,6 +127,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets if the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes
+        /// </summary>
         public bool IsTrackingDirty
         {
             get { return _isTrackingDirty; }
@@ -135,9 +144,26 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets if the repository keeps a cache of instances saved/read. Default is true, setting to false gives new instance for each read.
+        /// </summary>
+        public bool IsCaching
+        {
+            get { return _isCaching; }
+            set
+            {
+                if (value == _isCaching)
+                {
+                    return;
+                }
+                _isCaching = value;
+                OnPropertyChanged();
+            }
+        }
+
         public static RepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new RepositorySettings(true, directory, Settings.BackupSettings.DefaultFor(directory));
+            return new RepositorySettings(directory, true, true, Settings.BackupSettings.DefaultFor(directory));
         }
 
         [NotifyPropertyChangedInvocator]

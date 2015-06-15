@@ -9,28 +9,28 @@
     using NUnit.Framework;
 
     // ReSharper disable once TestClassNameSuffixWarning
-    public class BackupFile_ : BackupTests
+    public class BackupFileTests : BackupTests
     {
         [Test]
         public void GetAllBackupsForNoTimeStamp()
         {
-            _file.VoidCreate();
-            _backup.VoidCreate();
-            var restores = BackupFile.GetAllBackupsFor(_file, _setting);
+            File.VoidCreate();
+            Backup.VoidCreate();
+            var restores = BackupFile.GetAllBackupsFor(File, Setting);
             Assert.AreEqual(1, restores.Count);
-            Assert.AreEqual(_backup.FullName, restores[0].File.FullName);
+            Assert.AreEqual(Backup.FullName, restores[0].File.FullName);
         }
 
         [Test]
         public void GetAllBackupsFor()
         {
-            _file.VoidCreate();
-            foreach (var backup in _timestampedBackups)
+            File.VoidCreate();
+            foreach (var backup in TimestampedBackups)
             {
                 backup.VoidCreate();
             }
-            var restores = BackupFile.GetAllBackupsFor(_file, _setting);
-            var expected = _timestampedBackups.Select(x => x.FullName).OrderBy(x => x).ToArray();
+            var restores = BackupFile.GetAllBackupsFor(File, Setting);
+            var expected = TimestampedBackups.Select(x => x.FullName).OrderBy(x => x).ToArray();
             var actual = restores.Select(x => x.File.FullName).OrderBy(x => x).ToArray();
             CollectionAssert.AreEqual(expected, actual);
         }
@@ -38,39 +38,40 @@
         [Test]
         public void GetRestoreFileForNoTimeStamp()
         {
-            _file.VoidCreate();
-            _backup.VoidCreate();
-            var restore = BackupFile.GetRestoreFileFor(_file, _setting);
-            Assert.AreEqual(_backup.FullName, restore.FullName);
+            File.VoidCreate();
+            Backup.VoidCreate();
+            var restore = BackupFile.GetRestoreFileFor(File, Setting);
+            Assert.AreEqual(Backup.FullName, restore.FullName);
         }
 
         [Test]
         public void GetRestoreFileFor()
         {
-            _setting.TimeStampFormat = BackupSettings.DefaultTimeStampFormat;
-            _file.VoidCreate();
-            foreach (var backup in _timestampedBackups)
+            Setting.TimeStampFormat = BackupSettings.DefaultTimeStampFormat;
+            File.VoidCreate();
+            foreach (var backup in TimestampedBackups)
             {
                 backup.VoidCreate();
             }
-            var restore = BackupFile.GetRestoreFileFor(_file, _setting);
-            Assert.AreEqual(_backup1.FullName, restore.FullName);
+            var restore = BackupFile.GetRestoreFileFor(File, Setting);
+            Assert.AreEqual(BackupOneMinuteOld.FullName, restore.FullName);
         }
 
-        [TestCase(@"C:\Temp\Meh.cfg", @"C:\Temp\Meh.bak")]
-        public void CreateForNoTimestamp(string fileName, string expected)
+        [TestCase(@"C:\Temp\Gu.Settings\BackupFileTests\Meh.bak")]
+        public void CreateForNoTimestamp(string expected)
         {
-            var file = new FileInfo(fileName);
-            var setting = new BackupSettings(true, file.Directory, ".bak", null, false, 1, Int32.MaxValue);
-            var backup = BackupFile.CreateFor(file, setting);
+            File.VoidCreate();
+            var setting = new BackupSettings(File.Directory, true, BackupSettings.DefaultExtension, null, false, 1, Int32.MaxValue);
+            var backup = BackupFile.CreateFor(File, setting);
             Assert.AreEqual(expected, backup.FullName);
         }
 
-        [TestCase(@"C:\\Temp\\Gu.Settings\\BackupFile_\\Meh\.\d\d\d\d_\d\d_\d\d_\d\d_\d\d_\d\d\.bak")]
+        [TestCase(@"C:\\Temp\\Gu.Settings\\BackupFileTests\\Meh\.\d\d\d\d_\d\d_\d\d_\d\d_\d\d_\d\d\.bak")]
         public void CreateFor(string expected)
         {
-            _setting.TimeStampFormat = BackupSettings.DefaultTimeStampFormat;
-            var backup = BackupFile.CreateFor(_file, _setting);
+            File.VoidCreate();
+            Setting.TimeStampFormat = BackupSettings.DefaultTimeStampFormat;
+            var backup = BackupFile.CreateFor(File, Setting);
             StringAssert.IsMatch(expected, backup.FullName);
         }
 
@@ -78,7 +79,7 @@
         public void GetTimeStamp(string fileName)
         {
             var file = new FileInfo(fileName);
-            var setting = new BackupSettings(true, file.Directory, ".bak", BackupSettings.DefaultTimeStampFormat, false, 1, Int32.MaxValue);
+            var setting = new BackupSettings(file.Directory, true, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, false, 1, Int32.MaxValue);
             var timeStamp = file.GetTimeStamp(setting);
             Assert.AreEqual(new DateTime(2015, 06, 13, 17, 05, 15), timeStamp);
         }

@@ -19,30 +19,30 @@
         [Test]
         public void ValidateTimeStampFormat()
         {
-            Assert.Fail("roundtrip datetime");
-            Assert.Fail("valid filename");
+            Assert.Inconclusive("roundtrip datetime");
+            Assert.Inconclusive("valid filename");
         }
 
         [Test]
         public void RemoveTimestamp()
         {
-            Assert.Fail("roundtrip datetime");
-            Assert.Fail("valid filename");
+            Assert.Inconclusive("roundtrip datetime");
+            Assert.Inconclusive("valid filename");
         }
 
         [Test]
         public void Rename()
         {
-            Assert.Fail("repository should handle rename");
-            Assert.Fail("Cache should update on rename");
-            Assert.Fail("DirtyTracker should update on rename");
-            Assert.Fail("Backup should rename backups on rename");
+            Assert.Inconclusive("repository should handle rename");
+            Assert.Inconclusive("Cache should update on rename");
+            Assert.Inconclusive("DirtyTracker should update on rename");
+            Assert.Inconclusive("Backup should rename backups on rename");
         }
 
         [Test]
         public void MockFilesystem()
         {
-            Assert.Fail();
+            Assert.Inconclusive();
         }
     }
 }

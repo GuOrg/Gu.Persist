@@ -11,8 +11,8 @@
     [Serializable]
     public class BackupSettings : IBackupSettings
     {
-        public static BackupSettings None = new BackupSettings(false, null, null, null, false, 1, 1);
         public static readonly string DefaultTimeStampFormat = "yyyy_MM_dd_HH_mm_ss";
+        public static readonly string DefaultExtension = ".bak";
         private string _directoryPath;
         private string _extension;
         private bool _createBackups;
@@ -21,13 +21,28 @@
         private int _numberOfBackups;
         private int _maxAgeInDays;
 
-        private BackupSettings() // needed for XmlSerializer
+        protected BackupSettings() // needed for XmlSerializer
+        {
+        }
+
+        public BackupSettings(DirectoryInfo directory)
+            : this(directory, true, DefaultExtension, null, false, 1, int.MaxValue)
+        {
+        }
+
+        public BackupSettings(DirectoryInfo directory, int numberOfBackups)
+            : this(directory, true, DefaultExtension, DefaultTimeStampFormat, false, numberOfBackups, int.MaxValue)
+        {
+        }
+
+        public BackupSettings(DirectoryInfo directory, int numberOfBackups, int maxAgeInDays)
+            : this(directory, true, DefaultExtension, DefaultTimeStampFormat, false, numberOfBackups, maxAgeInDays)
         {
         }
 
         public BackupSettings(
-            bool createBackups,
             DirectoryInfo directory,
+            bool createBackups,
             string extension,
             string timeStampFormat,
             bool hidden,
@@ -61,7 +76,14 @@
 
         public DirectoryInfo Directory
         {
-            get { return new DirectoryInfo(DirectoryPath); }
+            get
+            {
+                if (string.IsNullOrEmpty(DirectoryPath))
+                {
+                    return null;
+                }
+                return  new DirectoryInfo(DirectoryPath);
+            }
         }
 
         public string DirectoryPath
@@ -175,7 +197,7 @@
 
         public static BackupSettings DefaultFor(DirectoryInfo directory)
         {
-            return new BackupSettings(true, directory, ".bak", null, false, 1, int.MaxValue);
+            return new BackupSettings(directory, true, BackupSettings.DefaultExtension, null, false, 1, int.MaxValue);
         }
 
         public static void ValidateTimestampFormat(string value)
