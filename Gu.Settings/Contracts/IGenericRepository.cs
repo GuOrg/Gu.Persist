@@ -5,7 +5,7 @@
     /// <summary>
     /// Use this when you only want one setting per type.
     /// </summary>
-    public interface IAutoRepository
+    public interface IGenericRepository
     {
         bool Exists<T>();
 

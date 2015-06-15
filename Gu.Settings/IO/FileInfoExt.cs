@@ -12,6 +12,7 @@
 
         public static FileInfo ChangeExtension(this FileInfo file, string newExtension)
         {
+            Ensure.NotNull(file,"file");
             Ensure.NotNullOrEmpty(newExtension, "newExtension");
             if (!newExtension.StartsWith("."))
             {
@@ -22,8 +23,14 @@
             return newFile;
         }
 
+        internal static FileInfo GetSoftDeleteFileFor(this FileInfo file)
+        {
+            return file.AppendExtension(FileHelper.SoftDeleteExtension);
+        }
+
         internal static FileInfo AppendExtension(this FileInfo file, string extension)
         {
+            Ensure.NotNull(file, "file");
             Ensure.NotNullOrEmpty(extension, "extension");
             extension = FileHelper.PrependDotIfMissing(extension);
             return new FileInfo(string.Concat(file.FullName, extension));
@@ -31,6 +38,7 @@
 
         internal static FileInfo RemoveExtension(this FileInfo file, string extension)
         {
+            Ensure.NotNull(file, "file");
             Ensure.NotNullOrEmpty(extension, "extension");
             var ext = Path.GetExtension(file.FullName);
             extension = FileHelper.PrependDotIfMissing(extension);
@@ -44,6 +52,7 @@
 
         internal static DateTime GetTimeStamp(this FileInfo file, IBackupSettings setting)
         {
+            Ensure.NotNull(file, "file");
             Ensure.NotNull(setting, "setting");
             if (setting.TimeStampFormat == null)
             {
@@ -63,10 +72,9 @@
 
         internal static FileInfo AddTimeStamp(this FileInfo file, DateTime time, IBackupSettings setting)
         {
-            if (setting == null)
-            {
-                return file;
-            }
+            Ensure.NotNull(file, "file");
+            Ensure.NotNull(setting, "setting");
+
             if (String.IsNullOrWhiteSpace(setting.TimeStampFormat) && setting.NumberOfBackups <= 1)
             {
                 return file;
@@ -78,6 +86,7 @@
 
         internal static FileInfo RemoveTimeStamp(this FileInfo file, IBackupSettings setting)
         {
+            Ensure.NotNull(file, "file");
             Ensure.NotNull(setting, "setting");
             if (setting.TimeStampFormat == null)
             {

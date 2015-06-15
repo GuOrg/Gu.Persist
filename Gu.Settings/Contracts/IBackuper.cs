@@ -14,6 +14,13 @@
         void Backup(FileInfo file, FileInfo backup);
 
         /// <summary>
+        /// Checks if there is a soft delete file available or if there are backup(s)
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        bool CanRestore(FileInfo file);
+
+        /// <summary>
         /// Reads the newest backup if any.
         /// Order:
         /// 1) Soft delete file.
