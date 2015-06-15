@@ -2,19 +2,22 @@ namespace Gu.Settings.Tests.Repositories
 {
     using System.IO;
 
+    using Gu.Settings.Backup;
+
     using NUnit.Framework;
 
-    public class XmlDefault : RepositoryTests
+    public class XmlNoBackup : RepositoryTests
     {
         [Test]
-        public void SavesSettingsFile()
+        public void BackuperIsNone()
         {
-            AssertFile.Exists(true, RepoSettingFile);
+            Assert.AreSame(Backuper.None, Repository.Backuper);
         }
 
         protected override IRepository Create(RepositorySettings settings)
         {
-            return new XmlRepository();
+            settings.BackupSettings = null;
+            return new XmlRepository(settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)

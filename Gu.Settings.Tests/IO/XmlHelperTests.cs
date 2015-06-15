@@ -3,8 +3,6 @@
     using System.IO;
     using System.Threading.Tasks;
 
-    using Gu.Settings.Tests.Helpers;
-
     using NUnit.Framework;
 
     public class XmlHelperTests

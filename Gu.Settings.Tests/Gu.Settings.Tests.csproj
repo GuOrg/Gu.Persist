@@ -56,19 +56,25 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="AssertFile.cs" />
+    <Compile Include="Helpers\AssertFile.cs" />
     <Compile Include="AutoSaver\AutoSaverTests.cs" />
+    <Compile Include="Backup\BackupTests.cs" />
     <Compile Include="BenchmarkTests.cs" />
     <Compile Include="Comparers\ComparerTests.cs" />
     <Compile Include="Helpers\DummyObservable.cs" />
     <Compile Include="Helpers\DummySerializable.cs" />
     <Compile Include="Helpers\FileInfoExt.cs" />
+    <Compile Include="Helpers\RepositoryExt.cs" />
     <Compile Include="Helpers\TypicalSetting.cs" />
-    <Compile Include="IO\BackuperTests.cs" />
-    <Compile Include="IO\BackupFileTests.cs" />
+    <Compile Include="Backup\NullBackuperTests.cs" />
+    <Compile Include="Backup\BackuperTests.cs" />
+    <Compile Include="Backup\BackupFileTests.cs" />
+    <Compile Include="IO\DirectoriesTests.cs" />
+    <Compile Include="IO\FileInfoExtTests.cs" />
     <Compile Include="Repositories\Binary.cs" />
     <Compile Include="IO\BinaryHelperTests.cs" />
     <Compile Include="Repositories\BinaryDefault.cs" />
+    <Compile Include="Repositories\BinaryNoBackup.cs" />
     <Compile Include="Repositories\XmlDefault.cs" />
     <Compile Include="IO\RepositorySettingTests.cs" />
     <Compile Include="Repositories\RepositoryTests.cs" />
@@ -76,8 +82,8 @@
     <Compile Include="IO\XmlHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\FileHelperTests.cs" />
-    <Compile Include="IO\FileInfosTests.cs" />
     <Compile Include="RemindersTests.cs" />
+    <Compile Include="Repositories\XmlNoBackup.cs" />
     <Compile Include="Sandbox\FakesTests.cs" />
     <Compile Include="Sandbox\SyncBoxTests.cs" />
     <Compile Include="SimpleSample.cs" />

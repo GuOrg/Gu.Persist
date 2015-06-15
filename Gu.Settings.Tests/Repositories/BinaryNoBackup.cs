@@ -2,29 +2,32 @@ namespace Gu.Settings.Tests.Repositories
 {
     using System.IO;
 
+    using Gu.Settings.Backup;
+
     using NUnit.Framework;
 
-    public class XmlDefault : RepositoryTests
+    public class BinaryNoBackup : RepositoryTests
     {
         [Test]
-        public void SavesSettingsFile()
+        public void BackuperIsNone()
         {
-            AssertFile.Exists(true, RepoSettingFile);
+            Assert.AreSame(Backuper.None, Repository.Backuper);
         }
 
         protected override IRepository Create(RepositorySettings settings)
         {
-            return new XmlRepository();
+            settings.BackupSettings = null;
+            return new BinaryRepository(settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)
         {
-            XmlHelper.Save(item, file);
+            BinaryHelper.Save(item, file);
         }
 
         protected override T Read<T>(FileInfo file)
         {
-            return XmlHelper.Read<T>(file);
+            return BinaryHelper.Read<T>(file);
         }
     }
 }

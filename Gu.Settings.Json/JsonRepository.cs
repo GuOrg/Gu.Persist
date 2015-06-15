@@ -3,9 +3,12 @@
     using System.Collections.Generic;
     using System.IO;
 
+    using Gu.Settings.IO;
+
     public class JsonRepository : Repository
     {
         public JsonRepository()
+            : base(Directories.Default)
         {
         }
 
@@ -14,8 +17,8 @@
         {
         }
 
-        public JsonRepository(RepositorySetting setting)
-            : base(setting)
+        public JsonRepository(RepositorySettings settings)
+            : base(settings)
         {
         }
 

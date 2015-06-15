@@ -5,8 +5,6 @@
     using System.Diagnostics;
     using System.Linq;
 
-    using Gu.Settings.Tests.Helpers;
-
     using NUnit.Framework;
 
     [Explicit("Longrunning benchmarks")]

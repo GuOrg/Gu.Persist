@@ -6,34 +6,38 @@
 
     public static class Directories
     {
-        public static DirectoryInfo ExecutingDirectory = CreateInfo(Assembly.GetExecutingAssembly().Location);
-        
-        public static DirectoryInfo ApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-        public static DirectoryInfo LocalApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
-        public static DirectoryInfo CommonApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
-       
-        public static DirectoryInfo MyDocuments = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-        public static DirectoryInfo CommonDocuments = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
+        public static readonly DirectoryInfo ExecutingDirectory = CreateInfo(Assembly.GetExecutingAssembly().Location);
 
-        public static DirectoryInfo ProgramFiles = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
-        public static DirectoryInfo ProgramFilesX86 = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
+        public static readonly DirectoryInfo ApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+        public static readonly DirectoryInfo LocalApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+        public static readonly DirectoryInfo CommonApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
 
-        public static DirectoryInfo CommonProgramFiles = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles));
-        public static DirectoryInfo CommonProgramFilesX86 = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86));
+        public static readonly DirectoryInfo MyDocuments = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+        public static readonly DirectoryInfo CommonDocuments = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
 
-        public static DirectoryInfo Desktop = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-        public static DirectoryInfo DesktopDirectory = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
+        public static readonly DirectoryInfo ProgramFiles = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
+        public static readonly DirectoryInfo ProgramFilesX86 = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
 
-        public static DirectoryInfo Subdirectory(this DirectoryInfo directory, string name)
+        public static readonly DirectoryInfo CommonProgramFiles = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles));
+        public static readonly DirectoryInfo CommonProgramFilesX86 = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86));
+
+        public static readonly DirectoryInfo Desktop = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+        public static readonly DirectoryInfo DesktopDirectory = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
+        public static readonly DirectoryInfo TempDirectory = CreateInfo(Path.GetTempPath());
+
+        private static DirectoryInfo _default;
+        public static DirectoryInfo Default
         {
-            var path = Path.Combine(directory.FullName, name);
-            return new DirectoryInfo(path);
-        }
-
-        public static FileInfo CreateFileInfoInDirectory(this DirectoryInfo directory, string fileName)
-        {
-            var path = Path.Combine(directory.FullName, fileName);
-            return new FileInfo(path);
+            get
+            {
+                if (_default == null)
+                {
+                    var subDirectory = string.Format(@"{0}/Settings", Assembly.GetExecutingAssembly().GetName().Name);
+                    _default = CommonApplicationData.Subdirectory(subDirectory);
+                }
+                return _default;
+            }
+            set { _default = value; }
         }
 
         private static DirectoryInfo CreateInfo(string path)
@@ -41,19 +45,5 @@
             var directoryName = Path.GetDirectoryName(path);
             return new DirectoryInfo(directoryName);
         }
-
-
-        /// <summary>
-        /// Creates the directory if not exists
-        /// </summary>
-        /// <param name="directory"></param>
-        internal static void CreateIfNotExists(this DirectoryInfo directory)
-        {
-            if (!directory.Exists)
-            {
-                directory.Create();
-            }
-        }
-
     }
 }

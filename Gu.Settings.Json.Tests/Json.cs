@@ -6,9 +6,9 @@
 
     public class Json : RepositoryTests
     {
-        protected override IRepository Create(RepositorySetting setting)
+        protected override IRepository Create(RepositorySettings settings)
         {
-            return new JsonRepository(setting);
+            return new JsonRepository(settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)

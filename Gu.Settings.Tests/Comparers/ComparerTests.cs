@@ -3,8 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Gu.Settings.Tests.Helpers;
-
     using NUnit.Framework;
 
     public class ComparerTests
