@@ -29,8 +29,8 @@ namespace Gu.Settings.Tests.Repositories
         {
             Directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + GetType().Name);
             Directories.Default = Directory;
-            var backupSettings = new BackupSettings(true, Directory, ".bak", null, false, 1, Int32.MaxValue);
-            Settings = new RepositorySettings(true, Directory, backupSettings, ".cfg", ".tmp");
+            var backupSettings = new BackupSettings(Directory, true, BackupSettings.DefaultExtension, null, false, 1, Int32.MaxValue);
+            Settings = new RepositorySettings(Directory, true, true, backupSettings, ".cfg", ".tmp");
 
             var name = GetType().Name;
 
@@ -201,7 +201,6 @@ namespace Gu.Settings.Tests.Repositories
             AssertFile.Exists(true, _dummyBackup);
         }
 
-
         [Test]
         public async Task SaveAsyncType()
         {
@@ -259,7 +258,6 @@ namespace Gu.Settings.Tests.Repositories
             var read = Repository.Read<DummySerializable>(_file);
             Assert.AreSame(_dummy, read);
         }
-
 
         [Test]
         public async Task SaveAsyncCaches()

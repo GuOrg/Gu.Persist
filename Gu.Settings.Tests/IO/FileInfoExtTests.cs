@@ -16,11 +16,13 @@
         public void SetUp()
         {
             _setting = new BackupSettings(
-                true,
                 _directoryInfo,
-                ".bak",
-                BackupSettings.DefaultTimeStampFormat, false,
-                3, 3);
+                true,
+                BackupSettings.DefaultExtension,
+                BackupSettings.DefaultTimeStampFormat, 
+                false,
+                3,
+                3);
             _file = _directoryInfo.CreateFileInfoInDirectory("Meh.cfg");
             _backupFile = _file.ChangeExtension(_setting.Extension);
         }

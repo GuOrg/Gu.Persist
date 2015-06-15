@@ -27,8 +27,8 @@
         [SetUp]
         public void SetUp()
         {
-            _backupSettings = new BackupSettings(true, _file.Directory, ".bak", null, false, 1, Int32.MaxValue);
-            _settings = new RepositorySettings(true, _file.Directory, _backupSettings, ".cfg", ".tmp");
+            _backupSettings = new BackupSettings(_file.Directory, true, BackupSettings.DefaultExtension, null, false, 1, Int32.MaxValue);
+            _settings = new RepositorySettings(_file.Directory, true, true, _backupSettings, ".cfg", ".tmp");
 
             _file = new FileInfo(string.Format(@"C:\Temp\{0}{1}", GetType().Name, _settings.Extension));
             _temp = new FileInfo(string.Format(@"C:\Temp\{0}{1}", GetType().Name, _settings.TempExtension));

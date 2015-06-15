@@ -23,7 +23,7 @@
         {
             _file = Directory.CreateFileInfoInDirectory("Setting.cfg");
             _softDeleteFile = _file.AppendExtension(FileHelper.SoftDeleteExtension);
-            _backup = _file.ChangeExtension(".bak");
+            _backup = _file.ChangeExtension(BackupSettings.DefaultExtension);
             _backup.VoidCreate();
         }
 

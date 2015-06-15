@@ -33,6 +33,7 @@
             {
                 Tracker = new DirtyTracker(this);
             }
+            Backuper = Backup.Backuper.Create(Settings.BackupSettings); // creating temp for TryRestore in ReadOrCreate
             Settings = ReadOrCreateCore(() => RepositorySettings.DefaultFor(directory));
             Backuper = Backup.Backuper.Create(Settings.BackupSettings);
         }
@@ -124,14 +125,21 @@
         public virtual async Task<T> ReadAsync<T>(FileInfo file)
         {
             VerifyDisposed();
-            Ensure.NotNull(file, "file");
-            WeakReference cached;
-            if (_cache.TryGetValue(file, out cached))
+            Ensure.NotNull(file,"file"); // not checking exists, framework exception is more familiar.
+            if (Settings.IsCaching)
             {
-                return (T)cached.Target;
+                WeakReference cached;
+                if (_cache.TryGetValue(file, out cached))
+                {
+                    return (T)cached.Target;
+                }
             }
+
             var value = await FileHelper.ReadAsync(file, FromStream<T>);
-            _cache.TryAdd(file, new WeakReference(value));
+            if (Settings.IsCaching)
+            {
+                _cache.TryAdd(file, new WeakReference(value));                
+            }
             if (Settings.IsTrackingDirty)
             {
                 Tracker.TrackOrUpdate(file, value);
@@ -171,13 +179,20 @@
         {
             VerifyDisposed();
             Ensure.NotNull(file, "file");
-            WeakReference cached;
-            if (_cache.TryGetValue(file, out cached))
+            if (Settings.IsCaching)
             {
-                return (T)cached.Target;
+                WeakReference cached;
+                if (_cache.TryGetValue(file, out cached))
+                {
+                    return (T)cached.Target;
+                }
             }
+
             var value = FileHelper.Read(file, FromStream<T>);
-            _cache.TryAdd(file, new WeakReference(value));
+            if (Settings.IsCaching)
+            {
+                _cache.TryAdd(file, new WeakReference(value));
+            }
             if (Settings.IsTrackingDirty)
             {
                 Tracker.TrackOrUpdate(file, value);
@@ -214,6 +229,10 @@
             Ensure.NotNull(creator, "creator");
             T setting;
             if (ExistsCore<T>())
+            {
+                setting = ReadCore<T>();
+            }
+            else if (Backuper.TryRestore(file))
             {
                 setting = ReadCore<T>();
             }
@@ -269,13 +288,7 @@
             VerifyDisposed();
             Ensure.NotNull(file, "file");
             Ensure.NotNull(tempFile, "tempFile");
-            Cache(item, file);
-            if (Settings.IsTrackingDirty)
-            {
-                Tracker.TrackOrUpdate(file, item);
-            }
-
-            Backuper.Backup(file);
+            var createdBackup = PrepareForSaveCore(item, file);
             try
             {
                 if (item == null)
@@ -294,7 +307,7 @@
             }
             catch (Exception)
             {
-                Backuper.Restore(file);
+                Backuper.TryRestore(file);
                 throw;
             }
         }
@@ -324,12 +337,7 @@
             VerifyDisposed();
             Ensure.NotNull(file, "file");
             Ensure.NotNull(tempFile, "tempFile");
-            Cache(item, file);
-            if (Settings.IsTrackingDirty)
-            {
-                Tracker.TrackOrUpdate(file, item);
-            }
-            Backuper.Backup(file);
+            var createdBackup = PrepareForSaveCore(item, file);
 
             try
             {
@@ -350,7 +358,7 @@
             }
             catch (Exception)
             {
-                Backuper.Restore(file);
+                Backuper.TryRestore(file);
                 throw;
             }
         }
@@ -375,7 +383,7 @@
         {
             Ensure.NotNullOrEmpty(fileName, "fileName");
             var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
-            return IsDirty(item, fileInfo);
+            return IsDirty(item, fileInfo, comparer);
         }
 
         public virtual bool IsDirty<T>(T item, FileInfo file)
@@ -472,6 +480,21 @@
             {
                 _cache.TryAdd(file, new WeakReference(item));
             }
+        }
+
+        private bool PrepareForSaveCore<T>(T item, FileInfo file)
+        {
+            if (Settings.IsCaching)
+            {
+                Cache(item, file);
+            }
+
+            if (Settings.IsTrackingDirty)
+            {
+                Tracker.TrackOrUpdate(file, item);
+            }
+
+            return Backuper.TryBackup(file);
         }
     }
 }
