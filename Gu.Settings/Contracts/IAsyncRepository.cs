@@ -5,8 +5,6 @@ namespace Gu.Settings
 
     public interface IAsyncRepository
     {
-        RepositorySettings Settings { get; }
-
         Task<T> ReadAsync<T>(string fileName);
         
         Task<T> ReadAsync<T>(FileInfo file);

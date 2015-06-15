@@ -7,8 +7,6 @@
     /// </summary>
     public interface IAutoRepository
     {
-        RepositorySettings Settings { get; }
-        
         bool Exists<T>();
 
         /// <summary>

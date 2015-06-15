@@ -10,7 +10,7 @@
     using Gu.Settings.Backup;
     using Gu.Settings.IO;
 
-    public abstract class Repository : IRepository, IAsyncRepository, IAutoAsyncRepository, IAutoRepository, ICloner, IAutoSavingRepository, IFileNameRepository, IDisposable
+    public abstract class Repository : IRepository, IAsyncRepository, IAutoAsyncRepository, IAutoRepository, ICloner, IAutoSavingRepository, IFileNameRepository, IRepositoryWithSettings, IDisposable
     {
         private readonly ConcurrentDictionary<FileInfo, WeakReference> _cache = new ConcurrentDictionary<FileInfo, WeakReference>(FileInfoComparer.Default);
         private bool _disposed;
@@ -37,12 +37,12 @@
             Backuper = Backup.Backuper.Create(Settings.BackupSettings);
         }
 
-        protected Repository(RepositorySettings settings)
+        protected Repository(IRepositorySettings settings)
             : this(settings, Backup.Backuper.Create(settings.BackupSettings))
         {
         }
 
-        protected Repository(RepositorySettings settings, IBackuper backuper)
+        protected Repository(IRepositorySettings settings, IBackuper backuper)
         {
             settings.Directory.CreateIfNotExists();
             Settings = settings;
@@ -53,7 +53,7 @@
             }
         }
 
-        public RepositorySettings Settings { get; private set; }
+        public IRepositorySettings Settings { get; private set; }
 
         public virtual IDirtyTracker Tracker { get; private set; }
 

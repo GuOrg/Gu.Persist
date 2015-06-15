@@ -10,7 +10,8 @@
         IDirtyTracker Tracker { get; }
         
         IBackuper Backuper { get; }
-        RepositorySettings Settings { get; }
+        
+        IRepositorySettings Settings { get; }
 
         bool Exists<T>();
 

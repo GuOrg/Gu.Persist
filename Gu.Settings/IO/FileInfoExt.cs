@@ -42,7 +42,7 @@
             return new FileInfo(fileName);
         }
 
-        internal static DateTime GetTimeStamp(this FileInfo file, BackupSettings setting)
+        internal static DateTime GetTimeStamp(this FileInfo file, IBackupSettings setting)
         {
             Ensure.NotNull(setting, "setting");
             if (setting.TimeStampFormat == null)
@@ -61,7 +61,7 @@
             return timeStamp;
         }
 
-        internal static FileInfo AddTimeStamp(this FileInfo file, DateTime time, BackupSettings setting)
+        internal static FileInfo AddTimeStamp(this FileInfo file, DateTime time, IBackupSettings setting)
         {
             if (setting == null)
             {
@@ -76,7 +76,7 @@
             return timestamped;
         }
 
-        internal static FileInfo RemoveTimeStamp(this FileInfo file, BackupSettings setting)
+        internal static FileInfo RemoveTimeStamp(this FileInfo file, IBackupSettings setting)
         {
             Ensure.NotNull(setting, "setting");
             if (setting.TimeStampFormat == null)
@@ -88,7 +88,7 @@
             return new FileInfo(stripped);
         }
 
-        internal static string TimeStampPattern(this BackupSettings setting)
+        internal static string TimeStampPattern(this IBackupSettings setting)
         {
             if (setting == null || string.IsNullOrEmpty(setting.TimeStampFormat))
             {
