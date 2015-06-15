@@ -10,7 +10,7 @@
     using Gu.Settings.Backup;
     using Gu.Settings.IO;
 
-    public abstract class Repository : IRepository, IAsyncRepository, IAutoAsyncRepository, IAutoRepository, ICloner, IAutoSavingRepository, IFileNameRepository, IRepositoryWithSettings, IDisposable
+    public abstract class Repository : IRepository, IAsyncRepository, IGenericAsyncRepository, IGenericRepository, ICloner, IAutoSavingRepository, IFileNameRepository, IRepositoryWithSettings, IDisposable
     {
         private readonly ConcurrentDictionary<FileInfo, WeakReference> _cache = new ConcurrentDictionary<FileInfo, WeakReference>(FileInfoComparer.Default);
         private bool _disposed;
@@ -90,21 +90,21 @@
         protected bool ExistsCore<T>()
         {
             var file = GetFileInfoCore<T>();
-            return ExistsCore<T>(file);
+            return ExistsCore(file);
         }
 
-        public virtual bool Exists<T>(string fileName)
+        public virtual bool Exists(string fileName)
         {
             var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
-            return Exists<T>(fileInfo);
+            return Exists(fileInfo);
         }
 
-        public virtual bool Exists<T>(FileInfo file)
+        public virtual bool Exists(FileInfo file)
         {
-            return ExistsCore<T>(file);
+            return ExistsCore(file);
         }
 
-        protected bool ExistsCore<T>(FileInfo file)
+        protected bool ExistsCore(FileInfo file)
         {
             file.Refresh();
             return file.Exists;

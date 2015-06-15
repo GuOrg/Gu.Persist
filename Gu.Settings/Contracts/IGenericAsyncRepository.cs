@@ -2,7 +2,7 @@
 {
     using System.Threading.Tasks;
 
-    public interface IAutoAsyncRepository : IAutoRepository
+    public interface IGenericAsyncRepository : IGenericRepository
     {
         Task<T> ReadAsync<T>();
 
