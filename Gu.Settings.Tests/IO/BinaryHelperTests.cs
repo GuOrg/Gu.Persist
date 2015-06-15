@@ -7,8 +7,6 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    using Gu.Settings.Tests.Helpers;
-
     using NUnit.Framework;
 
     public class BinaryHelperTests

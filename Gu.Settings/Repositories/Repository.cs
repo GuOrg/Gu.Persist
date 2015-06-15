@@ -3,22 +3,23 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.IO;
     using System.Threading.Tasks;
 
     using Gu.Settings.IO;
 
-    public abstract class Repository : IRepository, IAsyncRepository, IAutoAsyncRepository, IAutoRepository, ICloner, IAutoSavingRepository, IDisposable
+    public abstract class Repository : IRepository, IAsyncRepository, IAutoAsyncRepository, IAutoRepository, ICloner, IAutoSavingRepository, IFileNameRepository, IDisposable
     {
         private readonly ConcurrentDictionary<FileInfo, WeakReference> _cache = new ConcurrentDictionary<FileInfo, WeakReference>(FileInfoComparer.Default);
         private bool _disposed;
-        private readonly IBackuper _backuper = Settings.Backuper.None;
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private IBackuper _backuper;
 
         /// <summary>
-        /// Defaults to %AppDat%/Settings
+        /// Defaults to %AppDat%/ExecutingAssembly.Name/Settings
         /// </summary>
         protected Repository()
-            : this(Directories.ApplicationData.Subdirectory("Settings"))
         {
         }
 
@@ -26,47 +27,50 @@
         {
             Ensure.NotNull(directory, "directory");
             directory.CreateIfNotExists();
-            Setting = RepositorySetting.DefaultFor(directory);
-            if (Setting.IsTrackingDirty)
+            Settings = RepositorySettings.DefaultFor(directory);
+            if (Settings.IsTrackingDirty)
             {
                 Tracker = new DirtyTracker(this);
             }
-            if (Exists<RepositorySetting>())
-            {
-                Setting = Read<RepositorySetting>();
-            }
-            else
-            {
-                Save(Setting);
-            }
-            _backuper = new Backuper(Setting.BackupSettings);
-            Backuper.Repository = this;
+            Settings = ReadOrCreateCore(() => RepositorySettings.DefaultFor(directory));
+            Backuper = Backup.Backuper.Create(Settings.BackupSettings);
         }
 
-        protected Repository(RepositorySetting setting)
-            : this(setting, new Backuper(setting.BackupSettings))
+        protected Repository(RepositorySettings settings)
+            : this(settings, Backup.Backuper.Create(settings.BackupSettings))
         {
         }
 
-        public Repository(RepositorySetting setting, IBackuper backuper)
+        protected Repository(RepositorySettings settings, IBackuper backuper)
         {
-            setting.Directory.CreateIfNotExists();
-            Setting = setting;
-            _backuper = backuper;
-            Backuper.Repository = this;
-            if (Setting.IsTrackingDirty)
+            settings.Directory.CreateIfNotExists();
+            Settings = settings;
+            Backuper = backuper;
+            if (Settings.IsTrackingDirty)
             {
                 Tracker = new DirtyTracker(this);
             }
         }
 
-        public RepositorySetting Setting { get; private set; }
+        public RepositorySettings Settings { get; private set; }
 
         public virtual IDirtyTracker Tracker { get; private set; }
 
         public virtual IBackuper Backuper
         {
-            get { return _backuper; }
+            get { return _backuper ?? Backup.Backuper.None; }
+            private set
+            {
+                if (_backuper != null)
+                {
+                    _backuper.Repository = null;
+                }
+                _backuper = value;
+                if (_backuper != null)
+                {
+                    _backuper.Repository = this;
+                }
+            }
         }
 
         /// <summary>
@@ -76,22 +80,37 @@
         /// <returns></returns>
         public virtual FileInfo GetFileInfo<T>()
         {
-            return FileHelper.CreateFileInfo<T>(Setting);
+            return GetFileInfoCore<T>();
+        }
+
+        protected FileInfo GetFileInfoCore<T>()
+        {
+            return FileHelper.CreateFileInfo<T>(Settings);
         }
 
         public virtual bool Exists<T>()
         {
-            var file = GetFileInfo<T>();
-            return Exists<T>(file);
+            return ExistsCore<T>();
+        }
+
+        protected bool ExistsCore<T>()
+        {
+            var file = GetFileInfoCore<T>();
+            return ExistsCore<T>(file);
         }
 
         public virtual bool Exists<T>(string fileName)
         {
-            var fileInfo = FileHelper.CreateFileInfo(fileName, Setting);
+            var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
             return Exists<T>(fileInfo);
         }
 
         public virtual bool Exists<T>(FileInfo file)
+        {
+            return ExistsCore<T>(file);
+        }
+
+        protected bool ExistsCore<T>(FileInfo file)
         {
             file.Refresh();
             return file.Exists;
@@ -105,7 +124,7 @@
 
         public virtual Task<T> ReadAsync<T>(string fileName)
         {
-            var fileInfo = FileHelper.CreateFileInfo(fileName, Setting);
+            var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
             return ReadAsync<T>(fileInfo);
         }
 
@@ -120,7 +139,7 @@
             }
             var value = await FileHelper.ReadAsync(file, FromStream<T>);
             _cache.TryAdd(file, new WeakReference(value));
-            if (Setting.IsTrackingDirty)
+            if (Settings.IsTrackingDirty)
             {
                 Tracker.TrackOrUpdate(file, value);
             }
@@ -129,14 +148,13 @@
 
         public virtual T Read<T>()
         {
-            var file = GetFileInfo<T>();
-            return Read<T>(file);
+            return ReadCore<T>();
         }
 
-        public virtual T ReadOrCreate<T>(Func<T> creator)
+        protected T ReadCore<T>()
         {
-            var file = GetFileInfo<T>();
-            return ReadOrCreate(file, creator);
+            var file = GetFileInfoCore<T>();
+            return ReadCore<T>(file);
         }
 
         /// <summary>
@@ -147,18 +165,16 @@
         /// <returns></returns>
         public virtual T Read<T>(string fileName)
         {
-            var fileInfo = FileHelper.CreateFileInfo(fileName, Setting);
+            var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
             return Read<T>(fileInfo);
         }
 
-        public virtual T ReadOrCreate<T>(string fileName, Func<T> creator)
+        public virtual T Read<T>(FileInfo file)
         {
-            Ensure.NotNullOrEmpty(fileName, "fileName");
-            var file = FileHelper.CreateFileInfo(fileName, Setting);
-            return ReadOrCreate(file, creator);
+            return ReadCore<T>(file);
         }
 
-        public virtual T Read<T>(FileInfo file)
+        protected T ReadCore<T>(FileInfo file)
         {
             VerifyDisposed();
             Ensure.NotNull(file, "file");
@@ -169,26 +185,49 @@
             }
             var value = FileHelper.Read(file, FromStream<T>);
             _cache.TryAdd(file, new WeakReference(value));
-            if (Setting.IsTrackingDirty)
+            if (Settings.IsTrackingDirty)
             {
                 Tracker.TrackOrUpdate(file, value);
             }
             return value;
         }
 
+        public virtual T ReadOrCreate<T>(Func<T> creator)
+        {
+            return ReadOrCreateCore(creator);
+        }
+
+        protected T ReadOrCreateCore<T>(Func<T> creator)
+        {
+            var file = GetFileInfoCore<T>();
+            return ReadOrCreateCore(file, creator);
+        }
+
+        public virtual T ReadOrCreate<T>(string fileName, Func<T> creator)
+        {
+            Ensure.NotNullOrEmpty(fileName, "fileName");
+            var file = FileHelper.CreateFileInfo(fileName, Settings);
+            return ReadOrCreate(file, creator);
+        }
+
         public virtual T ReadOrCreate<T>(FileInfo file, Func<T> creator)
+        {
+            return ReadOrCreateCore(file, creator);
+        }
+
+        protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator)
         {
             Ensure.NotNull(file, "file");
             Ensure.NotNull(creator, "creator");
             T setting;
-            if (Exists<T>())
+            if (ExistsCore<T>())
             {
-                setting = Read<T>();
+                setting = ReadCore<T>();
             }
             else
             {
                 setting = creator();
-                Save(setting);
+                SaveCore(setting);
             }
             return setting;
         }
@@ -200,30 +239,45 @@
         /// <param name="item"></param>
         public virtual void Save<T>(T item)
         {
-            var file = GetFileInfo<T>();
-            Save(item, file);
+            SaveCore(item);
+        }
+
+        protected void SaveCore<T>(T item)
+        {
+            var file = GetFileInfoCore<T>();
+            SaveCore(item, file);
         }
 
         public virtual void Save<T>(T item, string fileName)
         {
-            var file = FileHelper.CreateFileInfo(fileName, Setting);
+            var file = FileHelper.CreateFileInfo(fileName, Settings);
             Save(item, file);
         }
 
         public virtual void Save<T>(T item, FileInfo file)
         {
+            SaveCore(item, file);
+        }
+
+        protected void SaveCore<T>(T item, FileInfo file)
+        {
             Ensure.NotNull(file, "file");
-            var tempFile = file.ChangeExtension(Setting.TempExtension);
-            Save(item, file, tempFile);
+            var tempFile = file.ChangeExtension(Settings.TempExtension);
+            SaveCore(item, file, tempFile);
         }
 
         public virtual void Save<T>(T item, FileInfo file, FileInfo tempFile)
+        {
+            SaveCore(item, file, tempFile);
+        }
+
+        protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
         {
             VerifyDisposed();
             Ensure.NotNull(file, "file");
             Ensure.NotNull(tempFile, "tempFile");
             Cache(item, file);
-            if (Setting.IsTrackingDirty)
+            if (Settings.IsTrackingDirty)
             {
                 Tracker.TrackOrUpdate(file, item);
             }
@@ -261,14 +315,14 @@
         public virtual Task SaveAsync<T>(T item, string fileName)
         {
             Ensure.NotNullOrEmpty(fileName, "fileName");
-            var fileInfo = FileHelper.CreateFileInfo(fileName, Setting);
+            var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
             return SaveAsync(item, fileInfo);
         }
 
         public virtual Task SaveAsync<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, "file");
-            var tempFile = file.ChangeExtension(Setting.TempExtension);
+            var tempFile = file.ChangeExtension(Settings.TempExtension);
             return SaveAsync(item, file, tempFile);
         }
 
@@ -278,7 +332,7 @@
             Ensure.NotNull(file, "file");
             Ensure.NotNull(tempFile, "tempFile");
             Cache(item, file);
-            if (Setting.IsTrackingDirty)
+            if (Settings.IsTrackingDirty)
             {
                 Tracker.TrackOrUpdate(file, item);
             }
@@ -327,7 +381,7 @@
         public virtual bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer)
         {
             Ensure.NotNullOrEmpty(fileName, "fileName");
-            var fileInfo = FileHelper.CreateFileInfo(fileName, Setting);
+            var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
             return IsDirty(item, fileInfo);
         }
 
@@ -339,7 +393,7 @@
         public virtual bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
         {
             VerifyDisposed();
-            if (!Setting.IsTrackingDirty)
+            if (!Settings.IsTrackingDirty)
             {
                 throw new InvalidOperationException("Cannot check IsDirty if not Setting.IsTrackingDirty");
             }
@@ -357,6 +411,11 @@
         }
 
         public virtual T Clone<T>(T item)
+        {
+            return CloneCore(item);
+        }
+
+        public virtual T CloneCore<T>(T item)
         {
             VerifyDisposed();
             using (var stream = ToStream(item))
@@ -401,6 +460,11 @@
         protected abstract IEqualityComparer<T> DefaultStructuralEqualityComparer<T>();
 
         protected virtual void Cache<T>(T item, FileInfo file)
+        {
+            CacheCore(item, file);
+        }
+
+        protected void CacheCore<T>(T item, FileInfo file)
         {
             VerifyDisposed();
             WeakReference cached;

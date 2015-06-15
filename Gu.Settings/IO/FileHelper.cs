@@ -2,14 +2,14 @@ namespace Gu.Settings
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Globalization;
     using System.IO;
     using System.Threading.Tasks;
 
     public static class FileHelper
     {
         public static readonly string SoftDeleteExtension = ".delete";
-        private static readonly ConcurrentDictionary<string, FileInfo> FileNamesMap = new ConcurrentDictionary<string, FileInfo>(StringComparer.OrdinalIgnoreCase);
-        private static readonly ConcurrentDictionary<FileInfo, IFileInfos> FileInfosMap = new ConcurrentDictionary<FileInfo, IFileInfos>(FileInfoComparer.Default);
+        //private static readonly ConcurrentDictionary<string, FileInfo> FileNamesMap = new ConcurrentDictionary<string, FileInfo>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// 
@@ -18,7 +18,7 @@ namespace Gu.Settings
         /// <param name="file"></param>
         /// <param name="fromStream">Reading from from file to T</param>
         /// <returns></returns>
-        public static T Read<T>(FileInfo file, Func<Stream, T> fromStream)
+        public static T Read<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
             using (var stream = File.OpenRead(file.FullName))
             {
@@ -32,7 +32,7 @@ namespace Gu.Settings
         /// <param name="file"></param>
         /// <param name="fromStream">Reading from stream to T</param>
         /// <returns></returns>
-        public static async Task<T> ReadAsync<T>(FileInfo file, Func<Stream, T> fromStream)
+        public static async Task<T> ReadAsync<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
             using (var ms = new MemoryStream())
             {
@@ -53,7 +53,7 @@ namespace Gu.Settings
         /// <param name="file"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static async Task SaveAsync(FileInfo file, Stream stream)
+        public static async Task SaveAsync(this FileInfo file, Stream stream)
         {
             using (var fileStream = file.OpenWrite())
             {
@@ -67,12 +67,40 @@ namespace Gu.Settings
         /// </summary>
         /// <param name="file"></param>
         /// <param name="stream"></param>
-        public static void Save(FileInfo file, Stream stream)
+        public static void Save(this FileInfo file, Stream stream)
         {
             using (var fileStream = File.OpenWrite(file.FullName))
             {
                 stream.CopyTo(fileStream);
             }
+        }
+
+        internal static void HardDelete(this FileInfo file)
+        {
+            var soft = string.Concat(file.FullName, SoftDeleteExtension);
+            File.Delete(soft);
+            file.Delete();
+        }
+
+        internal static FileInfo SoftDelete(this FileInfo file)
+        {
+            file.Refresh();
+            if (!file.Exists)
+            {
+                return null;
+            }
+            var soft = file.AppendExtension(SoftDeleteExtension);
+            File.Delete(soft.FullName);
+            try // Swallowing here, no way to know that the file has not been touched.
+            {
+                File.Move(file.FullName, soft.FullName); 
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+            return soft;
         }
 
         public static void MoveTo(this FileInfo source, FileInfo destination)
@@ -85,7 +113,7 @@ namespace Gu.Settings
             File.Move(source.FullName, destination.FullName);
         }
 
-        internal static void Backup(FileInfo file, FileInfo backup)
+        internal static void Backup(this FileInfo file, FileInfo backup)
         {
             if (backup == null)
             {
@@ -103,7 +131,7 @@ namespace Gu.Settings
             file.Refresh();
         }
 
-        internal static void Restore(FileInfo file, FileInfo backup)
+        internal static void Restore(this FileInfo file, FileInfo backup)
         {
             if (backup == null)
             {
@@ -126,14 +154,8 @@ namespace Gu.Settings
         public static FileInfo CreateFileInfo(string fileName, IFileSettings settings)
         {
             Ensure.NotNull(fileName, "fileName");
-            FileInfo fileInfo;
-            if (FileNamesMap.TryGetValue(fileName, out fileInfo))
-            {
-                return fileInfo;
-            }
-            fileInfo = CreateFileInfo(settings.Directory, fileName, settings.Extension);
-            FileNamesMap.TryAdd(fileName, fileInfo);
-            return fileInfo;
+            var file = CreateFileInfo(settings.Directory, fileName, settings.Extension);
+            return file;
         }
 
         internal static FileInfo CreateFileInfo(DirectoryInfo directory, string fileName, string extension)
@@ -166,45 +188,6 @@ namespace Gu.Settings
 
             var fullFileName = Path.Combine(directory.FullName, fileName);
             return new FileInfo(fullFileName);
-        }
-
-        public static FileInfo ChangeExtension(this FileInfo file, string newExtension)
-        {
-            Ensure.NotNullOrEmpty(newExtension, "newExtension");
-            if (!newExtension.StartsWith("."))
-            {
-                newExtension = "." + newExtension;
-            }
-            var newFileName = Path.ChangeExtension(file.FullName, newExtension);
-            var newFile = new FileInfo(newFileName);
-            return newFile;
-        }
-
-        internal static void HardDelete(this FileInfo file)
-        {
-            var soft = string.Concat(file.FullName, SoftDeleteExtension);
-            File.Delete(soft);
-            file.Delete();
-        }
-
-        internal static FileInfo SoftDelete(this FileInfo file)
-        {
-            var soft = string.Concat(file.FullName, SoftDeleteExtension);
-            File.Delete(soft);
-            File.Move(file.Name, soft);
-            return new FileInfo(soft);
-        }
-
-        [Obsolete("Refactor away from fileinfos")]
-        internal static IFileInfos GetFileInfos(FileInfo file, RepositorySetting setting)
-        {
-            if (setting.BackupSettings.CreateBackups)
-            {
-                return FileInfosMap.GetOrAdd(
-                    file,
-                    x => FileInfos.CreateFileInfos(file, setting.TempExtension, setting.BackupSettings.Extension));
-            }
-            return FileInfosMap.GetOrAdd(file, x => FileInfos.CreateFileInfos(file, setting.TempExtension, null));
         }
 
         internal static string PrependDotIfMissing(string extension)

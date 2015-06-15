@@ -1,43 +1,43 @@
 ﻿namespace Gu.Settings
 {
     using System;
+    using System.IO;
 
     internal sealed class AutoSaveSetting
     {
-        private AutoSaveSetting(AutoSaveMode mode, TimeSpan time, FileInfos files)
+        private AutoSaveSetting(AutoSaveMode mode, TimeSpan time, FileInfo file)
         {
-            Ensure.NotNull(files, "files");
-            Ensure.NotNull(files.File, "files");
+            Ensure.NotNull(file, "file");
             Mode = mode;
             Time = time;
-            Files = files;
+            File = file;
         }
 
         public AutoSaveMode Mode { get; private set; }
 
         public TimeSpan Time { get; private set; }
 
-        public FileInfos Files { get; private set; }
+        public FileInfo File { get; private set; }
 
         /// <summary>
         /// Saves automatically every x seconds
         /// </summary>
         /// <param name="saveEvery"></param>
-        /// <param name="fileInfos">Information about file to save and backup</param> 
+        /// <param name="file">Information about file to save and backup</param> 
         /// <returns></returns>
-        public static AutoSaveSetting OnSchedule(TimeSpan saveEvery, FileInfos fileInfos)
+        public static AutoSaveSetting OnSchedule(TimeSpan saveEvery, FileInfo file)
         {
-            return new AutoSaveSetting(AutoSaveMode.OnSchedule, saveEvery, fileInfos);
+            return new AutoSaveSetting(AutoSaveMode.OnSchedule, saveEvery, file);
         }
 
         /// <summary>
         /// Saves on propertychange
         /// </summary>
-        /// <param name="fileInfos">Information about file to save and backup</param>
+        /// <param name="file">Information about file to save and backup</param>
         /// <returns></returns>
-        public static AutoSaveSetting OnChanged(FileInfos fileInfos)
+        public static AutoSaveSetting OnChanged(FileInfo file)
         {
-            return new AutoSaveSetting(AutoSaveMode.OnChanged, TimeSpan.Zero, fileInfos);
+            return new AutoSaveSetting(AutoSaveMode.OnChanged, TimeSpan.Zero, file);
         }
 
         /// <summary>
@@ -45,11 +45,11 @@
         /// </summary>
         /// <param name="bufferTime"></param>
         /// <param name="maxTime"></param>
-        /// <param name="fileInfos">Information about file to save and backup</param> 
+        /// <param name="file">Information about file to save and backup</param> 
         /// <returns></returns>
-        public static AutoSaveSetting Deferred(TimeSpan bufferTime, TimeSpan maxTime, FileInfos fileInfos)
+        public static AutoSaveSetting Deferred(TimeSpan bufferTime, TimeSpan maxTime, FileInfo file)
         {
-            return new AutoSaveSetting(AutoSaveMode.Deferred, bufferTime, fileInfos);
+            return new AutoSaveSetting(AutoSaveMode.Deferred, bufferTime, file);
         }
     }
 }

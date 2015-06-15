@@ -1,4 +1,4 @@
-﻿namespace Gu.Settings.Tests.Helpers
+﻿namespace Gu.Settings.Tests
 {
     using System;
     using System.ComponentModel;
