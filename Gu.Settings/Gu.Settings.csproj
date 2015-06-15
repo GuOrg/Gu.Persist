@@ -62,8 +62,8 @@
     <Compile Include="EventArgs\SaveEventArgs.cs" />
     <Compile Include="Comparers\BinaryEqualsComparer`1.cs" />
     <Compile Include="Contracts\IAsyncRepository.cs" />
-    <Compile Include="Contracts\IAutoAsyncRepository.cs" />
-    <Compile Include="Contracts\IAutoRepository.cs" />
+    <Compile Include="Contracts\IGenericAsyncRepository.cs" />
+    <Compile Include="Contracts\IGenericRepository.cs" />
     <Compile Include="Contracts\IAutoSaveRepository.cs" />
     <Compile Include="Contracts\ICloner.cs" />
     <Compile Include="Contracts\IFileSettings.cs" />

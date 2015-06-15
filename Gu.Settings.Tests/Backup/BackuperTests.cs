@@ -39,6 +39,7 @@
             AssertFile.Exists(false, File);
             AssertFile.Exists(true, SoftDelete);
 
+            Assert.IsTrue(_backuper.CanRestore(File));
             Assert.IsTrue(_backuper.TryRestore(File));
 
             Assert.AreEqual(_dummy, File.ReadXml<DummySerializable>());
@@ -58,6 +59,7 @@
             AssertFile.Exists(true, SoftDelete);
             AssertFile.Exists(true, Backup);
 
+            Assert.IsTrue(_backuper.CanRestore(File));
             Assert.IsTrue(_backuper.TryRestore(File));
 
             Assert.AreEqual(_dummy, File.ReadXml<DummySerializable>());
@@ -92,6 +94,7 @@
             AssertFile.Exists(false, SoftDelete);
             AssertFile.Exists(true, Backup);
 
+            Assert.IsTrue(_backuper.CanRestore(File));
             Assert.IsTrue(_backuper.TryRestore(File));
 
             Assert.AreEqual(_dummy, File.ReadXml<DummySerializable>());

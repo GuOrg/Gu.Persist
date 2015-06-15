@@ -1,7 +1,9 @@
 ﻿namespace Gu.Settings.Backup
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
 
     using Gu.Settings.Internals;
 
@@ -57,6 +59,17 @@
             FileHelper.Backup(file, backup);
         }
 
+        public bool CanRestore(FileInfo file)
+        {
+            var softDelete = file.GetSoftDeleteFileFor();
+            if (softDelete.Exists)
+            {
+                return true;
+            }
+            var backups = BackupFile.GetAllBackupsFor(file, Setting);
+            return backups.Any();
+        }
+
         /// <summary>
         /// Reads the newest backup if any.
         /// Order:
@@ -73,7 +86,7 @@
 
             try
             {
-                var softDelete = file.AppendExtension(FileHelper.SoftDeleteExtension);
+                var softDelete = file.GetSoftDeleteFileFor();
                 if (softDelete.Exists)
                 {
                     Restore(file, softDelete);

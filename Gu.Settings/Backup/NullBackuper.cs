@@ -22,6 +22,17 @@
             FileHelper.Backup(file, backup);
         }
 
+        public bool CanRestore(FileInfo file)
+        {
+            Ensure.NotNull(file, "file");
+            var softDelete = file.GetSoftDeleteFileFor();
+            if (softDelete.Exists)
+            {
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Reads the newest backup if any.
         /// Order:

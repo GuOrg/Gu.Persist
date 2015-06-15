@@ -5,7 +5,7 @@
     using System.IO;
     using System.Threading.Tasks;
 
-    public interface IRepository : ICloner, IDirty
+    public interface IRepository : ICloner, IDirty, IDisposable
     {
         IDirtyTracker Tracker { get; }
         
@@ -13,9 +13,18 @@
         
         IRepositorySettings Settings { get; }
 
+        /// <summary>
+        /// This gets the fileinfo used for reading & writing files of type T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        FileInfo GetFileInfo<T>();
+
         bool Exists<T>();
 
-        bool Exists<T>(FileInfo file);
+        bool Exists(string fileName);
+
+        bool Exists(FileInfo file);
 
         Task<T> ReadAsync<T>();
 
@@ -50,21 +59,6 @@
 
         Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile);
 
-        /// <summary>
-        /// Dispose(true); //I am calling you from Dispose, it's safe
-        /// GC.SuppressFinalize(this); //Hey, GC: don't bother calling finalize later
-        /// </summary>
-        void Dispose();
-
-        /// <summary>
-        /// This gets the fileinfo used for reading & writing files of type T
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        FileInfo GetFileInfo<T>();
-
-        bool Exists<T>(string fileName);
-
         Task<T> ReadAsync<T>(string fileName);
 
         /// <summary>
@@ -76,9 +70,5 @@
         T Read<T>(string fileName);
 
         void Save<T>(T item, string fileName);
-
-        bool IsDirty<T>(T item, string fileName);
-
-        bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer);
     }
 }
