@@ -1,11 +1,9 @@
 ﻿namespace Gu.Settings.Backup
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-
-    using Gu.Settings.Internals;
+    using Internals;
 
     public class Backuper : IBackuper
     {
@@ -107,7 +105,7 @@
             }
         }
 
-        public virtual void Restore(FileInfo file)
+        internal virtual void Restore(FileInfo file)
         {
             Ensure.NotNull(file, "file");
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");
@@ -126,7 +124,7 @@
             }
         }
 
-        public virtual void Restore(FileInfo file, FileInfo backup)
+        internal virtual void Restore(FileInfo file, FileInfo backup)
         {
             Ensure.NotNull(file, "file");
             Ensure.NotNull(backup, "backup");

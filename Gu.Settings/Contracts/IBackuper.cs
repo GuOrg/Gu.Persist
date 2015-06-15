@@ -30,9 +30,9 @@
         /// <returns>True if a backup was found and successfully restored. Now File can be read.</returns>
         bool TryRestore(FileInfo file);
 
-        void Restore(FileInfo file);
+        // void Restore(FileInfo file); // Not trivially solved with singletons
 
-        void Restore(FileInfo file, FileInfo backup);
+        // void Restore(FileInfo file, FileInfo backup);
         
         void PurgeBackups(FileInfo file);
     }

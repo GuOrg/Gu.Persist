@@ -67,7 +67,7 @@
             }
         }
 
-        public virtual void Restore(FileInfo file)
+        internal virtual void Restore(FileInfo file)
         {
             var softDelete = file.AppendExtension(FileHelper.SoftDeleteExtension);
             if (softDelete.Exists)
@@ -76,7 +76,7 @@
             }
         }
 
-        public virtual void Restore(FileInfo file, FileInfo backup)
+        internal virtual void Restore(FileInfo file, FileInfo backup)
         {
             Ensure.NotNull(file, "file");
             Ensure.NotNull(backup, "backup");
