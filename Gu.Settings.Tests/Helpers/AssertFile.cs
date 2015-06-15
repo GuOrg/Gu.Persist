@@ -8,7 +8,7 @@
         public static void Exists(bool expected, FileInfo file)
         {
             file.Refresh();
-            Assert.AreEqual(expected, file.Exists, "Expected {0}.Exists == {1}", file.FullName, expected);
+            Assert.AreEqual(expected, file.Exists, "Expected File.Exists == {0} for {1}", expected, file.FullName);
         }
     }
 }

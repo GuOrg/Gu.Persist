@@ -19,7 +19,7 @@
         private RepositoriesVm()
         {
             var directory = Directories.ExecutingDirectory.Subdirectory("Settings");
-            var backupSettings = new BackupSettings(true, directory, ".bak", BackupSettings.DefaultTimeStampFormat, false, 5, 5);
+            var backupSettings = new BackupSettings(directory, true, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, false, 5, 5);
             _settings = new RepositorySettings(directory, backupSettings);
             _repositories = new IRepository[]
                                 {
