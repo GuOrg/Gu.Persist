@@ -15,7 +15,9 @@ namespace Gu.Settings.Tests.Repositories
         [Test]
         public void DefaultSettings()
         {
-            Assert.AreEqual(RepositorySettings.DefaultFor(Directory), Repository.Settings);
+            var defaultSettings = RepositorySettings.DefaultFor(Directory);
+            var comparer = new BinaryEqualsComparer<IRepositorySettings>();
+            Assert.IsTrue(comparer.Equals(defaultSettings, Repository.Settings));
         }
 
         protected override IRepository Create(RepositorySettings settings)
