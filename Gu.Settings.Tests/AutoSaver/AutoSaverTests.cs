@@ -6,8 +6,6 @@
     using System.Reflection;
     using System.Threading;
 
-    using Gu.Settings.Tests.Helpers;
-
     using NUnit.Framework;
 
     using AutoSaver = Gu.Settings.AutoSaver;
@@ -17,7 +15,7 @@
     {
         private FileInfo _file;
         private FileInfo _backup;
-        private RepositorySetting _setting;
+        private RepositorySettings _settings;
         private DummySerializable _dummy;
         private XmlRepository _repository;
         private AutoSaver _autoSaver;
@@ -30,17 +28,17 @@
         public void SetUp()
         {
             _backupSettings = new BackupSettings(true, _file.Directory, ".bak", null, false, 1, Int32.MaxValue);
-            _setting = new RepositorySetting(true, _file.Directory, _backupSettings, ".cfg", ".tmp");
+            _settings = new RepositorySettings(true, _file.Directory, _backupSettings, ".cfg", ".tmp");
 
-            _file = new FileInfo(string.Format(@"C:\Temp\{0}{1}", GetType().Name, _setting.Extension));
-            _temp = new FileInfo(string.Format(@"C:\Temp\{0}{1}", GetType().Name, _setting.TempExtension));
-            _backup = new FileInfo(string.Format(@"C:\Temp\{0}{1}", GetType().Name, _setting.BackupSettings.Extension));
+            _file = new FileInfo(string.Format(@"C:\Temp\{0}{1}", GetType().Name, _settings.Extension));
+            _temp = new FileInfo(string.Format(@"C:\Temp\{0}{1}", GetType().Name, _settings.TempExtension));
+            _backup = new FileInfo(string.Format(@"C:\Temp\{0}{1}", GetType().Name, _settings.BackupSettings.Extension));
 
             _file.Delete();
             _temp.Delete();
             _backup.Delete();
 
-            _repository = new XmlRepository(_setting);
+            _repository = new XmlRepository(_settings);
             _autoSaver = new AutoSaver(_repository);
             _subject = new DummySubject<object>();
             _resetEvent = new ManualResetEvent(false);

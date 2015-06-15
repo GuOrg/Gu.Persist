@@ -4,9 +4,9 @@ namespace Gu.Settings.Tests.Repositories
 
     public class Binary : RepositoryTests
     {
-        protected override IRepository Create(RepositorySetting setting)
+        protected override IRepository Create(RepositorySettings settings)
         {
-            return new BinaryRepository(setting);
+            return new BinaryRepository(settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)

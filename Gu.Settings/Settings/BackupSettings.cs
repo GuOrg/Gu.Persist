@@ -2,16 +2,17 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Globalization;
     using System.IO;
     using System.Runtime.CompilerServices;
 
     using Gu.Settings.Annotations;
 
     [Serializable]
-    public class BackupSettings : IFileSettings
+    public class BackupSettings : IBackupSettings
     {
         public static BackupSettings None = new BackupSettings(false, null, null, null, false, 1, 1);
-        public static readonly string DefaultTimeStampFormat = ".yyyy_MM_dd_HH_mm_ss";
+        public static readonly string DefaultTimeStampFormat = "yyyy_MM_dd_HH_mm_ss";
         private string _directoryPath;
         private string _extension;
         private bool _createBackups;
@@ -37,22 +38,23 @@
             {
                 Ensure.NotNull(directory, "directory");
                 Ensure.NotNullOrEmpty(extension, "extension");
-                DirectoryPath = directory.FullName;
+                ValidateTimestampFormat(timeStampFormat);
+                _directoryPath = directory.FullName;
             }
-            CreateBackups = createBackups;
+            _createBackups = createBackups;
 
             if (!string.IsNullOrWhiteSpace(timeStampFormat))
             {
-                TimeStampFormat = timeStampFormat;
+                _timeStampFormat = timeStampFormat;
             }
             if (numberOfBackups > 1)
             {
-                TimeStampFormat = DefaultTimeStampFormat;
+                _timeStampFormat = DefaultTimeStampFormat;
             }
-            Extension = FileHelper.PrependDotIfMissing(extension);
-            Hidden = hidden;
-            NumberOfBackups = numberOfBackups;
-            MaxAgeInDays = maxAgeInDays;
+            _extension = FileHelper.PrependDotIfMissing(extension);
+            _hidden = hidden;
+            _numberOfBackups = numberOfBackups;
+            _maxAgeInDays = maxAgeInDays;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -110,11 +112,11 @@
             get { return _timeStampFormat; }
             set
             {
-                value = FileHelper.PrependDotIfMissing(value); // this is not very nice, hack for now
                 if (value == _timeStampFormat)
                 {
                     return;
                 }
+                ValidateTimestampFormat(value);
                 _timeStampFormat = value;
                 OnPropertyChanged();
             }
@@ -174,6 +176,22 @@
         public static BackupSettings DefaultFor(DirectoryInfo directory)
         {
             return new BackupSettings(true, directory, ".bak", null, false, 1, int.MaxValue);
+        }
+
+        public static void ValidateTimestampFormat(string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                var time = new DateTime(2015, 06, 14, 11, 54, 25);
+                var s = time.ToString(value, CultureInfo.InvariantCulture);
+                var roundtrip = DateTime.ParseExact(s, value, CultureInfo.InvariantCulture);
+                if (time != roundtrip)
+                {
+                    throw new ArgumentException(
+                        string.Format("The format: {0} is not valid as it cannot be roundtripped", value),
+                        "value");
+                }
+            }
         }
 
         [NotifyPropertyChangedInvocator]

@@ -13,19 +13,19 @@
     {
         public static RepositoriesVm Instance = new RepositoriesVm();
         private readonly IReadOnlyList<IRepository> _repositories;
-        private RepositorySetting _setting;
+        private RepositorySettings _settings;
         private IRepository _selectedRepository;
 
         private RepositoriesVm()
         {
             var directory = Directories.ExecutingDirectory.Subdirectory("Settings");
             var backupSettings = new BackupSettings(true, directory, ".bak", BackupSettings.DefaultTimeStampFormat, false, 5, 5);
-            _setting = new RepositorySetting(directory, backupSettings);
+            _settings = new RepositorySettings(directory, backupSettings);
             _repositories = new IRepository[]
                                 {
-                                    new JsonRepository(_setting),
-                                    new XmlRepository(_setting), 
-                                    new BinaryRepository(_setting), 
+                                    new JsonRepository(_settings),
+                                    new XmlRepository(_settings), 
+                                    new BinaryRepository(_settings), 
                                 };
             var autoSaveSetting = AutoSaveSetting.Instance;
             autoSaveSetting.PropertyChanged += (o, e) => Save((AutoSaveSetting)o);
@@ -50,16 +50,16 @@
             get { return _repositories; }
         }
 
-        public RepositorySetting Setting
+        public RepositorySettings Settings
         {
-            get { return _setting; }
+            get { return _settings; }
             set
             {
-                if (Equals(value, _setting))
+                if (Equals(value, _settings))
                 {
                     return;
                 }
-                _setting = value;
+                _settings = value;
                 OnPropertyChanged();
             }
         }

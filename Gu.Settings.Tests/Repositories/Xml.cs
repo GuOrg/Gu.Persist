@@ -4,9 +4,9 @@ namespace Gu.Settings.Tests.Repositories
 
     public class Xml : RepositoryTests
     {
-        protected override IRepository Create(RepositorySetting setting)
+        protected override IRepository Create(RepositorySettings settings)
         {
-            return new XmlRepository(setting);
+            return new XmlRepository(settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)

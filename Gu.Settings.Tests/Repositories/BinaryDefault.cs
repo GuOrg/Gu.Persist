@@ -12,9 +12,15 @@ namespace Gu.Settings.Tests.Repositories
             AssertFile.Exists(true, RepoSettingFile);
         }
 
-        protected override IRepository Create(RepositorySetting setting)
+        [Test]
+        public void DefaultSettings()
         {
-            return new BinaryRepository(Directory);
+            Assert.AreEqual(RepositorySettings.DefaultFor(Directory), Repository.Settings);
+        }
+
+        protected override IRepository Create(RepositorySettings settings)
+        {
+            return new BinaryRepository();
         }
 
         protected override void Save<T>(T item, FileInfo file)

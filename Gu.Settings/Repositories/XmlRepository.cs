@@ -3,9 +3,12 @@ namespace Gu.Settings
     using System.Collections.Generic;
     using System.IO;
 
+    using Gu.Settings.IO;
+
     public class XmlRepository : Repository
     {
         public XmlRepository()
+            : base(Directories.Default)
         {
         }
 
@@ -14,8 +17,8 @@ namespace Gu.Settings
         {
         }
 
-        public XmlRepository(RepositorySetting setting) 
-            : base(setting)
+        public XmlRepository(RepositorySettings settings) 
+            : base(settings)
         {
         }
 

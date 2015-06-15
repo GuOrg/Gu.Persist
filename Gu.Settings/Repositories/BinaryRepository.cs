@@ -3,9 +3,12 @@ namespace Gu.Settings
     using System.Collections.Generic;
     using System.IO;
 
+    using Gu.Settings.IO;
+
     public class BinaryRepository : Repository
     {
         public BinaryRepository()
+            : base(Directories.Default)
         {
         }
 
@@ -14,8 +17,8 @@ namespace Gu.Settings
         {
         }
 
-        public BinaryRepository(RepositorySetting setting)
-            : base(setting)
+        public BinaryRepository(RepositorySettings settings)
+            : base(settings)
         {
         }
 
