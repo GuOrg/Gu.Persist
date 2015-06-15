@@ -14,10 +14,6 @@
             setting.Directory.CreateIfNotExists();
         }
 
-        public static readonly IBackuper None = new NullBackuper();
-
-        public IRepository Repository { get; set; }
-
         public BackupSettings Setting { get; private set; }
 
         public static IBackuper Create(BackupSettings setting)
@@ -26,13 +22,7 @@
             {
                 return new Backuper(setting);
             }
-            return None;
-        }
-
-        public virtual void Backup<T>()
-        {
-            var file = FileHelper.CreateFileInfo<T>(Repository.Settings);
-            Backup(file);
+            return NullBackuper.Default;
         }
 
         public virtual void Backup(FileInfo file)
@@ -49,12 +39,6 @@
         {
             PurgeBackups(file);
             FileHelper.Backup(file, backup);
-        }
-
-        public virtual void Restore<T>()
-        {
-            var file = FileHelper.CreateFileInfo<T>(Repository.Settings);
-            Restore(file);
         }
 
         public virtual void Restore(FileInfo file)

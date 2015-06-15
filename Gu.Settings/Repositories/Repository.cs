@@ -7,6 +7,7 @@
     using System.IO;
     using System.Threading.Tasks;
 
+    using Gu.Settings.Backup;
     using Gu.Settings.IO;
 
     public abstract class Repository : IRepository, IAsyncRepository, IAutoAsyncRepository, IAutoRepository, ICloner, IAutoSavingRepository, IFileNameRepository, IDisposable
@@ -58,18 +59,10 @@
 
         public virtual IBackuper Backuper
         {
-            get { return _backuper ?? Backup.Backuper.None; }
+            get { return _backuper ?? NullBackuper.Default; }
             private set
             {
-                if (_backuper != null)
-                {
-                    _backuper.Repository = null;
-                }
                 _backuper = value;
-                if (_backuper != null)
-                {
-                    _backuper.Repository = this;
-                }
             }
         }
 
