@@ -53,7 +53,7 @@
             }
             try
             {
-                var softDelete = file.AppendExtension(FileHelper.SoftDeleteExtension);
+                var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
                 if (softDelete.Exists)
                 {
                     Restore(file, softDelete);
@@ -69,7 +69,7 @@
 
         internal virtual void Restore(FileInfo file)
         {
-            var softDelete = file.AppendExtension(FileHelper.SoftDeleteExtension);
+            var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             if (softDelete.Exists)
             {
                 Restore(file, softDelete);
@@ -92,7 +92,7 @@
         {
             Ensure.NotNull(file, "file");
             Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");
-            var softDelete = file.AppendExtension(FileHelper.SoftDeleteExtension);
+            var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             softDelete.Delete();
         }
     }

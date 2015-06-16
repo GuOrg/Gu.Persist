@@ -78,7 +78,6 @@
     <Compile Include="RepositoriesView.xaml.cs">
       <DependentUpon>RepositoriesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs" />
     <Compile Include="SharedSizeGroups.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
