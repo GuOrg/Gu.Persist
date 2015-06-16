@@ -62,12 +62,12 @@
             Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");
             Ensure.NotNull(setting, "setting");
 
-            var backup = file.ChangeExtension(setting.Extension);
+            var backup = file.WithNewExtension(setting.Extension);
             if (string.IsNullOrEmpty(setting.TimeStampFormat))
             {
-                return file.ChangeExtension(setting.Extension);
+                return file.WithNewExtension(setting.Extension);
             }
-            return backup.AddTimeStamp(DateTime.Now, setting);
+            return backup.WithTimeStamp(DateTime.Now, setting);
         }
 
         internal static string GetBackupFilePattern(FileInfo file, IBackupSettings setting)

@@ -10,14 +10,23 @@
     {
         private static ConcurrentDictionary<string, string> TimeStampPatternMap = new ConcurrentDictionary<string, string>();
 
-        public static FileInfo ChangeExtension(this FileInfo file, string newExtension)
+        public static bool IsValidFileName(string filename)
         {
-            Ensure.NotNull(file,"file");
+            return filename.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0;
+        }
+
+        /// <summary>
+        /// Changes extension and returns the new fileinfo.
+        /// No IO
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="newExtension"></param>
+        /// <returns></returns>
+        internal static FileInfo WithNewExtension(this FileInfo file, string newExtension)
+        {
+            Ensure.NotNull(file, "file");
             Ensure.NotNullOrEmpty(newExtension, "newExtension");
-            if (!newExtension.StartsWith("."))
-            {
-                newExtension = "." + newExtension;
-            }
+            newExtension = FileHelper.PrependDotIfMissing(newExtension);
             var newFileName = Path.ChangeExtension(file.FullName, newExtension);
             var newFile = new FileInfo(newFileName);
             return newFile;
@@ -25,10 +34,15 @@
 
         internal static FileInfo GetSoftDeleteFileFor(this FileInfo file)
         {
-            return file.AppendExtension(FileHelper.SoftDeleteExtension);
+            return file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
         }
 
-        internal static FileInfo AppendExtension(this FileInfo file, string extension)
+        internal static bool GetIsSoftDeleteFile(this FileInfo file)
+        {
+            return file.FullName.EndsWith(FileHelper.SoftDeleteExtension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        internal static FileInfo WithAppendedExtension(this FileInfo file, string extension)
         {
             Ensure.NotNull(file, "file");
             Ensure.NotNullOrEmpty(extension, "extension");
@@ -36,7 +50,7 @@
             return new FileInfo(string.Concat(file.FullName, extension));
         }
 
-        internal static FileInfo RemoveExtension(this FileInfo file, string extension)
+        internal static FileInfo WithRemovedExtension(this FileInfo file, string extension)
         {
             Ensure.NotNull(file, "file");
             Ensure.NotNullOrEmpty(extension, "extension");
@@ -48,6 +62,35 @@
             }
             string fileName = file.FullName.Substring(0, (file.FullName.Length - extension.Length));
             return new FileInfo(fileName);
+        }
+
+        internal static FileInfo WithNewName(this FileInfo file, string newName, IFileSettings setting)
+        {
+            Ensure.NotNull(file, "file");
+            Ensure.NotNull(setting, "setting");
+            FileInfo newFile;
+
+            if (Path.HasExtension(newName))
+            {
+                newFile = setting.Directory.CreateFileInfoInDirectory(newName);
+            }
+            else
+            {
+                newFile = setting.Directory.CreateFileInfoInDirectory(String.Concat(newName, file.Extension));
+            }
+            var backupSettings = setting as IBackupSettings;
+            if (backupSettings != null)
+            {
+                var timeStamp = file.GetTimeStamp(backupSettings);
+                newFile = newFile.WithTimeStamp(timeStamp, backupSettings);
+            }
+
+            return newFile;
+        }
+
+        internal static string GetFileNameWithoutExtension(this FileInfo file)
+        {
+            return Path.GetFileNameWithoutExtension(file.Name);
         }
 
         internal static DateTime GetTimeStamp(this FileInfo file, IBackupSettings setting)
@@ -70,7 +113,7 @@
             return timeStamp;
         }
 
-        internal static FileInfo AddTimeStamp(this FileInfo file, DateTime time, IBackupSettings setting)
+        internal static FileInfo WithTimeStamp(this FileInfo file, DateTime time, IBackupSettings setting)
         {
             Ensure.NotNull(file, "file");
             Ensure.NotNull(setting, "setting");
@@ -80,11 +123,11 @@
                 return file;
             }
             var timestamp = string.Format(".{0}{1}", time.ToString(setting.TimeStampFormat, CultureInfo.InvariantCulture), file.Extension);
-            var timestamped = file.ChangeExtension(timestamp);
+            var timestamped = file.WithNewExtension(timestamp);
             return timestamped;
         }
 
-        internal static FileInfo RemoveTimeStamp(this FileInfo file, IBackupSettings setting)
+        internal static FileInfo WithRemovedTimeStamp(this FileInfo file, IBackupSettings setting)
         {
             Ensure.NotNull(file, "file");
             Ensure.NotNull(setting, "setting");

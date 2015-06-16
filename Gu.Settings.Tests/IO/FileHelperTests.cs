@@ -8,8 +8,9 @@
     {
         private readonly DirectoryInfo Directory;
         private FileInfo _file;
-        private FileInfo _backup;
         private FileInfo _softDeleteFile;
+        private FileInfo _backup;
+        private FileInfo _backupSoftDelete;
 
         public FileHelperTests()
         {
@@ -22,8 +23,9 @@
         public void SetUp()
         {
             _file = Directory.CreateFileInfoInDirectory("Setting.cfg");
-            _softDeleteFile = _file.AppendExtension(FileHelper.SoftDeleteExtension);
-            _backup = _file.ChangeExtension(BackupSettings.DefaultExtension);
+            _softDeleteFile = _file.GetSoftDeleteFileFor();
+            _backup = _file.WithNewExtension(BackupSettings.DefaultExtension);
+            _backupSoftDelete = _backup.GetSoftDeleteFileFor();
             _backup.VoidCreate();
         }
 
@@ -146,6 +148,20 @@
             AssertFile.Exists(false, _file);
             AssertFile.Exists(true, _backup);
             Assert.AreEqual("File", _backup.ReadAllText());
+        }
+
+        [Test]
+        public void BackupWhenHasBackupFileAndBackupHasSoftDelete()
+        {
+            _backupSoftDelete.WriteAllText("OldSoft");
+            _file.WriteAllText("File");
+            _backup.WriteAllText("Backup");
+            _file.Backup(_backup);
+            AssertFile.Exists(false, _file);
+            AssertFile.Exists(true, _backup);
+            Assert.AreEqual("File", _backup.ReadAllText());
+            AssertFile.Exists(true, _backupSoftDelete);
+            Assert.AreEqual("Backup", _backupSoftDelete.ReadAllText());
         }
 
         [Test]

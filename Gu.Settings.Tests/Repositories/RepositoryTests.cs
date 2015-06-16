@@ -46,7 +46,7 @@ namespace Gu.Settings.Tests.Repositories
             var dummyFileName = string.Concat(typeof(DummySerializable).Name, Settings.Extension);
             _dummyFile = Settings.Directory.CreateFileInfoInDirectory(dummyFileName);
 
-            _dummyBackup = _dummyFile.ChangeExtension(backupSettings.Extension);
+            _dummyBackup = _dummyFile.WithNewExtension(backupSettings.Extension);
             _dummy = new DummySerializable(1);
         }
 

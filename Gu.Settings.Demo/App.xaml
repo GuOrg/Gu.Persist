@@ -4,37 +4,8 @@
              xmlns:demo="clr-namespace:Gu.Settings.Demo"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style x:Key="SettingsListStyle" TargetType="{x:Type ItemsControl}">
-            <Setter Property="Grid.IsSharedSizeScope" Value="True" />
-            <Setter Property="KeyboardNavigation.TabNavigation" Value="Cycle" />
-            <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
-            <!--<Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <StackPanel Grid.IsSharedSizeScope="True" />
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>-->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ItemsControl}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="{x:Static demo:SharedSizeGroups.LabelColumn}" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Row="0"
-                                        Grid.Column="0"
-                                        Grid.ColumnSpan="2"
-                                        Grid.IsSharedSizeScope="True"
-                                        IsItemsHost="True" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
-        <Style TargetType="{x:Type HeaderedContentControl}">
+        <Style x:Key="HeaderedSettingStyle" TargetType="{x:Type HeaderedContentControl}">
             <Setter Property="Margin" Value="8,8" />
             <Setter Property="Focusable" Value="False" />
             <Setter Property="Template">
@@ -48,25 +19,42 @@
                             <ContentPresenter Grid.Column="0" ContentSource="Header" />
                             <ContentPresenter Grid.Column="1"
                                               Margin="8,0"
-                                              ContentSource="Content"
-                                              demo:Settings.ContentProxy="{Binding Path=(demo:Settings.ContentProxy),
-                                                                                   RelativeSource={RelativeSource TemplatedParent}}" />
+                                              ContentSource="Content" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <!--<Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBox Text="{Binding (demo:Settings.ContentProxy)}" />
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>-->
             <Setter Property="HeaderTemplate">
                 <Setter.Value>
                     <DataTemplate>
                         <TextBlock VerticalAlignment="Center" Text="{Binding}" />
                     </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SettingsListStyle" TargetType="{x:Type ItemsControl}">
+            <Setter Property="Grid.IsSharedSizeScope" Value="True" />
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="Cycle" />
+            <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <ControlTemplate.Resources>
+                            <Style BasedOn="{StaticResource HeaderedSettingStyle}" TargetType="{x:Type HeaderedContentControl}" />
+                        </ControlTemplate.Resources>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="{x:Static demo:SharedSizeGroups.LabelColumn}" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="0"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Grid.IsSharedSizeScope="True"
+                                        IsItemsHost="True" />
+                        </Grid>
+                    </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>

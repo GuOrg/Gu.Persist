@@ -8,7 +8,6 @@
     using System.Threading.Tasks;
 
     using Gu.Settings.Backup;
-    using Gu.Settings.IO;
 
     public abstract class Repository : IRepository, IAsyncRepository, IGenericAsyncRepository, IGenericRepository, ICloner, IAutoSavingRepository, IFileNameRepository, IRepositoryWithSettings, IDisposable
     {
@@ -135,7 +134,7 @@
                 }
             }
 
-            var value = await FileHelper.ReadAsync(file, FromStream<T>);
+            var value = await FileHelper.ReadAsync<T>(file, FromStream<T>);
             if (Settings.IsCaching)
             {
                 _cache.TryAdd(file, new WeakReference(value));                
@@ -188,7 +187,7 @@
                 }
             }
 
-            var value = FileHelper.Read(file, FromStream<T>);
+            var value = FileHelper.Read<T>(file, FromStream<T>);
             if (Settings.IsCaching)
             {
                 _cache.TryAdd(file, new WeakReference(value));
@@ -246,6 +245,7 @@
 
         /// <summary>
         /// Saves to a file named typeof(T).Name
+        /// Note: T must be the same exact type you read.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
@@ -274,7 +274,7 @@
         protected void SaveCore<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, "file");
-            var tempFile = file.ChangeExtension(Settings.TempExtension);
+            var tempFile = file.WithNewExtension(Settings.TempExtension);
             SaveCore(item, file, tempFile);
         }
 
@@ -328,7 +328,7 @@
         public virtual Task SaveAsync<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, "file");
-            var tempFile = file.ChangeExtension(Settings.TempExtension);
+            var tempFile = file.WithNewExtension(Settings.TempExtension);
             return SaveAsync(item, file, tempFile);
         }
 
