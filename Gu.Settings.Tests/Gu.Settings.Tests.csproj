@@ -56,6 +56,12 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="ChangeTracking\ChangeTracker_Collection_Tests.cs" />
+    <Compile Include="ChangeTracking\ChangeTracker_Create_Throws_Tests.cs" />
+    <Compile Include="ChangeTracking\CollectionItemTrackerTests.cs" />
+    <Compile Include="ChangeTracking\Helpers\IllegalEnumerable.cs" />
+    <Compile Include="ChangeTracking\Helpers\Dummy.cs" />
+    <Compile Include="ChangeTracking\TrackerTests.cs" />
     <Compile Include="Helpers\AssertFile.cs" />
     <Compile Include="AutoSaver\AutoSaverTests.cs" />
     <Compile Include="Backup\BackupTests.cs" />
@@ -64,6 +70,7 @@
     <Compile Include="Helpers\DummyObservable.cs" />
     <Compile Include="Helpers\DummySerializable.cs" />
     <Compile Include="Helpers\FileInfoExt.cs" />
+    <Compile Include="ChangeTracking\Helpers\Level.cs" />
     <Compile Include="Helpers\RepositoryExt.cs" />
     <Compile Include="Helpers\TypicalSetting.cs" />
     <Compile Include="Backup\NullBackuperTests.cs" />
@@ -84,6 +91,7 @@
     <Compile Include="IO\FileHelperTests.cs" />
     <Compile Include="RemindersTests.cs" />
     <Compile Include="Repositories\XmlNoBackup.cs" />
+    <Compile Include="ChangeTracking\ChangeTracker_PropertyChanged_Tests.cs" />
     <Compile Include="Sandbox\FakesTests.cs" />
     <Compile Include="Sandbox\SyncBoxTests.cs" />
     <Compile Include="SimpleSample.cs" />

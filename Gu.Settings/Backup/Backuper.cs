@@ -110,7 +110,7 @@
             Ensure.NotNull(file, "file");
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");
           
-            var softDelete = file.AppendExtension(FileHelper.SoftDeleteExtension);
+            var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             if (softDelete.Exists)
             {
                 Restore(file, softDelete);
@@ -137,8 +137,7 @@
         {
             Ensure.NotNull(file, "file");
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");
-            var softDelete = file.AppendExtension(FileHelper.SoftDeleteExtension);
-            softDelete.Delete();
+            file.DeleteSoftDeleteFileFor();
             var allBackups = BackupFile.GetAllBackupsFor(file, Setting);
             if (allBackups.Count == 0)
             {

@@ -28,16 +28,16 @@ namespace Gu.Settings.Tests.Backup
             Setting = new BackupSettings(Directory, true, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, false, 2, 3);
 
             File = Directory.CreateFileInfoInDirectory("Meh.cfg");
-            SoftDelete = File.AppendExtension(FileHelper.SoftDeleteExtension);
+            SoftDelete = File.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             Backup = Directory.CreateFileInfoInDirectory("Meh.bak");
 
-            BackupOneMinuteOld = Backup.AddTimeStamp(DateTime.Now.AddMinutes(-1), Setting);
-            BackupOneHourOld = Backup.AddTimeStamp(DateTime.Now.AddHours(-1), Setting);
-            BackupOneDayOld = Backup.AddTimeStamp(DateTime.Now.AddDays(-1), Setting);
-            BackupOneMonthOld = Backup.AddTimeStamp(DateTime.Now.AddMonths(-1), Setting);
-            BackupOneYearOld = Backup.AddTimeStamp(DateTime.Now.AddYears(-1), Setting);
+            BackupOneMinuteOld = Backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), Setting);
+            BackupOneHourOld = Backup.WithTimeStamp(DateTime.Now.AddHours(-1), Setting);
+            BackupOneDayOld = Backup.WithTimeStamp(DateTime.Now.AddDays(-1), Setting);
+            BackupOneMonthOld = Backup.WithTimeStamp(DateTime.Now.AddMonths(-1), Setting);
+            BackupOneYearOld = Backup.WithTimeStamp(DateTime.Now.AddYears(-1), Setting);
 
-            OtherBackup = Directory.CreateFileInfoInDirectory("Other.bak").AddTimeStamp(DateTime.Now.AddHours(1), Setting);
+            OtherBackup = Directory.CreateFileInfoInDirectory("Other.bak").WithTimeStamp(DateTime.Now.AddHours(1), Setting);
 
             TimestampedBackups = new[]
                                       {

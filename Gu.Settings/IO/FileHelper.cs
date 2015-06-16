@@ -77,9 +77,20 @@ namespace Gu.Settings
 
         internal static void HardDelete(this FileInfo file)
         {
-            var soft = string.Concat(file.FullName, SoftDeleteExtension);
-            File.Delete(soft);
+            Ensure.NotNull(file, "file");
+            file.DeleteSoftDeleteFileFor();
+
             file.Delete();
+        }
+
+        internal static void DeleteSoftDeleteFileFor(this FileInfo file)
+        {
+            Ensure.NotNull(file, "file");
+            var softDelete = file.GetSoftDeleteFileFor();
+            if (softDelete != null)
+            {
+                softDelete.Delete();
+            }
         }
 
         internal static FileInfo SoftDelete(this FileInfo file)
@@ -89,11 +100,11 @@ namespace Gu.Settings
             {
                 return null;
             }
-            var soft = file.AppendExtension(SoftDeleteExtension);
+            var soft = file.WithAppendedExtension(SoftDeleteExtension);
             File.Delete(soft.FullName);
             try // Swallowing here, no way to know that the file has not been touched.
             {
-                File.Move(file.FullName, soft.FullName); 
+                File.Move(file.FullName, soft.FullName);
             }
             catch (Exception)
             {
@@ -126,7 +137,8 @@ namespace Gu.Settings
                 return;
             }
 
-            backup.HardDelete();
+            backup.DeleteSoftDeleteFileFor();
+            backup.SoftDelete();
             file.MoveTo(backup);
             file.Refresh();
         }
