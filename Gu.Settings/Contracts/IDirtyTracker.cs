@@ -10,5 +10,9 @@ namespace Gu.Settings
         void TrackOrUpdate<T>(FileInfo file, T item);
 
         void Rename(FileInfo oldName, FileInfo newName, bool owerWrite);
+      
+        void ClearCache();
+
+        void RemoveFromCache(FileInfo file);
     }
 }

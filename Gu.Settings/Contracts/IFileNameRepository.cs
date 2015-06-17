@@ -107,7 +107,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
         /// <param name="fileName"></param>
-        /// <returns></returns>
+        /// <returns>Null if not found in cache</returns>
         bool IsDirty<T>(T item, string fileName);
 
         /// <summary>
@@ -117,7 +117,7 @@
         /// <param name="item"></param>
         /// <param name="fileName"></param>
         /// <param name="comparer"></param>
-        /// <returns></returns>
+        /// <returns>Null if not found in cache</returns>
         bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer);
 
         /// <summary>

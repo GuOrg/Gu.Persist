@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Gu.Settings.Backup;
@@ -54,14 +55,14 @@
             }
         }
 
-        public IRepositorySettings Settings { get; private set; }
+        public IRepositorySettings Settings { get; protected set; }
 
-        public virtual IDirtyTracker Tracker { get; private set; }
+        public IDirtyTracker Tracker { get; protected set; }
 
-        public virtual IBackuper Backuper
+        public IBackuper Backuper
         {
             get { return _backuper ?? NullBackuper.Default; }
-            private set
+            protected set
             {
                 _backuper = value;
             }
@@ -95,12 +96,15 @@
 
         public virtual bool Exists(string fileName)
         {
+            Ensure.IsValidFileName(fileName, "fileName");
             var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
             return Exists(fileInfo);
         }
 
         public virtual bool Exists(FileInfo file)
         {
+            Ensure.NotNull(file, "file");
+
             return ExistsCore(file);
         }
 
@@ -118,6 +122,7 @@
 
         public virtual Task<T> ReadAsync<T>(string fileName)
         {
+            Ensure.IsValidFileName(fileName, "fileName");
             var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
             return ReadAsync<T>(fileInfo);
         }
@@ -166,12 +171,16 @@
         /// <returns></returns>
         public virtual T Read<T>(string fileName)
         {
+            Ensure.IsValidFileName(fileName, "fileName");
+
             var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
             return Read<T>(fileInfo);
         }
 
         public virtual T Read<T>(FileInfo file)
         {
+            Ensure.NotNull(file, "file");
+
             return ReadCore<T>(file);
         }
 
@@ -202,24 +211,28 @@
 
         public virtual T ReadOrCreate<T>(Func<T> creator)
         {
+            Ensure.NotNull(creator, "creator");
             return ReadOrCreateCore(creator);
         }
 
         protected T ReadOrCreateCore<T>(Func<T> creator)
         {
+            Ensure.NotNull(creator, "creator");
             var file = GetFileInfoCore<T>();
             return ReadOrCreateCore(file, creator);
         }
 
         public virtual T ReadOrCreate<T>(string fileName, Func<T> creator)
         {
-            Ensure.NotNullOrEmpty(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, "fileName");
             var file = FileHelper.CreateFileInfo(fileName, Settings);
             return ReadOrCreate(file, creator);
         }
 
         public virtual T ReadOrCreate<T>(FileInfo file, Func<T> creator)
         {
+            Ensure.NotNull(file, "file");
+
             return ReadOrCreateCore(file, creator);
         }
 
@@ -263,24 +276,59 @@
 
         public virtual void Save<T>(T item, string fileName)
         {
+            Ensure.IsValidFileName(fileName, "fileName");
             var file = FileHelper.CreateFileInfo(fileName, Settings);
             Save(item, file);
         }
 
+        /// <summary>
+        /// Saves the file. Then removes it from cache.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="fileName"></param>
+        public virtual void SaveAndClose<T>(T item, string fileName)
+        {
+            Ensure.NotNullOrEmpty(fileName, "fileName");
+            Save(item, fileName);
+            RemoveFromCache(item);
+            RemoveFromDirtyTracker(item);
+        }
+
         public virtual void Save<T>(T item, FileInfo file)
         {
+            Ensure.NotNull(file, "file");
+
             SaveCore(item, file);
+        }
+
+        /// <summary>
+        /// Saves the file. Then removes it from cache.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="file"></param>
+        public virtual void SaveAndClose<T>(T item, FileInfo file)
+        {
+            Ensure.NotNull(file, "file");
+
+            SaveCore(item, file);
+            RemoveFromCache(item);
+            RemoveFromDirtyTracker(item);
         }
 
         protected void SaveCore<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, "file");
+
             var tempFile = file.WithNewExtension(Settings.TempExtension);
             SaveCore(item, file, tempFile);
         }
 
         public virtual void Save<T>(T item, FileInfo file, FileInfo tempFile)
         {
+            Ensure.NotNull(file, "file");
+
             SaveCore(item, file, tempFile);
         }
 
@@ -377,23 +425,30 @@
 
         public virtual bool IsDirty<T>(T item, string fileName)
         {
+            Ensure.NotNullOrEmpty(fileName, "fileName");
+
             return IsDirty(item, fileName, DefaultStructuralEqualityComparer<T>());
         }
 
         public virtual bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer)
         {
             Ensure.NotNullOrEmpty(fileName, "fileName");
+
             var fileInfo = FileHelper.CreateFileInfo(fileName, Settings);
             return IsDirty(item, fileInfo, comparer);
         }
 
         public virtual bool IsDirty<T>(T item, FileInfo file)
         {
+            Ensure.NotNull(file, "file");
+
             return IsDirty(item, file, DefaultStructuralEqualityComparer<T>());
         }
 
         public virtual bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
         {
+            Ensure.NotNull(file, "file");
+
             VerifyDisposed();
             if (!Settings.IsTrackingDirty)
             {
@@ -405,7 +460,7 @@
         public bool CanRename<T>(string newName)
         {
             Ensure.IsValidFileName(newName, "newName");
-          
+
             var fileInfo = GetFileInfo<T>();
             return CanRename(fileInfo, newName);
         }
@@ -518,6 +573,39 @@
             {
                 return FromStream<T>(stream);
             }
+        }
+
+        public void ClearCache()
+        {
+            _cache.Clear();
+        }
+
+        public void RemoveFromCache<T>(T item)
+        {
+            var matches = _cache.Where(kvp => kvp.Value != null && ReferenceEquals(kvp.Value.Target, item))
+                                .Select(x => x.Key)
+                                .ToArray();
+            foreach (var key in matches)
+            {
+                WeakReference temp;
+                _cache.TryRemove(key, out temp);
+            }
+        }
+
+        public void ClearTrackerCache()
+        {
+            Tracker.ClearCache();
+        }
+
+        public void RemoveFromDirtyTracker<T>(T item)
+        {
+            var tracker = Tracker;
+            if (tracker == null)
+            {
+                return;
+            }
+            var fileInfo = GetFileInfo<T>();
+            tracker.RemoveFromCache(fileInfo);
         }
 
         /// <summary>

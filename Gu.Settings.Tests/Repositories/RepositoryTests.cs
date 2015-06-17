@@ -11,28 +11,43 @@ namespace Gu.Settings.Tests.Repositories
     {
         private const string NewName = "New";
         protected readonly DirectoryInfo Directory;
-        private readonly FileInfo _file;
-        private readonly FileInfo _fileTemp;
-        private readonly FileInfo _fileSoftDelete;
-        private readonly FileInfo _fileNewName;
+        private FileInfo _file;
+        private FileInfo _fileTemp;
+        private FileInfo _fileSoftDelete;
+        private FileInfo _fileNewName;
 
-        private readonly FileInfo _backup;
-        private readonly FileInfo _backupSoftDelete;
-        private readonly FileInfo _backupNewName;
+        private FileInfo _backup;
+        private FileInfo _backupSoftDelete;
+        private FileInfo _backupNewName;
 
-        protected readonly FileInfo RepoSettingFile;
+        protected FileInfo RepoSettingFile;
 
-        private readonly FileInfo _dummyFile;
-        private readonly FileInfo _dummyNewName;
+        private  FileInfo _dummyFile;
+        private  FileInfo _dummyNewName;
 
-        private readonly FileInfo _dummySoftDelete;
-        private readonly FileInfo _dummySoftDeleteNewName;
+        private  FileInfo _dummySoftDelete;
+        private  FileInfo _dummySoftDeleteNewName;
 
-        private readonly FileInfo _dummyBackup;
-        private readonly FileInfo _dummyBackupNewName;
+        private  FileInfo _dummyBackup;
+        private  FileInfo _dummyBackupNewName;
 
-        protected readonly RepositorySettings Settings;
         public IRepository Repository;
+
+        protected RepositorySettings Settings
+        {
+            get { return (RepositorySettings)Repository.Settings; }
+        }
+
+        protected BackupSettings BackupSettings
+        {
+            get { return Repository.Settings.BackupSettings; }
+        }
+
+        protected bool IsBackingUp
+        {
+            get { return BackupSettings != null && BackupSettings.IsCreatingBackups; }
+        }
+
         private readonly DummySerializable _dummy;
 
 
@@ -40,8 +55,16 @@ namespace Gu.Settings.Tests.Repositories
         {
             Directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + GetType().Name);
             Directories.Default = Directory;
+            _dummy = new DummySerializable(1);
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
             var backupSettings = new BackupSettings(Directory, true, BackupSettings.DefaultExtension, null, false, 1, Int32.MaxValue);
-            Settings = new RepositorySettings(Directory, true, true, backupSettings, ".cfg", ".tmp");
+            var settings = new RepositorySettings(Directory, true, true, backupSettings, ".cfg", ".tmp");
+            Repository = Create(settings);
+            Repository.ClearCache();
 
             var name = GetType().Name;
 
@@ -53,8 +76,8 @@ namespace Gu.Settings.Tests.Repositories
             _fileSoftDelete = _file.GetSoftDeleteFileFor();
             _fileNewName = _file.WithNewName(NewName, Settings);
 
-            var backupFileName = string.Concat(name, backupSettings.Extension);
-            _backup = backupSettings.Directory.CreateFileInfoInDirectory(backupFileName);
+            var backupFileName = string.Concat(name, BackupSettings.DefaultExtension);
+            _backup = Directory.CreateFileInfoInDirectory(backupFileName);
             _backupSoftDelete = _backup.GetSoftDeleteFileFor();
             _backupNewName = _backup.WithNewName(NewName, Settings);
 
@@ -66,16 +89,9 @@ namespace Gu.Settings.Tests.Repositories
             _dummySoftDelete = _dummyFile.GetSoftDeleteFileFor();
             _dummySoftDeleteNewName = _dummySoftDelete.WithNewName(NewName, Settings);
             _dummyNewName = _dummyFile.WithNewName(NewName, Settings);
-            _dummyBackup = _dummyFile.WithNewExtension(backupSettings.Extension);
-            _dummyBackupNewName = _dummyBackup.WithNewName(NewName, Settings.BackupSettings);
-            _dummy = new DummySerializable(1);
-        }
+            _dummyBackup = _dummyFile.WithNewExtension(BackupSettings.DefaultExtension);
+            _dummyBackupNewName = _dummyBackup.WithNewName(NewName, Settings);
 
-        [SetUp]
-        public void SetUp()
-        {
-            Repository = Create(Settings);
-            Repository.ClearCache();
             _file.Delete();
             _fileTemp.Delete();
             _fileSoftDelete.Delete();
@@ -407,6 +423,7 @@ namespace Gu.Settings.Tests.Repositories
             if (backupNewNameExists)
             {
                 _dummyBackupNewName.VoidCreate();
+                _dummySoftDelete.VoidCreate();
                 _dummySoftDeleteNewName.VoidCreate();
             }
             Assert.IsFalse(Repository.CanRename<DummySerializable>(NewName));
@@ -418,6 +435,11 @@ namespace Gu.Settings.Tests.Repositories
         [TestCase(false, false)]
         public void RenameType(bool hasBackup, bool hasSoft)
         {
+            if (!IsBackingUp && hasBackup)
+            {
+                Assert.Inconclusive("Not a relevant test for this config");
+                return; // due to inheritance
+            }
             _dummyFile.VoidCreate();
             if (hasBackup)
             {
@@ -476,8 +498,6 @@ namespace Gu.Settings.Tests.Repositories
             //var read = Read<DummySerializable>(_file);
             //Assert.AreEqual(_dummy.Value - 1, read.Value);
         }
-
-
 
         protected abstract IRepository Create(RepositorySettings settings);
 

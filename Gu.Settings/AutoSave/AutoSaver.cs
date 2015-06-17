@@ -91,7 +91,7 @@
             {
                 if (isDirtyComparer != null)
                 {
-                    if (!_repository.IsDirty(item, file, isDirtyComparer))
+                    if (_repository.IsDirty(item, file, isDirtyComparer) == false)
                     {
                         return;
                     }
