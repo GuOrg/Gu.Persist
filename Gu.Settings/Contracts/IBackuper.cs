@@ -35,5 +35,9 @@
         // void Restore(FileInfo file, FileInfo backup);
         
         void PurgeBackups(FileInfo file);
+
+        bool CanRename(FileInfo file, string newName);
+
+        void Rename(FileInfo file, string newName, bool owerWrite);
     }
 }

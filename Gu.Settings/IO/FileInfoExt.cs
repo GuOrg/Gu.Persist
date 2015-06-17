@@ -9,10 +9,23 @@
     public static class FileInfoExt
     {
         private static ConcurrentDictionary<string, string> TimeStampPatternMap = new ConcurrentDictionary<string, string>();
+        public static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
+        public static readonly char[] InvalidPathChars = Path.GetInvalidPathChars();
 
         public static bool IsValidFileName(string filename)
         {
-            return filename.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0;
+            var indexOfAny = filename.IndexOfAny(InvalidFileNameChars);
+            return indexOfAny == -1;
+        }
+
+        internal static bool CanRename(this FileInfo file, string newName, IFileSettings settings)
+        {
+            if (!file.Exists)
+            {
+                return false;
+            }
+            var withNewName = file.WithNewName(newName, settings);
+            return !withNewName.Exists;
         }
 
         /// <summary>
@@ -67,9 +80,18 @@
         internal static FileInfo WithNewName(this FileInfo file, string newName, IFileSettings setting)
         {
             Ensure.NotNull(file, "file");
+            Ensure.IsValidFileName(newName, "newName");
             Ensure.NotNull(setting, "setting");
             FileInfo newFile;
-
+            var isSoftDeleteFile = file.GetIsSoftDeleteFile();
+            if (isSoftDeleteFile)
+            {
+                if (newName.EndsWith(FileHelper.SoftDeleteExtension, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    newName = newName.Substring(0, (newName.Length - FileHelper.SoftDeleteExtension.Length));
+                }
+                file = file.WithRemovedExtension(FileHelper.SoftDeleteExtension);
+            }
             if (Path.HasExtension(newName))
             {
                 newFile = setting.Directory.CreateFileInfoInDirectory(newName);
@@ -84,7 +106,10 @@
                 var timeStamp = file.GetTimeStamp(backupSettings);
                 newFile = newFile.WithTimeStamp(timeStamp, backupSettings);
             }
-
+            if (isSoftDeleteFile && !newFile.GetIsSoftDeleteFile())
+            {
+                newFile = newFile.WithAppendedExtension(FileHelper.SoftDeleteExtension);
+            }
             return newFile;
         }
 
