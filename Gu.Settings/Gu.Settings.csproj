@@ -65,6 +65,7 @@
     <Compile Include="Contracts\IDirty.cs" />
     <Compile Include="Contracts\IFileNameRepository.cs" />
     <Compile Include="Contracts\IRepositoryWithSettings.cs" />
+    <Compile Include="Internals\DictionaryExt.cs" />
     <Compile Include="Internals\EnumerableEx.cs" />
     <Compile Include="Internals\TypeExt.cs" />
     <Compile Include="IO\DirectoryInfoExt.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Contracts\IBackuper.cs" />
     <Compile Include="Contracts\IBackupSettings.cs" />
     <Compile Include="Contracts\IRepositorySettings.cs" />
+    <Compile Include="Settings\FileSettings.cs" />
     <Compile Include="Settings\RepositorySettings.cs" />
     <Compile Include="IO\XmlHelper.cs" />
     <Compile Include="Repositories\Repository.cs" />

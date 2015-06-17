@@ -70,5 +70,21 @@
         T Read<T>(string fileName);
 
         void Save<T>(T item, string fileName);
+
+        bool CanRename<T>(string newName);
+
+        void Rename<T>(string newName, bool owerWrite);
+
+        bool CanRename(string oldName, string newName);
+
+        void Rename(string oldName, string newName, bool owerWrite);
+
+        bool CanRename(FileInfo oldName, string newName);
+
+        void Rename(FileInfo oldName, string newName, bool owerWrite);
+
+        bool CanRename(FileInfo oldName, FileInfo newName);
+
+        void Rename(FileInfo oldName, FileInfo newName, bool owerWrite);
     }
 }

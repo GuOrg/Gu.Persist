@@ -1,5 +1,6 @@
 ﻿namespace Gu.Settings.Json
 {
+    using System.Globalization;
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
@@ -9,11 +10,25 @@
     public static class JsonHelper
     {
         public static readonly UTF8Encoding DefaultEncoding = new UTF8Encoding(false, true);
+        public static readonly JsonSerializerSettings DefaultJsonSettings = new JsonSerializerSettings
+        {
+            MissingMemberHandling = MissingMemberHandling.Error,
+            Formatting = Formatting.Indented,
+            Culture = CultureInfo.InvariantCulture,
+            FloatFormatHandling = FloatFormatHandling.DefaultValue
+        };
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static T FromStream<T>(Stream stream)
         {
-            var serializer = new JsonSerializer();
+            return FromStream<T>(stream, null);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
+        public static T FromStream<T>(Stream stream, JsonSerializerSettings settings)
+        {
+            var serializer = settings != null
+                ? JsonSerializer.Create(settings)
+                : JsonSerializer.Create();
             using (var sr = new StreamReader(stream, DefaultEncoding, true, 1024, true))
             using (var jsonTextReader = new JsonTextReader(sr))
             {
@@ -23,8 +38,15 @@
 
         public static MemoryStream ToStream<T>(T item)
         {
+            return ToStream(item, null);
+        }
+
+        public static MemoryStream ToStream<T>(T item, JsonSerializerSettings settings)
+        {
             var stream = new MemoryStream();
-            var serializer = new JsonSerializer();
+            var serializer = settings != null
+                ? JsonSerializer.Create(settings)
+                : JsonSerializer.Create();
             using (var writer = new JsonTextWriter(new StreamWriter(stream, DefaultEncoding, 1024, true)))
             {
                 serializer.Serialize(writer, item);

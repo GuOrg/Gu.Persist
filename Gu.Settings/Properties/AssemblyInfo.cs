@@ -37,4 +37,5 @@ using System.Resources;
 [assembly: AssemblyFileVersion("1.0.5.0")]
 [assembly: InternalsVisibleTo("Gu.Settings.Tests", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Settings.Demo", AllInternalsVisible = true)]
+[assembly: InternalsVisibleTo("Gu.Settings.Json", AllInternalsVisible = true)]
 [assembly: NeutralResourcesLanguageAttribute("en")]

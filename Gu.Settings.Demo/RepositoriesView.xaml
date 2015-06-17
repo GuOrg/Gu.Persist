@@ -42,7 +42,7 @@
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="CreateBackups">
-                <CheckBox IsChecked="{Binding Settings.BackupSettings.CreateBackups}" />
+                <CheckBox IsChecked="{Binding Settings.BackupSettings.IsCreatingBackups}" />
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="NumberOfBackups">

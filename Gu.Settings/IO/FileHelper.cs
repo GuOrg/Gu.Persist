@@ -1,15 +1,12 @@
 namespace Gu.Settings
 {
     using System;
-    using System.Collections.Concurrent;
-    using System.Globalization;
     using System.IO;
     using System.Threading.Tasks;
 
     public static class FileHelper
     {
         public static readonly string SoftDeleteExtension = ".delete";
-        //private static readonly ConcurrentDictionary<string, FileInfo> FileNamesMap = new ConcurrentDictionary<string, FileInfo>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// 
@@ -18,7 +15,7 @@ namespace Gu.Settings
         /// <param name="file"></param>
         /// <param name="fromStream">Reading from from file to T</param>
         /// <returns></returns>
-        public static T Read<T>(this FileInfo file, Func<Stream, T> fromStream)
+        internal static T Read<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
             using (var stream = File.OpenRead(file.FullName))
             {
@@ -32,7 +29,7 @@ namespace Gu.Settings
         /// <param name="file"></param>
         /// <param name="fromStream">Reading from stream to T</param>
         /// <returns></returns>
-        public static async Task<T> ReadAsync<T>(this FileInfo file, Func<Stream, T> fromStream)
+        internal static async Task<T> ReadAsync<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
             using (var ms = new MemoryStream())
             {
@@ -53,7 +50,7 @@ namespace Gu.Settings
         /// <param name="file"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static async Task SaveAsync(this FileInfo file, Stream stream)
+        internal static async Task SaveAsync(this FileInfo file, Stream stream)
         {
             using (var fileStream = file.OpenWrite())
             {
@@ -67,7 +64,7 @@ namespace Gu.Settings
         /// </summary>
         /// <param name="file"></param>
         /// <param name="stream"></param>
-        public static void Save(this FileInfo file, Stream stream)
+        internal static void Save(this FileInfo file, Stream stream)
         {
             using (var fileStream = File.OpenWrite(file.FullName))
             {
@@ -114,7 +111,33 @@ namespace Gu.Settings
             return soft;
         }
 
-        public static void MoveTo(this FileInfo source, FileInfo destination)
+        internal static void SetIsVisible(this FileInfo file, bool isVisible)
+        {
+            Ensure.Exists(file, "file");
+            if (isVisible)
+            {
+                file.Attributes |= FileAttributes.Hidden;
+            }
+            else
+            {
+                file.Attributes &= ~FileAttributes.Hidden;
+            }
+        }
+
+        internal static void Rename(this FileInfo oldName, FileInfo newName, bool owerWrite)
+        {
+            Ensure.Exists(oldName);
+            if (!owerWrite)
+            {
+                Ensure.DoesNotExist(newName);
+            }
+            if (owerWrite)
+            {
+                newName.Delete();
+            }
+            oldName.MoveTo(newName);
+        }
+        internal static void MoveTo(this FileInfo source, FileInfo destination)
         {
             destination.Refresh();
             if (destination.Exists)

@@ -8,5 +8,7 @@ namespace Gu.Settings
         bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer);
 
         void TrackOrUpdate<T>(FileInfo file, T item);
+
+        void Rename(FileInfo oldName, FileInfo newName, bool owerWrite);
     }
 }

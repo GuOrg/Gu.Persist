@@ -15,7 +15,7 @@
         public static readonly string DefaultExtension = ".bak";
         private string _directoryPath;
         private string _extension;
-        private bool _createBackups;
+        private bool _isCreatingBackups;
         private string _timeStampFormat;
         private bool _hidden;
         private int _numberOfBackups;
@@ -42,21 +42,21 @@
 
         public BackupSettings(
             DirectoryInfo directory,
-            bool createBackups,
+            bool isCreatingBackups,
             string extension,
             string timeStampFormat,
             bool hidden,
             int numberOfBackups,
             int maxAgeInDays)
         {
-            if (createBackups)
+            if (isCreatingBackups)
             {
                 Ensure.NotNull(directory, "directory");
                 Ensure.NotNullOrEmpty(extension, "extension");
                 ValidateTimestampFormat(timeStampFormat);
                 _directoryPath = directory.FullName;
             }
-            _createBackups = createBackups;
+            _isCreatingBackups = isCreatingBackups;
 
             if (!string.IsNullOrWhiteSpace(timeStampFormat))
             {
@@ -115,16 +115,16 @@
             }
         }
 
-        public bool CreateBackups
+        public bool IsCreatingBackups
         {
-            get { return _createBackups; }
+            get { return _isCreatingBackups; }
             set
             {
-                if (value == _createBackups)
+                if (value == _isCreatingBackups)
                 {
                     return;
                 }
-                _createBackups = value;
+                _isCreatingBackups = value;
                 OnPropertyChanged();
             }
         }

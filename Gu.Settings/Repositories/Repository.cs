@@ -8,10 +8,11 @@
     using System.Threading.Tasks;
 
     using Gu.Settings.Backup;
+    using Internals;
 
     public abstract class Repository : IRepository, IAsyncRepository, IGenericAsyncRepository, IGenericRepository, ICloner, IAutoSavingRepository, IFileNameRepository, IRepositoryWithSettings, IDisposable
     {
-        private readonly ConcurrentDictionary<FileInfo, WeakReference> _cache = new ConcurrentDictionary<FileInfo, WeakReference>(FileInfoComparer.Default);
+        private readonly ConcurrentDictionary<string, WeakReference> _cache = new ConcurrentDictionary<string, WeakReference>(StringComparer.OrdinalIgnoreCase);
         private bool _disposed;
         [EditorBrowsable(EditorBrowsableState.Never)]
         private IBackuper _backuper;
@@ -124,11 +125,11 @@
         public virtual async Task<T> ReadAsync<T>(FileInfo file)
         {
             VerifyDisposed();
-            Ensure.NotNull(file,"file"); // not checking exists, framework exception is more familiar.
+            Ensure.NotNull(file, "file"); // not checking exists, framework exception is more familiar.
             if (Settings.IsCaching)
             {
                 WeakReference cached;
-                if (_cache.TryGetValue(file, out cached))
+                if (_cache.TryGetValue(file.FullName, out cached))
                 {
                     return (T)cached.Target;
                 }
@@ -137,7 +138,7 @@
             var value = await FileHelper.ReadAsync<T>(file, FromStream<T>);
             if (Settings.IsCaching)
             {
-                _cache.TryAdd(file, new WeakReference(value));                
+                _cache.TryAdd(file.FullName, new WeakReference(value));
             }
             if (Settings.IsTrackingDirty)
             {
@@ -181,7 +182,7 @@
             if (Settings.IsCaching)
             {
                 WeakReference cached;
-                if (_cache.TryGetValue(file, out cached))
+                if (_cache.TryGetValue(file.FullName, out cached))
                 {
                     return (T)cached.Target;
                 }
@@ -190,7 +191,7 @@
             var value = FileHelper.Read<T>(file, FromStream<T>);
             if (Settings.IsCaching)
             {
-                _cache.TryAdd(file, new WeakReference(value));
+                _cache.TryAdd(file.FullName, new WeakReference(value));
             }
             if (Settings.IsTrackingDirty)
             {
@@ -401,6 +402,100 @@
             return Tracker.IsDirty(item, file, comparer);
         }
 
+        public bool CanRename<T>(string newName)
+        {
+            Ensure.IsValidFileName(newName, "newName");
+          
+            var fileInfo = GetFileInfo<T>();
+            return CanRename(fileInfo, newName);
+        }
+
+        public void Rename<T>(string newName, bool owerWrite)
+        {
+            Ensure.IsValidFileName(newName, "newName");
+
+            var fileInfo = GetFileInfo<T>();
+            Rename(fileInfo, newName, owerWrite);
+        }
+
+        public bool CanRename(string oldName, string newName)
+        {
+            Ensure.IsValidFileName(oldName, "oldName");
+            Ensure.IsValidFileName(newName, "newName");
+
+            var oldFile = FileHelper.CreateFileInfo(oldName, Settings);
+            var newFile = FileHelper.CreateFileInfo(newName, Settings);
+            return CanRename(oldFile, newFile);
+        }
+
+        public void Rename(string oldName, string newName, bool owerWrite)
+        {
+            Ensure.IsValidFileName(oldName, "oldName");
+            Ensure.IsValidFileName(newName, "newName");
+
+            var oldFile = FileHelper.CreateFileInfo(oldName, Settings);
+            var newFile = FileHelper.CreateFileInfo(newName, Settings);
+            Rename(oldFile, newFile, owerWrite);
+        }
+
+        public bool CanRename(FileInfo oldName, string newName)
+        {
+            Ensure.NotNull(oldName, "oldName");
+            Ensure.IsValidFileName(newName, "newName");
+
+            var newFile = FileHelper.CreateFileInfo(newName, Settings);
+            return CanRename(oldName, newFile);
+        }
+
+        public void Rename(FileInfo oldName, string newName, bool owerWrite)
+        {
+            Ensure.Exists(oldName, "oldName");
+            Ensure.IsValidFileName(newName, "newName");
+
+            var newFile = FileHelper.CreateFileInfo(newName, Settings);
+            Rename(oldName, newFile, owerWrite);
+        }
+
+        public bool CanRename(FileInfo oldName, FileInfo newName)
+        {
+            Ensure.NotNull(oldName, "oldName");
+            oldName.Refresh();
+            if (!oldName.Exists)
+            {
+                return false;
+            }
+            newName.Refresh();
+            if (newName.Exists)
+            {
+                return false;
+            }
+            if (_cache.ContainsKey(newName.FullName))
+            {
+                return false;
+            }
+            if (Backuper != null)
+            {
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(newName.FullName);
+                return Backuper.CanRename(oldName, fileNameWithoutExtension);
+            }
+            return true;
+        }
+
+        public void Rename(FileInfo oldName, FileInfo newName, bool owerWrite)
+        {
+            oldName.Rename(newName, owerWrite);
+            if (Backuper != null)
+            {
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(newName.Name);
+                Backuper.Rename(oldName, fileNameWithoutExtension, owerWrite);
+            }
+            _cache.ChangeKey(oldName.FullName, newName.FullName, owerWrite);
+            if (Settings.IsTrackingDirty && Tracker != null)
+            {
+                Tracker.Rename(oldName, newName, owerWrite);
+            }
+        }
+
         /// <summary>
         /// Dispose(true); //I am calling you from Dispose, it's safe
         /// GC.SuppressFinalize(this); //Hey, GC: don't bother calling finalize later
@@ -469,7 +564,7 @@
         {
             VerifyDisposed();
             WeakReference cached;
-            if (_cache.TryGetValue(file, out cached))
+            if (_cache.TryGetValue(file.FullName, out cached))
             {
                 if (!ReferenceEquals(item, cached.Target))
                 {
@@ -478,7 +573,7 @@
             }
             else
             {
-                _cache.TryAdd(file, new WeakReference(item));
+                _cache.TryAdd(file.FullName, new WeakReference(item));
             }
         }
 
