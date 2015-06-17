@@ -31,7 +31,28 @@
             }
         }
 
-        internal static void Extension(FileInfo file, string extension, string paramName, string message = null)
+        internal static void IsValidFileName(string s, string paramName)
+        {
+            NotNullOrEmpty(paramName, "paramName");
+            if (!FileInfoExt.IsValidFileName(s))
+            {
+                var illegalCahrs = FileInfoExt.InvalidFileNameChars.Where(c => s.IndexOf(c) != -1).ToArray();
+                var illegals = string.Join(", ", illegalCahrs.Select(x => string.Format("'{0}'", x)));
+                var message = string.Format(@"{0} is not a valid filename. Contains: {{{1}}}", s, illegals);
+                IsValidFileName(s, paramName, message);
+            }
+        }
+
+        internal static void IsValidFileName(string s, string paramName, string message)
+        {
+            NotNullOrEmpty(paramName, "paramName");
+            if (!FileInfoExt.IsValidFileName(s))
+            {
+                throw new ArgumentException(paramName, message);
+            }
+        }
+
+        internal static void HasExtension(FileInfo file, string extension, string paramName, string message = null)
         {
             NotNull(file, "file");
             NotNullOrEmpty(extension, "extension");

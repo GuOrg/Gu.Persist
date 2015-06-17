@@ -3,7 +3,7 @@
     public interface IBackupSettings : IFileSettings
     {
         string DirectoryPath { get; }
-        bool CreateBackups { get; }
+        bool IsCreatingBackups { get; }
         string TimeStampFormat { get; }
         /// <summary>
         /// Gets if backup files shall be hidden

@@ -40,7 +40,7 @@
                 return false;
             }
 
-            if (!Setting.CreateBackups)
+            if (!Setting.IsCreatingBackups)
             {
                 var softDelete = file.SoftDelete();
                 return softDelete != null;
@@ -109,7 +109,7 @@
         {
             Ensure.NotNull(file, "file");
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");
-          
+
             var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             if (softDelete.Exists)
             {
@@ -129,7 +129,7 @@
             Ensure.NotNull(file, "file");
             Ensure.NotNull(backup, "backup");
             Ensure.DoesNotExist(file, string.Format("Trying to restore {0} when there is already an original: {1}", backup.FullName, file.FullName));
- 
+
             FileHelper.Restore(file, backup);
         }
 
@@ -164,6 +164,63 @@
                     }
                     backupFile.File.HardDelete();
                     allBackups.Remove(backupFile);
+                }
+            }
+        }
+
+        public bool CanRename(FileInfo file, string newName)
+        {
+            Ensure.NotNull(file, "file");
+            Ensure.NotNullOrEmpty(newName, "newName");
+            var soft = file.GetSoftDeleteFileFor();
+            if (soft.Exists)
+            {
+                if (!soft.CanRename(newName, Setting))
+                {
+                    return false;
+                }
+            }
+
+            var allBackups = BackupFile.GetAllBackupsFor(file, Setting);
+            foreach (var backup in allBackups)
+            {
+                if (!backup.File.CanRename(newName, Setting))
+                {
+                    return false;
+                }
+                soft = backup.File.GetSoftDeleteFileFor();
+                if (soft.Exists)
+                {
+                    if (!soft.CanRename(newName, Setting))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public void Rename(FileInfo file, string newName, bool owerWrite)
+        {
+            Ensure.NotNull(file, "file");
+            Ensure.NotNullOrEmpty(newName, "newName");
+            var soft = file.GetSoftDeleteFileFor();
+            if (soft.Exists)
+            {
+                var withNewName = soft.WithNewName(newName, Setting);
+                soft.Rename(withNewName, owerWrite);
+            }
+
+            var allBackups = BackupFile.GetAllBackupsFor(file, Setting);
+            foreach (var backup in allBackups)
+            {
+                var withNewName = backup.File.WithNewName(newName, Setting);
+                backup.File.Rename(withNewName, owerWrite);
+                soft = backup.File.GetSoftDeleteFileFor();
+                if (soft.Exists)
+                {
+                    withNewName = soft.WithNewName(newName, Setting);
+                    soft.Rename(withNewName, owerWrite);
                 }
             }
         }

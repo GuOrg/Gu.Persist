@@ -1,7 +1,6 @@
 namespace Gu.Settings.Tests.ChangeTracking
 {
     using System;
-    using System.ComponentModel;
 
     using Gu.Settings.Tests.ChangeTracking.Helpers;
 

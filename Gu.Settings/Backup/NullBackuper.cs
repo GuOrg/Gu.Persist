@@ -1,6 +1,7 @@
 ﻿namespace Gu.Settings.Backup
 {
     using System;
+    using System.ComponentModel;
     using System.IO;
 
     public class NullBackuper : IBackuper
@@ -94,6 +95,36 @@
             Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");
             var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             softDelete.Delete();
+        }
+
+        public bool CanRename(FileInfo file, string newName)
+        {
+            Ensure.NotNull(file, "file");
+            Ensure.NotNullOrEmpty(newName, "newName");
+            var soft = file.GetSoftDeleteFileFor();
+            if (soft.Exists)
+            {
+                var fileSettings = new FileSettings(file.Directory, file.Extension);
+                if (!soft.CanRename(newName, fileSettings))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public void Rename(FileInfo file, string newName, bool owerWrite)
+        {
+            Ensure.NotNull(file, "file");
+            Ensure.NotNullOrEmpty(newName, "newName");
+            var soft = file.GetSoftDeleteFileFor();
+            if (soft.Exists)
+            {
+                var fileSettings = new FileSettings(file.Directory, file.Extension);
+                var withNewName = soft.WithNewName(newName, fileSettings);
+                soft.Rename(withNewName, owerWrite);
+            }
         }
     }
 }
