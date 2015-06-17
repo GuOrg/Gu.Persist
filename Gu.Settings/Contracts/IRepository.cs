@@ -1,7 +1,6 @@
 ﻿namespace Gu.Settings
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
 
@@ -86,5 +85,28 @@
         bool CanRename(FileInfo oldName, FileInfo newName);
 
         void Rename(FileInfo oldName, FileInfo newName, bool owerWrite);
+       
+        void ClearCache();
+        
+        void ClearTrackerCache();
+
+        /// <summary>
+        /// Saves the file. Then removes it from cache.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="fileName"></param>
+        void SaveAndClose<T>(T item, string fileName);
+
+        /// <summary>
+        /// Saves the file. Then removes it from cache.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="file"></param>
+        void SaveAndClose<T>(T item, FileInfo file);
+
+        void RemoveFromCache<T>(T item);
+        void RemoveFromDirtyTracker<T>(T item);
     }
 }
