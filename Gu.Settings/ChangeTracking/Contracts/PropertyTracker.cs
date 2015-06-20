@@ -18,5 +18,10 @@ namespace Gu.Settings
         public Type ParentType { get; private set; }
 
         public PropertyInfo ParentProperty { get; private set; }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
     }
 }
