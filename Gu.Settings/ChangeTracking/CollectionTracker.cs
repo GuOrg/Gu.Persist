@@ -12,12 +12,14 @@ namespace Gu.Settings
 
     public sealed class CollectionTracker : PropertyTracker
     {
+        private readonly ChangeTrackerSettings _settings;
         private readonly CollectionItemTrackerCollection _itemTrackers;
 
-        public CollectionTracker(Type parentType, PropertyInfo parentProperty, IEnumerable value)
+        public CollectionTracker(Type parentType, PropertyInfo parentProperty, IEnumerable value, ChangeTrackerSettings settings)
             : base(parentType, parentProperty, value)
         {
-            _itemTrackers = new CollectionItemTrackerCollection(parentType, parentProperty);
+            _settings = settings;
+            _itemTrackers = new CollectionItemTrackerCollection(parentType, parentProperty, settings);
             _itemTrackers.PropertyChanged += OnSubtrackerPropertyChanged;
             var incc = value as INotifyCollectionChanged;
             if (incc != null)
@@ -55,7 +57,7 @@ namespace Gu.Settings
             if (type.IsEnumerableOfT())
             {
                 var itemType = type.GetItemType();
-                if (itemType != null && !IsTrackType(itemType))
+                if (itemType != null && !IsTrackType(itemType, _settings))
                 {
                     return;
                 }

@@ -12,7 +12,7 @@ namespace Gu.Settings.Tests.ChangeTracking
         public void ThrowsOnIllegalObjectNested()
         {
             var item = new Dummy();
-            var exception = Assert.Throws<ArgumentException>(() => Tracker.Track(item));
+            var exception = Assert.Throws<ArgumentException>(() => ChangeTracker.Track(item, ChangeTrackerSettings.Default));
             Console.WriteLine(exception.Message);
         }
 
@@ -20,7 +20,7 @@ namespace Gu.Settings.Tests.ChangeTracking
         public void ThrowsOnIllegalEnumerableNested()
         {
             var item = new IllegalEnumerable();
-            var exception = Assert.Throws<ArgumentException>(() => Tracker.Track(item));
+            var exception = Assert.Throws<ArgumentException>(() => ChangeTracker.Track(item, ChangeTrackerSettings.Default));
             Console.WriteLine(exception.Message);
         }
     }

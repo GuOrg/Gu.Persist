@@ -1,10 +1,10 @@
 ﻿namespace Gu.Settings.Json
 {
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
 
     using Gu.Settings.IO;
+
     using Newtonsoft.Json;
 
     public class JsonRepository : Repository

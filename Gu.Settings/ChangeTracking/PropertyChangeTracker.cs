@@ -8,12 +8,19 @@
 
     public sealed class PropertyChangeTracker : PropertyTracker
     {
+        private readonly ChangeTrackerSettings _settings;
         private readonly PropertyTrackerCollection _propertyTrackers;
 
-        internal PropertyChangeTracker(Type parentType, PropertyInfo parentProperty, INotifyPropertyChanged value)
+        internal PropertyChangeTracker(Type parentType, PropertyInfo parentProperty, INotifyPropertyChanged value, ChangeTrackerSettings settings)
             : base(parentType, parentProperty, value)
         {
-            _propertyTrackers = new PropertyTrackerCollection(value.GetType());
+            Ensure.NotNull(parentType, "parentType");
+            Ensure.NotNull(parentProperty, "parentProperty");
+            Ensure.NotNull(value, "value");
+            Ensure.NotNull(settings, "settings");
+
+            _settings = settings;
+            _propertyTrackers = new PropertyTrackerCollection(value.GetType(), settings);
             value.PropertyChanged += OnItemPropertyChanged;
             _propertyTrackers.PropertyChanged += OnSubtrackerPropertyChanged;
             _propertyTrackers.Add(value, TrackProperties);
@@ -26,7 +33,7 @@
 
         public IReadOnlyList<PropertyInfo> TrackProperties
         {
-            get { return GetTrackProperties(Value); }
+            get { return GetTrackProperties(Value, _settings); }
         }
 
         protected override void Dispose(bool disposing)

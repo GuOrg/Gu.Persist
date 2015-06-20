@@ -1,6 +1,6 @@
 namespace Gu.Settings
 {
-    public abstract class ValueTracker : Tracker, IValueTracker
+    public abstract class ValueTracker : ChangeTracker, IValueTracker
     {
         protected ValueTracker(object value)
         {
