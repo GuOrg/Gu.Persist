@@ -25,7 +25,7 @@
         public void NotifiesOnCollectionChanged()
         {
             var ints = new ObservableCollection<int>();
-            using (var tracker = new CollectionTracker(typeof(CollectionItemTrackerTests), DummyPropertyInfo, ints))
+            using (var tracker = new CollectionTracker(typeof(CollectionItemTrackerTests), DummyPropertyInfo, ints, ChangeTrackerSettings.Default))
             {
                 tracker.PropertyChanged += TrackerOnPropertyChanged;
 
@@ -40,7 +40,7 @@
         public void NotifiesOnCollectionItemChanged()
         {
             var items = new ObservableCollection<Level>();
-            using (var tracker = new CollectionTracker(typeof(CollectionItemTrackerTests), DummyPropertyInfo, items))
+            using (var tracker = new CollectionTracker(typeof(CollectionItemTrackerTests), DummyPropertyInfo, items, ChangeTrackerSettings.Default))
             {
                 tracker.PropertyChanged += TrackerOnPropertyChanged;
 

@@ -22,7 +22,7 @@ namespace Gu.Settings.Tests.ChangeTracking
         public void NotifiesOnAdd()
         {
             var root = new Level();
-            using (var tracker = Tracker.Track(root))
+            using (var tracker = ChangeTracker.Track(root, ChangeTrackerSettings.Default))
             {
                 tracker.PropertyChanged += TrackerOnPropertyChanged;
                 
@@ -50,7 +50,7 @@ namespace Gu.Settings.Tests.ChangeTracking
         public void TracksAddedStopsOnRemoved()
         {
             var root = new Level();
-            using (var tracker = Tracker.Track(root))
+            using (var tracker = ChangeTracker.Track(root, ChangeTrackerSettings.Default))
             {
                 tracker.PropertyChanged += TrackerOnPropertyChanged;
                 
@@ -79,7 +79,7 @@ namespace Gu.Settings.Tests.ChangeTracking
         public void NotifiesThreeLevels()
         {
             var root = new Level { Next = new Level { Next = new Level() } };
-            using (var tracker = Tracker.Track(root))
+            using (var tracker = ChangeTracker.Track(root, ChangeTrackerSettings.Default))
             {
                 tracker.PropertyChanged += TrackerOnPropertyChanged;
                

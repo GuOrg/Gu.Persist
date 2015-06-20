@@ -9,14 +9,16 @@
     using System.Reflection;
 
     [DebuggerDisplay("Count: {Count}")]
-    public sealed class PropertyTrackerCollection : Tracker, IReadOnlyCollection<IPropertyTracker>, IDisposable
+    public sealed class PropertyTrackerCollection : ChangeTracker, IReadOnlyCollection<IPropertyTracker>, IDisposable
     {
         private readonly Type _parentType;
+        private readonly ChangeTrackerSettings _settings;
         private readonly List<IPropertyTracker> _trackers = new List<IPropertyTracker>();
 
-        public PropertyTrackerCollection(Type parentType)
+        public PropertyTrackerCollection(Type parentType, ChangeTrackerSettings settings)
         {
             _parentType = parentType;
+            _settings = settings;
         }
 
         public int Count { get { return _trackers.Count; } }
@@ -34,12 +36,6 @@
             return GetEnumerator();
         }
 
-        public bool Contains(IPropertyTracker item)
-        {
-            VerifyDisposed();
-            return _trackers.Contains(item);
-        }
-
         internal void Add(INotifyPropertyChanged item, IReadOnlyList<PropertyInfo> trackProperties)
         {
             Ensure.NotNull(item, "item");
@@ -55,12 +51,15 @@
             Ensure.NotNull(item, "item");
             Ensure.NotNull(property, "property");
             var value = property.GetValue(item);
-            CanTrack(_parentType, property, value);
+            if (!CanTrack(_parentType, property, value, _settings))
+            {
+                return;
+            }
             if (value == null)
             {
                 return;
             }
-            var tracker = Create(_parentType, property, value);
+            var tracker = Create(_parentType, property, value, _settings);
             if (tracker != null)
             {
                 Add(tracker);

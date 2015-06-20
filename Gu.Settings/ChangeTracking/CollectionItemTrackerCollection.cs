@@ -7,24 +7,26 @@
     using System.Linq;
     using System.Reflection;
 
-    public sealed class CollectionItemTrackerCollection : Tracker, IReadOnlyCollection<IValueTracker>
+    public sealed class CollectionItemTrackerCollection : ChangeTracker, IReadOnlyCollection<IValueTracker>
     {
         private readonly Type _parentType;
         private readonly PropertyInfo _parentProperty;
+        private readonly ChangeTrackerSettings _settings;
         private readonly List<IValueTracker> _trackers = new List<IValueTracker>();
 
-        public CollectionItemTrackerCollection(Type parentType, PropertyInfo parentProperty)
+        public CollectionItemTrackerCollection(Type parentType, PropertyInfo parentProperty, ChangeTrackerSettings settings)
         {
             Ensure.NotNull(parentType, "parentType");
             Ensure.NotNull(parentProperty, "parentProperty");
             _parentType = parentType;
             _parentProperty = parentProperty;
+            _settings = settings;
         }
 
-        public int Count { get; private set; }
-        
-        public bool IsReadOnly { get; private set; }
-        
+        public int Count { get { return _trackers.Count; } }
+
+        public bool IsReadOnly { get { return true; } }
+
         public IEnumerator<IValueTracker> GetEnumerator()
         {
             return _trackers.GetEnumerator();
@@ -45,8 +47,11 @@
         {
             foreach (var child in items)
             {
-                var itemTracker = Create(_parentType,_parentProperty, child);
-                Add(itemTracker);
+                var itemTracker = Create(_parentType, _parentProperty, child, _settings);
+                if (itemTracker != null)
+                {
+                    Add(itemTracker);
+                }
             }
         }
 
