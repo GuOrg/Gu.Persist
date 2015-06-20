@@ -59,7 +59,7 @@
     <Compile Include="ChangeTracking\CollectionTracker.cs" />
     <Compile Include="ChangeTracking\Contracts\PropertyTracker.cs" />
     <Compile Include="ChangeTracking\TrackAs.cs" />
-    <Compile Include="ChangeTracking\Tracker.cs" />
+    <Compile Include="ChangeTracking\ChangeTracker.cs" />
     <Compile Include="ChangeTracking\PropertyTrackerCollection.cs" />
     <Compile Include="ChangeTracking\TrackingAttribute.cs" />
     <Compile Include="Contracts\IDirty.cs" />
@@ -101,6 +101,8 @@
     <Compile Include="Contracts\IBackuper.cs" />
     <Compile Include="Contracts\IBackupSettings.cs" />
     <Compile Include="Contracts\IRepositorySettings.cs" />
+    <Compile Include="Settings\ChangeTrackerSettings.cs" />
+    <Compile Include="Settings\ChangeTrackerSpecialType.cs" />
     <Compile Include="Settings\FileSettings.cs" />
     <Compile Include="Settings\RepositorySettings.cs" />
     <Compile Include="IO\XmlHelper.cs" />

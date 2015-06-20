@@ -32,8 +32,8 @@
             {
                 if (_default == null)
                 {
-                    var subDirectory = string.Format(@"{0}/Settings", Assembly.GetExecutingAssembly().GetName().Name);
-                    _default = CommonApplicationData.Subdirectory(subDirectory);
+                    _default = ApplicationData.Subdirectory(Assembly.GetExecutingAssembly().GetName().Name)
+                                              .Subdirectory("Settings");
                 }
                 return _default;
             }
