@@ -13,8 +13,8 @@
 
         public FileSettings(DirectoryInfo directory, string extension)
         {
-            Directory = directory;
-            Extension = extension;
+            _directory = directory;
+            _extension = extension;
         }
         
         public event PropertyChangedEventHandler PropertyChanged;

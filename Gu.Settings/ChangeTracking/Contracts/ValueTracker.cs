@@ -9,5 +9,10 @@ namespace Gu.Settings
         }
 
         public object Value { get; private set; }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
     }
 }
