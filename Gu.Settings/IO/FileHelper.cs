@@ -76,7 +76,6 @@ namespace Gu.Settings
         {
             Ensure.NotNull(file, "file");
             file.DeleteSoftDeleteFileFor();
-
             file.Delete();
         }
 
