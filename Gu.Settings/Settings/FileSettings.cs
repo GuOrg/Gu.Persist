@@ -1,5 +1,6 @@
 ﻿namespace Gu.Settings
 {
+    using System;
     using System.ComponentModel;
     using System.IO;
     using System.Runtime.CompilerServices;
@@ -16,7 +17,8 @@
             _directory = directory;
             _extension = extension;
         }
-        
+
+        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
         public DirectoryInfo Directory

@@ -2,7 +2,9 @@
 {
     public enum TrackAs
     {
+        Unknown,
         Immutable,
-        Explicit
+        Explicit,
+        Ignore
     }
 }

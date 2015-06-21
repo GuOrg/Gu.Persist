@@ -5,6 +5,7 @@
     using System.Globalization;
     using System.IO;
     using System.Runtime.CompilerServices;
+    using System.Xml.Serialization;
 
     using Gu.Settings.Annotations;
 
@@ -72,8 +73,10 @@
             _maxAgeInDays = maxAgeInDays;
         }
 
+        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [XmlIgnore]
         public DirectoryInfo Directory
         {
             get
@@ -82,7 +85,7 @@
                 {
                     return null;
                 }
-                return  new DirectoryInfo(DirectoryPath);
+                return new DirectoryInfo(DirectoryPath);
             }
         }
 
