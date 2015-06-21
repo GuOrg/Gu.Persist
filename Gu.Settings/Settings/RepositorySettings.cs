@@ -4,6 +4,7 @@
     using System.ComponentModel;
     using System.IO;
     using System.Runtime.CompilerServices;
+    using System.Xml.Serialization;
 
     using Gu.Settings.Annotations;
 
@@ -52,8 +53,10 @@
             _tempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
 
+        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [XmlIgnore]
         public DirectoryInfo Directory
         {
             get

@@ -47,6 +47,34 @@ namespace Gu.Settings.Tests.ChangeTracking
         }
 
         [Test]
+        public void NotifiesOnAddSpecialCollection()
+        {
+            var root = new SpecialCollection();
+            using (var tracker = ChangeTracker.Track(root, ChangeTrackerSettings.Default))
+            {
+                tracker.PropertyChanged += TrackerOnPropertyChanged;
+
+                var level = new Level();
+                root.Add(level);
+                Assert.AreEqual(1, tracker.Changes);
+                Assert.AreEqual(1, _changes.Count);
+
+                level.Value++;
+                Assert.AreEqual(2, tracker.Changes);
+                Assert.AreEqual(2, _changes.Count);
+
+                root.Remove(level);
+                Assert.AreEqual(3, tracker.Changes);
+                Assert.AreEqual(3, _changes.Count);
+
+                level.Value++;
+                Assert.AreEqual(3, tracker.Changes);
+                Assert.AreEqual(3, _changes.Count);
+                tracker.PropertyChanged -= TrackerOnPropertyChanged;
+            }
+        }
+
+        [Test]
         public void TracksAddedStopsOnRemoved()
         {
             var root = new Level();

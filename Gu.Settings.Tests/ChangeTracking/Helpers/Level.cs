@@ -1,5 +1,8 @@
 ﻿namespace Gu.Settings.Tests.ChangeTracking.Helpers
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
@@ -12,6 +15,8 @@
         private Level _next;
         private ObservableCollection<int> _ints = new ObservableCollection<int>();
         private ObservableCollection<Level> _levels = new ObservableCollection<Level>();
+        private string _name;
+        private StringComparison _comparison;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public int Value
@@ -24,6 +29,34 @@
                     return;
                 }
                 _value = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (value == _name)
+                {
+                    return;
+                }
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public StringComparison Comparison
+        {
+            get { return _comparison; }
+            set
+            {
+                if (value == _comparison)
+                {
+                    return;
+                }
+                _comparison = value;
                 OnPropertyChanged();
             }
         }

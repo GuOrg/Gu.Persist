@@ -12,10 +12,10 @@
 
     using Gu.Settings.Annotations;
 
-    public abstract class ChangeTracker : ITracker
+    public abstract class Tracker : ITracker
     {
         public static readonly string ChangesPropertyName = "Changes";
-        protected static readonly PropertyInfo ChangesPropertyInfo = typeof(ChangeTracker).GetProperty(ChangesPropertyName);
+        protected static readonly PropertyInfo ChangesPropertyInfo = typeof(Tracker).GetProperty(ChangesPropertyName);
         protected static readonly PropertyChangedEventArgs ChangesEventArgs = new PropertyChangedEventArgs(ChangesPropertyName);
         private static readonly ConcurrentDictionary<Type, IReadOnlyList<PropertyInfo>> TrackPropertiesMap = new ConcurrentDictionary<Type, IReadOnlyList<PropertyInfo>>();
         private int _changes;
@@ -43,20 +43,10 @@
         public static IValueTracker Track(INotifyPropertyChanged root)
         {
             Ensure.NotNull(root, "root");
-            return Track(root, ChangeTrackerSettings.Default);
+            return new PropertyChangeTracker(typeof(Tracker), ChangesPropertyInfo, root);
         }
 
-        public static IValueTracker Track(INotifyPropertyChanged root, ChangeTrackerSettings settings)
-        {
-            Ensure.NotNull(root, "root");
-            Ensure.NotNull(settings, "settings");
-
-            var tracker = Create(typeof(ChangeTracker), ChangesPropertyInfo, root, settings);
-            Ensure.NotNull(tracker, "tracker");
-            return tracker;
-        }
-
-        internal static void Verify(Type parentType, PropertyInfo parentProperty, object item, ChangeTrackerSettings settings)
+        internal static void Verify(Type parentType, PropertyInfo parentProperty, object item)
         {
             if (Attribute.IsDefined(parentType, typeof(TrackingAttribute), true))
             {
@@ -69,16 +59,12 @@
             }
 
             var propertyType = parentProperty.PropertyType;
-            if (settings.SpecialTypes.Any(x => x.TypeName == propertyType.FullName))
-            {
-                return;
-            }
             //if (Attribute.IsDefined(propertyType, typeof(TrackingAttribute), true))
             //{
             //    return;
             //}
 
-            if (!IsTrackType(propertyType, settings))
+            if (!IsTrackType(propertyType))
             {
                 return;
             }
@@ -95,23 +81,23 @@
 
             var message =
                 string.Format(
-                    @"Create tracker failed for {1}.{2}{0}. Solve the problem by:{0}1) Implementing INotifyPropertyChanged {0}2) Implementing INotifyPropertyChanged{0}3) Add TrackingAttribute: Immutable to type:{1}{0}4) AddTrackingAttribute: Explicit to {2} ",
+                    @"Create tracker failed for {1}.{2}{0}. Solve the problem by:{0}1) Implementing INotifyPropertyChanged {0}2) Implementing INotifyCollectionChanged{0}3) Add TrackingAttribute: Immutable to type:{1}{0}4) AddTrackingAttribute: Explicit to {2} ",
                     Environment.NewLine,
                     parentType.Name,
                     parentProperty.Name);
             throw new ArgumentException(message);
         }
 
-        internal static bool CanTrack(Type parentType, PropertyInfo parentProperty, object value, ChangeTrackerSettings settings)
+        internal static bool CanTrack(Type parentType, PropertyInfo parentProperty, object item)
         {
-            Verify(parentType, parentProperty, value, settings);
+            Verify(parentType, parentProperty, item);
 
-            var incc = value as INotifyCollectionChanged;
+            var incc = item as INotifyCollectionChanged;
             if (incc != null)
             {
                 return true;
             }
-            var inpc = value as INotifyPropertyChanged;
+            var inpc = item as INotifyPropertyChanged;
             if (inpc != null)
             {
                 return true;
@@ -130,9 +116,9 @@
             GC.SuppressFinalize(this);
         }
 
-        protected static IPropertyTracker Create(Type parentType, PropertyInfo parentProperty, object child, ChangeTrackerSettings settings)
+        protected static IPropertyTracker Create(Type parentType, PropertyInfo parentProperty, object child)
         {
-            if (!CanTrack(parentType, parentProperty, child, settings))
+            if (!CanTrack(parentType, parentProperty, child))
             {
                 return null;
             }
@@ -144,24 +130,24 @@
             var incc = child as INotifyCollectionChanged;
             if (incc != null)
             {
-                return new CollectionTracker(parentType, parentProperty, (IEnumerable)incc, settings);
+                return new CollectionTracker(parentType, parentProperty, (IEnumerable)incc);
             }
             var inpc = child as INotifyPropertyChanged;
             if (inpc != null)
             {
-                return new PropertyChangeTracker(parentType, parentProperty, inpc, settings);
+                return new PropertyChangeTracker(parentType, parentProperty, inpc);
             }
             throw new ArgumentException();
         }
 
-        protected static IReadOnlyList<PropertyInfo> GetTrackProperties(INotifyPropertyChanged item, ChangeTrackerSettings settings)
+        protected static IReadOnlyList<PropertyInfo> GetTrackProperties(INotifyPropertyChanged item)
         {
             if (item == null)
             {
                 return null;
             }
 
-            var trackProperties = TrackPropertiesMap.GetOrAdd(item.GetType(), t => TrackPropertiesFor(t, settings));
+            var trackProperties = TrackPropertiesMap.GetOrAdd(item.GetType(), TrackPropertiesFor);
             return trackProperties;
         }
 
@@ -220,25 +206,23 @@
             }
         }
 
-        protected static bool IsTrackType(Type type, ChangeTrackerSettings settings)
+        protected static bool IsTrackType(Type type)
         {
-            Ensure.NotNull(type, "type");
-            if (type == typeof(string) || type.IsEnum || type.IsPrimitive)
+            if (type == typeof(string))
             {
                 return false;
             }
-
-            if (settings.SpecialTypes.Any(x => x.TypeName == type.FullName))
+            if (type.IsPrimitive)
             {
                 return false;
             }
             return true;
         }
 
-        private static IReadOnlyList<PropertyInfo> TrackPropertiesFor(Type type, ChangeTrackerSettings settings)
+        private static IReadOnlyList<PropertyInfo> TrackPropertiesFor(Type type)
         {
             var propertyInfos = type.GetProperties()
-                                    .Where(x => x.GetIndexParameters().Length == 0 && IsTrackType(x.PropertyType, settings))
+                                    .Where(x => IsTrackType(x.PropertyType))
                                     .ToArray();
             return propertyInfos;
         }
