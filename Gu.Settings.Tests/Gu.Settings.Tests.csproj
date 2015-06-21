@@ -61,6 +61,7 @@
     <Compile Include="ChangeTracking\CollectionItemTrackerTests.cs" />
     <Compile Include="ChangeTracking\Helpers\IllegalEnumerable.cs" />
     <Compile Include="ChangeTracking\Helpers\Dummy.cs" />
+    <Compile Include="ChangeTracking\Helpers\SpecialCollection.cs" />
     <Compile Include="ChangeTracking\TrackerTests.cs" />
     <Compile Include="Helpers\AssertFile.cs" />
     <Compile Include="AutoSaver\AutoSaverTests.cs" />

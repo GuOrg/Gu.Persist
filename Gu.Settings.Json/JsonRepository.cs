@@ -49,12 +49,12 @@
 
         protected override T FromStream<T>(Stream stream)
         {
-            return JsonHelper.FromStream<T>(stream);
+            return JsonHelper.FromStream<T>(stream, JsonSettings);
         }
 
         protected override Stream ToStream<T>(T item)
         {
-            return JsonHelper.ToStream(item);
+            return JsonHelper.ToStream(item, JsonSettings);
         }
 
         protected override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
