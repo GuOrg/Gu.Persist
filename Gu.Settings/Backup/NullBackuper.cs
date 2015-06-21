@@ -93,8 +93,7 @@
         {
             Ensure.NotNull(file, "file");
             Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");
-            var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
-            softDelete.Delete();
+            file.DeleteSoftDeleteFileFor();
         }
 
         public bool CanRename(FileInfo file, string newName)
