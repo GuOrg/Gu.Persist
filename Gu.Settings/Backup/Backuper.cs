@@ -129,7 +129,7 @@
             Ensure.NotNull(file, "file");
             Ensure.NotNull(backup, "backup");
             Ensure.DoesNotExist(file, string.Format("Trying to restore {0} when there is already an original: {1}", backup.FullName, file.FullName));
-
+            backup.DeleteSoftDeleteFileFor();
             FileHelper.Restore(file, backup);
         }
 
@@ -143,6 +143,12 @@
             {
                 return;
             }
+
+            foreach (var backup in allBackups)
+            {
+                backup.File.DeleteSoftDeleteFileFor();
+            }
+            
             if (Setting.NumberOfBackups > 0)
             {
                 while (allBackups.Count > Setting.NumberOfBackups) // this is not efficient but the number of backups should be low
@@ -152,6 +158,7 @@
                     allBackups.Remove(backupFile);
                 }
             }
+            
             if (Setting.MaxAgeInDays > 0 && Setting.MaxAgeInDays < Int32.MaxValue)
             {
                 while (true) // this is not efficient but the number of backups should be low
