@@ -19,7 +19,7 @@ namespace Gu.Settings.Tests.ChangeTracking
         }
 
         [Test]
-        public void NotifiesOnAdd()
+        public void NotifiesOnAddInt()
         {
             var root = new Level();
             using (var tracker = ChangeTracker.Track(root, ChangeTrackerSettings.Default))
@@ -42,6 +42,48 @@ namespace Gu.Settings.Tests.ChangeTracking
                 root.Ints.Add(2);
                 Assert.AreEqual(3, tracker.Changes);  
                 Assert.AreEqual(3, _changes.Count);
+                tracker.PropertyChanged -= TrackerOnPropertyChanged;
+            }
+        }
+
+        [Test]
+        public void NotifiesOnAdd()
+        {
+            var root = new Level();
+            using (var tracker = ChangeTracker.Track(root, ChangeTrackerSettings.Default))
+            {
+                tracker.PropertyChanged += TrackerOnPropertyChanged;
+
+                var level = new Level();
+                root.Levels.Add(level);
+                Assert.AreEqual(1, tracker.Changes);
+                Assert.AreEqual(1, _changes.Count);
+
+                level.Value ++;
+                Assert.AreEqual(2, tracker.Changes);
+                Assert.AreEqual(2, _changes.Count);
+
+                root.Levels.Add(level);
+                Assert.AreEqual(3, tracker.Changes);
+                Assert.AreEqual(3, _changes.Count);
+
+                root.Levels.Add(new Level());
+                Assert.AreEqual(4, tracker.Changes);
+                Assert.AreEqual(4, _changes.Count);
+
+                root.Levels = new ObservableCollection<Level>();
+                Assert.AreEqual(5, tracker.Changes);
+                Assert.AreEqual(5, _changes.Count);
+
+                tracker.Dispose();
+
+                level.Value++;
+                Assert.AreEqual(5, tracker.Changes);
+                Assert.AreEqual(5, _changes.Count);
+
+                root.Levels.Add(new Level());
+                Assert.AreEqual(5, tracker.Changes);
+                Assert.AreEqual(5, _changes.Count);
                 tracker.PropertyChanged -= TrackerOnPropertyChanged;
             }
         }

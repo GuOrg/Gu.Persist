@@ -53,6 +53,11 @@
                 Assert.AreEqual(2, tracker.Changes);
                 Assert.AreEqual(2, _changes.Count);
 
+
+                items.Add(new Level());
+                Assert.AreEqual(3, tracker.Changes);
+                Assert.AreEqual(3, _changes.Count);
+
                 tracker.PropertyChanged -= TrackerOnPropertyChanged;
             }
         }
