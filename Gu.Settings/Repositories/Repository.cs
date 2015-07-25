@@ -83,6 +83,29 @@
             return FileHelper.CreateFileInfo<T>(Settings);
         }
 
+        public virtual void Delete<T>(bool deleteBackups)
+        {
+            var file = GetFileInfo<T>();
+            Delete(file, deleteBackups);
+        }
+
+        public virtual void Delete(string fileName, bool deleteBackups)
+        {
+            Ensure.IsValidFileName(fileName, "fileName");
+            var file = FileHelper.CreateFileInfo(fileName, Settings);
+            Delete(file, deleteBackups);
+        }
+
+        public virtual void Delete(FileInfo file, bool deleteBackups)
+        {
+            Ensure.NotNull(file, "file");
+            file.Delete();
+            if (deleteBackups)
+            {
+                Backuper.DeleteBackups(file);
+            }
+        }
+
         public virtual bool Exists<T>()
         {
             return ExistsCore<T>();

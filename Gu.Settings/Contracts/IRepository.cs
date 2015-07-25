@@ -19,6 +19,12 @@
         /// <returns></returns>
         FileInfo GetFileInfo<T>();
 
+        void Delete<T>(bool deleteBackups);
+
+        void Delete(string fileName, bool deleteBackups);
+
+        void Delete(FileInfo file, bool deleteBackups);
+
         bool Exists<T>();
 
         bool Exists(string fileName);

@@ -9,6 +9,8 @@
     /// </summary>
     public interface IGenericRepository
     {
+        void Delete<T>(bool deleteBackups);
+
         bool Exists<T>();
 
         /// <summary>
