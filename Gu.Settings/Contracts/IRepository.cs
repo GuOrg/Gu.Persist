@@ -122,5 +122,46 @@
         void RemoveFromCache<T>(T item);
 
         void RemoveFromDirtyTracker<T>(T item);
+
+        void DeleteBackups<T>();
+
+        void DeleteBackups(string fileName);
+
+        void DeleteBackups(FileInfo file);
+
+        Task<MemoryStream> ReadStreamAsync<T>();
+
+        Task<MemoryStream> ReadAsync(string fileName);
+
+        Task<MemoryStream> ReadStreamAsync(FileInfo file);
+
+        Stream ReadStream<T>();
+
+        Stream Read(string fileName);
+
+        Stream Read(FileInfo file);
+
+        void SaveAndClose<T>(T item);
+
+        void Save<T>(Stream stream);
+
+        void Save(Stream stream, string fileName);
+
+        /// <summary>
+        /// Saves the stream and creates backups.
+        /// </summary>
+        /// <param name="stream">If the stream is null the file is deleted</param>
+        /// <param name="file"></param>
+        void Save(Stream stream, FileInfo file);
+
+        void Save(Stream stream, FileInfo file, FileInfo tempFile);
+
+        Task SaveAsync<T>(Stream stream);
+
+        Task SaveAsync(Stream stream, string fileName);
+
+        Task SaveAsync(Stream stream, FileInfo file);
+
+        Task SaveAsync(Stream stream, FileInfo file, FileInfo tempFile);
     }
 }
