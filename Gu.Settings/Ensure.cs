@@ -1,32 +1,33 @@
 ﻿namespace Gu.Settings
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
 
     internal static class Ensure
     {
-        internal static void NotNull(object o, string paramName, [CallerMemberName] string caller = null)
+        internal static void NotNull(object o, string parameterName, [CallerMemberName] string caller = null)
         {
-            NotNullOrEmpty(paramName, "paramName");
+            Debug.Assert(!string.IsNullOrEmpty(parameterName));
             if (o == null)
             {
-                var message = string.Format("Expected parameter {0} in member {1} to not be null", paramName, caller);
-                throw new ArgumentNullException(paramName, message);
+                var message = string.Format("Expected parameter {0} in member {1} to not be null", parameterName, caller);
+                throw new ArgumentNullException(parameterName, message);
             }
         }
 
-        internal static void NotNull(object o, string paramName, string message, [CallerMemberName] string caller = null)
+        internal static void NotNull(object o, string parameterName, string message, [CallerMemberName] string caller = null)
         {
-            NotNullOrEmpty(paramName, "paramName");
+            Debug.Assert(!string.IsNullOrEmpty(parameterName));
             if (o == null)
             {
                 if (message == null)
                 {
-                    throw new ArgumentNullException(paramName);
+                    throw new ArgumentNullException(parameterName);
                 }
-                throw new ArgumentNullException(paramName, message);
+                throw new ArgumentNullException(parameterName, message);
             }
         }
 
@@ -42,77 +43,78 @@
             }
         }
 
-        public static void NotEqual<T>(T value, T other, string parameter)
+        public static void NotEqual<T>(T value, T other, string parameterName)
         {
+            Debug.Assert(!string.IsNullOrEmpty(parameterName));
             if (Equals(value, other))
             {
                 var message = string.Format("Expected {0} to not equal {1}", value, other);
-                throw new ArgumentException(message, parameter);
+                throw new ArgumentException(message, parameterName);
             }
         }
 
-        internal static void IsValidFileName(string s, string paramName)
+        internal static void IsValidFileName(string s, string parameterName)
         {
-            NotNullOrEmpty(paramName, "paramName");
+            Debug.Assert(!string.IsNullOrEmpty(parameterName));
             if (!FileInfoExt.IsValidFileName(s))
             {
                 var illegalCahrs = FileInfoExt.InvalidFileNameChars.Where(c => s.IndexOf(c) != -1).ToArray();
                 var illegals = string.Join(", ", illegalCahrs.Select(x => string.Format("'{0}'", x)));
                 var message = string.Format(@"{0} is not a valid filename. Contains: {{{1}}}", s, illegals);
-                IsValidFileName(s, paramName, message);
+                IsValidFileName(s, parameterName, message);
             }
         }
 
-        internal static void IsValidFileName(string s, string paramName, string message)
+        internal static void IsValidFileName(string s, string parameterName, string message)
         {
-            NotNullOrEmpty(paramName, "paramName");
+            Debug.Assert(!string.IsNullOrEmpty(parameterName));
             if (!FileInfoExt.IsValidFileName(s))
             {
-                throw new ArgumentException(paramName, message);
+                throw new ArgumentException(parameterName, message);
             }
         }
 
-        internal static void HasExtension(FileInfo file, string extension, string paramName, string message = null)
+        internal static void HasExtension(FileInfo file, string extension, string parameterName, string message = null)
         {
             NotNull(file, "file");
             NotNullOrEmpty(extension, "extension");
-            NotNullOrEmpty(paramName, "paramName");
+            Debug.Assert(!string.IsNullOrEmpty(parameterName));
             if (!string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase))
             {
                 if (message == null)
                 {
-                    throw new ArgumentException(string.Format("Expected extension: {0}, was: {1}", extension, file.Extension), paramName);
+                    throw new ArgumentException(string.Format("Expected extension: {0}, was: {1}", extension, file.Extension), parameterName);
                 }
-                throw new ArgumentNullException(paramName, message);
+                throw new ArgumentNullException(parameterName, message);
             }
         }
 
-        internal static void ExtensionIsNot(FileInfo file, string extension, string paramName, string message = null)
+        internal static void ExtensionIsNot(FileInfo file, string extension, string parameterName, string message = null)
         {
             NotNull(file, "file");
-            NotNullOrEmpty(paramName, "paramName");
+            Debug.Assert(!string.IsNullOrEmpty(parameterName));
             if (string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase))
             {
                 if (message == null)
                 {
-                    throw new ArgumentException(string.Format("Expected extension to not be {0}", extension), paramName);
+                    throw new ArgumentException(string.Format("Expected extension to not be {0}", extension), parameterName);
                 }
-                throw new ArgumentNullException(paramName, message);
+                throw new ArgumentNullException(parameterName, message);
             }
         }
 
-        internal static void ExtensionIsNotAnyOf(FileInfo file, string[] extensions, string paramName, string message = null)
+        internal static void ExtensionIsNotAnyOf(FileInfo file, string[] extensions, string parameterName, string message = null)
         {
             NotNull(file, "file");
             NotNull(extensions, "extensions");
-            NotNullOrEmpty(paramName, "paramName");
+            Debug.Assert(!string.IsNullOrEmpty(parameterName));
             if (extensions.Any(x => string.Equals(file.Extension, x, StringComparison.OrdinalIgnoreCase)))
             {
                 if (message == null)
                 {
-                    throw new ArgumentException(string.Format("Expected not be any of {{{0}}}, was: {1}", string.Join(", ", extensions), file.Extension), paramName);
+                    throw new ArgumentException(string.Format("Expected not be any of {{{0}}}, was: {1}", string.Join(", ", extensions), file.Extension), parameterName);
                 }
-                throw new ArgumentNullException(paramName, message);
+                throw new ArgumentNullException(parameterName, message);
             }
         }
 
