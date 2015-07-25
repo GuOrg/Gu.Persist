@@ -5,8 +5,14 @@ namespace Gu.Settings
 
     public interface IAsyncRepository
     {
+        void Delete<T>(bool deleteBackups);
+
+        void Delete(string fileName, bool deleteBackups);
+
+        void Delete(FileInfo file, bool deleteBackups);
+
         Task<T> ReadAsync<T>(string fileName);
-        
+
         Task<T> ReadAsync<T>(FileInfo file);
 
         Task SaveAsync<T>(T item, string fileName);

@@ -125,5 +125,14 @@
                 soft.Rename(withNewName, owerWrite);
             }
         }
+
+        public void DeleteBackups(FileInfo file)
+        {
+            var soft = file.GetSoftDeleteFileFor();
+            if (soft != null)
+            {
+                soft.Delete();
+            }
+        }
     }
 }
