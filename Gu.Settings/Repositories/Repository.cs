@@ -412,6 +412,34 @@
             SaveCore(item, file, tempFile);
         }
 
+        public virtual void Save<T>(Stream stream)
+        {
+            VerifyDisposed();
+            var file = GetFileInfoCore<T>();
+            SaveCore(stream, file);
+        }
+
+        public virtual void Save(Stream stream, string fileName)
+        {
+            Ensure.IsValidFileName(fileName, "fileName");
+            VerifyDisposed();
+            var file = GetFileInfoCore(fileName);
+            SaveCore(stream, file);
+        }
+
+        /// <summary>
+        /// Saves the stream and creates backups.
+        /// </summary>
+        /// <param name="stream">If the stream is null the file is deleted</param>
+        /// <param name="file"></param>
+        public virtual void Save(Stream stream, FileInfo file)
+        {
+            Ensure.NotNull(file, "file");
+            VerifyDisposed();
+            var tempFile = file.WithNewExtension(Settings.TempExtension);
+            SaveCore(stream, file, tempFile);
+        }
+
         public virtual void Save(Stream stream, FileInfo file, FileInfo tempFile)
         {
             Ensure.NotNull(file, "file");
@@ -421,23 +449,32 @@
 
         protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
         {
+            if (item == null)
+            {
+                FileHelper.HardDelete(file);
+                return;
+            }
             CacheAndTrackCore(item, file);
-            var createdBackup = Backuper.TryBackup(file);
+
+            using (var stream = ToStream(item))
+            {
+                SaveCore(stream,file, tempFile);
+            }
+        }
+
+        protected void SaveCore(Stream stream, FileInfo file, FileInfo tempFile)
+        {
+            if (stream == null)
+            {
+                FileHelper.HardDelete(file);
+                return;
+            }
+            Backuper.TryBackup(file);
             try
             {
-                if (item == null)
-                {
-                    FileHelper.HardDelete(file);
-                }
-                else
-                {
-                    using (var stream = ToStream(item))
-                    {
-                        FileHelper.Save(tempFile, stream);
-                    }
-                    tempFile.MoveTo(file);
-                    Backuper.PurgeBackups(file);
-                }
+                FileHelper.Save(tempFile, stream);
+                tempFile.MoveTo(file);
+                Backuper.PurgeBackups(file);
             }
             catch (Exception)
             {
