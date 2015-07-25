@@ -19,6 +19,13 @@
         /// <returns></returns>
         FileInfo GetFileInfo<T>();
 
+        /// <summary>
+        /// Gets the fileinfo for that is used for the given filename
+        /// </summary
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        FileInfo GetFileInfo(string fileName);
+
         void Delete<T>(bool deleteBackups);
 
         void Delete(string fileName, bool deleteBackups);
@@ -113,6 +120,7 @@
         void SaveAndClose<T>(T item, FileInfo file);
 
         void RemoveFromCache<T>(T item);
+
         void RemoveFromDirtyTracker<T>(T item);
     }
 }
