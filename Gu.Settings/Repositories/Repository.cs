@@ -6,6 +6,7 @@
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
 
     using Gu.Settings.Backup;
@@ -13,6 +14,7 @@
 
     public abstract class Repository : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IAutoSavingRepository, IRepositoryWithSettings, IDisposable
     {
+        private readonly object _gate = new object();
         private readonly ConcurrentDictionary<string, WeakReference> _cache = new ConcurrentDictionary<string, WeakReference>(StringComparer.OrdinalIgnoreCase);
         private bool _disposed;
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -83,6 +85,11 @@
         {
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
+            return GetFileInfoCore(fileName);
+        }
+
+        protected FileInfo GetFileInfoCore(string fileName)
+        {
             var file = FileHelper.CreateFileInfo(fileName, Settings);
             return file;
         }
@@ -103,7 +110,7 @@
         {
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
-            var file = GetFileInfo(fileName);
+            var file = GetFileInfoCore(fileName);
             Delete(file, deleteBackups);
         }
 
@@ -134,7 +141,7 @@
         {
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
-            var fileInfo = GetFileInfo(fileName);
+            var fileInfo = GetFileInfoCore(fileName);
             return Exists(fileInfo);
         }
 
@@ -162,7 +169,7 @@
         {
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
-            var fileInfo = GetFileInfo(fileName);
+            var fileInfo = GetFileInfoCore(fileName);
             return ReadAsync<T>(fileInfo);
         }
 
@@ -170,6 +177,7 @@
         {
             Ensure.NotNull(file, "file"); // not checking exists, framework exception is more familiar.
             VerifyDisposed();
+            T value;
             if (Settings.IsCaching)
             {
                 WeakReference cached;
@@ -177,13 +185,26 @@
                 {
                     return (T)cached.Target;
                 }
+
+                // can't await  inside the lock. 
+                // If there are many threads reading the same only the first is used
+                // the other reads are wasted, can't think of anything better than this.
+                value = await FileHelper.ReadAsync<T>(file, FromStream<T>);
+
+                lock (_gate)
+                {
+                    if (_cache.TryGetValue(file.FullName, out cached))
+                    {
+                        return (T)cached.Target;
+                    }
+                    _cache.TryAdd(file.FullName, new WeakReference(value));
+                }
+            }
+            else
+            {
+                value = await FileHelper.ReadAsync<T>(file, FromStream<T>);
             }
 
-            var value = await FileHelper.ReadAsync<T>(file, FromStream<T>);
-            if (Settings.IsCaching)
-            {
-                _cache.TryAdd(file.FullName, new WeakReference(value));
-            }
             if (Settings.IsTrackingDirty)
             {
                 Tracker.TrackOrUpdate(file, value);
@@ -213,7 +234,7 @@
         {
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
-            var fileInfo = GetFileInfo(fileName);
+            var fileInfo = GetFileInfoCore(fileName);
             return Read<T>(fileInfo);
         }
 
@@ -228,6 +249,7 @@
         {
             VerifyDisposed();
             Ensure.NotNull(file, "file");
+            T value;
             if (Settings.IsCaching)
             {
                 WeakReference cached;
@@ -235,17 +257,27 @@
                 {
                     return (T)cached.Target;
                 }
+
+                lock (_gate)
+                {
+                    if (_cache.TryGetValue(file.FullName, out cached))
+                    {
+                        return (T)cached.Target;
+                    }
+                    value = FileHelper.Read<T>(file, FromStream<T>);
+                    _cache.TryAdd(file.FullName, new WeakReference(value));
+                }
+            }
+            else
+            {
+                value = FileHelper.Read<T>(file, FromStream<T>);
             }
 
-            var value = FileHelper.Read<T>(file, FromStream<T>);
-            if (Settings.IsCaching)
-            {
-                _cache.TryAdd(file.FullName, new WeakReference(value));
-            }
             if (Settings.IsTrackingDirty)
             {
                 Tracker.TrackOrUpdate(file, value);
             }
+
             return value;
         }
 
@@ -268,7 +300,7 @@
             Ensure.IsValidFileName(fileName, "fileName");
             Ensure.NotNull(creator, "creator");
             VerifyDisposed();
-            var file = GetFileInfo(fileName);
+            var file = GetFileInfoCore(fileName);
             return ReadOrCreate(file, creator);
         }
 
@@ -309,7 +341,6 @@
         /// <param name="item"></param>
         public virtual void Save<T>(T item)
         {
-            Ensure.NotNull(item, "item");
             VerifyDisposed();
             SaveCore(item);
         }
@@ -322,10 +353,9 @@
 
         public virtual void Save<T>(T item, string fileName)
         {
-            Ensure.NotNull(item, "item");
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
-            var file = GetFileInfo(fileName);
+            var file = GetFileInfoCore(fileName);
             Save(item, file);
         }
 
@@ -337,7 +367,6 @@
         /// <param name="fileName"></param>
         public virtual void SaveAndClose<T>(T item, string fileName)
         {
-            Ensure.NotNull(item, "item");
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
             Save(item, fileName);
@@ -347,7 +376,6 @@
 
         public virtual void Save<T>(T item, FileInfo file)
         {
-            Ensure.NotNull(item, "item");
             Ensure.NotNull(file, "file");
             VerifyDisposed();
             SaveCore(item, file);
@@ -361,7 +389,6 @@
         /// <param name="file"></param>
         public virtual void SaveAndClose<T>(T item, FileInfo file)
         {
-            Ensure.NotNull(item, "item");
             Ensure.NotNull(file, "file");
             VerifyDisposed();
             SaveCore(item, file);
@@ -380,15 +407,22 @@
 
         public virtual void Save<T>(T item, FileInfo file, FileInfo tempFile)
         {
-            Ensure.NotNull(item, "item");
             Ensure.NotNull(file, "file");
             VerifyDisposed();
             SaveCore(item, file, tempFile);
         }
 
+        public virtual void Save(Stream stream, FileInfo file, FileInfo tempFile)
+        {
+            Ensure.NotNull(file, "file");
+            VerifyDisposed();
+            SaveCore(stream, file, tempFile);
+        }
+
         protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
         {
-            var createdBackup = PrepareForSaveCore(item, file);
+            CacheAndTrackCore(item, file);
+            var createdBackup = Backuper.TryBackup(file);
             try
             {
                 if (item == null)
@@ -424,7 +458,7 @@
             Ensure.NotNull(item, "item");
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
-            var fileInfo = GetFileInfo(fileName);
+            var fileInfo = GetFileInfoCore(fileName);
             return SaveAsync(item, fileInfo);
         }
 
@@ -442,25 +476,49 @@
             Ensure.NotNull(file, "file");
             Ensure.NotNull(tempFile, "tempFile");
             VerifyDisposed();
+            if (item == null)
+            {
+                FileHelper.HardDelete(file);
+                return;
+            }
+            CacheAndTrackCore(item, file);
+            using (var stream = ToStream(item))
+            {
+                await SaveAsync(stream, file, tempFile).ConfigureAwait(false);
+            }
+        }
 
-            var createdBackup = PrepareForSaveCore(item, file);
+        public virtual Task SaveAsync<T>(Stream stream)
+        {
+            Ensure.NotNull(stream, "stream");
+            var file = GetFileInfo<T>();
+            return SaveAsync(stream, file);
+        }
 
+        public virtual Task SaveAsync(Stream stream, string fileName)
+        {
+            Ensure.NotNull(stream, "stream");
+            Ensure.IsValidFileName(fileName, "fileName");
+            var file = GetFileInfoCore(fileName);
+            return SaveAsync(stream, file);
+        }
+
+        public virtual Task SaveAsync(Stream stream, FileInfo file)
+        {
+            Ensure.NotNull(stream, "stream");
+            Ensure.NotNull(file, "file");
+            var tempFile = file.WithNewExtension(Settings.TempExtension);
+            return SaveAsync(stream, file, tempFile);
+        }
+
+        public virtual async Task SaveAsync(Stream stream, FileInfo file, FileInfo tempFile)
+        {
+            Backuper.TryBackup(file);
             try
             {
-                if (item == null)
-                {
-                    FileHelper.HardDelete(file);
-                }
-                else
-                {
-                    using (var stream = ToStream(item))
-                    {
-                        await FileHelper.SaveAsync(tempFile, stream)
-                                        .ConfigureAwait(false);
-                    }
-                    tempFile.MoveTo(file);
-                    Backuper.PurgeBackups(file);
-                }
+                await tempFile.SaveAsync(stream).ConfigureAwait(false);
+                tempFile.MoveTo(file);
+                Backuper.PurgeBackups(file);
             }
             catch (Exception)
             {
@@ -490,7 +548,7 @@
         public virtual bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer)
         {
             Ensure.IsValidFileName(fileName, "fileName");
-            var fileInfo = GetFileInfo(fileName);
+            var fileInfo = GetFileInfoCore(fileName);
             return IsDirty(item, fileInfo, comparer);
         }
 
@@ -533,8 +591,8 @@
             Ensure.IsValidFileName(oldName, "oldName");
             Ensure.IsValidFileName(newName, "newName");
             VerifyDisposed();
-            var oldFile = GetFileInfo(oldName);
-            var newFile = GetFileInfo(newName);
+            var oldFile = GetFileInfoCore(oldName);
+            var newFile = GetFileInfoCore(newName);
             return CanRename(oldFile, newFile);
         }
 
@@ -543,8 +601,8 @@
             Ensure.IsValidFileName(oldName, "oldName");
             Ensure.IsValidFileName(newName, "newName");
             VerifyDisposed();
-            var oldFile = GetFileInfo(oldName);
-            var newFile = GetFileInfo(newName);
+            var oldFile = GetFileInfoCore(oldName);
+            var newFile = GetFileInfoCore(newName);
             Rename(oldFile, newFile, owerWrite);
         }
 
@@ -553,7 +611,7 @@
             Ensure.NotNull(oldName, "oldName");
             Ensure.IsValidFileName(newName, "newName");
             VerifyDisposed();
-            var newFile = GetFileInfo(newName);
+            var newFile = GetFileInfoCore(newName);
             return CanRename(oldName, newFile);
         }
 
@@ -562,7 +620,7 @@
             Ensure.Exists(oldName, "oldName");
             Ensure.IsValidFileName(newName, "newName");
             VerifyDisposed();
-            var newFile = GetFileInfo(newName);
+            var newFile = GetFileInfoCore(newName);
             Rename(oldName, newFile, owerWrite);
         }
 
@@ -688,7 +746,7 @@
             _disposed = true;
             if (disposing)
             {
-                //FileHelper.Finished.WaitOne();
+                // FileHelper.Finished.WaitOne();
                 // Intentional no-operation.
                 // Using a transaction to wait for any current transaction has time to finish.
             }
@@ -698,9 +756,7 @@
         {
             if (_disposed)
             {
-                throw new ObjectDisposedException(
-                    GetType()
-                        .FullName);
+                throw new ObjectDisposedException(GetType().FullName);
             }
         }
 
@@ -732,7 +788,7 @@
             }
         }
 
-        private bool PrepareForSaveCore<T>(T item, FileInfo file)
+        private void CacheAndTrackCore<T>(T item, FileInfo file)
         {
             if (Settings.IsCaching)
             {
@@ -743,8 +799,6 @@
             {
                 Tracker.TrackOrUpdate(file, item);
             }
-
-            return Backuper.TryBackup(file);
         }
     }
 }
