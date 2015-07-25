@@ -62,6 +62,7 @@
     <Compile Include="ChangeTracking\ChangeTracker.cs" />
     <Compile Include="ChangeTracking\PropertyTrackerCollection.cs" />
     <Compile Include="ChangeTracking\TrackingAttribute.cs" />
+    <Compile Include="Contracts\IAsyncFileNameRepository.cs" />
     <Compile Include="Contracts\IDirty.cs" />
     <Compile Include="Contracts\IFileNameRepository.cs" />
     <Compile Include="Contracts\IRepositoryWithSettings.cs" />

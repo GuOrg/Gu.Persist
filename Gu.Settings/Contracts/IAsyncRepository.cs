@@ -11,6 +11,20 @@ namespace Gu.Settings
 
         void Delete(FileInfo file, bool deleteBackups);
 
+        /// <summary>
+        /// Gets the fileinfo for that is used for the type
+        /// </summary
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        FileInfo GetFileInfo<T>();
+
+        /// <summary>
+        /// Gets the fileinfo for that is used for the given filename
+        /// </summary
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        FileInfo GetFileInfo(string fileName);
+
         Task<T> ReadAsync<T>(string fileName);
 
         Task<T> ReadAsync<T>(FileInfo file);
