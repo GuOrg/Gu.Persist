@@ -165,12 +165,27 @@
             return ReadAsync<T>(file);
         }
 
+        public virtual Task<MemoryStream> ReadStreamAsync<T>()
+        {
+            VerifyDisposed();
+            var file = GetFileInfo<T>();
+            return ReadStreamAsync(file);
+        }
+
         public virtual Task<T> ReadAsync<T>(string fileName)
         {
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
             var fileInfo = GetFileInfoCore(fileName);
             return ReadAsync<T>(fileInfo);
+        }
+
+        public virtual Task<MemoryStream> ReadAsync(string fileName)
+        {
+            Ensure.IsValidFileName(fileName, "fileName");
+            VerifyDisposed();
+            var fileInfo = GetFileInfoCore(fileName);
+            return ReadStreamAsync(fileInfo);
         }
 
         public virtual async Task<T> ReadAsync<T>(FileInfo file)
@@ -212,10 +227,24 @@
             return value;
         }
 
+        public virtual Task<MemoryStream> ReadStreamAsync(FileInfo file)
+        {
+            Ensure.NotNull(file, "file"); // not checking exists, framework exception is more familiar.
+            VerifyDisposed();
+            return file.ReadAsync();
+        }
+
         public virtual T Read<T>()
         {
             VerifyDisposed();
             return ReadCore<T>();
+        }
+
+        public virtual Stream ReadStream<T>()
+        {
+            VerifyDisposed();
+            var file = GetFileInfoCore<T>();
+            return Read(file);
         }
 
         protected T ReadCore<T>()
@@ -234,8 +263,16 @@
         {
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
-            var fileInfo = GetFileInfoCore(fileName);
-            return Read<T>(fileInfo);
+            var file = GetFileInfoCore(fileName);
+            return Read<T>(file);
+        }
+
+        public virtual Stream Read(string fileName)
+        {
+            Ensure.IsValidFileName(fileName, "fileName");
+            VerifyDisposed();
+            var file = GetFileInfoCore(fileName);
+            return Read(file);
         }
 
         public virtual T Read<T>(FileInfo file)
@@ -243,6 +280,13 @@
             Ensure.NotNull(file, "file");
             VerifyDisposed();
             return ReadCore<T>(file);
+        }
+
+        public virtual Stream Read(FileInfo file)
+        {
+            Ensure.NotNull(file, "file");
+            VerifyDisposed();
+            return file.OpenRead();
         }
 
         protected T ReadCore<T>(FileInfo file)
@@ -343,6 +387,15 @@
         {
             VerifyDisposed();
             SaveCore(item);
+        }
+
+        public virtual void SaveAndClose<T>(T item)
+        {
+            VerifyDisposed();
+            var file = GetFileInfoCore<T>();
+            Save(item, file);
+            RemoveFromCache(item);
+            RemoveFromDirtyTracker(item);
         }
 
         protected void SaveCore<T>(T item)
@@ -458,7 +511,7 @@
 
             using (var stream = ToStream(item))
             {
-                SaveCore(stream,file, tempFile);
+                SaveCore(stream, file, tempFile);
             }
         }
 

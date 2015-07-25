@@ -31,17 +31,23 @@ namespace Gu.Settings
         /// <returns></returns>
         internal static async Task<T> ReadAsync<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
-            using (var ms = new MemoryStream())
+            using (var ms = await ReadAsync(file).ConfigureAwait(false))
             {
-                using (var fileStream = File.OpenRead(file.FullName))
-                {
-                    await fileStream.CopyToAsync(ms)
-                                    .ConfigureAwait(false);
-                }
-
-                ms.Position = 0;
                 return fromStream(ms);
             }
+        }
+
+        internal static async Task<MemoryStream> ReadAsync(this FileInfo file)
+        {
+            var ms = new MemoryStream();
+            using (var fileStream = File.OpenRead(file.FullName))
+            {
+                await fileStream.CopyToAsync(ms)
+                                .ConfigureAwait(false);
+            }
+
+            ms.Position = 0;
+            return ms;
         }
 
         /// <summary>
