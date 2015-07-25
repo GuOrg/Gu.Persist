@@ -106,6 +106,13 @@
             Delete(file, deleteBackups);
         }
 
+        public virtual void DeleteBackups<T>()
+        {
+            VerifyDisposed();
+            var file = GetFileInfo<T>();
+            DeleteBackups(file);
+        }
+
         public virtual void Delete(string fileName, bool deleteBackups)
         {
             Ensure.IsValidFileName(fileName, "fileName");
@@ -114,15 +121,30 @@
             Delete(file, deleteBackups);
         }
 
+        public virtual void DeleteBackups(string fileName)
+        {
+            Ensure.IsValidFileName(fileName, "fileName");
+            VerifyDisposed();
+            var file = GetFileInfoCore(fileName);
+            DeleteBackups(file);
+        }
+
         public virtual void Delete(FileInfo file, bool deleteBackups)
         {
             Ensure.NotNull(file, "file");
             VerifyDisposed();
             file.Delete();
+            file.DeleteSoftDeleteFileFor();
             if (deleteBackups)
             {
-                Backuper.DeleteBackups(file);
+                DeleteBackups(file);
             }
+        }
+
+        public virtual void DeleteBackups(FileInfo file)
+        {
+            Ensure.NotNull(file, "file");
+            Backuper.DeleteBackups(file);
         }
 
         public virtual bool Exists<T>()

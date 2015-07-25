@@ -3,6 +3,9 @@ namespace Gu.Settings.Tests.Repositories
     using System;
     using System.IO;
     using System.Threading.Tasks;
+
+    using Gu.Settings.Backup;
+
     using NUnit.Framework;
     using Settings.IO;
 
@@ -22,14 +25,14 @@ namespace Gu.Settings.Tests.Repositories
 
         protected FileInfo RepoSettingFile;
 
-        private  FileInfo _dummyFile;
-        private  FileInfo _dummyNewName;
+        private FileInfo _dummyFile;
+        private FileInfo _dummyNewName;
 
-        private  FileInfo _dummySoftDelete;
-        private  FileInfo _dummySoftDeleteNewName;
+        private FileInfo _dummySoftDelete;
+        private FileInfo _dummySoftDeleteNewName;
 
-        private  FileInfo _dummyBackup;
-        private  FileInfo _dummyBackupNewName;
+        private FileInfo _dummyBackup;
+        private FileInfo _dummyBackupNewName;
 
         public IRepository Repository;
 
@@ -199,6 +202,45 @@ namespace Gu.Settings.Tests.Repositories
             var read = Read<DummySerializable>(_file);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void Delete(bool deleteBakups)
+        {
+            _dummyFile.VoidCreate();
+            _dummySoftDelete.VoidCreate();
+            if (!(Repository.Backuper is NullBackuper))
+            {
+                _dummyBackup.VoidCreate();
+                AssertFile.Exists(true, _dummyBackup);
+            } 
+            AssertFile.Exists(true, _dummyFile);
+            AssertFile.Exists(true, _dummySoftDelete);
+
+            Repository.Delete<DummySerializable>(deleteBakups);
+            AssertFile.Exists(false, _dummyFile);
+            AssertFile.Exists(false, _dummySoftDelete);
+            if (!(Repository.Backuper is NullBackuper))
+            {
+                AssertFile.Exists(!deleteBakups, _dummyBackup);
+            }
+        }
+
+        [Test]
+        public void DeleteBackups()
+        {
+            if (Repository.Backuper is NullBackuper)
+            {
+                return;
+            }
+            _dummySoftDelete.VoidCreate();
+            _dummyBackup.VoidCreate();
+            AssertFile.Exists(true, _dummySoftDelete);
+            AssertFile.Exists(true, _dummyBackup);
+            Repository.DeleteBackups<DummySerializable>();
+            AssertFile.Exists(false, _dummySoftDelete);
+            AssertFile.Exists(false, _dummyBackup);
         }
 
         [Test]
