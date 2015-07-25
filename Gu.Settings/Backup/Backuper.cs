@@ -148,7 +148,7 @@
             {
                 backup.File.DeleteSoftDeleteFileFor();
             }
-            
+
             if (Setting.NumberOfBackups > 0)
             {
                 while (allBackups.Count > Setting.NumberOfBackups) // this is not efficient but the number of backups should be low
@@ -158,7 +158,7 @@
                     allBackups.Remove(backupFile);
                 }
             }
-            
+
             if (Setting.MaxAgeInDays > 0 && Setting.MaxAgeInDays < Int32.MaxValue)
             {
                 while (true) // this is not efficient but the number of backups should be low
@@ -228,6 +228,23 @@
                 {
                     withNewName = soft.WithNewName(newName, Setting);
                     soft.Rename(withNewName, owerWrite);
+                }
+            }
+        }
+
+        public void DeleteBackups(FileInfo file)
+        {
+            var soft = file.GetSoftDeleteFileFor();
+            if (soft != null)
+            {
+                soft.Delete();
+            }
+            var allBackups = BackupFile.GetAllBackupsFor(file, Setting);
+            foreach (var backup in allBackups)
+            {
+                if (backup.File != null)
+                {
+                    backup.File.Delete();
                 }
             }
         }

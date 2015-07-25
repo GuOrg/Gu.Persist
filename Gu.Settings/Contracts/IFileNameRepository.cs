@@ -7,6 +7,19 @@
     public interface IFileNameRepository
     {
         /// <summary>
+        /// Delete the file if it exists.
+        /// </summary>
+        /// <param name="fileName">
+        /// Filename can be either of:
+        /// C:\Temp\FileName.cfg
+        /// FileName.cfg
+        /// FileName
+        /// </param>
+        /// <param name="deleteBackups"></param>
+        /// <returns></returns>
+        void Delete(string fileName, bool deleteBackups);
+
+        /// <summary>
         /// Check if a file exists
         /// </summary>
         /// <param name="fileName">

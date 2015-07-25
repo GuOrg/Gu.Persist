@@ -39,5 +39,7 @@
         bool CanRename(FileInfo file, string newName);
 
         void Rename(FileInfo file, string newName, bool owerWrite);
+
+        void DeleteBackups(FileInfo file);
     }
 }
