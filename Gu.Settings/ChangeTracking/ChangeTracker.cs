@@ -92,13 +92,21 @@
             {
                 return;
             }
-
+            // settings.AddSpecialType<FileInfo>(TrackAs.Explicit)
             var message =
                 string.Format(
-                    @"Create tracker failed for {1}.{2}{0}. Solve the problem by:{0}1) Implementing INotifyPropertyChanged {0}2) Implementing INotifyPropertyChanged{0}3) Add TrackingAttribute: Immutable to type:{1}{0}4) AddTrackingAttribute: Explicit to {2} ",
-                    Environment.NewLine,
+                    @"Create tracker failed for {0}.{1}." + Environment.NewLine +
+                    @"Solve the problem by:" +Environment.NewLine +
+                    @"1) Add a specialcase to tracker setting example: " + Environment.NewLine +
+                    @"    settings.AddSpecialType<YourType>(TrackAs.Explicit)" + Environment.NewLine +
+                    @"    Note that this requires you to track changes." + Environment.NewLine +
+                    @"2) Implementing INotifyPropertyChanged for {2}" + Environment.NewLine +
+                    @"3) Implementing INotifyCollectionChanged for {2}" +Environment.NewLine +
+                    @"4) Add TrackingAttribute: Immutable to type:{1}" + Environment.NewLine +
+                    @"5) Add TrackingAttribute: Explicit to {2} ",
                     parentType.Name,
-                    parentProperty.Name);
+                    parentProperty.Name,
+                    parentProperty.PropertyType.Name);
             throw new ArgumentException(message);
         }
 
