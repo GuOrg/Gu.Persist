@@ -35,7 +35,11 @@
             settings.AddSpecialType<Type>(TrackAs.Immutable);
             settings.AddSpecialType<CultureInfo>(TrackAs.Immutable);
             settings.AddSpecialType<DateTime>(TrackAs.Immutable);
+            settings.AddSpecialType<DateTime?>(TrackAs.Immutable);
+            settings.AddSpecialType<DateTimeOffset>(TrackAs.Immutable);
+            settings.AddSpecialType<DateTimeOffset?>(TrackAs.Immutable);
             settings.AddSpecialType<TimeSpan>(TrackAs.Immutable);
+            settings.AddSpecialType<TimeSpan?>(TrackAs.Immutable);
             settings.AddSpecialType<string>(TrackAs.Immutable);
             return settings;
         }
