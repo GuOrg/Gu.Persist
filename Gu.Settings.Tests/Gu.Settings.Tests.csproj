@@ -83,6 +83,7 @@
     <Compile Include="IO\BinaryHelperTests.cs" />
     <Compile Include="Repositories\BinaryDefault.cs" />
     <Compile Include="Repositories\BinaryNoBackup.cs" />
+    <Compile Include="Repositories\FileCacheTests.cs" />
     <Compile Include="Repositories\XmlDefault.cs" />
     <Compile Include="IO\RepositorySettingTests.cs" />
     <Compile Include="Repositories\RepositoryTests.cs" />

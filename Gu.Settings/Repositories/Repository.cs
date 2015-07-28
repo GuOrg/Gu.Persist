@@ -10,12 +10,14 @@
     using System.Threading.Tasks;
 
     using Gu.Settings.Backup;
+    using Gu.Settings.Repositories;
+
     using Internals;
 
     public abstract class Repository : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IAutoSavingRepository, IRepositoryWithSettings, IDisposable
     {
         private readonly object _gate = new object();
-        private readonly ConcurrentDictionary<string, WeakReference> _cache = new ConcurrentDictionary<string, WeakReference>(StringComparer.OrdinalIgnoreCase);
+        private readonly FileCache _fileCache = new FileCache();
         private bool _disposed;
         [EditorBrowsable(EditorBrowsableState.Never)]
         private IBackuper _backuper;
@@ -217,10 +219,10 @@
             T value;
             if (Settings.IsCaching)
             {
-                WeakReference cached;
-                if (_cache.TryGetValue(file.FullName, out cached))
+                T cached;
+                if (_fileCache.TryGetValue(file.FullName, out cached))
                 {
-                    return (T)cached.Target;
+                    return cached;
                 }
 
                 // can't await  inside the lock. 
@@ -230,11 +232,11 @@
 
                 lock (_gate)
                 {
-                    if (_cache.TryGetValue(file.FullName, out cached))
+                    if (_fileCache.TryGetValue(file.FullName, out cached))
                     {
-                        return (T)cached.Target;
+                        return cached;
                     }
-                    _cache.TryAdd(file.FullName, new WeakReference(value));
+                    _fileCache.Add(file.FullName, value);
                 }
             }
             else
@@ -244,7 +246,7 @@
 
             if (Settings.IsTrackingDirty)
             {
-                Tracker.TrackOrUpdate(file, value);
+                Tracker.Track(file, value);
             }
             return value;
         }
@@ -318,20 +320,20 @@
             T value;
             if (Settings.IsCaching)
             {
-                WeakReference cached;
-                if (_cache.TryGetValue(file.FullName, out cached))
+                T cached;
+                if (_fileCache.TryGetValue(file.FullName, out cached))
                 {
-                    return (T)cached.Target;
+                    return (T)cached;
                 }
 
                 lock (_gate)
                 {
-                    if (_cache.TryGetValue(file.FullName, out cached))
+                    if (_fileCache.TryGetValue(file.FullName, out cached))
                     {
-                        return (T)cached.Target;
+                        return (T)cached;
                     }
                     value = FileHelper.Read<T>(file, FromStream<T>);
-                    _cache.TryAdd(file.FullName, new WeakReference(value));
+                    _fileCache.Add(file.FullName, value);
                 }
             }
             else
@@ -341,7 +343,7 @@
 
             if (Settings.IsTrackingDirty)
             {
-                Tracker.TrackOrUpdate(file, value);
+                Tracker.Track(file, value);
             }
 
             return value;
@@ -473,8 +475,6 @@
 
         protected void SaveCore<T>(T item, FileInfo file)
         {
-            Ensure.NotNull(item, "item");
-            Ensure.NotNull(file, "file");
             VerifyDisposed();
             var tempFile = file.WithNewExtension(Settings.TempExtension);
             SaveCore(item, file, tempFile);
@@ -560,14 +560,12 @@
 
         public virtual Task SaveAsync<T>(T item)
         {
-            Ensure.NotNull(item, "item");
             var file = GetFileInfo<T>();
             return SaveAsync(item, file);
         }
 
         public virtual Task SaveAsync<T>(T item, string fileName)
         {
-            Ensure.NotNull(item, "item");
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
             var fileInfo = GetFileInfoCore(fileName);
@@ -576,7 +574,6 @@
 
         public virtual Task SaveAsync<T>(T item, FileInfo file)
         {
-            Ensure.NotNull(item, "item");
             Ensure.NotNull(file, "file");
             VerifyDisposed();
             var tempFile = file.WithNewExtension(Settings.TempExtension);
@@ -751,7 +748,7 @@
             {
                 return false;
             }
-            if (_cache.ContainsKey(newName.FullName))
+            if (_fileCache.ContainsKey(newName.FullName))
             {
                 return false;
             }
@@ -774,7 +771,7 @@
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(newName.Name);
                 Backuper.Rename(oldName, fileNameWithoutExtension, owerWrite);
             }
-            _cache.ChangeKey(oldName.FullName, newName.FullName, owerWrite);
+            _fileCache.ChangeKey(oldName.FullName, newName.FullName, owerWrite);
             if (Settings.IsTrackingDirty && Tracker != null)
             {
                 Tracker.Rename(oldName, newName, owerWrite);
@@ -811,20 +808,13 @@
         public void ClearCache()
         {
             VerifyDisposed();
-            _cache.Clear();
+            _fileCache.Clear();
         }
 
         public void RemoveFromCache<T>(T item)
         {
             VerifyDisposed();
-            var matches = _cache.Where(kvp => kvp.Value != null && ReferenceEquals(kvp.Value.Target, item))
-                                .Select(x => x.Key)
-                                .ToArray();
-            foreach (var key in matches)
-            {
-                WeakReference temp;
-                _cache.TryRemove(key, out temp);
-            }
+            _fileCache.TryRemove(item);
         }
 
         public void ClearTrackerCache()
@@ -858,6 +848,8 @@
             _disposed = true;
             if (disposing)
             {
+                _fileCache.Dispose();
+                Tracker.Dispose();
                 // FileHelper.Finished.WaitOne();
                 // Intentional no-operation.
                 // Using a transaction to wait for any current transaction has time to finish.
@@ -886,17 +878,17 @@
         protected void CacheCore<T>(T item, FileInfo file)
         {
             VerifyDisposed();
-            WeakReference cached;
-            if (_cache.TryGetValue(file.FullName, out cached))
+            T cached;
+            if (_fileCache.TryGetValue(file.FullName, out cached))
             {
-                if (!ReferenceEquals(item, cached.Target))
+                if (!ReferenceEquals(item, cached))
                 {
                     throw new InvalidOperationException("Trying to save a different instance than the cached");
                 }
             }
             else
             {
-                _cache.TryAdd(file.FullName, new WeakReference(item));
+                _fileCache.Add(file.FullName, item);
             }
         }
 
@@ -909,7 +901,7 @@
 
             if (Settings.IsTrackingDirty)
             {
-                Tracker.TrackOrUpdate(file, item);
+                Tracker.Track(file, item);
             }
         }
     }
