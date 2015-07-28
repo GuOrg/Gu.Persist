@@ -90,6 +90,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\FileCache.cs" />
     <Compile Include="Settings\BackupSettings.cs" />
     <Compile Include="IO\BinaryHelper.cs" />
     <Compile Include="Contracts\IRepository.cs" />

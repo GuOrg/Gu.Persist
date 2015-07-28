@@ -6,19 +6,22 @@
     using System.IO;
     using Internals;
 
-    public class DirtyTracker : IDirtyTracker
+    public sealed class DirtyTracker : IDirtyTracker
     {
         private readonly ICloner _cloner;
         private readonly ConcurrentDictionary<string, object> _cache = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        private bool _disposed;
+
         public DirtyTracker(ICloner cloner)
         {
             Ensure.NotNull(cloner, "cloner");
             _cloner = cloner;
         }
 
-        public virtual void TrackOrUpdate<T>(FileInfo file, T item)
+        public void Track<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, "file");
+            VerifyDisposed();
             var clone = _cloner.Clone(item);
             _cache.AddOrUpdate(file.FullName, clone, (f, o) => clone);
         }
@@ -27,6 +30,7 @@
         {
             Ensure.NotNull(oldName, "oldName");
             Ensure.NotNull(newName, "newName");
+            VerifyDisposed();
             _cache.ChangeKey(oldName.FullName, newName.FullName, owerWrite);
         }
 
@@ -38,6 +42,7 @@
         public void RemoveFromCache(FileInfo file)
         {
             Ensure.NotNull(file, "file");
+            VerifyDisposed();
             object temp;
             _cache.TryRemove(file.FullName, out temp);
         }
@@ -50,16 +55,42 @@
         /// <param name="file"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public virtual bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
+        public bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
         {
             Ensure.NotNull(file, "file");
             Ensure.NotNull(comparer, "comparer");
+            VerifyDisposed();
             object clone;
             if (_cache.TryGetValue(file.FullName, out clone))
             {
                 return !comparer.Equals((T)clone, item);
             }
             return item != null;
+        }
+
+        /// <summary>
+        /// Make the class sealed when using this. 
+        /// Call VerifyDisposed at the start of all public methods
+        /// </summary>
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+            _disposed = true;
+            _cache.Clear();
+             // Dispose some stuff now
+        }
+
+        private void VerifyDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(
+                    GetType()
+                        .FullName);
+            }
         }
     }
 }
