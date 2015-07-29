@@ -41,6 +41,17 @@
             settings.AddSpecialType<TimeSpan>(TrackAs.Immutable);
             settings.AddSpecialType<TimeSpan?>(TrackAs.Immutable);
             settings.AddSpecialType<string>(TrackAs.Immutable);
+            settings.AddSpecialType<double?>(TrackAs.Immutable);
+            settings.AddSpecialType<float?>(TrackAs.Immutable);
+            settings.AddSpecialType<decimal?>(TrackAs.Immutable);
+            settings.AddSpecialType<int?>(TrackAs.Immutable);
+            settings.AddSpecialType<uint?>(TrackAs.Immutable);
+            settings.AddSpecialType<long?>(TrackAs.Immutable);
+            settings.AddSpecialType<ulong?>(TrackAs.Immutable);
+            settings.AddSpecialType<short?>(TrackAs.Immutable);
+            settings.AddSpecialType<ushort?>(TrackAs.Immutable);
+            settings.AddSpecialType<sbyte?>(TrackAs.Immutable);
+            settings.AddSpecialType<byte?>(TrackAs.Immutable);
             return settings;
         }
     }
