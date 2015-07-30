@@ -148,7 +148,7 @@ namespace Gu.Settings.Tests.Repositories
         public async Task ReadAsync()
         {
             Save(_dummy, _file);
-            var read = await Repository.ReadAsync<DummySerializable>(_file);
+            var read = await Repository.ReadAsync<DummySerializable>(_file).ConfigureAwait(false);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
         }
@@ -328,12 +328,12 @@ namespace Gu.Settings.Tests.Repositories
         [Test]
         public async Task SaveAsyncCreatesBackup()
         {
-            await Repository.SaveAsync(_dummy, _file);
+            await Repository.SaveAsync(_dummy, _file).ConfigureAwait(false);
             AssertFile.Exists(true, _file);
             AssertFile.Exists(false, _backup);
 
             _dummy.Value++;
-            await Repository.SaveAsync(_dummy, _file);
+            await Repository.SaveAsync(_dummy, _file).ConfigureAwait(false);
 
             AssertFile.Exists(true, _file);
             var createsBackups = Settings.BackupSettings != null && Settings.BackupSettings.IsCreatingBackups;
