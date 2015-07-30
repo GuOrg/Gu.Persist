@@ -204,7 +204,7 @@
             return ReadAsync<T>(fileInfo);
         }
 
-        public virtual Task<MemoryStream> ReadAsync(string fileName)
+        public virtual Task<MemoryStream> ReadStreamAsync(string fileName)
         {
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
@@ -268,7 +268,7 @@
         {
             VerifyDisposed();
             var file = GetFileInfoCore<T>();
-            return Read(file);
+            return ReadStream(file);
         }
 
         protected T ReadCore<T>()
@@ -291,12 +291,12 @@
             return Read<T>(file);
         }
 
-        public virtual Stream Read(string fileName)
+        public virtual Stream ReadStream(string fileName)
         {
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
             var file = GetFileInfoCore(fileName);
-            return Read(file);
+            return ReadStream(file);
         }
 
         public virtual T Read<T>(FileInfo file)
@@ -306,7 +306,7 @@
             return ReadCore<T>(file);
         }
 
-        public virtual Stream Read(FileInfo file)
+        public virtual Stream ReadStream(FileInfo file)
         {
             Ensure.NotNull(file, "file");
             VerifyDisposed();
@@ -487,14 +487,14 @@
             SaveCore(item, file, tempFile);
         }
 
-        public virtual void Save<T>(Stream stream)
+        public virtual void SaveStream<T>(Stream stream)
         {
             VerifyDisposed();
             var file = GetFileInfoCore<T>();
             SaveCore(stream, file);
         }
 
-        public virtual void Save(Stream stream, string fileName)
+        public virtual void SaveStream(Stream stream, string fileName)
         {
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
@@ -507,19 +507,19 @@
         /// </summary>
         /// <param name="stream">If the stream is null the file is deleted</param>
         /// <param name="file"></param>
-        public virtual void Save(Stream stream, FileInfo file)
+        public virtual void SaveStream(Stream stream, FileInfo file)
         {
             Ensure.NotNull(file, "file");
             VerifyDisposed();
             var tempFile = file.WithNewExtension(Settings.TempExtension);
-            SaveCore(stream, file, tempFile);
+            SaveStreamCore(stream, file, tempFile);
         }
 
-        public virtual void Save(Stream stream, FileInfo file, FileInfo tempFile)
+        public virtual void SaveStream(Stream stream, FileInfo file, FileInfo tempFile)
         {
             Ensure.NotNull(file, "file");
             VerifyDisposed();
-            SaveCore(stream, file, tempFile);
+            SaveStreamCore(stream, file, tempFile);
         }
 
         protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
@@ -533,11 +533,11 @@
 
             using (var stream = ToStream(item))
             {
-                SaveCore(stream, file, tempFile);
+                SaveStreamCore(stream, file, tempFile);
             }
         }
 
-        protected void SaveCore(Stream stream, FileInfo file, FileInfo tempFile)
+        protected void SaveStreamCore(Stream stream, FileInfo file, FileInfo tempFile)
         {
             if (stream == null)
             {
@@ -593,34 +593,34 @@
             CacheAndTrackCore(item, file);
             using (var stream = ToStream(item))
             {
-                await SaveAsync(stream, file, tempFile).ConfigureAwait(false);
+                await SaveStreamAsync(stream, file, tempFile).ConfigureAwait(false);
             }
         }
 
-        public virtual Task SaveAsync<T>(Stream stream)
+        public virtual Task SaveStreamAsync<T>(Stream stream)
         {
             Ensure.NotNull(stream, "stream");
             var file = GetFileInfo<T>();
-            return SaveAsync(stream, file);
+            return SaveStreamAsync(stream, file);
         }
 
-        public virtual Task SaveAsync(Stream stream, string fileName)
+        public virtual Task SaveStreamAsync(Stream stream, string fileName)
         {
             Ensure.NotNull(stream, "stream");
             Ensure.IsValidFileName(fileName, "fileName");
             var file = GetFileInfoCore(fileName);
-            return SaveAsync(stream, file);
+            return SaveStreamAsync(stream, file);
         }
 
-        public virtual Task SaveAsync(Stream stream, FileInfo file)
+        public virtual Task SaveStreamAsync(Stream stream, FileInfo file)
         {
             Ensure.NotNull(stream, "stream");
             Ensure.NotNull(file, "file");
             var tempFile = file.WithNewExtension(Settings.TempExtension);
-            return SaveAsync(stream, file, tempFile);
+            return SaveStreamAsync(stream, file, tempFile);
         }
 
-        public virtual async Task SaveAsync(Stream stream, FileInfo file, FileInfo tempFile)
+        public virtual async Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile)
         {
             Backuper.TryBackup(file);
             try

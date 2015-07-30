@@ -131,37 +131,37 @@
 
         Task<MemoryStream> ReadStreamAsync<T>();
 
-        Task<MemoryStream> ReadAsync(string fileName);
+        Task<MemoryStream> ReadStreamAsync(string fileName);
 
         Task<MemoryStream> ReadStreamAsync(FileInfo file);
 
         Stream ReadStream<T>();
 
-        Stream Read(string fileName);
+        Stream ReadStream(string fileName);
 
-        Stream Read(FileInfo file);
+        Stream ReadStream(FileInfo file);
 
         void SaveAndClose<T>(T item);
 
-        void Save<T>(Stream stream);
+        void SaveStream<T>(Stream stream);
 
-        void Save(Stream stream, string fileName);
+        void SaveStream(Stream stream, string fileName);
 
         /// <summary>
         /// Saves the stream and creates backups.
         /// </summary>
         /// <param name="stream">If the stream is null the file is deleted</param>
         /// <param name="file"></param>
-        void Save(Stream stream, FileInfo file);
+        void SaveStream(Stream stream, FileInfo file);
 
-        void Save(Stream stream, FileInfo file, FileInfo tempFile);
+        void SaveStream(Stream stream, FileInfo file, FileInfo tempFile);
 
-        Task SaveAsync<T>(Stream stream);
+        Task SaveStreamAsync<T>(Stream stream);
 
-        Task SaveAsync(Stream stream, string fileName);
+        Task SaveStreamAsync(Stream stream, string fileName);
 
-        Task SaveAsync(Stream stream, FileInfo file);
+        Task SaveStreamAsync(Stream stream, FileInfo file);
 
-        Task SaveAsync(Stream stream, FileInfo file, FileInfo tempFile);
+        Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile);
     }
 }
