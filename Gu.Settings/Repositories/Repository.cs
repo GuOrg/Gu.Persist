@@ -228,7 +228,7 @@
                 // can't await  inside the lock. 
                 // If there are many threads reading the same only the first is used
                 // the other reads are wasted, can't think of anything better than this.
-                value = await FileHelper.ReadAsync<T>(file, FromStream<T>);
+                value = await FileHelper.ReadAsync<T>(file, FromStream<T>).ConfigureAwait(false);
 
                 lock (_gate)
                 {
@@ -241,7 +241,7 @@
             }
             else
             {
-                value = await FileHelper.ReadAsync<T>(file, FromStream<T>);
+                value = await FileHelper.ReadAsync<T>(file, FromStream<T>).ConfigureAwait(false);
             }
 
             if (Settings.IsTrackingDirty)
@@ -491,7 +491,7 @@
         {
             VerifyDisposed();
             var file = GetFileInfoCore<T>();
-            SaveCore(stream, file);
+            SaveStream(stream, file);
         }
 
         public virtual void SaveStream(Stream stream, string fileName)
@@ -499,7 +499,7 @@
             Ensure.IsValidFileName(fileName, "fileName");
             VerifyDisposed();
             var file = GetFileInfoCore(fileName);
-            SaveCore(stream, file);
+            SaveStream(stream, file);
         }
 
         /// <summary>
