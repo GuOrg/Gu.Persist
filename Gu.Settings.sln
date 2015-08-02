@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E325F9
 	ProjectSection(SolutionItems) = preProject
 		Gu.Settings.Json\Gu.Settings.Json.nuspec = Gu.Settings.Json\Gu.Settings.Json.nuspec
 		Gu.Settings\Gu.Settings.nuspec = Gu.Settings\Gu.Settings.nuspec
+		Gu.Settings.RuntimeXml\Gu.Settings.RuntimeXml.nuspec = Gu.Settings.RuntimeXml\Gu.Settings.RuntimeXml.nuspec
+		Gu.Settings.SystemXml\Gu.Settings.SystemXml.nuspec = Gu.Settings.SystemXml\Gu.Settings.SystemXml.nuspec
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
@@ -21,6 +23,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.Demo", "Gu.Settings.Demo\Gu.Settings.Demo.csproj", "{963F1418-ED9B-47C6-92B3-363C3720BEC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.Json.Tests", "Gu.Settings.Json.Tests\Gu.Settings.Json.Tests.csproj", "{EFF48C6B-4FB4-467D-A2E3-0EC8D7236D75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.RuntimeXml", "Gu.Settings.RuntimeXml\Gu.Settings.RuntimeXml.csproj", "{E2DE0B67-6A90-4CE9-8CF7-4118BBE9CF79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.SystemXml", "Gu.Settings.SystemXml\Gu.Settings.SystemXml.csproj", "{686E3D46-4655-4E16-92BA-156275FA1FF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.RuntimeXml.Tests", "Gu.Settings.RuntimeXml.Tests\Gu.Settings.RuntimeXml.Tests.csproj", "{AA049462-982F-44EF-91A4-E0BE4AA3CCDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.SystemXml.Tests", "Gu.Settings.SystemXml.Tests\Gu.Settings.SystemXml.Tests.csproj", "{6D72ACFA-A440-41CF-8122-2972AA714E98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +69,30 @@ Global
 		{EFF48C6B-4FB4-467D-A2E3-0EC8D7236D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFF48C6B-4FB4-467D-A2E3-0EC8D7236D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFF48C6B-4FB4-467D-A2E3-0EC8D7236D75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2DE0B67-6A90-4CE9-8CF7-4118BBE9CF79}.CreateNugetPackages|Any CPU.ActiveCfg = CreateNugetPackage|Any CPU
+		{E2DE0B67-6A90-4CE9-8CF7-4118BBE9CF79}.CreateNugetPackages|Any CPU.Build.0 = CreateNugetPackage|Any CPU
+		{E2DE0B67-6A90-4CE9-8CF7-4118BBE9CF79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2DE0B67-6A90-4CE9-8CF7-4118BBE9CF79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2DE0B67-6A90-4CE9-8CF7-4118BBE9CF79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2DE0B67-6A90-4CE9-8CF7-4118BBE9CF79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{686E3D46-4655-4E16-92BA-156275FA1FF2}.CreateNugetPackages|Any CPU.ActiveCfg = CreateNugetPackage|Any CPU
+		{686E3D46-4655-4E16-92BA-156275FA1FF2}.CreateNugetPackages|Any CPU.Build.0 = CreateNugetPackage|Any CPU
+		{686E3D46-4655-4E16-92BA-156275FA1FF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{686E3D46-4655-4E16-92BA-156275FA1FF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{686E3D46-4655-4E16-92BA-156275FA1FF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{686E3D46-4655-4E16-92BA-156275FA1FF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA049462-982F-44EF-91A4-E0BE4AA3CCDF}.CreateNugetPackages|Any CPU.ActiveCfg = Release|Any CPU
+		{AA049462-982F-44EF-91A4-E0BE4AA3CCDF}.CreateNugetPackages|Any CPU.Build.0 = Release|Any CPU
+		{AA049462-982F-44EF-91A4-E0BE4AA3CCDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA049462-982F-44EF-91A4-E0BE4AA3CCDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA049462-982F-44EF-91A4-E0BE4AA3CCDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA049462-982F-44EF-91A4-E0BE4AA3CCDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D72ACFA-A440-41CF-8122-2972AA714E98}.CreateNugetPackages|Any CPU.ActiveCfg = Release|Any CPU
+		{6D72ACFA-A440-41CF-8122-2972AA714E98}.CreateNugetPackages|Any CPU.Build.0 = Release|Any CPU
+		{6D72ACFA-A440-41CF-8122-2972AA714E98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D72ACFA-A440-41CF-8122-2972AA714E98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D72ACFA-A440-41CF-8122-2972AA714E98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D72ACFA-A440-41CF-8122-2972AA714E98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

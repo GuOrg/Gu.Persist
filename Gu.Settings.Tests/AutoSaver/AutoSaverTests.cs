@@ -17,7 +17,7 @@
         private FileInfo _backup;
         private RepositorySettings _settings;
         private DummySerializable _dummy;
-        private XmlRepository _repository;
+        private BinaryRepository _repository;
         private AutoSaver _autoSaver;
         private DummySubject<object> _subject;
         private ManualResetEvent _resetEvent;
@@ -38,7 +38,7 @@
             _temp.Delete();
             _backup.Delete();
 
-            _repository = new XmlRepository(_settings);
+            _repository = new BinaryRepository(_settings);
             _autoSaver = new AutoSaver(_repository);
             _subject = new DummySubject<object>();
             _resetEvent = new ManualResetEvent(false);

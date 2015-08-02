@@ -1,4 +1,4 @@
-﻿namespace Gu.Settings
+﻿namespace Gu.Settings.SystemXml
 {
     public class XmlEqualsComparer<T> : SerializedEqualsComparer<T>
     {

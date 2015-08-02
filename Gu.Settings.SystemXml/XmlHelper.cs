@@ -1,4 +1,4 @@
-﻿namespace Gu.Settings
+﻿namespace Gu.Settings.SystemXml
 {
     using System;
     using System.Collections.Concurrent;

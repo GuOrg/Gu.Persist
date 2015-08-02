@@ -1,12 +1,14 @@
-﻿namespace Gu.Settings.Json.Tests
+namespace Gu.Settings.SystemXml.Tests
 {
     using System.IO;
 
+    using Gu.Settings.SystemXml;
+    using Gu.Settings.Tests;
     using Gu.Settings.Tests.Repositories;
-    using NUnit.Framework;
-    using Settings.Tests;
 
-    public class JsonNullSettings : RepositoryTests
+    using NUnit.Framework;
+
+    public class XmlDefault : RepositoryTests
     {
         [Test]
         public void SavesSettingsFile()
@@ -16,31 +18,17 @@
 
         protected override RepositorySettings Settings
         {
-            get
-            {
-                if (Repository == null)
-                {
-                    return null;
-                }
-                return (RepositorySettings)Repository.Settings;
-            }
+            get { return RepositorySettings.DefaultFor(Directory); }
         }
 
         protected override BackupSettings BackupSettings
         {
-            get
-            {
-                if (Repository == null)
-                {
-                    return null;
-                }
-                return Repository.Settings.BackupSettings;
-            }
+            get { return BackupSettings.DefaultFor(Directory); }
         }
 
         protected override IRepository Create()
         {
-            return new JsonRepository();
+            return new XmlRepository();
         }
 
         protected override void Save<T>(T item, FileInfo file)

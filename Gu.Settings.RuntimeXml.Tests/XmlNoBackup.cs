@@ -1,13 +1,13 @@
-namespace Gu.Settings.Tests.Repositories
+namespace Gu.Settings.RuntimeXml.Tests
 {
-    using System;
     using System.IO;
 
     using Gu.Settings.Backup;
+    using Gu.Settings.Tests.Repositories;
 
     using NUnit.Framework;
 
-    public class BinaryNoBackup : RepositoryTests
+    public class XmlNoBackup : RepositoryTests
     {
         [Test]
         public void BackuperIsNone()
@@ -17,7 +17,7 @@ namespace Gu.Settings.Tests.Repositories
 
         protected override RepositorySettings Settings
         {
-            get { return new RepositorySettings(Directory, true, true, BackupSettings, ".cfg", ".tmp"); }
+            get { return new RepositorySettings(Directory, null); }
         }
 
         protected override BackupSettings BackupSettings
@@ -27,17 +27,17 @@ namespace Gu.Settings.Tests.Repositories
 
         protected override IRepository Create()
         {
-            return new Settings.BinaryRepository(Settings);
+            return new XmlRepository(Settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)
         {
-            BinaryHelper.Save(item, file);
+            TestHelper.Save(item, file);
         }
 
         protected override T Read<T>(FileInfo file)
         {
-            return BinaryHelper.Read<T>(file);
+            return TestHelper.Read<T>(file);
         }
     }
 }

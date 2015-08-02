@@ -4,14 +4,8 @@ namespace Gu.Settings.Tests.Repositories
 
     using NUnit.Framework;
 
-    public class BinaryDefault : RepositoryTests
+    public class BinaryRepositoryDefaultSettings : RepositoryTests
     {
-        [Test]
-        public void SavesSettingsFile()
-        {
-            AssertFile.Exists(true, RepoSettingFile);
-        }
-
         [Test]
         public void DefaultSettings()
         {
@@ -20,9 +14,19 @@ namespace Gu.Settings.Tests.Repositories
             Assert.IsTrue(comparer.Equals(defaultSettings, Repository.Settings));
         }
 
-        protected override IRepository Create(RepositorySettings settings)
+        protected override IRepository Create()
         {
-            return new BinaryRepository();
+            return new Settings.BinaryRepository(Settings);
+        }
+
+        protected override RepositorySettings Settings
+        {
+            get { return RepositorySettings.DefaultFor(Directory); }
+        }
+
+        protected override BackupSettings BackupSettings
+        {
+            get { return BackupSettings.DefaultFor(Directory); }
         }
 
         protected override void Save<T>(T item, FileInfo file)

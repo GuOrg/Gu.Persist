@@ -6,7 +6,7 @@
 
         protected override byte[] GetBytes(T item)
         {
-            using (var stream = XmlHelper.ToStream(item))
+            using (var stream = JsonHelper.ToStream(item))
             {
                 return stream.ToArray();
             }

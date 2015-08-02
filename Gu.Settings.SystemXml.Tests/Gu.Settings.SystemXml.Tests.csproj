@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CB570B6E-5AA8-4FD5-ADF4-1A1F58A136BC}</ProjectGuid>
+    <ProjectGuid>{6D72ACFA-A440-41CF-8122-2972AA714E98}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gu.Settings.Tests</RootNamespace>
-    <AssemblyName>Gu.Settings.Tests</AssemblyName>
+    <RootNamespace>Gu.Settings.SystemXml.Tests</RootNamespace>
+    <AssemblyName>Gu.Settings.SystemXml.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -42,8 +42,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -56,54 +56,34 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="ChangeTracking\ChangeTracker_Collection_Tests.cs" />
-    <Compile Include="ChangeTracking\ChangeTracker_Create_Throws_Tests.cs" />
-    <Compile Include="ChangeTracking\CollectionItemTrackerTests.cs" />
-    <Compile Include="ChangeTracking\Helpers\IllegalEnumerable.cs" />
-    <Compile Include="ChangeTracking\Helpers\Dummy.cs" />
-    <Compile Include="ChangeTracking\Helpers\SpecialCollection.cs" />
-    <Compile Include="ChangeTracking\TrackerTests.cs" />
-    <Compile Include="Helpers\AssertFile.cs" />
-    <Compile Include="AutoSaver\AutoSaverTests.cs" />
-    <Compile Include="Backup\BackupTests.cs" />
-    <Compile Include="Comparers\ComparerTests.cs" />
-    <Compile Include="Helpers\DummyObservable.cs" />
-    <Compile Include="Helpers\DummySerializable.cs" />
-    <Compile Include="Helpers\FileInfoExt.cs" />
-    <Compile Include="ChangeTracking\Helpers\Level.cs" />
-    <Compile Include="Helpers\RepositoryExt.cs" />
-    <Compile Include="Helpers\TestHelper.cs" />
-    <Compile Include="Helpers\TypicalSetting.cs" />
-    <Compile Include="Backup\NullBackuperTests.cs" />
-    <Compile Include="Backup\BackuperTests.cs" />
-    <Compile Include="Backup\BackupFileTests.cs" />
-    <Compile Include="IO\DirectoriesTests.cs" />
-    <Compile Include="IO\FileInfoExtTests.cs" />
-    <Compile Include="Repositories\BinaryRepositoryBackupInSubDirrectory.cs" />
-    <Compile Include="IO\BinaryHelperTests.cs" />
-    <Compile Include="Repositories\BinaryRepositoryDefaultSettings.cs" />
-    <Compile Include="Repositories\BinaryNoBackup.cs" />
-    <Compile Include="Repositories\BinaryRepositoryNullSettings.cs" />
-    <Compile Include="Repositories\FileCacheTests.cs" />
-    <Compile Include="IO\RepositorySettingTests.cs" />
-    <Compile Include="Repositories\RepositoryTests.cs" />
+    <Compile Include="BenchmarkTests.cs" />
+    <Compile Include="ComparerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IO\FileHelperTests.cs" />
-    <Compile Include="RemindersTests.cs" />
-    <Compile Include="ChangeTracking\ChangeTracker_PropertyChanged_Tests.cs" />
-    <Compile Include="Sandbox\FakesTests.cs" />
-    <Compile Include="Sandbox\SyncBoxTests.cs" />
+    <Compile Include="Helpers\SimpleSample.cs" />
+    <Compile Include="Helpers\TestHelper.cs" />
+    <Compile Include="SettingsTests.cs" />
+    <Compile Include="XmlHelperTests.cs" />
+    <Compile Include="RspositoryTests\XmlRepositoryTests.cs" />
+    <Compile Include="RspositoryTests\XmlDefault.cs" />
+    <Compile Include="RspositoryTests\XmlNoBackup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gu.Settings.SystemXml\Gu.Settings.SystemXml.csproj">
+      <Project>{686e3d46-4655-4e16-92ba-156275fa1ff2}</Project>
+      <Name>Gu.Settings.SystemXml</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gu.Settings.Tests\Gu.Settings.Tests.csproj">
+      <Project>{cb570b6e-5aa8-4fd5-adf4-1a1f58a136bc}</Project>
+      <Name>Gu.Settings.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gu.Settings\Gu.Settings.csproj">
+      <Project>{95985e35-6130-4442-abd0-a460d9e6e328}</Project>
+      <Name>Gu.Settings</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Gu.Settings\Gu.Settings.csproj">
-      <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
-      <Name>Gu.Settings</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -5,7 +5,6 @@
     using System.Globalization;
     using System.IO;
     using System.Runtime.CompilerServices;
-    using System.Xml.Serialization;
 
     using Gu.Settings.Annotations;
 
@@ -76,7 +75,6 @@
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [XmlIgnore]
         public DirectoryInfo Directory
         {
             get
