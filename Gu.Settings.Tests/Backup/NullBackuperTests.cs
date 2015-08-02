@@ -35,14 +35,14 @@
         [Test]
         public void TryRestoreWhenHasSoftDelete()
         {
-            SoftDelete.WriteXml(_dummy);
+            SoftDelete.Save(_dummy);
             AssertFile.Exists(false, File);
             AssertFile.Exists(true, SoftDelete);
 
             Assert.IsTrue(_backuper.CanRestore(File));
             Assert.IsTrue(_backuper.TryRestore(File));
 
-            Assert.AreEqual(_dummy, File.ReadXml<DummySerializable>());
+            Assert.AreEqual(_dummy, File.Read<DummySerializable>());
             AssertFile.Exists(true, File);
             AssertFile.Exists(false, SoftDelete);
             AssertFile.Exists(false, Backup);
@@ -51,9 +51,9 @@
         [Test]
         public void TryRestoreWhenHasSoftDeleteAndBackup()
         {
-            Backup.WriteXml(_dummy);
+            Backup.Save(_dummy);
             _dummy.Value++;
-            SoftDelete.WriteXml(_dummy);
+            SoftDelete.Save(_dummy);
 
             AssertFile.Exists(false, File);
             AssertFile.Exists(true, SoftDelete);
@@ -62,7 +62,7 @@
             Assert.IsTrue(_backuper.CanRestore(File));
             Assert.IsTrue(_backuper.TryRestore(File));
 
-            Assert.AreEqual(_dummy, File.ReadXml<DummySerializable>());
+            Assert.AreEqual(_dummy, File.Read<DummySerializable>());
             AssertFile.Exists(true, File);
             AssertFile.Exists(false, SoftDelete);
             AssertFile.Exists(true, Backup);
@@ -89,7 +89,7 @@
         [Test]
         public void TryRestoreWhenHasBackup()
         {
-            Backup.WriteXml(_dummy);
+            Backup.Save(_dummy);
 
             AssertFile.Exists(false, File);
             AssertFile.Exists(false, SoftDelete);

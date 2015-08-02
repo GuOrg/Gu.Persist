@@ -45,10 +45,10 @@
         public async Task FileAsyncRoundtrip()
         {
             var dummy = new DummySerializable { Value = 1 };
-            await BinaryHelper.SaveAsync(dummy, _file);
+            await BinaryHelper.SaveAsync(dummy, _file).ConfigureAwait(false);
             AssertFile.Exists(true, _file);
 
-            var read = await BinaryHelper.ReadAsync<DummySerializable>(_file);
+            var read = await BinaryHelper.ReadAsync<DummySerializable>(_file).ConfigureAwait(false);
             Assert.AreEqual(dummy.Value, read.Value);
             Assert.AreNotSame(dummy, read);
         }

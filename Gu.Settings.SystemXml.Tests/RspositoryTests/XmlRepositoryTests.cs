@@ -1,19 +1,12 @@
-﻿namespace Gu.Settings.Json.Tests
+namespace Gu.Settings.SystemXml.Tests
 {
     using System.IO;
 
+    using Gu.Settings.SystemXml;
     using Gu.Settings.Tests.Repositories;
-    using NUnit.Framework;
-    using Settings.Tests;
 
-    public class JsonNullSettings : RepositoryTests
+    public class XmlRepositoryTests : RepositoryTests
     {
-        [Test]
-        public void SavesSettingsFile()
-        {
-            AssertFile.Exists(true, RepoSettingFile);
-        }
-
         protected override RepositorySettings Settings
         {
             get
@@ -40,7 +33,7 @@
 
         protected override IRepository Create()
         {
-            return new JsonRepository();
+            return new XmlRepository();
         }
 
         protected override void Save<T>(T item, FileInfo file)

@@ -1,7 +1,9 @@
-﻿namespace Gu.Settings.Tests.IO
+﻿namespace Gu.Settings.SystemXml.Tests
 {
     using System.IO;
     using System.Threading.Tasks;
+
+    using Gu.Settings.Tests;
 
     using NUnit.Framework;
 
@@ -48,10 +50,10 @@
                 _file.Delete();
             }
             var dummy = new DummySerializable { Value = 1 };
-            await XmlHelper.SaveAsync(dummy, _file);
+            await XmlHelper.SaveAsync(dummy, _file).ConfigureAwait(false);
             AssertFile.Exists(true, _file);
 
-            var read = await XmlHelper.ReadAsync<DummySerializable>(_file);
+            var read = await XmlHelper.ReadAsync<DummySerializable>(_file).ConfigureAwait(false);
             Assert.AreEqual(dummy.Value, read.Value);
             Assert.AreNotSame(dummy, read);
         }

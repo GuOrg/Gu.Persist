@@ -25,6 +25,8 @@ namespace Gu.Settings.Tests.Repositories
 
         protected FileInfo RepoSettingFile;
 
+        private readonly DummySerializable _dummy;
+
         private FileInfo _dummyFile;
         private FileInfo _dummyNewName;
 
@@ -36,23 +38,14 @@ namespace Gu.Settings.Tests.Repositories
 
         public IRepository Repository;
 
-        protected RepositorySettings Settings
-        {
-            get { return (RepositorySettings)Repository.Settings; }
-        }
+        protected abstract RepositorySettings Settings { get; }
 
-        protected BackupSettings BackupSettings
-        {
-            get { return Repository.Settings.BackupSettings; }
-        }
+        protected abstract BackupSettings BackupSettings { get; }
 
         protected bool IsBackingUp
         {
             get { return BackupSettings != null && BackupSettings.IsCreatingBackups; }
         }
-
-        private readonly DummySerializable _dummy;
-
 
         protected RepositoryTests()
         {
@@ -64,9 +57,7 @@ namespace Gu.Settings.Tests.Repositories
         [SetUp]
         public void SetUp()
         {
-            var backupSettings = new BackupSettings(Directory, true, BackupSettings.DefaultExtension, null, false, 1, Int32.MaxValue);
-            var settings = new RepositorySettings(Directory, true, true, backupSettings, ".cfg", ".tmp");
-            Repository = Create(settings);
+            Repository = Create();
             Repository.ClearCache();
 
             var name = GetType().Name;
@@ -78,11 +69,13 @@ namespace Gu.Settings.Tests.Repositories
             _fileTemp = Settings.Directory.CreateFileInfoInDirectory(tempfileName);
             _fileSoftDelete = _file.GetSoftDeleteFileFor();
             _fileNewName = _file.WithNewName(NewName, Settings);
-
-            var backupFileName = string.Concat(name, BackupSettings.DefaultExtension);
-            _backup = Directory.CreateFileInfoInDirectory(backupFileName);
-            _backupSoftDelete = _backup.GetSoftDeleteFileFor();
-            _backupNewName = _backup.WithNewName(NewName, Settings);
+            if (IsBackingUp)
+            {
+                var backupFileName = string.Concat(name, BackupSettings.Extension);
+                _backup = Directory.CreateFileInfoInDirectory(backupFileName);
+                _backupSoftDelete = _backup.GetSoftDeleteFileFor();
+                _backupNewName = _backup.WithNewName(NewName, Settings);
+            }
 
             var repoSettingFileName = string.Concat(typeof(RepositorySettings).Name, Settings.Extension);
             RepoSettingFile = Settings.Directory.CreateFileInfoInDirectory(repoSettingFileName);
@@ -92,26 +85,34 @@ namespace Gu.Settings.Tests.Repositories
             _dummySoftDelete = _dummyFile.GetSoftDeleteFileFor();
             _dummySoftDeleteNewName = _dummySoftDelete.WithNewName(NewName, Settings);
             _dummyNewName = _dummyFile.WithNewName(NewName, Settings);
-            _dummyBackup = _dummyFile.WithNewExtension(BackupSettings.DefaultExtension);
-            _dummyBackupNewName = _dummyBackup.WithNewName(NewName, Settings);
+            if (IsBackingUp)
+            {
+                _dummyBackup = _dummyFile.WithNewExtension(BackupSettings.Extension);
+                _dummyBackupNewName = _dummyBackup.WithNewName(NewName, Settings);
+            }
 
             _file.Delete();
             _fileTemp.Delete();
             _fileSoftDelete.Delete();
             _fileNewName.Delete();
+            if (IsBackingUp)
+            {
+                _backup.Delete();
+                _backupSoftDelete.Delete();
+                _backupNewName.Delete();
+            }
 
-            _backup.Delete();
-            _backupSoftDelete.Delete();
-            _backupNewName.Delete();
 
             _dummyFile.Delete();
             _dummyNewName.Delete();
 
             _dummySoftDelete.Delete();
             _dummySoftDeleteNewName.Delete();
-
-            _dummyBackup.Delete();
-            _dummyBackupNewName.Delete();
+            if (IsBackingUp)
+            {
+                _dummyBackup.Delete();
+                _dummyBackupNewName.Delete();
+            }
         }
 
         [TearDown]
@@ -119,11 +120,15 @@ namespace Gu.Settings.Tests.Repositories
         {
             _file.Delete();
             _fileTemp.Delete();
-            _backup.Delete();
+
             RepoSettingFile.Delete();
 
             _dummyFile.Delete();
-            _dummyBackup.Delete();
+            if (IsBackingUp)
+            {
+                _backup.Delete();
+                _dummyBackup.Delete();
+            }
         }
 
         [Test]
@@ -198,7 +203,10 @@ namespace Gu.Settings.Tests.Repositories
         {
             Repository.Save(_dummy, _file);
             AssertFile.Exists(true, _file);
-            AssertFile.Exists(false, _backup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(false, _backup);
+            }
             var read = Read<DummySerializable>(_file);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
@@ -210,18 +218,18 @@ namespace Gu.Settings.Tests.Repositories
         {
             _dummyFile.VoidCreate();
             _dummySoftDelete.VoidCreate();
-            if (!(Repository.Backuper is NullBackuper))
+            if (IsBackingUp)
             {
                 _dummyBackup.VoidCreate();
                 AssertFile.Exists(true, _dummyBackup);
-            } 
+            }
             AssertFile.Exists(true, _dummyFile);
             AssertFile.Exists(true, _dummySoftDelete);
 
             Repository.Delete<DummySerializable>(deleteBakups);
             AssertFile.Exists(false, _dummyFile);
             AssertFile.Exists(false, _dummySoftDelete);
-            if (!(Repository.Backuper is NullBackuper))
+            if (IsBackingUp)
             {
                 AssertFile.Exists(!deleteBakups, _dummyBackup);
             }
@@ -235,12 +243,21 @@ namespace Gu.Settings.Tests.Repositories
                 return;
             }
             _dummySoftDelete.VoidCreate();
-            _dummyBackup.VoidCreate();
+            if (IsBackingUp)
+            {
+                _dummyBackup.VoidCreate();
+            }
             AssertFile.Exists(true, _dummySoftDelete);
-            AssertFile.Exists(true, _dummyBackup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(true, _dummyBackup);
+            }
             Repository.DeleteBackups<DummySerializable>();
             AssertFile.Exists(false, _dummySoftDelete);
-            AssertFile.Exists(false, _dummyBackup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(false, _dummyBackup);
+            }
         }
 
         [Test]
@@ -249,13 +266,17 @@ namespace Gu.Settings.Tests.Repositories
             var fileName = typeof(DummySerializable).Name;
             Repository.Save(_dummy, fileName);
             AssertFile.Exists(true, _dummyFile);
-            AssertFile.Exists(false, _dummyBackup);
-
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(false, _dummyBackup);
+            }
             _dummy.Value++;
             Repository.Save(_dummy, fileName);
             AssertFile.Exists(true, _dummyFile);
-            var createsBackups = Settings.BackupSettings != null && Settings.BackupSettings.IsCreatingBackups;
-            AssertFile.Exists(createsBackups, _dummyBackup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(true, _dummyBackup);
+            }
             var read = Read<DummySerializable>(_dummyFile);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
@@ -266,7 +287,10 @@ namespace Gu.Settings.Tests.Repositories
         {
             await Repository.SaveAsync(_dummy, _file).ConfigureAwait(false);
             AssertFile.Exists(true, _file);
-            AssertFile.Exists(false, _backup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(false, _backup);
+            }
             var read = Read<DummySerializable>(_file);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
@@ -277,7 +301,10 @@ namespace Gu.Settings.Tests.Repositories
         {
             Repository.Save(_dummy);
             AssertFile.Exists(true, _dummyFile);
-            AssertFile.Exists(false, _dummyBackup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(false, _dummyBackup);
+            }
             var read = Read<DummySerializable>(_dummyFile);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
@@ -285,8 +312,10 @@ namespace Gu.Settings.Tests.Repositories
             _dummy.Value++;
             Repository.Save(_dummy);
             AssertFile.Exists(true, _dummyFile);
-            var createsBackups = Settings.BackupSettings != null && Settings.BackupSettings.IsCreatingBackups;
-            AssertFile.Exists(createsBackups, _dummyBackup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(true, _dummyBackup);
+            }
         }
 
         [Test]
@@ -294,7 +323,10 @@ namespace Gu.Settings.Tests.Repositories
         {
             await Repository.SaveAsync(_dummy).ConfigureAwait(false);
             AssertFile.Exists(true, _dummyFile);
-            AssertFile.Exists(false, _dummyBackup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(false, _dummyBackup);
+            }
             var read = Read<DummySerializable>(_dummyFile);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
@@ -302,8 +334,10 @@ namespace Gu.Settings.Tests.Repositories
             _dummy.Value++;
             await Repository.SaveAsync(_dummy).ConfigureAwait(false);
             AssertFile.Exists(true, _dummyFile);
-            var createsBackups = Settings.BackupSettings != null && Settings.BackupSettings.IsCreatingBackups;
-            AssertFile.Exists(createsBackups, _dummyBackup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(true, _dummyBackup);
+            }
         }
 
         [Test]
@@ -311,14 +345,18 @@ namespace Gu.Settings.Tests.Repositories
         {
             Repository.Save(_dummy, _file);
             AssertFile.Exists(true, _file);
-            AssertFile.Exists(false, _backup);
-
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(false, _backup);
+            }
             _dummy.Value++;
             Repository.Save(_dummy, _file);
 
             AssertFile.Exists(true, _file);
-            var createsBackups = Settings.BackupSettings != null && Settings.BackupSettings.IsCreatingBackups;
-            AssertFile.Exists(createsBackups, _backup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(true, _backup);
+            }
 
             var read = Read<DummySerializable>(_file);
             Assert.AreEqual(_dummy.Value, read.Value);
@@ -330,14 +368,18 @@ namespace Gu.Settings.Tests.Repositories
         {
             await Repository.SaveAsync(_dummy, _file).ConfigureAwait(false);
             AssertFile.Exists(true, _file);
-            AssertFile.Exists(false, _backup);
-
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(false, _backup);
+            }
             _dummy.Value++;
             await Repository.SaveAsync(_dummy, _file).ConfigureAwait(false);
 
             AssertFile.Exists(true, _file);
-            var createsBackups = Settings.BackupSettings != null && Settings.BackupSettings.IsCreatingBackups;
-            AssertFile.Exists(createsBackups, _backup);
+            if (IsBackingUp)
+            {
+                AssertFile.Exists(true, _backup);
+            }
             var read = Read<DummySerializable>(_file);
             Assert.AreEqual(_dummy.Value, read.Value);
             Assert.AreNotSame(_dummy, read);
@@ -385,14 +427,10 @@ namespace Gu.Settings.Tests.Repositories
                 Assert.AreSame(_dummy, read);
                 read = Read<DummySerializable>(_file);
                 Assert.AreEqual(_dummy, read);
-                if (createsBackups)
+                if (IsBackingUp)
                 {
                     read = Read<DummySerializable>(_backup);
                     Assert.AreEqual(_dummy.Value - 1, read.Value);
-                }
-                else
-                {
-                    AssertFile.Exists(false, _backup);
                 }
             }
         }
@@ -438,7 +476,10 @@ namespace Gu.Settings.Tests.Repositories
         public void CanRenameTypeHappyPath()
         {
             _dummyFile.VoidCreate();
-            _dummyBackup.VoidCreate();
+            if (IsBackingUp)
+            {
+                _dummyBackup.VoidCreate();
+            }
             Assert.IsTrue(Repository.CanRename<DummySerializable>(NewName));
         }
 
@@ -446,7 +487,10 @@ namespace Gu.Settings.Tests.Repositories
         public void CanRenameFileNamePath()
         {
             _dummyFile.VoidCreate();
-            _dummyBackup.VoidCreate();
+            if (IsBackingUp)
+            {
+                _dummyBackup.VoidCreate();
+            }
             Assert.IsTrue(Repository.CanRename(typeof(DummySerializable).Name, NewName));
         }
 
@@ -460,11 +504,16 @@ namespace Gu.Settings.Tests.Repositories
             {
                 _dummyNewName.VoidCreate();
             }
-
-            _dummyBackup.VoidCreate();
+            if (IsBackingUp)
+            {
+                _dummyBackup.VoidCreate();
+            }
             if (backupNewNameExists)
             {
-                _dummyBackupNewName.VoidCreate();
+                if (IsBackingUp)
+                {
+                    _dummyBackupNewName.VoidCreate();
+                }
                 _dummySoftDelete.VoidCreate();
                 _dummySoftDeleteNewName.VoidCreate();
             }
@@ -541,7 +590,7 @@ namespace Gu.Settings.Tests.Repositories
             //Assert.AreEqual(_dummy.Value - 1, read.Value);
         }
 
-        protected abstract IRepository Create(RepositorySettings settings);
+        protected abstract IRepository Create();
 
         protected abstract void Save<T>(T item, FileInfo file);
 

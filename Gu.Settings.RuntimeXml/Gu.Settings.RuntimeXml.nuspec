@@ -12,11 +12,10 @@
     <copyright>Copyright 2014</copyright>
     <dependencies>
       <dependency id="Gu.Settings" version="1.0.11.0" />
-      <dependency id="Newtonsoft.Json" version="6.0.8" />
     </dependencies>
   </metadata>
   <files>
-    <file src="\bin\CreateNugetPackage\Gu.Settings.Json.dll" target="lib\net45" />
-    <file src="\bin\CreateNugetPackage\Gu.Settings.Json.XML" target="lib\net45" />
+    <file src="\bin\CreateNugetPackage\Gu.Settings.RuntimeXml.dll" target="lib\net45" />
+    <file src="\bin\CreateNugetPackage\Gu.Settings.RuntimeXml.XML" target="lib\net45" />
   </files>
 </package>

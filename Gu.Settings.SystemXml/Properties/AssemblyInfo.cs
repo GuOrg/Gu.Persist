@@ -1,16 +1,15 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Resources;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Gu.Settings")]
-[assembly: AssemblyDescription("Manages saving and reading files.")]
+[assembly: AssemblyTitle("Gu.Settings.SystemXml")]
+[assembly: AssemblyDescription("Manages saving and reading xml-files.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Johan Larsson")]
-[assembly: AssemblyProduct("Gu.Settings")]
+[assembly: AssemblyProduct("Gu.Settings.SystemXml")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +20,7 @@ using System.Resources;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d254e6a5-a3a4-4a75-8ed1-41812208bca6")]
+[assembly: Guid("2661bb2c-60c7-4bde-abe9-f3c5f9b5b8b2")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -35,12 +34,3 @@ using System.Resources;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.11.0")]
 [assembly: AssemblyFileVersion("1.0.11.0")]
-[assembly: InternalsVisibleTo("Gu.Settings.Tests", AllInternalsVisible = true)]
-[assembly: InternalsVisibleTo("Gu.Settings.Demo", AllInternalsVisible = true)]
-[assembly: InternalsVisibleTo("Gu.Settings.Json", AllInternalsVisible = true)]
-[assembly: InternalsVisibleTo("Gu.Settings.Json.Tests", AllInternalsVisible = true)]
-[assembly: InternalsVisibleTo("Gu.Settings.RuntimeXml", AllInternalsVisible = true)]
-[assembly: InternalsVisibleTo("Gu.Settings.RuntimeXml.Tests", AllInternalsVisible = true)]
-[assembly: InternalsVisibleTo("Gu.Settings.SystemXml", AllInternalsVisible = true)]
-[assembly: InternalsVisibleTo("Gu.Settings.SystemXml.Tests", AllInternalsVisible = true)]
-[assembly: NeutralResourcesLanguageAttribute("en")]

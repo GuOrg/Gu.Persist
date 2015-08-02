@@ -1,9 +1,12 @@
-﻿namespace Gu.Settings.Tests
+﻿namespace Gu.Settings.SystemXml.Tests
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+
+    using Gu.Settings.SystemXml;
+    using Gu.Settings.Tests;
 
     using NUnit.Framework;
 

@@ -4,7 +4,6 @@
     using System.ComponentModel;
     using System.IO;
     using System.Runtime.CompilerServices;
-    using System.Xml.Serialization;
 
     using Gu.Settings.Annotations;
 
@@ -23,7 +22,7 @@
         }
 
         public RepositorySettings(DirectoryInfo directory)
-            : this(directory, Gu.Settings.BackupSettings.DefaultFor(directory))
+            : this(directory, BackupSettings.DefaultFor(directory))
         {
         }
 
@@ -56,7 +55,6 @@
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [XmlIgnore]
         public DirectoryInfo Directory
         {
             get
@@ -166,7 +164,7 @@
 
         public static RepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new RepositorySettings(directory, true, true, Settings.BackupSettings.DefaultFor(directory));
+            return new RepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory));
         }
 
         [NotifyPropertyChangedInvocator]

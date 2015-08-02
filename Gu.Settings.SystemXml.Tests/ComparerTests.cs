@@ -1,9 +1,9 @@
-﻿namespace Gu.Settings.Tests
+﻿namespace Gu.Settings.SystemXml.Tests
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using NUnit.Framework;
+    using Settings.Tests;
 
     public class ComparerTests
     {
@@ -47,6 +47,7 @@
         {
             public ComparerSource()
             {
+                Add(XmlEqualsComparer<TypicalSetting>.Default);
                 Add(BinaryEqualsComparer<TypicalSetting>.Default);
             }
         }

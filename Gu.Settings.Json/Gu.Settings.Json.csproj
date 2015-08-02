@@ -62,7 +62,7 @@
       <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
       <Name>Gu.Settings</Name>
     </ProjectReference>
-  </ItemGroup>
+  </ItemGroup>  
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
