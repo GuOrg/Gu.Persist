@@ -37,12 +37,19 @@
         /// <returns></returns>
         internal static FileInfo WithNewExtension(this FileInfo file, string newExtension)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNullOrEmpty(newExtension, "newExtension");
             newExtension = FileHelper.PrependDotIfMissing(newExtension);
             var newFileName = Path.ChangeExtension(file.FullName, newExtension);
             var newFile = new FileInfo(newFileName);
             return newFile;
+        }
+
+        internal static FileInfo InDirectory(this FileInfo file, DirectoryInfo directory)
+        {
+            if (file.Directory == directory)
+            {
+                return file;
+            }
+            return directory.CreateFileInfoInDirectory(file.Name);
         }
 
         internal static FileInfo GetSoftDeleteFileFor(this FileInfo file)

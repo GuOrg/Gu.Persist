@@ -1,4 +1,4 @@
-namespace Gu.Settings
+﻿namespace Gu.Settings.RuntimeXml
 {
     using System.Collections.Generic;
     using System.IO;
@@ -17,7 +17,7 @@ namespace Gu.Settings
         {
         }
 
-        public XmlRepository(RepositorySettings settings) 
+        public XmlRepository(RepositorySettings settings)
             : base(settings)
         {
         }

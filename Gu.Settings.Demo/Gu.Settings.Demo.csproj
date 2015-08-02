@@ -127,6 +127,10 @@
       <Project>{2710BB07-D45B-4F93-BB56-968F25D39C64}</Project>
       <Name>Gu.Settings.Json</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Gu.Settings.SystemXml\Gu.Settings.SystemXml.csproj">
+      <Project>{686e3d46-4655-4e16-92ba-156275fa1ff2}</Project>
+      <Name>Gu.Settings.SystemXml</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gu.Settings\Gu.Settings.csproj">
       <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
       <Name>Gu.Settings</Name>

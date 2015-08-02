@@ -1,28 +1,17 @@
 namespace Gu.Settings.Tests.Repositories
 {
-    using System;
     using System.IO;
 
-    using Gu.Settings.Backup;
-
-    using NUnit.Framework;
-
-    public class BinaryNoBackup : RepositoryTests
+    public class BinaryRepositoryBackupInSubDirrectory : RepositoryTests
     {
-        [Test]
-        public void BackuperIsNone()
-        {
-            Assert.AreSame(NullBackuper.Default, Repository.Backuper);
-        }
-
         protected override RepositorySettings Settings
         {
-            get { return new RepositorySettings(Directory, true, true, BackupSettings, ".cfg", ".tmp"); }
+            get { return RepositorySettings.DefaultFor(Directory); }
         }
 
         protected override BackupSettings BackupSettings
         {
-            get { return null; }
+            get { return new BackupSettings(Directory.Subdirectory("Backup"), 1); }
         }
 
         protected override IRepository Create()

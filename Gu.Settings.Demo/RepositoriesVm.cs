@@ -8,6 +8,7 @@
     using Gu.Settings.Annotations;
     using Gu.Settings.IO;
     using Gu.Settings.Json;
+    using Gu.Settings.SystemXml;
 
     public class RepositoriesVm : INotifyPropertyChanged
     {

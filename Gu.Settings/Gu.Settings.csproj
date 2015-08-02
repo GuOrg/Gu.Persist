@@ -44,7 +44,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoSave\AutoSaveMode.cs" />
@@ -107,13 +106,10 @@
     <Compile Include="Settings\ChangeTrackerSpecialType.cs" />
     <Compile Include="Settings\FileSettings.cs" />
     <Compile Include="Settings\RepositorySettings.cs" />
-    <Compile Include="IO\XmlHelper.cs" />
     <Compile Include="Repositories\Repository.cs" />
-    <Compile Include="Repositories\XmlRepository.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Comparers\SerializedEqualsComparer`1.cs" />
-    <Compile Include="Comparers\XmlEqualsComparer`1.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
