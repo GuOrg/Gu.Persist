@@ -127,7 +127,7 @@
       <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
       <Name>Gu.Settings.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Gu.Settings.Json\Gu.Settings.NewtonsoftJson.csproj">
+    <ProjectReference Include="..\Gu.Settings.NewtonsoftJson\Gu.Settings.NewtonsoftJson.csproj">
       <Project>{2710BB07-D45B-4F93-BB56-968F25D39C64}</Project>
       <Name>Gu.Settings.NewtonsoftJson</Name>
     </ProjectReference>
