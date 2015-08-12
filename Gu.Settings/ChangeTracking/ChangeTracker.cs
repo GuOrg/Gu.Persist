@@ -14,21 +14,23 @@
 
     public abstract class ChangeTracker : ITracker
     {
-        public static readonly string ChangesPropertyName = "Changes";
-        protected static readonly PropertyInfo ChangesPropertyInfo = typeof(ChangeTracker).GetProperty(ChangesPropertyName);
-        protected static readonly PropertyChangedEventArgs ChangesEventArgs = new PropertyChangedEventArgs(ChangesPropertyName);
+        protected static readonly PropertyInfo ChangesPropertyInfo = typeof(ChangeTracker).GetProperty(nameof(Changes));
+        protected static readonly PropertyChangedEventArgs ChangesEventArgs = new PropertyChangedEventArgs(nameof(Changes));
         private static readonly ConcurrentDictionary<Type, IReadOnlyList<PropertyInfo>> TrackPropertiesMap = new ConcurrentDictionary<Type, IReadOnlyList<PropertyInfo>>();
         private int _changes;
         private bool _disposed;
 
+        /// <inheritdoc/>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <inheritdoc/>
         public event EventHandler Changed;
 
+        /// <inheritdoc/>
         public int Changes
         {
             get { return _changes; }
-            set
+            protected set
             {
                 if (value == _changes)
                 {
@@ -40,12 +42,23 @@
             }
         }
 
+        /// <summary>
+        /// Creates a tracker that detects and notifies about changes of any property or subproperty of <paramref name="root"/>
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
         public static IValueTracker Track(INotifyPropertyChanged root)
         {
             Ensure.NotNull(root, nameof(root));
             return Track(root, ChangeTrackerSettings.Default);
         }
 
+        /// <summary>
+        /// Creates a tracker that detects and notifies about changes of any property or subproperty of <paramref name="root"/>
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         public static IValueTracker Track(INotifyPropertyChanged root, ChangeTrackerSettings settings)
         {
             Ensure.NotNull(root, nameof(root));

@@ -2,10 +2,20 @@
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// A base class for comparers using serialization
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class SerializedEqualsComparer<T> : IEqualityComparer<T>
     {
         private static readonly byte[] EmptyBytes = new byte[0];
 
+        /// <summary>
+        /// Serializes <paramref name="x"/> and <paramref name="y"/> and compares the bytes.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool Equals(T x, T y)
         {
             var xBytes = GetBytesInner(x);
@@ -26,6 +36,7 @@
         }
 
         /// <summary>
+        /// Serializes <paramref name="obj"/> and calculates hashcode from the bytes.
         /// http://stackoverflow.com/a/7244729/1069200
         /// </summary>
         /// <param name="obj"></param>

@@ -9,34 +9,25 @@
     /// </summary>
     public interface IGenericRepository
     {
+        /// <see cref="IRepository.Delete{T}(bool)"/>
         void Delete<T>(bool deleteBackups);
 
+        /// <see cref="IRepository.Exists{T}()"/>
         bool Exists<T>();
 
-        /// <summary>
-        /// Reads from file {Settings.Directory}/typeof(T).Name.{Settings.Extension}
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <see cref="IRepository.Read{T}()"/>
         T Read<T>();
 
-        /// <summary>
-        /// Reads from file {Settings.Directory}/typeof(T).Name.{Settings.Extension}
-        /// Creates and saves a new item if no file is found
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <see cref="IRepository.ReadOrCreate{T}(Func{T})"/>
         T ReadOrCreate<T>(Func<T> creator);
 
-        /// <summary>
-        /// Saves to file {Settings.Directory}/typeof(T).Name.{Settings.Extension}
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
+        /// <see cref="IRepository.Read{T}()"/>
         void Save<T>(T item);
 
+        /// <see cref="IRepository.IsDirty{T}(T)"/>
         bool IsDirty<T>(T item);
 
+        /// <see cref="IRepository.Clone{T}(T)"/>
         T Clone<T>(T item);
     }
 }
