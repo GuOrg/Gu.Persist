@@ -5,6 +5,8 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    using Gu.Settings.Core;
+
     using Newtonsoft.Json;
 
     public static class JsonHelper

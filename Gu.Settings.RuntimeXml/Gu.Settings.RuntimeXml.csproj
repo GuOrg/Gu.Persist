@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gu.Settings\Gu.Settings.csproj">
-      <Project>{95985e35-6130-4442-abd0-a460d9e6e328}</Project>
-      <Name>Gu.Settings</Name>
+    <ProjectReference Include="..\Gu.Settings.Core\Gu.Settings.Core.csproj">
+      <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
+      <Name>Gu.Settings.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

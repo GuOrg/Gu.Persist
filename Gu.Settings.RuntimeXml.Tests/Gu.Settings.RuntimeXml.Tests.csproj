@@ -66,17 +66,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Gu.Settings.Core.Tests\Gu.Settings.Core.Tests.csproj">
+      <Project>{CB570B6E-5AA8-4FD5-ADF4-1A1F58A136BC}</Project>
+      <Name>Gu.Settings.Core.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gu.Settings.Core\Gu.Settings.Core.csproj">
+      <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
+      <Name>Gu.Settings.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gu.Settings.RuntimeXml\Gu.Settings.RuntimeXml.csproj">
       <Project>{e2de0b67-6a90-4ce9-8cf7-4118bbe9cf79}</Project>
       <Name>Gu.Settings.RuntimeXml</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Gu.Settings.Tests\Gu.Settings.Tests.csproj">
-      <Project>{cb570b6e-5aa8-4fd5-adf4-1a1f58a136bc}</Project>
-      <Name>Gu.Settings.Tests</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Gu.Settings\Gu.Settings.csproj">
-      <Project>{95985e35-6130-4442-abd0-a460d9e6e328}</Project>
-      <Name>Gu.Settings</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

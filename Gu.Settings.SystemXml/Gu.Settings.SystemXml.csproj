@@ -53,9 +53,9 @@
     <Compile Include="XmlRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gu.Settings\Gu.Settings.csproj">
+    <ProjectReference Include="..\Gu.Settings.Core\Gu.Settings.Core.csproj">
       <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
-      <Name>Gu.Settings</Name>
+      <Name>Gu.Settings.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -65,7 +65,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>  
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

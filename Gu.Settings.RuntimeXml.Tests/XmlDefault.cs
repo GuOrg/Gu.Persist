@@ -2,9 +2,10 @@ namespace Gu.Settings.RuntimeXml.Tests
 {
     using System.IO;
 
+    using Gu.Settings.Core;
+    using Gu.Settings.Core.Tests;
+    using Gu.Settings.Core.Tests.Repositories;
     using Gu.Settings.RuntimeXml;
-    using Gu.Settings.Tests;
-    using Gu.Settings.Tests.Repositories;
 
     using NUnit.Framework;
 

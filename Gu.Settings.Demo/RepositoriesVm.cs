@@ -5,15 +5,15 @@
     using System.IO;
     using System.Runtime.CompilerServices;
 
-    using Gu.Settings.Annotations;
-    using Gu.Settings.IO;
+    using Gu.Settings.Core;
+    using Gu.Settings.Core.Properties;
     using Gu.Settings.Json;
+    using Gu.Settings.RuntimeBinary;
     using Gu.Settings.SystemXml;
 
     public class RepositoriesVm : INotifyPropertyChanged
     {
         public static RepositoriesVm Instance = new RepositoriesVm();
-        private readonly IReadOnlyList<IRepository> _repositories;
         private RepositorySettings _settings;
         private IRepository _selectedRepository;
 
@@ -22,7 +22,7 @@
             var directory = Directories.ExecutingDirectory.Subdirectory("Settings");
             var backupSettings = new BackupSettings(directory, true, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, false, 5, 5);
             _settings = new RepositorySettings(directory, backupSettings);
-            _repositories = new IRepository[]
+            Repositories = new IRepository[]
                                 {
                                     new JsonRepository(_settings),
                                     new XmlRepository(_settings), 
@@ -46,10 +46,7 @@
             }
         }
 
-        public IReadOnlyList<IRepository> Repositories
-        {
-            get { return _repositories; }
-        }
+        public IReadOnlyList<IRepository> Repositories { get; }
 
         public RepositorySettings Settings
         {

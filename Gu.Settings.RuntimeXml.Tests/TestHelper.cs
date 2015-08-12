@@ -2,6 +2,8 @@ namespace Gu.Settings.RuntimeXml.Tests
 {
     using System.IO;
 
+    using Gu.Settings.Core;
+
     public static class TestHelper
     {
         public static T Read<T>(FileInfo file)

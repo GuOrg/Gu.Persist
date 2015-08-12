@@ -6,6 +6,8 @@
     using System.Threading.Tasks;
     using System.Xml.Serialization;
 
+    using Gu.Settings.Core;
+
     public static class XmlHelper
     {
         internal static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();

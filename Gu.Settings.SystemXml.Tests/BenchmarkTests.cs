@@ -5,8 +5,9 @@
     using System.Diagnostics;
     using System.Linq;
 
+    using Gu.Settings.Core;
+    using Gu.Settings.Core.Tests;
     using Gu.Settings.SystemXml;
-    using Gu.Settings.Tests;
 
     using NUnit.Framework;
 
@@ -29,7 +30,16 @@
                 Value4 = 4,
                 Value5 = 5
             };
-            _setting2 = BinaryHelper.Clone(_setting1);
+            _setting2 = new TypicalSetting
+            {
+                Name = "Johan Larsson",
+                Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
+                Value1 = 1.2,
+                Value2 = 2,
+                Value3 = 3,
+                Value4 = 4,
+                Value5 = 5
+            };
 
         }
 
@@ -76,7 +86,6 @@
             public ComparerSource()
             {
                 Add(new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000));
-                Add(new ComparerData(BinaryEqualsComparer<TypicalSetting>.Default, 1000));
             }
         }
 

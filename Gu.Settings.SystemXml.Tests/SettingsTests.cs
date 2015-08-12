@@ -1,6 +1,9 @@
 ﻿namespace Gu.Settings.SystemXml.Tests
 {
     using System.IO;
+
+    using Gu.Settings.Core;
+
     using NUnit.Framework;
 
     public class SettingsTests
