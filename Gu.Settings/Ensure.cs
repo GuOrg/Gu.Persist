@@ -13,7 +13,7 @@
             Debug.Assert(!string.IsNullOrEmpty(parameterName));
             if (o == null)
             {
-                var message = string.Format("Expected parameter {0} in member {1} to not be null", parameterName, caller);
+                var message = $"Expected parameter {parameterName} in member {caller} to not be null";
                 throw new ArgumentNullException(parameterName, message);
             }
         }
@@ -48,7 +48,7 @@
             Debug.Assert(!string.IsNullOrEmpty(parameterName));
             if (Equals(value, other))
             {
-                var message = string.Format("Expected {0} to not equal {1}", value, other);
+                var message = $"Expected {value} to not equal {other}";
                 throw new ArgumentException(message, parameterName);
             }
         }

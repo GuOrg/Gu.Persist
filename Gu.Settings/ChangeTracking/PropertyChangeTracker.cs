@@ -14,10 +14,10 @@
         internal PropertyChangeTracker(Type parentType, PropertyInfo parentProperty, INotifyPropertyChanged value, ChangeTrackerSettings settings)
             : base(parentType, parentProperty, value)
         {
-            Ensure.NotNull(parentType, "parentType");
-            Ensure.NotNull(parentProperty, "parentProperty");
-            Ensure.NotNull(value, "value");
-            Ensure.NotNull(settings, "settings");
+            Ensure.NotNull(parentType, nameof(parentType));
+            Ensure.NotNull(parentProperty, nameof(parentProperty));
+            Ensure.NotNull(value, nameof(value));
+            Ensure.NotNull(settings, nameof(settings));
 
             _settings = settings;
             _propertyTrackers = new PropertyTrackerCollection(value.GetType(), settings);

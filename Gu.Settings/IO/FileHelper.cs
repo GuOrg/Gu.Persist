@@ -80,14 +80,14 @@ namespace Gu.Settings
 
         internal static void HardDelete(this FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             file.DeleteSoftDeleteFileFor();
             file.Delete();
         }
 
         internal static void DeleteSoftDeleteFileFor(this FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             var softDelete = file.GetSoftDeleteFileFor();
             if (softDelete != null)
             {
@@ -118,7 +118,7 @@ namespace Gu.Settings
 
         internal static void SetIsVisible(this FileInfo file, bool isVisible)
         {
-            Ensure.Exists(file, "file");
+            Ensure.Exists(file, nameof(file));
             if (isVisible)
             {
                 file.Attributes |= FileAttributes.Hidden;
@@ -193,14 +193,14 @@ namespace Gu.Settings
 
         public static FileInfo CreateFileInfo(string fileName, IFileSettings settings)
         {
-            Ensure.NotNull(fileName, "fileName");
+            Ensure.NotNull(fileName, nameof(fileName));
             var file = CreateFileInfo(settings.Directory, fileName, settings.Extension);
             return file;
         }
 
         internal static FileInfo CreateFileInfo(DirectoryInfo directory, string fileName, string extension)
         {
-            Ensure.NotNullOrEmpty(fileName, "fileName");
+            Ensure.NotNullOrEmpty(fileName, nameof(fileName));
             if (extension != null)
             {
                 if (!extension.StartsWith("."))

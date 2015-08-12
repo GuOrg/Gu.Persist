@@ -4,7 +4,7 @@ namespace Gu.Settings
     {
         protected ValueTracker(object value)
         {
-            Ensure.NotNull(value, "value");
+            Ensure.NotNull(value, nameof(value));
             Value = value;
         }
 
