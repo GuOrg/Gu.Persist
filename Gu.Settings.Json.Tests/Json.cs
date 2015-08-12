@@ -1,10 +1,11 @@
-﻿namespace Gu.Settings.Json.Tests
+﻿namespace Gu.Settings.NewtonsoftJson.Tests
 {
     using System.IO;
 
     using Gu.Settings.Core;
     using Gu.Settings.Core.Tests;
     using Gu.Settings.Core.Tests.Repositories;
+    using Gu.Settings.NewtonsoftJson;
 
     using NUnit.Framework;
 

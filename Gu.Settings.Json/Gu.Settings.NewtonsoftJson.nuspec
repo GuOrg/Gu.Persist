@@ -16,7 +16,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="\bin\CreateNugetPackage\Gu.Settings.Json.dll" target="lib\net45" />
-    <file src="\bin\CreateNugetPackage\Gu.Settings.Json.XML" target="lib\net45" />
+    <file src="\bin\CreateNugetPackage\Gu.Settings.NewtonsoftJson.dll" target="lib\net45" />
+    <file src="\bin\CreateNugetPackage\Gu.Settings.NewtonsoftJson.XML" target="lib\net45" />
   </files>
 </package>
