@@ -3,7 +3,7 @@
     using System.IO;
     using System.Threading.Tasks;
 
-    using Gu.Settings.Tests;
+    using Gu.Settings.Core.Tests;
 
     using NUnit.Framework;
 

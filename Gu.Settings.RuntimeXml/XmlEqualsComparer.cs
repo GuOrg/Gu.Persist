@@ -1,5 +1,7 @@
 ﻿namespace Gu.Settings.RuntimeXml
 {
+    using Gu.Settings.Core;
+
     public class XmlEqualsComparer<T> : SerializedEqualsComparer<T>
     {
         public static readonly XmlEqualsComparer<T> Default = new XmlEqualsComparer<T>();

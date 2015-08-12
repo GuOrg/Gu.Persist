@@ -55,17 +55,17 @@
     <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Gu.Settings.Core.Tests\Gu.Settings.Core.Tests.csproj">
+      <Project>{CB570B6E-5AA8-4FD5-ADF4-1A1F58A136BC}</Project>
+      <Name>Gu.Settings.Core.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gu.Settings.Core\Gu.Settings.Core.csproj">
+      <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
+      <Name>Gu.Settings.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gu.Settings.Json\Gu.Settings.Json.csproj">
       <Project>{2710BB07-D45B-4F93-BB56-968F25D39C64}</Project>
       <Name>Gu.Settings.Json</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Gu.Settings.Tests\Gu.Settings.Tests.csproj">
-      <Project>{CB570B6E-5AA8-4FD5-ADF4-1A1F58A136BC}</Project>
-      <Name>Gu.Settings.Tests</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Gu.Settings\Gu.Settings.csproj">
-      <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
-      <Name>Gu.Settings</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

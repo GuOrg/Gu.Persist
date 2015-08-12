@@ -4,7 +4,7 @@
     using System.IO;
     using System.Runtime.Serialization;
 
-    using Gu.Settings.IO;
+    using Gu.Settings.Core;
 
     /// <summary>
     /// A repository reading and saving files using <see cref="DataContractSerializer"/>

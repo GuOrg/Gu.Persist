@@ -3,9 +3,9 @@
     using System;
     using System.IO;
 
-    using Gu.Settings.IO;
+    using Gu.Settings.Core;
+    using Gu.Settings.Core.Tests;
     using Gu.Settings.SystemXml;
-    using Gu.Settings.Tests;
 
     using NUnit.Framework;
 
