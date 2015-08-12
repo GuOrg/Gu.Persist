@@ -25,7 +25,7 @@
 
         public bool CanRestore(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             var softDelete = file.GetSoftDeleteFileFor();
             if (softDelete.Exists)
             {
@@ -44,7 +44,7 @@
         /// <returns>True if a backup was found and successfully restored. Now File can be read.</returns>
         public virtual bool TryRestore(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");
             Ensure.DoesNotExist(file);
             file.Refresh();
@@ -79,8 +79,8 @@
 
         internal virtual void Restore(FileInfo file, FileInfo backup)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNull(backup, "backup");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(backup, nameof(backup));
             file.Refresh();
             if (file.Exists)
             {
@@ -91,15 +91,15 @@
 
         public virtual void PurgeBackups(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");
             file.DeleteSoftDeleteFileFor();
         }
 
         public bool CanRename(FileInfo file, string newName)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNullOrEmpty(newName, "newName");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNullOrEmpty(newName, nameof(newName));
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
             {
@@ -115,8 +115,8 @@
 
         public void Rename(FileInfo file, string newName, bool owerWrite)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNullOrEmpty(newName, "newName");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNullOrEmpty(newName, nameof(newName));
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
             {

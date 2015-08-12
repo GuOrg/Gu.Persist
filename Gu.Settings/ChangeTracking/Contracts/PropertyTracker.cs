@@ -10,7 +10,7 @@ namespace Gu.Settings
         protected PropertyTracker(Type parentType, PropertyInfo property, object value)
             : base(value)
         {
-            Ensure.NotNull(property, "property");
+            Ensure.NotNull(property, nameof(property));
             ParentType = parentType;
             ParentProperty = property;
         }

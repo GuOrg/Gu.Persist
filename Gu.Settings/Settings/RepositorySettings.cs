@@ -39,9 +39,9 @@
             string extension = ".cfg",
             string tempExtension = ".tmp")
         {
-            Ensure.NotNullOrEmpty(extension, "extension");
-            Ensure.NotNullOrEmpty(tempExtension, "tempExtension");
-            Ensure.NotNull(directory, "directory");
+            Ensure.NotNullOrEmpty(extension, nameof(extension));
+            Ensure.NotNullOrEmpty(tempExtension, nameof(tempExtension));
+            Ensure.NotNull(directory, nameof(directory));
 
             _isTrackingDirty = isTrackingDirty;
             _isCaching = isCaching;

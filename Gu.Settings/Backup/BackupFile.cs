@@ -12,7 +12,7 @@
         private BackupFile(FileInfo file, IBackupSettings setting)
         {
             Ensure.Exists(file);
-            Ensure.NotNull(setting, "setting");
+            Ensure.NotNull(setting, nameof(setting));
 
             File = file;
             TimeStamp = file.GetTimeStamp(setting);
