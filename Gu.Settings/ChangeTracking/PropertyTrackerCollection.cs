@@ -38,8 +38,8 @@
 
         internal void Add(INotifyPropertyChanged item, IReadOnlyList<PropertyInfo> trackProperties)
         {
-            Ensure.NotNull(item, "item");
-            Ensure.NotNull(trackProperties, "trackProperties");
+            Ensure.NotNull(item, nameof(item));
+            Ensure.NotNull(trackProperties, nameof(trackProperties));
             foreach (var property in trackProperties)
             {
                 Add(item, property);
@@ -48,8 +48,8 @@
 
         internal void Add(INotifyPropertyChanged item, PropertyInfo property)
         {
-            Ensure.NotNull(item, "item");
-            Ensure.NotNull(property, "property");
+            Ensure.NotNull(item, nameof(item));
+            Ensure.NotNull(property, nameof(property));
             var value = property.GetValue(item);
             if (!CanTrack(_parentType, property, value, _settings))
             {

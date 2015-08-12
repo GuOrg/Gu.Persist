@@ -9,7 +9,7 @@
     {
         protected Backuper(BackupSettings setting)
         {
-            Ensure.NotNull(setting, "setting");
+            Ensure.NotNull(setting, nameof(setting));
             Setting = setting;
             setting.Directory.CreateIfNotExists();
         }
@@ -32,7 +32,7 @@
 
         public virtual bool TryBackup(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");
             file.Refresh();
             if (!file.Exists)
@@ -52,8 +52,8 @@
 
         public virtual void Backup(FileInfo file, FileInfo backup)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNull(backup, "backup");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(backup, nameof(backup));
             FileHelper.Backup(file, backup);
         }
 
@@ -78,7 +78,7 @@
         /// <returns>True if a backup was found and successfully restored. Now File can be read.</returns>
         public virtual bool TryRestore(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");
             Ensure.DoesNotExist(file);
 
@@ -107,7 +107,7 @@
 
         internal virtual void Restore(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");
 
             var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
@@ -126,8 +126,8 @@
 
         internal virtual void Restore(FileInfo file, FileInfo backup)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNull(backup, "backup");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(backup, nameof(backup));
             Ensure.DoesNotExist(file, string.Format("Trying to restore {0} when there is already an original: {1}", backup.FullName, file.FullName));
             backup.DeleteSoftDeleteFileFor();
             FileHelper.Restore(file, backup);
@@ -135,7 +135,7 @@
 
         public virtual void PurgeBackups(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");
             file.DeleteSoftDeleteFileFor();
             var allBackups = BackupFile.GetAllBackupsFor(file, Setting);
@@ -177,8 +177,8 @@
 
         public bool CanRename(FileInfo file, string newName)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNullOrEmpty(newName, "newName");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNullOrEmpty(newName, nameof(newName));
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
             {
@@ -209,8 +209,8 @@
 
         public void Rename(FileInfo file, string newName, bool owerWrite)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNullOrEmpty(newName, "newName");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNullOrEmpty(newName, nameof(newName));
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
             {

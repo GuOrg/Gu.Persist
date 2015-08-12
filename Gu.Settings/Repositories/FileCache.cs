@@ -31,7 +31,7 @@
 
         public void Add<T>(string fullName, T value)
         {
-            Ensure.NotNullOrEmpty(fullName, "fullName");
+            Ensure.NotNullOrEmpty(fullName, nameof(fullName));
             if (value == null)
             {
                 return;
@@ -50,7 +50,7 @@
 
         public bool ContainsKey(string fullName)
         {
-            Ensure.NotNullOrEmpty(fullName, "fullName");
+            Ensure.NotNullOrEmpty(fullName, nameof(fullName));
 
             VerifyDisposed();
             WeakReference temp;

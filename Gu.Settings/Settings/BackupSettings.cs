@@ -51,8 +51,8 @@
         {
             if (isCreatingBackups)
             {
-                Ensure.NotNull(directory, "directory");
-                Ensure.NotNullOrEmpty(extension, "extension");
+                Ensure.NotNull(directory, nameof(directory));
+                Ensure.NotNullOrEmpty(extension, nameof(extension));
                 ValidateTimestampFormat(timeStampFormat);
                 _directoryPath = directory.FullName;
             }

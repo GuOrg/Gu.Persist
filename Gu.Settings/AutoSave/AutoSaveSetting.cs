@@ -7,7 +7,7 @@
     {
         private AutoSaveSetting(AutoSaveMode mode, TimeSpan time, FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             Mode = mode;
             Time = time;
             File = file;

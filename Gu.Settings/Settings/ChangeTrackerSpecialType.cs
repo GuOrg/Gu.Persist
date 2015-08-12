@@ -19,7 +19,7 @@
 
         public ChangeTrackerSpecialType(string fullTypeName, TrackAs trackAs)
         {
-            Ensure.NotNullOrEmpty(fullTypeName, "type");
+            Ensure.NotNullOrEmpty(fullTypeName, nameof(fullTypeName));
             Ensure.NotEqual(trackAs, TrackAs.Unknown, "trackAs");
             _typeName = fullTypeName;
             _trackAs = trackAs;
@@ -27,7 +27,7 @@
 
         public ChangeTrackerSpecialType(Type type, TrackAs trackAs)
         {
-            Ensure.NotNull(type, "type");
+            Ensure.NotNull(type, nameof(type));
             Ensure.NotEqual(trackAs, TrackAs.Unknown, "trackAs");
             _typeName = type.FullName;
             _trackAs = trackAs;

@@ -14,13 +14,13 @@
 
         public DirtyTracker(ICloner cloner)
         {
-            Ensure.NotNull(cloner, "cloner");
+            Ensure.NotNull(cloner, nameof(cloner));
             _cloner = cloner;
         }
 
         public void Track<T>(FileInfo file, T item)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             var clone = _cloner.Clone(item);
             _cache.AddOrUpdate(file.FullName, clone, (f, o) => clone);
@@ -28,8 +28,8 @@
 
         public void Rename(FileInfo oldName, FileInfo newName, bool owerWrite)
         {
-            Ensure.NotNull(oldName, "oldName");
-            Ensure.NotNull(newName, "newName");
+            Ensure.NotNull(oldName, nameof(oldName));
+            Ensure.NotNull(newName, nameof(newName));
             VerifyDisposed();
             _cache.ChangeKey(oldName.FullName, newName.FullName, owerWrite);
         }
@@ -41,7 +41,7 @@
 
         public void RemoveFromCache(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             object temp;
             _cache.TryRemove(file.FullName, out temp);
@@ -57,8 +57,8 @@
         /// <returns></returns>
         public bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNull(comparer, "comparer");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(comparer, nameof(comparer));
             VerifyDisposed();
             object clone;
             if (_cache.TryGetValue(file.FullName, out clone))

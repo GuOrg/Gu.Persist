@@ -42,17 +42,17 @@
 
         public static IValueTracker Track(INotifyPropertyChanged root)
         {
-            Ensure.NotNull(root, "root");
+            Ensure.NotNull(root, nameof(root));
             return Track(root, ChangeTrackerSettings.Default);
         }
 
         public static IValueTracker Track(INotifyPropertyChanged root, ChangeTrackerSettings settings)
         {
-            Ensure.NotNull(root, "root");
-            Ensure.NotNull(settings, "settings");
+            Ensure.NotNull(root, nameof(root));
+            Ensure.NotNull(settings, nameof(settings));
 
             var tracker = Create(typeof(ChangeTracker), ChangesPropertyInfo, root, settings);
-            Ensure.NotNull(tracker, "tracker");
+            Ensure.NotNull(tracker, nameof(tracker));
             return tracker;
         }
 
@@ -230,7 +230,7 @@
 
         protected static bool IsTrackType(Type type, ChangeTrackerSettings settings)
         {
-            Ensure.NotNull(type, "type");
+            Ensure.NotNull(type, nameof(type));
             if (type == typeof(string) || type.IsEnum || type.IsPrimitive)
             {
                 return false;

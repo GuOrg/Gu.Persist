@@ -16,8 +16,8 @@
 
         public CollectionItemTrackerCollection(Type parentType, PropertyInfo parentProperty, ChangeTrackerSettings settings)
         {
-            Ensure.NotNull(parentType, "parentType");
-            Ensure.NotNull(parentProperty, "parentProperty");
+            Ensure.NotNull(parentType, nameof(parentType));
+            Ensure.NotNull(parentProperty, nameof(parentProperty));
             _parentType = parentType;
             _parentProperty = parentProperty;
             _settings = settings;

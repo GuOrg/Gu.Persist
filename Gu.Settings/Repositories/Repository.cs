@@ -31,7 +31,7 @@
 
         protected Repository(DirectoryInfo directory)
         {
-            Ensure.NotNull(directory, "directory");
+            Ensure.NotNull(directory, nameof(directory));
             directory.CreateIfNotExists();
             Settings = RepositorySettings.DefaultFor(directory);
             if (Settings.IsTrackingDirty)
@@ -85,7 +85,7 @@
 
         public virtual FileInfo GetFileInfo(string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             return GetFileInfoCore(fileName);
         }
@@ -117,7 +117,7 @@
 
         public virtual void Delete(string fileName, bool deleteBackups)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             var file = GetFileInfoCore(fileName);
             Delete(file, deleteBackups);
@@ -125,7 +125,7 @@
 
         public virtual void DeleteBackups(string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             var file = GetFileInfoCore(fileName);
             DeleteBackups(file);
@@ -133,7 +133,7 @@
 
         public virtual void Delete(FileInfo file, bool deleteBackups)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             file.Delete();
             file.DeleteSoftDeleteFileFor();
@@ -145,7 +145,7 @@
 
         public virtual void DeleteBackups(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             Backuper.DeleteBackups(file);
         }
 
@@ -163,7 +163,7 @@
 
         public virtual bool Exists(string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             var fileInfo = GetFileInfoCore(fileName);
             return Exists(fileInfo);
@@ -171,7 +171,7 @@
 
         public virtual bool Exists(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             return ExistsCore(file);
         }
@@ -198,7 +198,7 @@
 
         public virtual Task<T> ReadAsync<T>(string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             var fileInfo = GetFileInfoCore(fileName);
             return ReadAsync<T>(fileInfo);
@@ -206,7 +206,7 @@
 
         public virtual Task<MemoryStream> ReadStreamAsync(string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             var fileInfo = GetFileInfoCore(fileName);
             return ReadStreamAsync(fileInfo);
@@ -214,7 +214,7 @@
 
         public virtual async Task<T> ReadAsync<T>(FileInfo file)
         {
-            Ensure.NotNull(file, "file"); // not checking exists, framework exception is more familiar.
+            Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
             VerifyDisposed();
             T value;
             if (Settings.IsCaching)
@@ -253,7 +253,7 @@
 
         public virtual Task<MemoryStream> ReadStreamAsync(FileInfo file)
         {
-            Ensure.NotNull(file, "file"); // not checking exists, framework exception is more familiar.
+            Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
             VerifyDisposed();
             return file.ReadAsync();
         }
@@ -285,7 +285,7 @@
         /// <returns></returns>
         public virtual T Read<T>(string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             var file = GetFileInfoCore(fileName);
             return Read<T>(file);
@@ -293,7 +293,7 @@
 
         public virtual Stream ReadStream(string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             var file = GetFileInfoCore(fileName);
             return ReadStream(file);
@@ -301,14 +301,14 @@
 
         public virtual T Read<T>(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             return ReadCore<T>(file);
         }
 
         public virtual Stream ReadStream(FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             return file.OpenRead();
         }
@@ -316,7 +316,7 @@
         protected T ReadCore<T>(FileInfo file)
         {
             VerifyDisposed();
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             T value;
             if (Settings.IsCaching)
             {
@@ -351,22 +351,22 @@
 
         public virtual T ReadOrCreate<T>(Func<T> creator)
         {
-            Ensure.NotNull(creator, "creator");
+            Ensure.NotNull(creator, nameof(creator));
             VerifyDisposed();
             return ReadOrCreateCore(creator);
         }
 
         protected T ReadOrCreateCore<T>(Func<T> creator)
         {
-            Ensure.NotNull(creator, "creator");
+            Ensure.NotNull(creator, nameof(creator));
             var file = GetFileInfoCore<T>();
             return ReadOrCreateCore(file, creator);
         }
 
         public virtual T ReadOrCreate<T>(string fileName, Func<T> creator)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
-            Ensure.NotNull(creator, "creator");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
+            Ensure.NotNull(creator, nameof(creator));
             VerifyDisposed();
             var file = GetFileInfoCore(fileName);
             return ReadOrCreate(file, creator);
@@ -374,16 +374,16 @@
 
         public virtual T ReadOrCreate<T>(FileInfo file, Func<T> creator)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNull(creator, "creator");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(creator, nameof(creator));
             VerifyDisposed();
             return ReadOrCreateCore(file, creator);
         }
 
         protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNull(creator, "creator");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(creator, nameof(creator));
             T setting;
             if (ExistsCore<T>())
             {
@@ -430,7 +430,7 @@
 
         public virtual void Save<T>(T item, string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             var file = GetFileInfoCore(fileName);
             Save(item, file);
@@ -444,7 +444,7 @@
         /// <param name="fileName"></param>
         public virtual void SaveAndClose<T>(T item, string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             Save(item, fileName);
             RemoveFromCache(item);
@@ -453,7 +453,7 @@
 
         public virtual void Save<T>(T item, FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             SaveCore(item, file);
         }
@@ -466,7 +466,7 @@
         /// <param name="file"></param>
         public virtual void SaveAndClose<T>(T item, FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             SaveCore(item, file);
             RemoveFromCache(item);
@@ -482,7 +482,7 @@
 
         public virtual void Save<T>(T item, FileInfo file, FileInfo tempFile)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             SaveCore(item, file, tempFile);
         }
@@ -496,7 +496,7 @@
 
         public virtual void SaveStream(Stream stream, string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             var file = GetFileInfoCore(fileName);
             SaveStream(stream, file);
@@ -509,7 +509,7 @@
         /// <param name="file"></param>
         public virtual void SaveStream(Stream stream, FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             var tempFile = file.WithNewExtension(Settings.TempExtension);
             SaveStreamCore(stream, file, tempFile);
@@ -517,7 +517,7 @@
 
         public virtual void SaveStream(Stream stream, FileInfo file, FileInfo tempFile)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             SaveStreamCore(stream, file, tempFile);
         }
@@ -566,7 +566,7 @@
 
         public virtual Task SaveAsync<T>(T item, string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             var fileInfo = GetFileInfoCore(fileName);
             return SaveAsync(item, fileInfo);
@@ -574,7 +574,7 @@
 
         public virtual Task SaveAsync<T>(T item, FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
             VerifyDisposed();
             var tempFile = file.WithNewExtension(Settings.TempExtension);
             return SaveAsync(item, file, tempFile);
@@ -582,8 +582,8 @@
 
         public virtual async Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile)
         {
-            Ensure.NotNull(file, "file");
-            Ensure.NotNull(tempFile, "tempFile");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(tempFile, nameof(tempFile));
             VerifyDisposed();
             if (item == null)
             {
@@ -599,23 +599,23 @@
 
         public virtual Task SaveStreamAsync<T>(Stream stream)
         {
-            Ensure.NotNull(stream, "stream");
+            Ensure.NotNull(stream, nameof(stream));
             var file = GetFileInfo<T>();
             return SaveStreamAsync(stream, file);
         }
 
         public virtual Task SaveStreamAsync(Stream stream, string fileName)
         {
-            Ensure.NotNull(stream, "stream");
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.NotNull(stream, nameof(stream));
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = GetFileInfoCore(fileName);
             return SaveStreamAsync(stream, file);
         }
 
         public virtual Task SaveStreamAsync(Stream stream, FileInfo file)
         {
-            Ensure.NotNull(stream, "stream");
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(stream, nameof(stream));
+            Ensure.NotNull(file, nameof(file));
             var tempFile = file.WithNewExtension(Settings.TempExtension);
             return SaveStreamAsync(stream, file, tempFile);
         }
@@ -649,28 +649,28 @@
 
         public virtual bool IsDirty<T>(T item, string fileName)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             VerifyDisposed();
             return IsDirty(item, fileName, DefaultStructuralEqualityComparer<T>());
         }
 
         public virtual bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer)
         {
-            Ensure.IsValidFileName(fileName, "fileName");
+            Ensure.IsValidFileName(fileName, nameof(fileName));
             var fileInfo = GetFileInfoCore(fileName);
             return IsDirty(item, fileInfo, comparer);
         }
 
         public virtual bool IsDirty<T>(T item, FileInfo file)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
 
             return IsDirty(item, file, DefaultStructuralEqualityComparer<T>());
         }
 
         public virtual bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
         {
-            Ensure.NotNull(file, "file");
+            Ensure.NotNull(file, nameof(file));
 
             VerifyDisposed();
             if (!Settings.IsTrackingDirty)
@@ -682,7 +682,7 @@
 
         public bool CanRename<T>(string newName)
         {
-            Ensure.IsValidFileName(newName, "newName");
+            Ensure.IsValidFileName(newName, nameof(newName));
 
             var fileInfo = GetFileInfo<T>();
             return CanRename(fileInfo, newName);
@@ -690,15 +690,15 @@
 
         public void Rename<T>(string newName, bool owerWrite)
         {
-            Ensure.IsValidFileName(newName, "newName");
+            Ensure.IsValidFileName(newName, nameof(newName));
             var fileInfo = GetFileInfo<T>();
             Rename(fileInfo, newName, owerWrite);
         }
 
         public bool CanRename(string oldName, string newName)
         {
-            Ensure.IsValidFileName(oldName, "oldName");
-            Ensure.IsValidFileName(newName, "newName");
+            Ensure.IsValidFileName(oldName, nameof(oldName));
+            Ensure.IsValidFileName(newName, nameof(newName));
             VerifyDisposed();
             var oldFile = GetFileInfoCore(oldName);
             var newFile = GetFileInfoCore(newName);
@@ -707,8 +707,8 @@
 
         public void Rename(string oldName, string newName, bool owerWrite)
         {
-            Ensure.IsValidFileName(oldName, "oldName");
-            Ensure.IsValidFileName(newName, "newName");
+            Ensure.IsValidFileName(oldName, nameof(oldName));
+            Ensure.IsValidFileName(newName, nameof(newName));
             VerifyDisposed();
             var oldFile = GetFileInfoCore(oldName);
             var newFile = GetFileInfoCore(newName);
@@ -717,8 +717,8 @@
 
         public bool CanRename(FileInfo oldName, string newName)
         {
-            Ensure.NotNull(oldName, "oldName");
-            Ensure.IsValidFileName(newName, "newName");
+            Ensure.NotNull(oldName, nameof(oldName));
+            Ensure.IsValidFileName(newName, nameof(newName));
             VerifyDisposed();
             var newFile = GetFileInfoCore(newName);
             return CanRename(oldName, newFile);
@@ -726,8 +726,8 @@
 
         public void Rename(FileInfo oldName, string newName, bool owerWrite)
         {
-            Ensure.Exists(oldName, "oldName");
-            Ensure.IsValidFileName(newName, "newName");
+            Ensure.Exists(oldName, nameof(oldName));
+            Ensure.IsValidFileName(newName, nameof(newName));
             VerifyDisposed();
             var newFile = GetFileInfoCore(newName);
             Rename(oldName, newFile, owerWrite);
@@ -735,8 +735,8 @@
 
         public bool CanRename(FileInfo oldName, FileInfo newName)
         {
-            Ensure.NotNull(oldName, "oldName");
-            Ensure.NotNull(newName, "newName");
+            Ensure.NotNull(oldName, nameof(oldName));
+            Ensure.NotNull(newName, nameof(newName));
             VerifyDisposed();
             oldName.Refresh();
             if (!oldName.Exists)
@@ -762,8 +762,8 @@
 
         public void Rename(FileInfo oldName, FileInfo newName, bool owerWrite)
         {
-            Ensure.NotNull(oldName, "oldName");
-            Ensure.NotNull(newName, "newName");
+            Ensure.NotNull(oldName, nameof(oldName));
+            Ensure.NotNull(newName, nameof(newName));
             VerifyDisposed();
             oldName.Rename(newName, owerWrite);
             if (Backuper != null)
@@ -790,14 +790,14 @@
 
         public virtual T Clone<T>(T item)
         {
-            Ensure.NotNull(item, "item");
+            Ensure.NotNull(item, nameof(item));
             VerifyDisposed();
             return CloneCore(item);
         }
 
         public virtual T CloneCore<T>(T item)
         {
-            Ensure.NotNull(item, "item");
+            Ensure.NotNull(item, nameof(item));
             VerifyDisposed();
             using (var stream = ToStream(item))
             {
