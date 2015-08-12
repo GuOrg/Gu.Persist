@@ -1,9 +1,11 @@
 ﻿namespace Gu.Settings.Backup
 {
     using System;
-    using System.ComponentModel;
     using System.IO;
 
+    /// <summary>
+    /// A backuper that does not create any backups
+    /// </summary>
     public class NullBackuper : IBackuper
     {
         public static readonly NullBackuper Default = new NullBackuper();
@@ -12,17 +14,20 @@
         {
         }
 
+        /// <inheritdoc/>
         public virtual bool TryBackup(FileInfo file)
         {
             var softDelete = file.SoftDelete();
             return softDelete != null;
         }
 
+        /// <inheritdoc/>
         public virtual void Backup(FileInfo file, FileInfo backup)
         {
             FileHelper.Backup(file, backup);
         }
 
+        /// <inheritdoc/>
         public bool CanRestore(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -34,14 +39,7 @@
             return false;
         }
 
-        /// <summary>
-        /// Reads the newest backup if any.
-        /// Order:
-        /// 1) Soft delete file.
-        /// 2) Newest backup if many.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns>True if a backup was found and successfully restored. Now File can be read.</returns>
+        /// <inheritdoc/>
         public virtual bool TryRestore(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -89,6 +87,7 @@
             FileHelper.Restore(file, backup);
         }
 
+        /// <inheritdoc/>
         public virtual void PurgeBackups(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -96,6 +95,7 @@
             file.DeleteSoftDeleteFileFor();
         }
 
+        /// <inheritdoc/>
         public bool CanRename(FileInfo file, string newName)
         {
             Ensure.NotNull(file, nameof(file));
@@ -113,6 +113,7 @@
             return true;
         }
 
+        /// <inheritdoc/>
         public void Rename(FileInfo file, string newName, bool owerWrite)
         {
             Ensure.NotNull(file, nameof(file));
@@ -126,13 +127,11 @@
             }
         }
 
+        /// <inheritdoc/>
         public void DeleteBackups(FileInfo file)
         {
             var soft = file.GetSoftDeleteFileFor();
-            if (soft != null)
-            {
-                soft.Delete();
-            }
+            soft?.Delete();
         }
     }
 }

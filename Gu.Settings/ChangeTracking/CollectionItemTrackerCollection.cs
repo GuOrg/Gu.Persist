@@ -23,26 +23,29 @@
             _settings = settings;
         }
 
+        /// <inheritdoc/>
         public int Count { get { return _trackers.Count; } }
 
-        public bool IsReadOnly { get { return true; } }
+        /// <inheritdoc/>
+        public bool IsReadOnly => true;
 
-        public IEnumerator<IValueTracker> GetEnumerator()
-        {
-            return _trackers.GetEnumerator();
-        }
+        /// <inheritdoc/>
+        public IEnumerator<IValueTracker> GetEnumerator() => _trackers.GetEnumerator();
 
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
+        /// <see cref="List{IValueTracker}.Contains(IValueTracker)"/>
         public bool Contains(IValueTracker item)
         {
             VerifyDisposed();
             return _trackers.Contains(item);
         }
 
+        /// <see cref="List{IValueTracker}.Add(IValueTracker)"/>
         internal void Add(IEnumerable items)
         {
             foreach (var child in items)
@@ -55,6 +58,7 @@
             }
         }
 
+        /// <see cref="List{IValueTracker}.Clear()"/>
         internal void Clear()
         {
             VerifyDisposed();
@@ -88,7 +92,7 @@
 
         private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != ChangesPropertyName)
+            if (e.PropertyName != nameof(Changes))
             {
                 return;
             }

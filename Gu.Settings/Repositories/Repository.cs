@@ -1,18 +1,13 @@
 ﻿namespace Gu.Settings
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.IO;
-    using System.Linq;
-    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
 
     using Gu.Settings.Backup;
     using Gu.Settings.Repositories;
-
-    using Internals;
 
     public abstract class Repository : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IAutoSavingRepository, IRepositoryWithSettings, IDisposable
     {
@@ -29,6 +24,12 @@
         {
         }
 
+        /// <summary>
+        /// Creates a new <see cref="Repository"/> with default settings.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new default setting is created and saved.
+        /// </summary>
+        /// <param name="directory"></param>
         protected Repository(DirectoryInfo directory)
         {
             Ensure.NotNull(directory, nameof(directory));
@@ -43,11 +44,19 @@
             Backuper = Backup.Backuper.Create(Settings.BackupSettings);
         }
 
+        /// <summary>
+        /// Creates a new <see cref="Repository"/> with <paramref name="settings"/>.
+        /// </summary>
+        /// <param name="settings"></param>
         protected Repository(IRepositorySettings settings)
             : this(settings, Backup.Backuper.Create(settings.BackupSettings))
         {
         }
 
+        /// <summary>
+        /// Creates a new <see cref="Repository"/> with <paramref name="settings"/>.
+        /// </summary>
+        /// <param name="settings"></param>
         protected Repository(IRepositorySettings settings, IBackuper backuper)
         {
             settings.Directory.CreateIfNotExists();
@@ -59,10 +68,13 @@
             }
         }
 
-        public IRepositorySettings Settings { get; protected set; }
+        /// <inheritdoc/>
+        public IRepositorySettings Settings { get; }
+       
+        /// <inheritdoc/>
+        public IDirtyTracker Tracker { get; }
 
-        public IDirtyTracker Tracker { get; protected set; }
-
+        /// <inheritdoc/>
         public IBackuper Backuper
         {
             get { return _backuper ?? NullBackuper.Default; }
@@ -72,17 +84,14 @@
             }
         }
 
-        /// <summary>
-        /// This gets the fileinfo used for reading & writing files of type T
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public virtual FileInfo GetFileInfo<T>()
         {
             VerifyDisposed();
             return GetFileInfoCore<T>();
         }
 
+        /// <inheritdoc/>
         public virtual FileInfo GetFileInfo(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -90,17 +99,20 @@
             return GetFileInfoCore(fileName);
         }
 
+        /// <inheritdoc/>
         protected FileInfo GetFileInfoCore(string fileName)
         {
             var file = FileHelper.CreateFileInfo(fileName, Settings);
             return file;
         }
 
+        /// <inheritdoc/>
         protected FileInfo GetFileInfoCore<T>()
         {
             return FileHelper.CreateFileInfo<T>(Settings);
         }
 
+        /// <inheritdoc/>
         public virtual void Delete<T>(bool deleteBackups)
         {
             VerifyDisposed();
@@ -108,6 +120,7 @@
             Delete(file, deleteBackups);
         }
 
+        /// <inheritdoc/>
         public virtual void DeleteBackups<T>()
         {
             VerifyDisposed();
@@ -115,6 +128,7 @@
             DeleteBackups(file);
         }
 
+        /// <inheritdoc/>
         public virtual void Delete(string fileName, bool deleteBackups)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -123,6 +137,7 @@
             Delete(file, deleteBackups);
         }
 
+        /// <inheritdoc/>
         public virtual void DeleteBackups(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -131,6 +146,7 @@
             DeleteBackups(file);
         }
 
+        /// <inheritdoc/>
         public virtual void Delete(FileInfo file, bool deleteBackups)
         {
             Ensure.NotNull(file, nameof(file));
@@ -143,12 +159,14 @@
             }
         }
 
+        /// <inheritdoc/>
         public virtual void DeleteBackups(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             Backuper.DeleteBackups(file);
         }
 
+        /// <inheritdoc/>
         public virtual bool Exists<T>()
         {
             VerifyDisposed();
@@ -161,6 +179,7 @@
             return ExistsCore(file);
         }
 
+        /// <inheritdoc/>
         public virtual bool Exists(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -169,6 +188,7 @@
             return Exists(fileInfo);
         }
 
+        /// <inheritdoc/>
         public virtual bool Exists(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -182,6 +202,7 @@
             return file.Exists;
         }
 
+        /// <inheritdoc/>
         public virtual Task<T> ReadAsync<T>()
         {
             VerifyDisposed();
@@ -189,6 +210,7 @@
             return ReadAsync<T>(file);
         }
 
+        /// <inheritdoc/>
         public virtual Task<MemoryStream> ReadStreamAsync<T>()
         {
             VerifyDisposed();
@@ -196,6 +218,7 @@
             return ReadStreamAsync(file);
         }
 
+        /// <inheritdoc/>
         public virtual Task<T> ReadAsync<T>(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -204,6 +227,7 @@
             return ReadAsync<T>(fileInfo);
         }
 
+        /// <inheritdoc/>
         public virtual Task<MemoryStream> ReadStreamAsync(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -212,6 +236,7 @@
             return ReadStreamAsync(fileInfo);
         }
 
+        /// <inheritdoc/>
         public virtual async Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
@@ -251,6 +276,7 @@
             return value;
         }
 
+        /// <inheritdoc/>
         public virtual Task<MemoryStream> ReadStreamAsync(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
@@ -258,12 +284,14 @@
             return file.ReadAsync();
         }
 
+        /// <inheritdoc/>
         public virtual T Read<T>()
         {
             VerifyDisposed();
             return ReadCore<T>();
         }
 
+        /// <inheritdoc/>
         public virtual Stream ReadStream<T>()
         {
             VerifyDisposed();
@@ -277,12 +305,7 @@
             return ReadCore<T>(file);
         }
 
-        /// <summary>
-        /// Reads from file the first time. After that it returns returns cached value (singleton).
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="fileName">Optional if blank a file with the name of the class is read.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public virtual T Read<T>(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -291,6 +314,7 @@
             return Read<T>(file);
         }
 
+        /// <inheritdoc/>
         public virtual Stream ReadStream(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -299,6 +323,7 @@
             return ReadStream(file);
         }
 
+        /// <inheritdoc/>
         public virtual T Read<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -306,6 +331,7 @@
             return ReadCore<T>(file);
         }
 
+        /// <inheritdoc/>
         public virtual Stream ReadStream(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -349,6 +375,7 @@
             return value;
         }
 
+        /// <inheritdoc/>
         public virtual T ReadOrCreate<T>(Func<T> creator)
         {
             Ensure.NotNull(creator, nameof(creator));
@@ -363,6 +390,7 @@
             return ReadOrCreateCore(file, creator);
         }
 
+        /// <inheritdoc/>
         public virtual T ReadOrCreate<T>(string fileName, Func<T> creator)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -372,6 +400,7 @@
             return ReadOrCreate(file, creator);
         }
 
+        /// <inheritdoc/>
         public virtual T ReadOrCreate<T>(FileInfo file, Func<T> creator)
         {
             Ensure.NotNull(file, nameof(file));
@@ -401,18 +430,14 @@
             return setting;
         }
 
-        /// <summary>
-        /// Saves to a file named typeof(T).Name
-        /// Note: T must be the same exact type you read.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
+        /// <inheritdoc/>
         public virtual void Save<T>(T item)
         {
             VerifyDisposed();
             SaveCore(item);
         }
 
+        /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item)
         {
             VerifyDisposed();
@@ -428,6 +453,7 @@
             SaveCore(item, file);
         }
 
+        /// <inheritdoc/>
         public virtual void Save<T>(T item, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -436,12 +462,7 @@
             Save(item, file);
         }
 
-        /// <summary>
-        /// Saves the file. Then removes it from cache.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="fileName"></param>
+        /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -451,6 +472,7 @@
             RemoveFromDirtyTracker(item);
         }
 
+        /// <inheritdoc/>
         public virtual void Save<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -458,12 +480,7 @@
             SaveCore(item, file);
         }
 
-        /// <summary>
-        /// Saves the file. Then removes it from cache.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="file"></param>
+        /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -480,6 +497,7 @@
             SaveCore(item, file, tempFile);
         }
 
+        /// <inheritdoc/>
         public virtual void Save<T>(T item, FileInfo file, FileInfo tempFile)
         {
             Ensure.NotNull(file, nameof(file));
@@ -487,6 +505,7 @@
             SaveCore(item, file, tempFile);
         }
 
+        /// <inheritdoc/>
         public virtual void SaveStream<T>(Stream stream)
         {
             VerifyDisposed();
@@ -494,6 +513,7 @@
             SaveStream(stream, file);
         }
 
+        /// <inheritdoc/>
         public virtual void SaveStream(Stream stream, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -502,11 +522,7 @@
             SaveStream(stream, file);
         }
 
-        /// <summary>
-        /// Saves the stream and creates backups.
-        /// </summary>
-        /// <param name="stream">If the stream is null the file is deleted</param>
-        /// <param name="file"></param>
+        /// <inheritdoc/>
         public virtual void SaveStream(Stream stream, FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -515,6 +531,7 @@
             SaveStreamCore(stream, file, tempFile);
         }
 
+        /// <inheritdoc/>
         public virtual void SaveStream(Stream stream, FileInfo file, FileInfo tempFile)
         {
             Ensure.NotNull(file, nameof(file));
@@ -558,12 +575,14 @@
             }
         }
 
+        /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item)
         {
             var file = GetFileInfo<T>();
             return SaveAsync(item, file);
         }
 
+        /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -572,6 +591,7 @@
             return SaveAsync(item, fileInfo);
         }
 
+        /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -580,6 +600,7 @@
             return SaveAsync(item, file, tempFile);
         }
 
+        /// <inheritdoc/>
         public virtual async Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile)
         {
             Ensure.NotNull(file, nameof(file));
@@ -597,6 +618,7 @@
             }
         }
 
+        /// <inheritdoc/>
         public virtual Task SaveStreamAsync<T>(Stream stream)
         {
             Ensure.NotNull(stream, nameof(stream));
@@ -604,6 +626,7 @@
             return SaveStreamAsync(stream, file);
         }
 
+        /// <inheritdoc/>
         public virtual Task SaveStreamAsync(Stream stream, string fileName)
         {
             Ensure.NotNull(stream, nameof(stream));
@@ -612,6 +635,7 @@
             return SaveStreamAsync(stream, file);
         }
 
+        /// <inheritdoc/>
         public virtual Task SaveStreamAsync(Stream stream, FileInfo file)
         {
             Ensure.NotNull(stream, nameof(stream));
@@ -620,6 +644,7 @@
             return SaveStreamAsync(stream, file, tempFile);
         }
 
+        /// <inheritdoc/>
         public virtual async Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile)
         {
             Backuper.TryBackup(file);
@@ -636,17 +661,20 @@
             }
         }
 
+        /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item)
         {
             return IsDirty(item, DefaultStructuralEqualityComparer<T>());
         }
 
+        /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item, IEqualityComparer<T> comparer)
         {
             var file = GetFileInfo<T>();
             return IsDirty(item, file, comparer);
         }
 
+        /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -654,6 +682,7 @@
             return IsDirty(item, fileName, DefaultStructuralEqualityComparer<T>());
         }
 
+        /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -661,6 +690,7 @@
             return IsDirty(item, fileInfo, comparer);
         }
 
+        /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -668,6 +698,7 @@
             return IsDirty(item, file, DefaultStructuralEqualityComparer<T>());
         }
 
+        /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
         {
             Ensure.NotNull(file, nameof(file));
@@ -680,6 +711,7 @@
             return Tracker.IsDirty(item, file, comparer);
         }
 
+        /// <inheritdoc/>
         public bool CanRename<T>(string newName)
         {
             Ensure.IsValidFileName(newName, nameof(newName));
@@ -688,6 +720,7 @@
             return CanRename(fileInfo, newName);
         }
 
+        /// <inheritdoc/>
         public void Rename<T>(string newName, bool owerWrite)
         {
             Ensure.IsValidFileName(newName, nameof(newName));
@@ -695,6 +728,7 @@
             Rename(fileInfo, newName, owerWrite);
         }
 
+        /// <inheritdoc/>
         public bool CanRename(string oldName, string newName)
         {
             Ensure.IsValidFileName(oldName, nameof(oldName));
@@ -705,6 +739,7 @@
             return CanRename(oldFile, newFile);
         }
 
+        /// <inheritdoc/>
         public void Rename(string oldName, string newName, bool owerWrite)
         {
             Ensure.IsValidFileName(oldName, nameof(oldName));
@@ -715,6 +750,7 @@
             Rename(oldFile, newFile, owerWrite);
         }
 
+        /// <inheritdoc/>
         public bool CanRename(FileInfo oldName, string newName)
         {
             Ensure.NotNull(oldName, nameof(oldName));
@@ -724,6 +760,7 @@
             return CanRename(oldName, newFile);
         }
 
+        /// <inheritdoc/>
         public void Rename(FileInfo oldName, string newName, bool owerWrite)
         {
             Ensure.Exists(oldName, nameof(oldName));
@@ -733,6 +770,7 @@
             Rename(oldName, newFile, owerWrite);
         }
 
+        /// <inheritdoc/>
         public bool CanRename(FileInfo oldName, FileInfo newName)
         {
             Ensure.NotNull(oldName, nameof(oldName));
@@ -760,6 +798,7 @@
             return true;
         }
 
+        /// <inheritdoc/>
         public void Rename(FileInfo oldName, FileInfo newName, bool owerWrite)
         {
             Ensure.NotNull(oldName, nameof(oldName));
@@ -788,6 +827,7 @@
             GC.SuppressFinalize(this);
         }
 
+        /// <inheritdoc/>
         public virtual T Clone<T>(T item)
         {
             Ensure.NotNull(item, nameof(item));
@@ -805,24 +845,28 @@
             }
         }
 
+        /// <inheritdoc/>
         public void ClearCache()
         {
             VerifyDisposed();
             _fileCache.Clear();
         }
 
+        /// <inheritdoc/>
         public void RemoveFromCache<T>(T item)
         {
             VerifyDisposed();
             _fileCache.TryRemove(item);
         }
 
+        /// <inheritdoc/>
         public void ClearTrackerCache()
         {
             VerifyDisposed();
             Tracker.ClearCache();
         }
 
+        /// <inheritdoc/>
         public void RemoveFromDirtyTracker<T>(T item)
         {
             VerifyDisposed();
@@ -856,6 +900,9 @@
             }
         }
 
+        /// <summary>
+        /// Check if Dispose() has benn called.
+        /// </summary>
         protected void VerifyDisposed()
         {
             if (_disposed)
@@ -864,12 +911,38 @@
             }
         }
 
+        /// <summary>
+        /// Deserialize from <paramref name="stream"/> to an instance of <typeparamref name="T"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         protected abstract T FromStream<T>(Stream stream);
 
+        /// <summary>
+        /// Serialize from <paramref name="item"/> to a <see cref="Stream"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <returns></returns>
         protected abstract Stream ToStream<T>(T item);
 
+        /// <summary>
+        /// Gets the comparer to use when checking <see cref="IDirty.IsDirty{T}(T)"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         protected abstract IEqualityComparer<T> DefaultStructuralEqualityComparer<T>();
 
+        /// <summary>
+        /// Adds <paramref name="item"/> to the cache.
+        /// </summary>
+        /// <remarks>
+        /// Calls <see cref="CacheCore{T}(T, FileInfo)"/>
+        /// </remarks>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="file"></param>
         protected virtual void Cache<T>(T item, FileInfo file)
         {
             CacheCore(item, file);

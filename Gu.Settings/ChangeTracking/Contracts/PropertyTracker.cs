@@ -15,13 +15,10 @@ namespace Gu.Settings
             ParentProperty = property;
         }
 
+        /// <inheritdoc/>
         public Type ParentType { get; private set; }
 
+        /// <inheritdoc/>
         public PropertyInfo ParentProperty { get; private set; }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
     }
 }

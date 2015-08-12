@@ -7,6 +7,9 @@
 
     using Gu.Settings.Internals;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class BackupFile
     {
         private BackupFile(FileInfo file, IBackupSettings setting)
@@ -18,13 +21,20 @@
             TimeStamp = file.GetTimeStamp(setting);
         }
 
-        public FileInfo File { get; private set; }
+        /// <summary>
+        /// Gets the <see cref="FileInfo"/>
+        /// </summary>
+        public FileInfo File { get; }
 
-        public DateTime TimeStamp { get; private set; }
+        /// <summary>
+        /// Gets the <see cref="DateTime"/> that represents the time of the backup.
+        /// </summary>
+        public DateTime TimeStamp { get; }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
-            return string.Format("File: {0}, TimeStamp: {1}", File, TimeStamp);
+            return $"File: {File}, TimeStamp: {TimeStamp}";
         }
 
         internal static FileInfo GetRestoreFileFor(FileInfo file, IBackupSettings setting)
@@ -59,10 +69,10 @@
             return backup.WithTimeStamp(DateTime.Now, setting);
         }
 
-        internal static string GetBackupFilePattern(FileInfo file, IBackupSettings setting)
+        private static string GetBackupFilePattern(FileInfo file, IBackupSettings setting)
         {
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FullName);
-            var pattern = String.Format("{0}*{1}", fileNameWithoutExtension, setting.Extension);
+            var pattern = $"{fileNameWithoutExtension}*{setting.Extension}";
             return pattern;
         }
     }
