@@ -68,7 +68,7 @@ namespace Gu.Settings
 
         private void OnSubtrackerPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == ChangesPropertyName)
+            if (e.PropertyName == nameof(Changes))
             {
                 Changes++;
             }

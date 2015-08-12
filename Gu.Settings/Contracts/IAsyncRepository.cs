@@ -3,44 +3,39 @@ namespace Gu.Settings
     using System.IO;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// A repository for async reads and writes.
+    /// </summary>
     public interface IAsyncRepository
     {
+        /// <see cref="IRepository.Delete{T}(bool)"/>
         void Delete<T>(bool deleteBackups);
 
+        /// <see cref="IRepository.Delete(string, bool)"/>
         void Delete(string fileName, bool deleteBackups);
 
+        /// <see cref="IRepository.Delete(FileInfo, bool)"/>
         void Delete(FileInfo file, bool deleteBackups);
 
-        /// <summary>
-        /// Gets the fileinfo for that is used for the type
-        /// </summary
-        /// <param name="fileName"></param>
-        /// <returns></returns>
+        /// <see cref="IRepository.GetFileInfo{T}()"/>
         FileInfo GetFileInfo<T>();
 
-        /// <summary>
-        /// Gets the fileinfo for that is used for the given filename
-        /// </summary
-        /// <param name="fileName"></param>
-        /// <returns></returns>
+        /// <see cref="IRepository.GetFileInfo(string)"/>
         FileInfo GetFileInfo(string fileName);
 
+        /// <see cref="IRepository.Read{T}(string)"/>
         Task<T> ReadAsync<T>(string fileName);
 
+        /// <see cref="IRepository.Read{T}(FileInfo)"/>
         Task<T> ReadAsync<T>(FileInfo file);
 
+        /// <see cref="IRepository.Save{T}(T, string)"/>
         Task SaveAsync<T>(T item, string fileName);
 
+        /// <see cref="IRepository.Save{T}(T, FileInfo)"/>
         Task SaveAsync<T>(T item, FileInfo file);
 
-        /// <summary>
-        /// The file is saved to tempFile, if successful tempFile is renamed to file
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="file"></param>
-        /// <param name="tempFile"></param>
-        /// <returns></returns>
+        /// <see cref="IRepository.Save{T}(T, FileInfo, FileInfo)"/>
         Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile);
     }
 }

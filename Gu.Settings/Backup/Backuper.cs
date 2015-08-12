@@ -14,13 +14,21 @@
             setting.Directory.CreateIfNotExists();
         }
 
-        public IBackupSettings Setting { get; private set; }
+        /// <summary>
+        /// Gets the <see cref="IBackupSettings"/>
+        /// </summary>
+        public IBackupSettings Setting { get; }
 
-        protected string[] BackupExtensions
-        {
-            get { return new[] { Setting.Extension, FileHelper.SoftDeleteExtension }; } // this can be local field if allocations become a problem which is unlikely.
-        }
+        protected string[] BackupExtensions => new[] { Setting.Extension, FileHelper.SoftDeleteExtension };
 
+        /// <summary>
+        /// Creates a backuper for the given settings.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="setting"/> is null a <see cref="NullBackuper"/> is returned.
+        /// </remarks>
+        /// <param name="setting">The setting to use for backups.</param>
+        /// <returns></returns>
         public static IBackuper Create(BackupSettings setting)
         {
             if (setting != null)
@@ -30,6 +38,7 @@
             return NullBackuper.Default;
         }
 
+        /// <inheritdoc/>
         public virtual bool TryBackup(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -50,6 +59,7 @@
             return true;
         }
 
+        /// <inheritdoc/>
         public virtual void Backup(FileInfo file, FileInfo backup)
         {
             Ensure.NotNull(file, nameof(file));
@@ -57,6 +67,7 @@
             FileHelper.Backup(file, backup);
         }
 
+        /// <inheritdoc/>
         public bool CanRestore(FileInfo file)
         {
             var softDelete = file.GetSoftDeleteFileFor();
@@ -68,14 +79,7 @@
             return backups.Any();
         }
 
-        /// <summary>
-        /// Reads the newest backup if any.
-        /// Order:
-        /// 1) Soft delete file.
-        /// 2) Newest backup if many.
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns>True if a backup was found and successfully restored. Now File can be read.</returns>
+        /// <inheritdoc/>
         public virtual bool TryRestore(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -105,6 +109,7 @@
             }
         }
 
+        /// <inheritdoc/>
         internal virtual void Restore(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -133,6 +138,7 @@
             FileHelper.Restore(file, backup);
         }
 
+        /// <inheritdoc/>
         public virtual void PurgeBackups(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -175,6 +181,7 @@
             }
         }
 
+        /// <inheritdoc/>
         public bool CanRename(FileInfo file, string newName)
         {
             Ensure.NotNull(file, nameof(file));
@@ -207,6 +214,7 @@
             return true;
         }
 
+        /// <inheritdoc/>
         public void Rename(FileInfo file, string newName, bool owerWrite)
         {
             Ensure.NotNull(file, nameof(file));
@@ -232,6 +240,7 @@
             }
         }
 
+        /// <inheritdoc/>
         public void DeleteBackups(FileInfo file)
         {
             var soft = file.GetSoftDeleteFileFor();

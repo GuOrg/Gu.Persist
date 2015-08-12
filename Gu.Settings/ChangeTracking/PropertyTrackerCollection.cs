@@ -144,7 +144,7 @@
 
         private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != ChangesPropertyName)
+            if (e.PropertyName != nameof(Changes))
             {
                 return;
             }
