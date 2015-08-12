@@ -1,4 +1,4 @@
-﻿namespace Gu.Settings.Json
+﻿namespace Gu.Settings.NewtonsoftJson
 {
     using System.Globalization;
     using System.IO;

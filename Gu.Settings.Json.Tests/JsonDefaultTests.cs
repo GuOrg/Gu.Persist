@@ -1,11 +1,10 @@
-﻿namespace Gu.Settings.Json.Tests
+﻿namespace Gu.Settings.NewtonsoftJson.Tests
 {
     using System.IO;
 
     using Gu.Settings.Core;
     using Gu.Settings.Core.Tests.Repositories;
-
-    using NUnit.Framework;
+    using Gu.Settings.NewtonsoftJson;
 
     public class JsonDefaultTests : RepositoryTests
     {

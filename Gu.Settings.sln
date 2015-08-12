@@ -6,7 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E325F99D-7820-461B-BF9D-B24C5E788DE2}"
 	ProjectSection(SolutionItems) = preProject
 		Gu.Settings\Gu.Settings.Core.nuspec = Gu.Settings\Gu.Settings.Core.nuspec
-		Gu.Settings.Json\Gu.Settings.Json.nuspec = Gu.Settings.Json\Gu.Settings.Json.nuspec
+		Gu.Settings.Json\Gu.Settings.NewtonsoftJson.nuspec = Gu.Settings.Json\Gu.Settings.NewtonsoftJson.nuspec
 		Gu.Settings.RuntimeBinary\Gu.Settings.RuntimeBinary.nuspec = Gu.Settings.RuntimeBinary\Gu.Settings.RuntimeBinary.nuspec
 		Gu.Settings.RuntimeXml\Gu.Settings.RuntimeXml.nuspec = Gu.Settings.RuntimeXml\Gu.Settings.RuntimeXml.nuspec
 		Gu.Settings.SystemXml\Gu.Settings.SystemXml.nuspec = Gu.Settings.SystemXml\Gu.Settings.SystemXml.nuspec
@@ -15,11 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E325F9
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.Json", "Gu.Settings.Json\Gu.Settings.Json.csproj", "{2710BB07-D45B-4F93-BB56-968F25D39C64}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.NewtonsoftJson", "Gu.Settings.Json\Gu.Settings.NewtonsoftJson.csproj", "{2710BB07-D45B-4F93-BB56-968F25D39C64}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.Demo", "Gu.Settings.Demo\Gu.Settings.Demo.csproj", "{963F1418-ED9B-47C6-92B3-363C3720BEC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.Json.Tests", "Gu.Settings.Json.Tests\Gu.Settings.Json.Tests.csproj", "{EFF48C6B-4FB4-467D-A2E3-0EC8D7236D75}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.NewtonsoftJson.Tests", "Gu.Settings.Json.Tests\Gu.Settings.NewtonsoftJson.Tests.csproj", "{EFF48C6B-4FB4-467D-A2E3-0EC8D7236D75}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.RuntimeXml", "Gu.Settings.RuntimeXml\Gu.Settings.RuntimeXml.csproj", "{E2DE0B67-6A90-4CE9-8CF7-4118BBE9CF79}"
 EndProject
