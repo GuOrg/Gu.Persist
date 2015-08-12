@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.IO;
 
-    using Gu.Settings.IO;
+    using Gu.Settings.Core;
 
     using Newtonsoft.Json;
 

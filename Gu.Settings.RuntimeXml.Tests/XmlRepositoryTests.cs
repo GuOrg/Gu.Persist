@@ -2,7 +2,8 @@ namespace Gu.Settings.RuntimeXml.Tests
 {
     using System.IO;
 
-    using Gu.Settings.Tests.Repositories;
+    using Gu.Settings.Core;
+    using Gu.Settings.Core.Tests.Repositories;
 
     public class XmlRepositoryTests : RepositoryTests
     {

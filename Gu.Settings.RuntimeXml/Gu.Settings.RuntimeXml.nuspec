@@ -11,7 +11,7 @@
     <description>$description$</description>
     <copyright>Copyright 2014</copyright>
     <dependencies>
-      <dependency id="Gu.Settings" version="1.0.11.0" />
+      <dependency id="Gu.Settings.Core" version="1.0.11.0" />
     </dependencies>
   </metadata>
   <files>
