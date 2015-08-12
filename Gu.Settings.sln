@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E325F99D-7820-461B-BF9D-B24C5E788DE2}"
 	ProjectSection(SolutionItems) = preProject
-		Gu.Settings\Gu.Settings.Core.nuspec = Gu.Settings\Gu.Settings.Core.nuspec
+		Gu.Settings.Core\Gu.Settings.Core.nuspec = Gu.Settings.Core\Gu.Settings.Core.nuspec
 		Gu.Settings.Json\Gu.Settings.NewtonsoftJson.nuspec = Gu.Settings.Json\Gu.Settings.NewtonsoftJson.nuspec
 		Gu.Settings.RuntimeBinary\Gu.Settings.RuntimeBinary.nuspec = Gu.Settings.RuntimeBinary\Gu.Settings.RuntimeBinary.nuspec
 		Gu.Settings.RuntimeXml\Gu.Settings.RuntimeXml.nuspec = Gu.Settings.RuntimeXml\Gu.Settings.RuntimeXml.nuspec
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E325F9
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\nuspec.2010.7.xsd = .nuget\nuspec.2010.7.xsd
+		.nuget\nuspec.2011.8.xsd = .nuget\nuspec.2011.8.xsd
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Settings.NewtonsoftJson", "Gu.Settings.Json\Gu.Settings.NewtonsoftJson.csproj", "{2710BB07-D45B-4F93-BB56-968F25D39C64}"
