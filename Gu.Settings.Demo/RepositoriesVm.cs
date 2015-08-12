@@ -7,7 +7,7 @@
 
     using Gu.Settings.Core;
     using Gu.Settings.Core.Properties;
-    using Gu.Settings.Json;
+    using Gu.Settings.NewtonsoftJson;
     using Gu.Settings.RuntimeBinary;
     using Gu.Settings.SystemXml;
 

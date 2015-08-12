@@ -1,4 +1,4 @@
-﻿namespace Gu.Settings.Json
+﻿namespace Gu.Settings.NewtonsoftJson
 {
     using Gu.Settings.Core;
 

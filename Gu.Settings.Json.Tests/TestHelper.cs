@@ -1,8 +1,9 @@
-﻿namespace Gu.Settings.Json.Tests
+﻿namespace Gu.Settings.NewtonsoftJson.Tests
 {
     using System.IO;
 
     using Gu.Settings.Core;
+    using Gu.Settings.NewtonsoftJson;
 
     public static class TestHelper
     {

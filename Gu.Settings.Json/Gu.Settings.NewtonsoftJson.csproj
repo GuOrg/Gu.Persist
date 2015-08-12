@@ -7,8 +7,8 @@
     <ProjectGuid>{2710BB07-D45B-4F93-BB56-968F25D39C64}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gu.Settings.Json</RootNamespace>
-    <AssemblyName>Gu.Settings.Json</AssemblyName>
+    <RootNamespace>Gu.Settings.NewtonsoftJson</RootNamespace>
+    <AssemblyName>Gu.Settings.NewtonsoftJson</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -39,7 +39,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile>bin\CreateNugetPackage\Gu.Settings.Json.XML</DocumentationFile>
+    <DocumentationFile>bin\CreateNugetPackage\Gu.Settings.NewtonsoftJson.xml</DocumentationFile>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <BuildPackage>true</BuildPackage>
   </PropertyGroup>

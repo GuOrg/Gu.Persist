@@ -7,8 +7,8 @@
     <ProjectGuid>{EFF48C6B-4FB4-467D-A2E3-0EC8D7236D75}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gu.Settings.Json.Tests</RootNamespace>
-    <AssemblyName>Gu.Settings.Json.Tests</AssemblyName>
+    <RootNamespace>Gu.Settings.NewtonsoftJson.Tests</RootNamespace>
+    <AssemblyName>Gu.Settings.NewtonsoftJson.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -63,9 +63,9 @@
       <Project>{95985E35-6130-4442-ABD0-A460D9E6E328}</Project>
       <Name>Gu.Settings.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Gu.Settings.Json\Gu.Settings.Json.csproj">
+    <ProjectReference Include="..\Gu.Settings.Json\Gu.Settings.NewtonsoftJson.csproj">
       <Project>{2710BB07-D45B-4F93-BB56-968F25D39C64}</Project>
-      <Name>Gu.Settings.Json</Name>
+      <Name>Gu.Settings.NewtonsoftJson</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
