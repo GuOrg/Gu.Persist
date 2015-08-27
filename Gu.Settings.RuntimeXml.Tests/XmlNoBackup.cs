@@ -16,19 +16,10 @@ namespace Gu.Settings.RuntimeXml.Tests
             Assert.AreSame(NullBackuper.Default, Repository.Backuper);
         }
 
-        protected override RepositorySettings Settings
-        {
-            get { return new RepositorySettings(Directory, null); }
-        }
-
-        protected override BackupSettings BackupSettings
-        {
-            get { return null; }
-        }
-
         protected override IRepository Create()
         {
-            return new XmlRepository(Settings);
+            var settings = new RuntimeXmlRepositorySettings(Directory, null);
+            return new XmlRepository(settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)

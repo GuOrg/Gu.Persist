@@ -16,19 +16,10 @@ namespace Gu.Settings.RuntimeBinary.Tests
             Assert.AreSame(NullBackuper.Default, Repository.Backuper);
         }
 
-        protected override RepositorySettings Settings
-        {
-            get { return new RepositorySettings(Directory, true, true, BackupSettings, ".cfg", ".tmp"); }
-        }
-
-        protected override BackupSettings BackupSettings
-        {
-            get { return null; }
-        }
-
         protected override IRepository Create()
         {
-            return new BinaryRepository(Settings);
+            var settings = new BinaryRepositorySettings(Directory, true, true, null, ".cfg", ".tmp");
+            return new BinaryRepository(settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)

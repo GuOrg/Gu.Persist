@@ -12,13 +12,7 @@
     public static class JsonHelper
     {
         public static readonly UTF8Encoding DefaultEncoding = new UTF8Encoding(false, true);
-        public static readonly JsonSerializerSettings DefaultJsonSettings = new JsonSerializerSettings
-        {
-            MissingMemberHandling = MissingMemberHandling.Error,
-            Formatting = Formatting.Indented,
-            Culture = CultureInfo.InvariantCulture,
-            FloatFormatHandling = FloatFormatHandling.DefaultValue
-        };
+
 
         public static T FromStream<T>(Stream stream)
         {

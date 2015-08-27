@@ -70,44 +70,41 @@
             }
         }
 
-        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg", "New", @"C:\Temp\NewDir\New.2015_06_14_16_54_12.cfg")]
-        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg", "New.cfg", @"C:\Temp\NewDir\New.2015_06_14_16_54_12.cfg")]
-        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg", "New.bak", @"C:\Temp\NewDir\New.2015_06_14_16_54_12.bak")]
-        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg.delete", "New.bak.delete", @"C:\Temp\NewDir\New.2015_06_14_16_54_12.bak.delete")]
-        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg.delete", "New.bak", @"C:\Temp\NewDir\New.2015_06_14_16_54_12.bak.delete")]
+        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg", "New", @"C:\Temp\New.2015_06_14_16_54_12.cfg")]
+        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg", "New.cfg", @"C:\Temp\New.2015_06_14_16_54_12.cfg")]
+        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg", "New.bak", @"C:\Temp\New.2015_06_14_16_54_12.bak")]
+        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg.delete", "New.bak.delete", @"C:\Temp\New.2015_06_14_16_54_12.bak.delete")]
+        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg.delete", "New.bak", @"C:\Temp\New.2015_06_14_16_54_12.bak.delete")]
         public void WithNewNameTimeStamped(string filename, string newName, string expected)
         {
-            var settings = Mock.Of<IBackupSettings>(x => x.Directory == new DirectoryInfo(@"C:\Temp\NewDir") &&
-                                                         x.TimeStampFormat == BackupSettings.DefaultTimeStampFormat);
+            var settings = Mock.Of<IBackupSettings>(x => x.TimeStampFormat == BackupSettings.DefaultTimeStampFormat);
             var file = new FileInfo(filename);
             var newFile = file.WithNewName(newName, settings);
             Assert.AreEqual(expected, newFile.FullName);
             Assert.AreEqual(filename, file.FullName);
         }
 
-        [TestCase(@"C:\Temp\Old.cfg", "New", @"C:\Temp\NewDir\New.cfg")]
-        [TestCase(@"C:\Temp\Old.cfg", "New.cfg", @"C:\Temp\NewDir\New.cfg")]
-        [TestCase(@"C:\Temp\Old.cfg.delete", "New", @"C:\Temp\NewDir\New.cfg.delete")]
-        [TestCase(@"C:\Temp\Old.cfg", "New.bak", @"C:\Temp\NewDir\New.bak")]
-        [TestCase(@"C:\Temp\Old.cfg.delete", "New.bak", @"C:\Temp\NewDir\New.bak.delete")]
+        [TestCase(@"C:\Temp\Old.cfg", "New", @"C:\Temp\New.cfg")]
+        [TestCase(@"C:\Temp\Old.cfg", "New.cfg", @"C:\Temp\New.cfg")]
+        [TestCase(@"C:\Temp\Old.cfg.delete", "New", @"C:\Temp\New.cfg.delete")]
+        [TestCase(@"C:\Temp\Old.cfg", "New.bak", @"C:\Temp\New.bak")]
+        [TestCase(@"C:\Temp\Old.cfg.delete", "New.bak", @"C:\Temp\New.bak.delete")]
         public void WithNewNameNoTimestampBackup(string filename, string newName, string expected)
         {
-            var settings = Mock.Of<IBackupSettings>(x => x.Directory == new DirectoryInfo(@"C:\Temp\NewDir") &&
-                                                         x.TimeStampFormat == (string)null);
+            var settings = Mock.Of<IBackupSettings>(x => x.TimeStampFormat == (string)null);
             var file = new FileInfo(filename);
             var newFile = file.WithNewName(newName, settings);
             Assert.AreEqual(expected, newFile.FullName);
             Assert.AreEqual(filename, file.FullName);
         }
 
-        [TestCase(@"C:\Temp\Old.cfg", "New", @"C:\Temp\NewDir\New.cfg")]
-        [TestCase(@"C:\Temp\Old.cfg", "New.cfg", @"C:\Temp\NewDir\New.cfg")]
-        [TestCase(@"C:\Temp\Old.cfg", "New.bak", @"C:\Temp\NewDir\New.bak")]
-        [TestCase(@"C:\Temp\Old.cfg", "New.bak.delete", @"C:\Temp\NewDir\New.bak.delete")]
+        [TestCase(@"C:\Temp\Old.cfg", "New", @"C:\Temp\New.cfg")]
+        [TestCase(@"C:\Temp\Old.cfg", "New.cfg", @"C:\Temp\New.cfg")]
+        [TestCase(@"C:\Temp\Old.cfg", "New.bak", @"C:\Temp\New.bak")]
+        [TestCase(@"C:\Temp\Old.cfg", "New.bak.delete", @"C:\Temp\New.bak.delete")]
         public void WithNewNameNoTimestamp(string filename, string newName, string expected)
         {
-            var dir = new DirectoryInfo(@"C:\Temp\NewDir");
-            var settings = Mock.Of<IFileSettings>(x => x.Directory == dir);
+            var settings = Mock.Of<IFileSettings>();
             var file = new FileInfo(filename);
 
             var newFile = file.WithNewName(newName, settings);

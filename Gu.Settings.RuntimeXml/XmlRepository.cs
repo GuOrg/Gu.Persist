@@ -2,29 +2,28 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Runtime.Serialization;
 
     using Gu.Settings.Core;
 
     /// <summary>
-    /// A repository reading and saving files using <see cref="DataContractSerializer"/>
+    /// A repository reading and saving files using <see cref="System.Runtime.Serialization.DataContractSerializer"/>
     /// </summary>
-    public class XmlRepository : Repository
+    public class XmlRepository : Repository<RuntimeXmlRepositorySettings>
     {
         /// <inheritdoc/>
         public XmlRepository()
-            : base(Directories.Default)
+            : this(Directories.Default)
         {
         }
 
         /// <inheritdoc/>
         public XmlRepository(DirectoryInfo directory)
-            : base(directory)
+            : base(directory, () => RuntimeXmlRepositorySettings.DefaultFor(directory))
         {
         }
 
         /// <inheritdoc/>
-        public XmlRepository(RepositorySettings settings)
+        public XmlRepository(RuntimeXmlRepositorySettings settings)
             : base(settings)
         {
         }

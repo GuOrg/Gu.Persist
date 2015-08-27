@@ -10,63 +10,50 @@
     /// <summary>
     /// A repository reading and saving files using <see cref="JsonSerializer"/>
     /// </summary>
-    public class JsonRepository : Repository
+    public class JsonRepository : Repository<JsonRepositorySettings>
     {
         /// <inheritdoc/>
         public JsonRepository()
-            : base(Directories.Default)
+            : this(Directories.Default)
         {
-            JsonSettings = ReadOrCreateCore(() => JsonHelper.DefaultJsonSettings);
         }
 
         /// <inheritdoc/>
         public JsonRepository(JsonSerializerSettings jsonSettings)
-            : base(Directories.Default)
+            : base(Directories.Default, () => JsonRepositorySettings.DefaultFor(Directories.Default, jsonSettings))
         {
-            JsonSettings = jsonSettings;
         }
 
         /// <inheritdoc/>
         public JsonRepository(DirectoryInfo directory)
-            : base(directory)
+            : base(directory, () => JsonRepositorySettings.DefaultFor(directory))
         {
-            JsonSettings = ReadOrCreateCore(() => JsonHelper.DefaultJsonSettings);
         }
 
         /// <inheritdoc/>
         public JsonRepository(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
-            : base(directory)
+            : base(directory, () => JsonRepositorySettings.DefaultFor(directory, jsonSettings))
         {
-            JsonSettings = jsonSettings;
         }
 
         /// <inheritdoc/>
-        public JsonRepository(RepositorySettings settings)
+        public JsonRepository(JsonRepositorySettings settings)
             : base(settings)
         {
-            JsonSettings = ReadOrCreateCore(() => JsonHelper.DefaultJsonSettings);
         }
 
-        /// <inheritdoc/>
-        public JsonRepository(RepositorySettings settings, JsonSerializerSettings jsonSettings)
-            : base(settings)
-        {
-            JsonSettings = jsonSettings;
-        }
-
-        /// <inheritdoc/>
-        public JsonSerializerSettings JsonSettings { get; private set; }
+        public new JsonRepositorySettings Settings => (JsonRepositorySettings)base.Settings;
 
         /// <inheritdoc/>
         protected override T FromStream<T>(Stream stream)
         {
-            return JsonHelper.FromStream<T>(stream, JsonSettings);
+            return JsonHelper.FromStream<T>(stream, Settings.JsonSerializerSettings);
         }
 
         /// <inheritdoc/>
         protected override Stream ToStream<T>(T item)
         {
-            return JsonHelper.ToStream(item, JsonSettings);
+            return JsonHelper.ToStream(item, Settings.JsonSerializerSettings);
         }
 
         /// <inheritdoc/>
