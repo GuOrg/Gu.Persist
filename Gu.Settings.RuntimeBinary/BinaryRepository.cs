@@ -8,22 +8,22 @@ namespace Gu.Settings.RuntimeBinary
     /// <summary>
     /// A repository reading and saving files using <see cref="System.Runtime.Serialization.Formatters.Binary.BinaryFormatter"/>
     /// </summary>
-    public class BinaryRepository : Repository
+    public class BinaryRepository : Repository<BinaryRepositorySettings>
     {
         /// <inheritdoc/>
         public BinaryRepository()
-            : base(Directories.Default)
+            : this(Directories.Default)
         {
         }
 
         /// <inheritdoc/>
         public BinaryRepository(DirectoryInfo directory)
-            : base(directory)
+            : base(directory, () => BinaryRepositorySettings.DefaultFor(directory))
         {
         }
 
         /// <inheritdoc/>
-        public BinaryRepository(RepositorySettings settings)
+        public BinaryRepository(BinaryRepositorySettings settings)
             : base(settings)
         {
         }

@@ -17,7 +17,7 @@
         public void SetUp()
         {
             Directories.Default = new DirectoryInfo(@"C:\Temp\Gu.Settings\SimpleSample");
-            _settingsFile = Directories.Default.CreateFileInfoInDirectory(typeof(RepositorySettings).Name + ".cfg");
+            _settingsFile = Directories.Default.CreateFileInfoInDirectory(nameof(XmlRepositorySettings) + ".cfg");
             if (_settingsFile.Exists)
             {
                 _settingsFile.Delete();

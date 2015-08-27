@@ -17,16 +17,6 @@ namespace Gu.Settings.RuntimeXml.Tests
             AssertFile.Exists(true, RepoSettingFile);
         }
 
-        protected override RepositorySettings Settings
-        {
-            get { return RepositorySettings.DefaultFor(Directory);}
-        }
-
-        protected override BackupSettings BackupSettings
-        {
-            get { return BackupSettings.DefaultFor(Directory);}
-        }
-
         protected override IRepository Create()
         {
             return new XmlRepository();

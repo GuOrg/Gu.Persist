@@ -224,7 +224,7 @@
             if (soft.Exists)
             {
                 var withNewName = soft.WithNewName(newName, Setting);
-                soft.Rename(withNewName, owerWrite);
+                soft.Rename(withNewName, true);
             }
 
             var allBackups = BackupFile.GetAllBackupsFor(file, Setting);

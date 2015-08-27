@@ -49,6 +49,7 @@
     <Compile Include="BinaryEqualsComparer`1.cs" />
     <Compile Include="BinaryHelper.cs" />
     <Compile Include="BinaryRepository.cs" />
+    <Compile Include="BinaryRepositorySettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

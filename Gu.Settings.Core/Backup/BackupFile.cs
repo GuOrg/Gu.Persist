@@ -64,7 +64,7 @@
 
             if (string.IsNullOrEmpty(setting.TimeStampFormat))
             {
-                return file.WithNewExtension(setting.Extension);
+                return backup;
             }
             return backup.WithTimeStamp(DateTime.Now, setting);
         }

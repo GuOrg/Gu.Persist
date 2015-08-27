@@ -24,9 +24,9 @@
             _settings = new RepositorySettings(directory, backupSettings);
             Repositories = new IRepository[]
                                 {
-                                    new JsonRepository(_settings),
-                                    new XmlRepository(_settings), 
-                                    new BinaryRepository(_settings), 
+                                    //new JsonRepository(_settings),
+                                    //new XmlRepository(_settings), 
+                                    //new BinaryRepository(_settings), 
                                 };
             var autoSaveSetting = AutoSaveSetting.Instance;
             autoSaveSetting.PropertyChanged += (o, e) => Save((AutoSaveSetting)o);

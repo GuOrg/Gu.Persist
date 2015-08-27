@@ -17,30 +17,6 @@
             AssertFile.Exists(true, RepoSettingFile);
         }
 
-        protected override RepositorySettings Settings
-        {
-            get
-            {
-                if (Repository == null)
-                {
-                    return null;
-                }
-                return (RepositorySettings)Repository.Settings;
-            }
-        }
-
-        protected override BackupSettings BackupSettings
-        {
-            get
-            {
-                if (Repository == null)
-                {
-                    return null;
-                }
-                return Repository.Settings.BackupSettings;
-            }
-        }
-
         protected override IRepository Create()
         {
             return new JsonRepository();

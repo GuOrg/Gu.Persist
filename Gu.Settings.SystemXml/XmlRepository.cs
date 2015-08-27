@@ -5,19 +5,19 @@ namespace Gu.Settings.SystemXml
 
     using Gu.Settings.Core;
 
-    public class XmlRepository : Repository
+    public class XmlRepository : Repository<XmlRepositorySettings>
     {
         public XmlRepository()
-            : base(Directories.Default)
+            : this(Directories.Default)
         {
         }
 
         public XmlRepository(DirectoryInfo directory)
-            : base(directory)
+            : base(directory, () => XmlRepositorySettings.DefaultFor(directory))
         {
         }
 
-        public XmlRepository(RepositorySettings settings) 
+        public XmlRepository(XmlRepositorySettings settings)
             : base(settings)
         {
         }
