@@ -8,7 +8,8 @@
 
     using Gu.Settings.Core.Backup;
 
-    public abstract class Repository : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IAutoSavingRepository, IRepositoryWithSettings, IDisposable
+    public abstract class Repository<TSetting> : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IAutoSavingRepository, IRepositoryWithSettings, IDisposable
+        where TSetting : IRepositorySettings
     {
         private readonly object _gate = new object();
         private readonly FileCache _fileCache = new FileCache();
@@ -29,17 +30,17 @@
         /// If not a new default setting is created and saved.
         /// </summary>
         /// <param name="directory"></param>
-        protected Repository(DirectoryInfo directory)
+        protected Repository(DirectoryInfo directory, Func<TSetting> settingsCreator)
         {
             Ensure.NotNull(directory, nameof(directory));
             directory.CreateIfNotExists();
-            Settings = RepositorySettings.DefaultFor(directory);
+            Settings = settingsCreator();
             if (Settings.IsTrackingDirty)
             {
                 Tracker = new DirtyTracker(this);
             }
             Backuper = Backup.Backuper.Create(Settings.BackupSettings); // creating temp for TryRestore in ReadOrCreate
-            Settings = ReadOrCreateCore(() => RepositorySettings.DefaultFor(directory));
+            Settings = ReadOrCreateCore(() => (TSetting)Settings);
             Backuper = Backup.Backuper.Create(Settings.BackupSettings);
         }
 
@@ -47,7 +48,7 @@
         /// Creates a new <see cref="Repository"/> with <paramref name="settings"/>.
         /// </summary>
         /// <param name="settings"></param>
-        protected Repository(IRepositorySettings settings)
+        protected Repository(TSetting settings)
             : this(settings, Backup.Backuper.Create(settings.BackupSettings))
         {
         }
@@ -56,7 +57,7 @@
         /// Creates a new <see cref="Repository"/> with <paramref name="settings"/>.
         /// </summary>
         /// <param name="settings"></param>
-        protected Repository(IRepositorySettings settings, IBackuper backuper)
+        protected Repository(TSetting settings, IBackuper backuper)
         {
             settings.Directory.CreateIfNotExists();
             Settings = settings;

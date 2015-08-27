@@ -7,19 +7,10 @@ namespace Gu.Settings.RuntimeBinary.Tests
 
     public class BinaryRepositoryBackupInSubDirrectory : RepositoryTests
     {
-        protected override RepositorySettings Settings
-        {
-            get { return RepositorySettings.DefaultFor(Directory); }
-        }
-
-        protected override BackupSettings BackupSettings
-        {
-            get { return new BackupSettings(Directory.Subdirectory("Backup"), 1); }
-        }
-
         protected override IRepository Create()
         {
-            return new BinaryRepository(Settings);
+            var settings = BinaryRepositorySettings.DefaultFor(Directory);
+            return new BinaryRepository(settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)

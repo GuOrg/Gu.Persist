@@ -101,11 +101,11 @@
             }
             if (Path.HasExtension(newName))
             {
-                newFile = setting.Directory.CreateFileInfoInDirectory(newName);
+                newFile = file.Directory.CreateFileInfoInDirectory(newName);
             }
             else
             {
-                newFile = setting.Directory.CreateFileInfoInDirectory(String.Concat(newName, file.Extension));
+                newFile = file.Directory.CreateFileInfoInDirectory(String.Concat(newName, file.Extension));
             }
             var backupSettings = setting as IBackupSettings;
             if (backupSettings != null)

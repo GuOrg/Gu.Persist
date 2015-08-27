@@ -10,6 +10,7 @@
     [Serializable]
     public class RepositorySettings : IRepositorySettings
     {
+        protected static readonly string BackupDirectoryName = "Backup";
         private string _directoryPath;
         private BackupSettings _backupSettings;
         private string _extension;
@@ -17,7 +18,7 @@
         private bool _isTrackingDirty;
         private bool _isCaching;
 
-        private RepositorySettings() // needed for XmlSerializer
+        protected RepositorySettings() // needed for XmlSerializer
         {
         }
 
@@ -169,7 +170,7 @@
         /// <returns></returns>
         public static RepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new RepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory));
+            return new RepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(BackupDirectoryName)));
         }
 
         [NotifyPropertyChangedInvocator]

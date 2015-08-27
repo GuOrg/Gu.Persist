@@ -38,14 +38,11 @@ namespace Gu.Settings.Core.Tests.Repositories
 
         public IRepository Repository;
 
-        protected abstract RepositorySettings Settings { get; }
+        protected RepositorySettings Settings => (RepositorySettings)Repository.Settings;
 
-        protected abstract BackupSettings BackupSettings { get; }
+        protected BackupSettings BackupSettings => Settings.BackupSettings;
 
-        protected bool IsBackingUp
-        {
-            get { return BackupSettings != null && BackupSettings.IsCreatingBackups; }
-        }
+        protected bool IsBackingUp => BackupSettings != null && BackupSettings.IsCreatingBackups;
 
         protected RepositoryTests()
         {
@@ -72,12 +69,12 @@ namespace Gu.Settings.Core.Tests.Repositories
             if (IsBackingUp)
             {
                 var backupFileName = string.Concat(name, BackupSettings.Extension);
-                _backup = Directory.CreateFileInfoInDirectory(backupFileName);
+                _backup = BackupSettings.Directory.CreateFileInfoInDirectory(backupFileName);
                 _backupSoftDelete = _backup.GetSoftDeleteFileFor();
-                _backupNewName = _backup.WithNewName(NewName, Settings);
+                _backupNewName = _backup.WithNewName(NewName, BackupSettings);
             }
 
-            var repoSettingFileName = string.Concat(typeof(RepositorySettings).Name, Settings.Extension);
+            var repoSettingFileName = string.Concat(Settings.GetType().Name, Settings.Extension);
             RepoSettingFile = Settings.Directory.CreateFileInfoInDirectory(repoSettingFileName);
 
             var dummyFileName = string.Concat(typeof(DummySerializable).Name, Settings.Extension);
@@ -87,8 +84,9 @@ namespace Gu.Settings.Core.Tests.Repositories
             _dummyNewName = _dummyFile.WithNewName(NewName, Settings);
             if (IsBackingUp)
             {
-                _dummyBackup = _dummyFile.WithNewExtension(BackupSettings.Extension);
-                _dummyBackupNewName = _dummyBackup.WithNewName(NewName, Settings);
+                var backupFileName = _dummyFile.WithNewExtension(BackupSettings.Extension).Name;
+                _dummyBackup = BackupSettings.Directory.CreateFileInfoInDirectory(backupFileName); 
+                _dummyBackupNewName = _dummyBackup.WithNewName(NewName, BackupSettings);
             }
 
             _file.Delete();
@@ -101,7 +99,6 @@ namespace Gu.Settings.Core.Tests.Repositories
                 _backupSoftDelete.Delete();
                 _backupNewName.Delete();
             }
-
 
             _dummyFile.Delete();
             _dummyNewName.Delete();
@@ -484,14 +481,15 @@ namespace Gu.Settings.Core.Tests.Repositories
         }
 
         [Test]
-        public void CanRenameFileNamePath()
+        public void CanRenameFileNameHappyPath()
         {
             _dummyFile.VoidCreate();
             if (IsBackingUp)
             {
                 _dummyBackup.VoidCreate();
             }
-            Assert.IsTrue(Repository.CanRename(typeof(DummySerializable).Name, NewName));
+            var oldName = nameof(DummySerializable);
+            Assert.IsTrue(Repository.CanRename(oldName, NewName));
         }
 
         [TestCase(true, true)]

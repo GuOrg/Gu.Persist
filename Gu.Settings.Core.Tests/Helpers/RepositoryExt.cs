@@ -8,7 +8,7 @@
 
     public static class RepositoryExt
     {
-        private static readonly FieldInfo RepositoryCacheField = typeof(Repository).GetField("_cache", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
+        private static readonly FieldInfo RepositoryCacheField = typeof(Repository<>).GetField("_cache", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
         private static readonly FieldInfo TrackerCacheField = typeof(DirtyTracker).GetField("_cache", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
 
         public static ConcurrentDictionary<string, WeakReference> GetCache(this IRepository repo)

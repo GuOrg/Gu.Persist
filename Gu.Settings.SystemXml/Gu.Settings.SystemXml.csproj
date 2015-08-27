@@ -51,6 +51,7 @@
     <Compile Include="XmlEqualsComparer`1.cs" />
     <Compile Include="XmlHelper.cs" />
     <Compile Include="XmlRepository.cs" />
+    <Compile Include="XmlRepositorySettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gu.Settings.Core\Gu.Settings.Core.csproj">

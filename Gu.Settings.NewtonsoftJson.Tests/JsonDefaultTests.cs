@@ -10,17 +10,8 @@
     {
         protected override IRepository Create()
         {
-            return new JsonRepository(Settings);
-        }
-
-        protected override RepositorySettings Settings
-        {
-            get { return RepositorySettings.DefaultFor(Directory); }
-        }
-
-        protected override BackupSettings BackupSettings
-        {
-            get { return BackupSettings.DefaultFor(Directory); }
+            var settings = JsonRepositorySettings.DefaultFor(Directory);
+            return new JsonRepository(settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)
