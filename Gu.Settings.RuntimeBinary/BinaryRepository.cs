@@ -1,5 +1,6 @@
 namespace Gu.Settings.RuntimeBinary
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
 
@@ -19,6 +20,12 @@ namespace Gu.Settings.RuntimeBinary
         /// <inheritdoc/>
         public BinaryRepository(DirectoryInfo directory)
             : base(directory, () => BinaryRepositorySettings.DefaultFor(directory))
+        {
+        }
+
+        /// <inheritdoc/>
+        public BinaryRepository(DirectoryInfo directory, Func<BinaryRepositorySettings> settingsCreator)
+            : base(directory, settingsCreator)
         {
         }
 

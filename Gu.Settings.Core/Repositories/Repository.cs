@@ -30,6 +30,7 @@
         /// If not a new default setting is created and saved.
         /// </summary>
         /// <param name="directory"></param>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
         protected Repository(DirectoryInfo directory, Func<TSetting> settingsCreator)
         {
             Ensure.NotNull(directory, nameof(directory));

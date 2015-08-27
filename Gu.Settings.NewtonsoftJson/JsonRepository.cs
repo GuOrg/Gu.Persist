@@ -1,5 +1,6 @@
 ﻿namespace Gu.Settings.NewtonsoftJson
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
 
@@ -27,6 +28,12 @@
         /// <inheritdoc/>
         public JsonRepository(DirectoryInfo directory)
             : base(directory, () => JsonRepositorySettings.DefaultFor(directory))
+        {
+        }
+
+        /// <inheritdoc/>
+        public JsonRepository(DirectoryInfo directory, Func<JsonRepositorySettings> settingsCreator)
+            : base(directory, settingsCreator)
         {
         }
 

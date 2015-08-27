@@ -1,5 +1,6 @@
 ﻿namespace Gu.Settings.RuntimeXml
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
 
@@ -19,6 +20,12 @@
         /// <inheritdoc/>
         public XmlRepository(DirectoryInfo directory)
             : base(directory, () => RuntimeXmlRepositorySettings.DefaultFor(directory))
+        {
+        }
+
+        /// <inheritdoc/>
+        public XmlRepository(DirectoryInfo directory, Func<RuntimeXmlRepositorySettings> settingsCreator)
+            : base(directory, settingsCreator)
         {
         }
 
