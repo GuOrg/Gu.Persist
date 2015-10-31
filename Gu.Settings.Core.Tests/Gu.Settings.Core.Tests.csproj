@@ -63,6 +63,7 @@
     <Compile Include="ChangeTracking\Helpers\Dummy.cs" />
     <Compile Include="ChangeTracking\Helpers\SpecialCollection.cs" />
     <Compile Include="ChangeTracking\TrackerTests.cs" />
+    <Compile Include="Comparers\DirectoryInfoComparerTests.cs" />
     <Compile Include="Helpers\AssertFile.cs" />
     <Compile Include="AutoSaver\AutoSaverTests.cs" />
     <Compile Include="Backup\BackupTests.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Backup\BackuperTests.cs" />
     <Compile Include="Backup\BackupFileTests.cs" />
     <Compile Include="IO\DirectoriesTests.cs" />
+    <Compile Include="IO\DirectoryInfoExtTests.cs" />
     <Compile Include="IO\FileInfoExtTests.cs" />
     <Compile Include="Repositories\FileCacheTests.cs" />
     <Compile Include="IO\RepositorySettingTests.cs" />
@@ -97,9 +99,7 @@
       <Name>Gu.Settings.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Comparers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

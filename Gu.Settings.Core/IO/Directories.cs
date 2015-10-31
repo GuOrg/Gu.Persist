@@ -6,11 +6,12 @@
 
     public static class Directories
     {
-        public static readonly DirectoryInfo ExecutingDirectory = CreateInfo(Assembly.GetExecutingAssembly().Location);
+        public static readonly DirectoryInfo CurrentDirectory = new DirectoryInfo(Environment.CurrentDirectory);
 
         public static readonly DirectoryInfo ApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
         public static readonly DirectoryInfo LocalApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
         public static readonly DirectoryInfo CommonApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+        public static readonly string AppDataVariable = "%AppData%";
 
         public static readonly DirectoryInfo MyDocuments = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
         public static readonly DirectoryInfo CommonDocuments = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
@@ -40,10 +41,39 @@
             set { _default = value; }
         }
 
-        private static DirectoryInfo CreateInfo(string path)
+        internal static DirectoryInfo CreateInfo(string path)
         {
-            var directoryName = Path.GetDirectoryName(path);
-            return new DirectoryInfo(directoryName);
+            if (path.StartsWith("%"))
+            {
+                path = Environment.ExpandEnvironmentVariables(path);
+            }
+            if (path.StartsWith("."))
+            {
+                path = Path.Combine(Environment.CurrentDirectory, path);
+            }
+            return new DirectoryInfo(path);
+        }
+
+        internal static string GetPath(DirectoryInfo info)
+        {
+            var path = TryGetRelativePath(info, CurrentDirectory, ".") ??
+                       TryGetRelativePath(info, ApplicationData, AppDataVariable) ??
+                       info.FullName;
+            return path;
+        }
+
+        private static string TryGetRelativePath(DirectoryInfo info, DirectoryInfo directory, string prefix)
+        {
+            if (directory == null)
+            {
+                return null;
+            }
+            if (info.IsStrictSubDirectoryOf(directory))
+            {
+                var relativePath = info.FullName.Substring(directory.FullName.Length);
+                return $"{prefix}{relativePath}";
+            }
+            return null;
         }
     }
 }

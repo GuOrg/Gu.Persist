@@ -17,6 +17,7 @@
         private string _tempExtension;
         private bool _isTrackingDirty;
         private bool _isCaching;
+        private DirectoryInfo _directory;
 
         protected RepositorySettings() // needed for XmlSerializer
         {
@@ -58,13 +59,12 @@
 
         public DirectoryInfo Directory
         {
-            get
+            get { return _directory ?? (_directory = Directories.CreateInfo(_directoryPath)); }
+            private set
             {
-                if (string.IsNullOrEmpty(DirectoryPath))
-                {
-                    return null;
-                }
-                return new DirectoryInfo(DirectoryPath);
+                if (Equals(value, _directory)) return;
+                _directory = value;
+                OnPropertyChanged();
             }
         }
 
@@ -78,8 +78,8 @@
                     return;
                 }
                 _directoryPath = value;
+                Directory = Directories.CreateInfo(_directoryPath);
                 OnPropertyChanged();
-                OnPropertyChanged("Directory");
             }
         }
 
