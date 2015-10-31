@@ -50,7 +50,7 @@
         internal static IList<BackupFile> GetAllBackupsFor(FileInfo file, IBackupSettings setting)
         {
             var pattern = GetBackupFilePattern(file, setting);
-            var backups = setting.Directory.EnumerateFiles(pattern)
+            var backups = setting.DirectoryPath.Directory.EnumerateFiles(pattern)
                                  .Select(x => new BackupFile(x, setting))
                                  .OrderBy(x => x.TimeStamp)
                                  .ToList();
@@ -60,7 +60,7 @@
         internal static FileInfo CreateFor(FileInfo file, IBackupSettings setting)
         {
             var backup = file.WithNewExtension(setting.Extension)
-                             .InDirectory(setting.Directory);
+                             .InDirectory(setting.DirectoryPath.Directory);
 
             if (string.IsNullOrEmpty(setting.TimeStampFormat))
             {

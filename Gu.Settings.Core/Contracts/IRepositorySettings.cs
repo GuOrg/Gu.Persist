@@ -3,11 +3,6 @@ namespace Gu.Settings.Core
     public interface IRepositorySettings : IFileSettings
     {
         /// <summary>
-        /// Gets the path to where files are saved to / read from
-        /// </summary>
-        string DirectoryPath { get;  }
-
-        /// <summary>
         /// Gets the settings speciying how backups are handled.
         /// </summary>
         BackupSettings BackupSettings { get;  }

@@ -3,11 +3,6 @@
     public interface IBackupSettings : IFileSettings
     {
         /// <summary>
-        /// Gets the path to where backups are saved.
-        /// </summary>
-        string DirectoryPath { get; }
-
-        /// <summary>
         /// Gest if backups should be created.
         /// </summary>
         bool IsCreatingBackups { get; }

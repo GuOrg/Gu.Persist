@@ -194,7 +194,7 @@ namespace Gu.Settings.Core
         public static FileInfo CreateFileInfo(string fileName, IFileSettings settings)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            var file = CreateFileInfo(settings.Directory, fileName, settings.Extension);
+            var file = CreateFileInfo(settings.DirectoryPath.Directory, fileName, settings.Extension);
             return file;
         }
 

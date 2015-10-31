@@ -2,14 +2,11 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.IO;
     using System.Runtime.CompilerServices;
 
     using Gu.Settings.Core;
-    using Gu.Settings.Core.Properties;
-    using Gu.Settings.NewtonsoftJson;
-    using Gu.Settings.RuntimeBinary;
-    using Gu.Settings.SystemXml;
+
+    using JetBrains.Annotations;
 
     public class RepositoriesVm : INotifyPropertyChanged
     {

@@ -1,14 +1,13 @@
 ﻿namespace Gu.Settings.Core
 {
     using System.ComponentModel;
-    using System.IO;
 
     public interface IFileSettings : INotifyPropertyChanged
     {
         /// <summary>
-        /// Gets the directory.
+        /// Gets the path to where backups are saved.
         /// </summary>
-        DirectoryInfo Directory { get; }
+        DirectoryPath DirectoryPath { get; }
 
         /// <summary>
         /// Gets the extension

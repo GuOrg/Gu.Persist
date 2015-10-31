@@ -6,6 +6,8 @@
 
     using Gu.Settings.Core.Properties;
 
+    using JetBrains.Annotations;
+
     [Serializable]
     public class DummySerializable : INotifyPropertyChanged, IEquatable<DummySerializable>
     {

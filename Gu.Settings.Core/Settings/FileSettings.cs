@@ -5,32 +5,42 @@
     using System.IO;
     using System.Runtime.CompilerServices;
 
-    using Gu.Settings.Core.Properties;
+    using JetBrains.Annotations;
 
-    internal class FileSettings : IFileSettings
+    public class FileSettings : IFileSettings
     {
-        private DirectoryInfo _directory;
         private string _extension;
+        private DirectoryPath _directoryPath;
+
+        protected FileSettings()
+        {
+        }
+
+        protected FileSettings(DirectoryPath directoryPath, string extension)
+        {
+            _directoryPath = directoryPath;
+            _extension = FileHelper.PrependDotIfMissing(extension);
+        }
 
         public FileSettings(DirectoryInfo directory, string extension)
         {
-            _directory = directory;
-            _extension = extension;
+            _directoryPath = new DirectoryPath(directory);
+            _extension = FileHelper.PrependDotIfMissing(extension);
         }
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public DirectoryInfo Directory
+        public DirectoryPath DirectoryPath
         {
-            get { return _directory; }
-            private set
+            get { return _directoryPath; }
+            set
             {
-                if (Equals(value, _directory))
+                if (Equals(value, _directoryPath))
                 {
                     return;
                 }
-                _directory = value;
+                _directoryPath = value;
                 OnPropertyChanged();
             }
         }
@@ -50,13 +60,9 @@
         }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

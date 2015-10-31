@@ -47,7 +47,7 @@ namespace Gu.Settings.Core.Tests.Repositories
         protected RepositoryTests()
         {
             Directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + GetType().Name);
-            Directories.Default = Directory;
+            //Directories.Default = Directory;
             _dummy = new DummySerializable(1);
         }
 
@@ -60,32 +60,32 @@ namespace Gu.Settings.Core.Tests.Repositories
             var name = GetType().Name;
 
             var fileName = string.Concat(name, Settings.Extension);
-            _file = Settings.Directory.CreateFileInfoInDirectory(fileName);
+            _file = Settings.DirectoryPath.Directory.CreateFileInfoInDirectory(fileName);
 
             var tempfileName = string.Concat(name, Settings.TempExtension);
-            _fileTemp = Settings.Directory.CreateFileInfoInDirectory(tempfileName);
+            _fileTemp = Settings.DirectoryPath.Directory.CreateFileInfoInDirectory(tempfileName);
             _fileSoftDelete = _file.GetSoftDeleteFileFor();
             _fileNewName = _file.WithNewName(NewName, Settings);
             if (IsBackingUp)
             {
                 var backupFileName = string.Concat(name, BackupSettings.Extension);
-                _backup = BackupSettings.Directory.CreateFileInfoInDirectory(backupFileName);
+                _backup = BackupSettings.DirectoryPath.Directory.CreateFileInfoInDirectory(backupFileName);
                 _backupSoftDelete = _backup.GetSoftDeleteFileFor();
                 _backupNewName = _backup.WithNewName(NewName, BackupSettings);
             }
 
             var repoSettingFileName = string.Concat(Settings.GetType().Name, Settings.Extension);
-            RepoSettingFile = Settings.Directory.CreateFileInfoInDirectory(repoSettingFileName);
+            RepoSettingFile = Settings.DirectoryPath.Directory.CreateFileInfoInDirectory(repoSettingFileName);
 
             var dummyFileName = string.Concat(typeof(DummySerializable).Name, Settings.Extension);
-            _dummyFile = Settings.Directory.CreateFileInfoInDirectory(dummyFileName);
+            _dummyFile = Settings.DirectoryPath.Directory.CreateFileInfoInDirectory(dummyFileName);
             _dummySoftDelete = _dummyFile.GetSoftDeleteFileFor();
             _dummySoftDeleteNewName = _dummySoftDelete.WithNewName(NewName, Settings);
             _dummyNewName = _dummyFile.WithNewName(NewName, Settings);
             if (IsBackingUp)
             {
                 var backupFileName = _dummyFile.WithNewExtension(BackupSettings.Extension).Name;
-                _dummyBackup = BackupSettings.Directory.CreateFileInfoInDirectory(backupFileName); 
+                _dummyBackup = BackupSettings.DirectoryPath.Directory.CreateFileInfoInDirectory(backupFileName); 
                 _dummyBackupNewName = _dummyBackup.WithNewName(NewName, BackupSettings);
             }
 
