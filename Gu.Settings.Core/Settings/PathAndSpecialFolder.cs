@@ -108,6 +108,7 @@
 
         public static PathAndSpecialFolder Create(DirectoryInfo info)
         {
+            Ensure.NotNull(info, nameof(info));
             return new PathAndSpecialFolder(info.FullName, null);
         }
 

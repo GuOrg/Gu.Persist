@@ -6,8 +6,7 @@
     [Serializable]
     public class RepositorySettings : FileSettings, IRepositorySettings
     {
-        protected static readonly string BackupDirectoryName = "Backup";
-
+        protected static readonly string DefaultBackupDirectoryName = "Backup";
         private BackupSettings _backupSettings;
         private string _tempExtension;
         private bool _isTrackingDirty;
@@ -34,6 +33,23 @@
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
+            : this(
+                PathAndSpecialFolder.Create(directory),
+                isTrackingDirty,
+                isCaching, 
+                backupSettings, 
+                extension,
+                tempExtension)
+        {
+        }
+
+        public RepositorySettings(
+            PathAndSpecialFolder directory,
+            bool isTrackingDirty,
+            bool isCaching,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
             : base(directory, extension)
         {
             Ensure.NotNullOrEmpty(extension, nameof(extension));
@@ -45,7 +61,6 @@
             _backupSettings = backupSettings;
             _tempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
-
         public BackupSettings BackupSettings
         {
             get { return _backupSettings; }
@@ -119,7 +134,7 @@
         /// <returns></returns>
         public static RepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new RepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(BackupDirectoryName)));
+            return new RepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
     }
 }

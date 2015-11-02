@@ -50,7 +50,6 @@
                 Ensure.NotNullOrEmpty(extension, nameof(extension));
                 ValidateTimestampFormat(timeStampFormat);
                 DirectoryPath = PathAndSpecialFolder.Create(directory);
-                
             }
             _isCreatingBackups = isCreatingBackups;
 

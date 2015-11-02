@@ -17,7 +17,7 @@
         {
         }
 
-        protected FileSettings(PathAndSpecialFolder directoryPath, string extension)
+        public FileSettings(PathAndSpecialFolder directoryPath, string extension)
         {
             _directoryPath = directoryPath;
             _extension = FileHelper.PrependDotIfMissing(extension);

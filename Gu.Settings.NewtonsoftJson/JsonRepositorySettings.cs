@@ -29,7 +29,6 @@ namespace Gu.Settings.NewtonsoftJson
             JsonSerializerSettings = DefaultJsonSettings;
         }
 
-        [JsonConstructor]
         public JsonRepositorySettings(
             DirectoryInfo directory,
             JsonSerializerSettings jsonSerializerSettings,
@@ -38,7 +37,26 @@ namespace Gu.Settings.NewtonsoftJson
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
-            : base(directory, isTrackingDirty, isCaching, backupSettings, extension, tempExtension)
+            : this(PathAndSpecialFolder.Create(directory),
+                   jsonSerializerSettings,
+                   isTrackingDirty,
+                   isCaching,
+                   backupSettings,
+                   extension, 
+                   tempExtension)
+        {
+        }
+
+        [JsonConstructor]
+        public JsonRepositorySettings(
+            PathAndSpecialFolder directoryPath,
+            JsonSerializerSettings jsonSerializerSettings,
+            bool isTrackingDirty,
+            bool isCaching,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
+            : base(directoryPath, isTrackingDirty, isCaching, backupSettings, extension, tempExtension)
         {
             JsonSerializerSettings = jsonSerializerSettings;
         }
@@ -50,7 +68,7 @@ namespace Gu.Settings.NewtonsoftJson
 
         public static JsonRepositorySettings DefaultFor(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
         {
-            return new JsonRepositorySettings(directory, jsonSettings, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(BackupDirectoryName)));
+            return new JsonRepositorySettings(PathAndSpecialFolder.Create(directory), jsonSettings, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
 
         public JsonSerializerSettings JsonSerializerSettings { get; private set; }

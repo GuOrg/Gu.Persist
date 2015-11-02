@@ -1,7 +1,6 @@
 namespace Gu.Settings.SystemXml
 {
     using System.IO;
-
     using Gu.Settings.Core;
 
     public class XmlRepositorySettings : RepositorySettings
@@ -27,7 +26,7 @@ namespace Gu.Settings.SystemXml
 
         public static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new XmlRepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(BackupDirectoryName)));
+            return new XmlRepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
     }
 }
