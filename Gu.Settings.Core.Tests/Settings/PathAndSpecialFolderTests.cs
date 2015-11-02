@@ -2,18 +2,11 @@
 {
     using System;
     using System.IO;
-
+    using System.Reflection;
     using NUnit.Framework;
 
     public class PathAndSpecialFolderTests
     {
-        [Test]
-        public void TestNameTest()
-        {
-            var directoryInfo = new DirectoryInfo(".");
-            Console.WriteLine(directoryInfo.FullName);
-        }
-
         [Test]
         public void Default()
         {
@@ -73,7 +66,29 @@
                               };
             foreach (var actual in actuals)
             {
-                Assert.AreEqual(@"\Test", actual.Path);
+                Assert.AreEqual("Test", actual.Path);
+                Assert.AreEqual(Environment.SpecialFolder.ApplicationData, actual.SpecialFolder);
+                var info = actual.CreateDirectoryInfo();
+                Assert.AreEqual(path, info.FullName);
+            }
+        }
+
+        [Test]
+        public void AppDataNestedSubfolder()
+        {
+            var path = Environment.ExpandEnvironmentVariables(@"%AppData%\Level1\Level2");
+            var actuals = new[]
+                              {
+                                  PathAndSpecialFolder.Create(path),
+                                  PathAndSpecialFolder.Create(new DirectoryInfo(path)),
+                                  new PathAndSpecialFolder(path, Environment.SpecialFolder.ApplicationData),
+                                  new PathAndSpecialFolder(@"Level1\Level2", Environment.SpecialFolder.ApplicationData),
+                                  new PathAndSpecialFolder(@"\Level1\Level2", Environment.SpecialFolder.ApplicationData),
+                                  new PathAndSpecialFolder(path, null),
+                              };
+            foreach (var actual in actuals)
+            {
+                Assert.AreEqual(@"Level1\Level2", actual.Path);
                 Assert.AreEqual(Environment.SpecialFolder.ApplicationData, actual.SpecialFolder);
                 var info = actual.CreateDirectoryInfo();
                 Assert.AreEqual(path, info.FullName);
@@ -84,19 +99,20 @@
         public void CurrentDirectory()
         {
             var path = @".";
+            var fullName = Environment.CurrentDirectory;
             var actuals = new[]
                               {
                                   PathAndSpecialFolder.Create(path),
-                                  PathAndSpecialFolder.Create(new DirectoryInfo(Environment.CurrentDirectory)),
+                                  PathAndSpecialFolder.Create(new DirectoryInfo(fullName)),
                                   new PathAndSpecialFolder(path, null),
-                                  new PathAndSpecialFolder(Environment.CurrentDirectory, null),
+                                  new PathAndSpecialFolder(fullName, null),
                               };
             foreach (var actual in actuals)
             {
                 Assert.AreEqual(@".", actual.Path);
                 Assert.AreEqual(null, actual.SpecialFolder);
                 var info = actual.CreateDirectoryInfo();
-                Assert.AreEqual(Environment.CurrentDirectory, info.FullName);
+                Assert.AreEqual(fullName, info.FullName);
             }
         }
 
@@ -104,18 +120,20 @@
         public void CurrentDirectorySubDirectory()
         {
             var path = @".\Settings";
+            var fullName = System.IO.Path.Combine(Environment.CurrentDirectory, "Settings");
             var actuals = new[]
                               {
                                   PathAndSpecialFolder.Create(path),
-                                  PathAndSpecialFolder.Create(new DirectoryInfo(Environment.CurrentDirectory +"\\Settings")),
+                                  PathAndSpecialFolder.Create(new DirectoryInfo(fullName)),
                                   new PathAndSpecialFolder(path, null),
+                                  new PathAndSpecialFolder(fullName, null),
                               };
             foreach (var actual in actuals)
             {
-                var info = actual.CreateDirectoryInfo();
-                Assert.AreEqual(Environment.CurrentDirectory + "\\Settings", info.FullName);
                 Assert.AreEqual(path, actual.Path);
                 Assert.AreEqual(null, actual.SpecialFolder);
+                var info = actual.CreateDirectoryInfo();
+                Assert.AreEqual(fullName, info.FullName);
             }
         }
 
@@ -127,12 +145,15 @@
         [TestCase(@"c:\foo\bar\", @"c:\foo\", true)]
         [TestCase(@"c:\foo\bar", @"c:\foo\", true)]
         [TestCase(@"c:\foobar", @"c:\foo", false)]
-        [TestCase(@"c:\foo\..\bar\baz", @"c:\foo", false)]
-        [TestCase(@"c:\foo\..\bar\baz", @"c:\bar", true)]
-        [TestCase(@"c:\foo\..\bar\baz", @"c:\barr", false)]
+        //[TestCase(@"c:\foo\..\bar\baz", @"c:\foo", false)]
+        //[TestCase(@"c:\foo\..\bar\baz", @"c:\bar", true)]
+        //[TestCase(@"c:\foo\..\bar\baz", @"c:\barr", false)]
         public void IsSubDirectoryOfOrSame(string path, string potentialParent, bool expected)
         {
-            Assert.AreEqual(expected, PathAndSpecialFolder.IsSubDirectoryOfOrSame(path, potentialParent));
+            var method = typeof(PathAndSpecialFolder).GetMethod("IsSubDirectoryOfOrSame",
+                BindingFlags.Static | BindingFlags.NonPublic);
+
+            Assert.AreEqual(expected, method.Invoke(null, new[] { path, potentialParent }));
         }
     }
 }
