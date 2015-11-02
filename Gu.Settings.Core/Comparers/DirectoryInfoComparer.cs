@@ -6,7 +6,7 @@
 
     public class DirectoryInfoComparer : IEqualityComparer<DirectoryInfo>
     {
-        private static readonly char[] TrimEnd = { '\\' };
+        private static readonly char[] BackSlash = { '\\' };
         public static readonly DirectoryInfoComparer Default = new DirectoryInfoComparer();
         private static readonly StringComparer OrdinalIgnoreCaseComparer = StringComparer.OrdinalIgnoreCase;
 
@@ -26,13 +26,13 @@
                 return false;
             }
 
-            return OrdinalIgnoreCaseComparer.Equals(x.FullName.TrimEnd(TrimEnd), y.FullName.TrimEnd(TrimEnd));
+            return OrdinalIgnoreCaseComparer.Equals(x.FullName.TrimEnd(BackSlash), y.FullName.TrimEnd(BackSlash));
         }
 
         public int GetHashCode(DirectoryInfo obj)
         {
             Ensure.NotNull(obj, nameof(obj));
-            return OrdinalIgnoreCaseComparer.GetHashCode(obj.FullName.TrimEnd(TrimEnd));
+            return OrdinalIgnoreCaseComparer.GetHashCode(obj.FullName.TrimEnd(BackSlash));
         }
     }
 }
