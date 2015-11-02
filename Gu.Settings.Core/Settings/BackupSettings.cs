@@ -49,7 +49,7 @@
                 Ensure.NotNull(directory, nameof(directory));
                 Ensure.NotNullOrEmpty(extension, nameof(extension));
                 ValidateTimestampFormat(timeStampFormat);
-                DirectoryPath = new DirectoryPath(directory);
+                DirectoryPath = PathAndSpecialFolder.Create(directory);
                 
             }
             _isCreatingBackups = isCreatingBackups;

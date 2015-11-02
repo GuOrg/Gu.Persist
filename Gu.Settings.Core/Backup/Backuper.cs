@@ -12,7 +12,7 @@
         {
             Ensure.NotNull(setting, nameof(setting));
             Setting = setting;
-            setting.DirectoryPath.Directory.CreateIfNotExists();
+            setting.DirectoryPath.CreateDirectoryInfo().CreateIfNotExists();
         }
 
         /// <summary>

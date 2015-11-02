@@ -62,7 +62,8 @@
             var path = @".\Settings";
             var pathAndSpecialFolder = PathAndSpecialFolder.Create(path);
             var info = pathAndSpecialFolder.CreateDirectoryInfo();
-            Assert.AreEqual(Environment.CurrentDirectory + "\\Settings", info.FullName);
+            var expected = Environment.CurrentDirectory + "\\Settings";
+            Assert.AreEqual(expected, info.FullName);
             var actual = PathAndSpecialFolder.Create(info);
             Assert.AreEqual(path, actual.Path);
             Assert.AreEqual(null, actual.SpecialFolder);

@@ -7,16 +7,17 @@
 
     using JetBrains.Annotations;
 
+    [Serializable]
     public class FileSettings : IFileSettings
     {
         private string _extension;
-        private DirectoryPath _directoryPath;
+        private PathAndSpecialFolder _directoryPath;
 
         protected FileSettings()
         {
         }
 
-        protected FileSettings(DirectoryPath directoryPath, string extension)
+        protected FileSettings(PathAndSpecialFolder directoryPath, string extension)
         {
             _directoryPath = directoryPath;
             _extension = FileHelper.PrependDotIfMissing(extension);
@@ -24,14 +25,14 @@
 
         public FileSettings(DirectoryInfo directory, string extension)
         {
-            _directoryPath = new DirectoryPath(directory);
+            _directoryPath = PathAndSpecialFolder.Create(directory);
             _extension = FileHelper.PrependDotIfMissing(extension);
         }
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public DirectoryPath DirectoryPath
+        public PathAndSpecialFolder DirectoryPath
         {
             get { return _directoryPath; }
             set

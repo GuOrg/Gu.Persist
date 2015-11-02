@@ -60,7 +60,7 @@
         /// <param name="settings"></param>
         protected Repository(TSetting settings, IBackuper backuper)
         {
-            settings.DirectoryPath.Directory.CreateIfNotExists();
+            settings.DirectoryPath.CreateDirectoryInfo().CreateIfNotExists();
             Settings = settings;
             Backuper = backuper;
             if (Settings.IsTrackingDirty)

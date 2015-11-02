@@ -4,17 +4,12 @@
     using System.IO;
     using System.Reflection;
 
+    [Serializable]
     public class PathAndSpecialFolder
     {
         public static readonly PathAndSpecialFolder Default = new PathAndSpecialFolder(Assembly.GetExecutingAssembly().GetName().Name, Environment.SpecialFolder.ApplicationData);
 
-        public PathAndSpecialFolder(string path, Environment.SpecialFolder specialFolder)
-        {
-            Path = path;
-            Environment.SpecialFolder = specialFolder;
-        }
-
-        internal PathAndSpecialFolder(string path, Environment.SpecialFolder? specialFolder)
+        public PathAndSpecialFolder(string path, Environment.SpecialFolder? specialFolder)
         {
             Path = path;
             SpecialFolder = specialFolder;
@@ -36,32 +31,29 @@
             return Create(new DirectoryInfo(path));
         }
 
-        public bool CanCreateDirectoryInfo
+        public bool CanCreateDirectoryInfo()
         {
-            get
+            if (SpecialFolder != null)
             {
-                if (Environment.SpecialFolder != null)
-                {
-                    return true;
-                }
-
-                if (string.IsNullOrEmpty(Path))
-                {
-                    return false;
-                }
-
-                if (Path.StartsWith("."))
-                {
-                    return true;
-                }
-
-                return System.IO.Path.IsPathRooted(Path);
+                return true;
             }
+
+            if (string.IsNullOrEmpty(Path))
+            {
+                return false;
+            }
+
+            if (Path.StartsWith("."))
+            {
+                return true;
+            }
+
+            return System.IO.Path.IsPathRooted(Path);
         }
 
         internal DirectoryInfo CreateDirectoryInfo()
         {
-            var specialFolder = Environment.SpecialFolder;
+            var specialFolder = SpecialFolder;
             if (specialFolder != null)
             {
                 var folderPath = Environment.GetFolderPath(specialFolder.Value);

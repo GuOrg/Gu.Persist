@@ -106,7 +106,6 @@
     <Compile Include="Contracts\IRepositorySettings.cs" />
     <Compile Include="Settings\ChangeTrackerSettings.cs" />
     <Compile Include="Settings\ChangeTrackerSpecialType.cs" />
-    <Compile Include="Settings\DirectoryPath.cs" />
     <Compile Include="Settings\FileSettings.cs" />
     <Compile Include="Contracts\IDirectoryPath.cs" />
     <Compile Include="Settings\PathAndSpecialFolder.cs" />
