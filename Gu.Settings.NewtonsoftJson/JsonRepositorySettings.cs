@@ -42,8 +42,25 @@ namespace Gu.Settings.NewtonsoftJson
                    isTrackingDirty,
                    isCaching,
                    backupSettings,
-                   extension, 
+                   extension,
                    tempExtension)
+        {
+        }
+
+        public JsonRepositorySettings(
+            JsonSerializerSettings jsonSerializerSettings,
+            bool isTrackingDirty,
+            bool isCaching,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
+            : this(PathAndSpecialFolder.Default,
+                jsonSerializerSettings,
+                isTrackingDirty,
+                isCaching,
+                backupSettings,
+                extension,
+                tempExtension)
         {
         }
 

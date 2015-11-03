@@ -4,17 +4,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:demo="clr-namespace:Gu.Settings.Demo"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             DataContext="{x:Static demo:AutoSaveSetting.Instance}"
+             DataContext="{x:Static demo:RepositoryVm.Instance}"
              d:DesignHeight="300"
              d:DesignWidth="300"
-             mc:Ignorable="d"
-             >
+             mc:Ignorable="d">
     <Grid>
-        <ItemsControl Style="{StaticResource SettingsListStyle}">
-
-            <TextBlock Style="{StaticResource HeaderStyle}"
-                       Text="Grejs"
-                       />
+        <ItemsControl DataContext="{Binding AutoSaveSetting}" Style="{StaticResource SettingsListStyle}">
+            <TextBlock Style="{StaticResource HeaderStyle}" Text="Auto Grejs" />
             <HeaderedContentControl Header="Value 1 long name">
                 <TextBox Text="{Binding Value1}" />
             </HeaderedContentControl>
@@ -23,14 +19,8 @@
                 <TextBox Text="{Binding Value2}" />
             </HeaderedContentControl>
 
-            <HeaderedContentControl Header="Value 2">
-                <TextBox Text="{Binding Value2}" />
-            </HeaderedContentControl>
-            
-            <HeaderedContentControl Header="Value 2">
-                <ComboBox ItemsSource="{x:Static demo:AutoSaveSetting.AllComparisons}"
-                          SelectedItem="{Binding Comparison}"
-                          />
+            <HeaderedContentControl Header="Enum">
+                <ComboBox ItemsSource="{x:Static demo:AutoSaveSetting.AllComparisons}" SelectedItem="{Binding Comparison}" />
             </HeaderedContentControl>
         </ItemsControl>
     </Grid>
