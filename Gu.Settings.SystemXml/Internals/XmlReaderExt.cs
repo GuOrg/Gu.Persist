@@ -25,7 +25,6 @@ namespace Gu.Settings.SystemXml
             if (reader.IsEmptyElement)
             {
                 reader.ReadStartElement();
-                reader.ReadEndElement();
                 return null;
             }
             reader.ReadStartElement(elementName);

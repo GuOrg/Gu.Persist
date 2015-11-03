@@ -47,6 +47,7 @@ namespace Gu.Settings.SystemXml
             IsTrackingDirty = reader.ReadElementBool(nameof(IsTrackingDirty));
             IsCaching = reader.ReadElementBool(nameof(IsCaching));
             BackupSettings = reader.ReadElementBackupSettings(nameof(BackupSettings));
+            reader.ReadEndElement();
         }
 
         public void WriteXml(XmlWriter writer)
