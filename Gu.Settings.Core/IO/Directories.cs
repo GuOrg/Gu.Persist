@@ -6,44 +6,40 @@
 
     public static class Directories
     {
-        public static readonly DirectoryInfo ExecutingDirectory = CreateInfo(Assembly.GetExecutingAssembly().Location);
+        public static DirectoryInfo CurrentDirectory => new DirectoryInfo(Environment.CurrentDirectory);
 
-        public static readonly DirectoryInfo ApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-        public static readonly DirectoryInfo LocalApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
-        public static readonly DirectoryInfo CommonApplicationData = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+        public static DirectoryInfo ApplicationData => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+        public static DirectoryInfo LocalApplicationData => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+        public static DirectoryInfo CommonApplicationData => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
 
-        public static readonly DirectoryInfo MyDocuments = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-        public static readonly DirectoryInfo CommonDocuments = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
+        public static DirectoryInfo MyDocuments => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+        public static DirectoryInfo CommonDocuments => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
 
-        public static readonly DirectoryInfo ProgramFiles = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
-        public static readonly DirectoryInfo ProgramFilesX86 = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
+        public static DirectoryInfo ProgramFiles => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
+        public static DirectoryInfo ProgramFilesX86 => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
 
-        public static readonly DirectoryInfo CommonProgramFiles = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles));
-        public static readonly DirectoryInfo CommonProgramFilesX86 = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86));
+        public static DirectoryInfo CommonProgramFiles => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles));
+        public static DirectoryInfo CommonProgramFilesX86 => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86));
 
-        public static readonly DirectoryInfo Desktop = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-        public static readonly DirectoryInfo DesktopDirectory = CreateInfo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
-        public static readonly DirectoryInfo TempDirectory = CreateInfo(Path.GetTempPath());
+        public static DirectoryInfo Desktop => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+        public static DirectoryInfo DesktopDirectory => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
+        public static DirectoryInfo TempDirectory => new DirectoryInfo(Path.GetTempPath());
 
         private static DirectoryInfo _default;
-        public static DirectoryInfo Default
-        {
-            get
-            {
-                if (_default == null)
-                {
-                    _default = ApplicationData.Subdirectory(Assembly.GetExecutingAssembly().GetName().Name)
-                                              .Subdirectory("Settings");
-                }
-                return _default;
-            }
-            set { _default = value; }
-        }
+        public static DirectoryInfo Default => _default ?? (_default = PathAndSpecialFolder.Default.CreateDirectoryInfo());
 
-        private static DirectoryInfo CreateInfo(string path)
+        internal static DirectoryInfo AppDirectory()
         {
-            var directoryName = Path.GetDirectoryName(path);
-            return new DirectoryInfo(directoryName);
+            var directory = new DirectoryInfo(Environment.CurrentDirectory);
+            while (directory != null &&
+                   (String.Equals("bin", directory.Name, StringComparison.OrdinalIgnoreCase) ||
+                    String.Equals("debug", directory.Name, StringComparison.OrdinalIgnoreCase) ||
+                    String.Equals("release", directory.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                directory = directory.Parent;
+            }
+
+            return directory;
         }
     }
 }

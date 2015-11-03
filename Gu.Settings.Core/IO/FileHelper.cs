@@ -152,7 +152,7 @@ namespace Gu.Settings.Core
             File.Move(source.FullName, destination.FullName);
         }
 
-        internal static void Backup(this FileInfo file, FileInfo backup)
+        internal static void Backup(FileInfo file, FileInfo backup)
         {
             if (backup == null)
             {
@@ -194,7 +194,7 @@ namespace Gu.Settings.Core
         public static FileInfo CreateFileInfo(string fileName, IFileSettings settings)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            var file = CreateFileInfo(settings.Directory, fileName, settings.Extension);
+            var file = CreateFileInfo(settings.DirectoryPath.CreateDirectoryInfo(), fileName, settings.Extension);
             return file;
         }
 

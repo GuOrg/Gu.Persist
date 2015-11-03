@@ -43,6 +43,7 @@
         /// <returns></returns>
         public int GetHashCode(T obj)
         {
+            Ensure.NotNull(obj, nameof(obj));
             var bytes = GetBytesInner(obj);
             unchecked
             {
