@@ -15,7 +15,7 @@
         }
 
         /// <inheritdoc/>
-        public virtual bool TryBackup(FileInfo file)
+        public virtual bool BeforeSave(FileInfo file)
         {
             var softDelete = file.SoftDelete();
             return softDelete != null;
@@ -89,7 +89,7 @@
         }
 
         /// <inheritdoc/>
-        public virtual void PurgeBackups(FileInfo file)
+        public virtual void AfterSuccessfulSave(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");

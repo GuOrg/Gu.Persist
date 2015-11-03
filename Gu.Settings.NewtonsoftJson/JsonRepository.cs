@@ -49,6 +49,11 @@
         {
         }
 
+        public JsonRepository(JsonRepositorySettings settings, IBackuper backuper)
+            : base(settings, backuper)
+        {
+        }
+
         public new JsonRepositorySettings Settings => (JsonRepositorySettings)base.Settings;
 
         /// <inheritdoc/>

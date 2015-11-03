@@ -180,9 +180,7 @@
                 var roundtrip = DateTime.ParseExact(s, value, CultureInfo.InvariantCulture);
                 if (time != roundtrip)
                 {
-                    throw new ArgumentException(
-                        string.Format("The format: {0} is not valid as it cannot be roundtripped", value),
-                        "value");
+                    throw new ArgumentException($"The format: {value} is not valid as it cannot be roundtripped");
                 }
             }
         }
