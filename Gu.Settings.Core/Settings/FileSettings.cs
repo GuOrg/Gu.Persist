@@ -49,7 +49,7 @@
         public string Extension
         {
             get { return _extension; }
-            private set
+            protected set
             {
                 if (value == _extension)
                 {

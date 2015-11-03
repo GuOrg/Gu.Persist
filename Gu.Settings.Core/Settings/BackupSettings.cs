@@ -42,6 +42,25 @@
             bool hidden,
             int numberOfBackups,
             int maxAgeInDays)
+            : this(
+                directory != null ? PathAndSpecialFolder.Create(directory) : null,
+                isCreatingBackups,
+                extension,
+                timeStampFormat,
+                hidden,
+                numberOfBackups,
+                maxAgeInDays)
+        {
+        }
+
+        public BackupSettings(
+            PathAndSpecialFolder directory,
+            bool isCreatingBackups,
+            string extension,
+            string timeStampFormat,
+            bool hidden,
+            int numberOfBackups,
+            int maxAgeInDays)
             : base(directory, extension)
         {
             if (isCreatingBackups)
@@ -49,7 +68,6 @@
                 Ensure.NotNull(directory, nameof(directory));
                 Ensure.NotNullOrEmpty(extension, nameof(extension));
                 ValidateTimestampFormat(timeStampFormat);
-                DirectoryPath = PathAndSpecialFolder.Create(directory);
             }
             _isCreatingBackups = isCreatingBackups;
 
@@ -90,6 +108,7 @@
                 {
                     return;
                 }
+
                 ValidateTimestampFormat(value);
                 _timeStampFormat = value;
                 OnPropertyChanged();
