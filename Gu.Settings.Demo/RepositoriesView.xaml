@@ -1,56 +1,57 @@
-﻿<UserControl x:Class="Gu.Settings.Demo.RepositoriesView"
+﻿<UserControl x:Class="Gu.Settings.Demo.RepositoryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Gu.Settings.Demo"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             DataContext="{x:Static local:RepositoriesVm.Instance}"
+             DataContext="{x:Static local:RepositoryVm.Instance}"
              d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="IsReadOnly" Value="True" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <ComboBox ItemsSource="{Binding Repositories}"
-                  SelectedIndex="0"
-                  SelectedItem="{Binding SelectedRepository}" />
-        <ItemsControl Grid.Row="1" Style="{StaticResource SettingsListStyle}">
+        <ItemsControl Grid.Column="0" Style="{StaticResource SettingsListStyle}">
             <HeaderedContentControl Header="Directory">
-                <TextBox Text="{Binding Settings.DirectoryPath}" />
+                <StackPanel>
+                    <TextBox Text="{Binding Repository.Settings.DirectoryPath.Path, Mode=OneWay}" />
+                    <TextBox Text="{Binding Repository.Settings.DirectoryPath.SpecialFolder, Mode=OneWay}" />
+                </StackPanel>
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="Extension">
-                <TextBox Text="{Binding Settings.Extension}" />
+                <TextBox Text="{Binding Repository.Settings.Extension, Mode=OneWay}" />
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="TempExtension">
-                <TextBox Text="{Binding Settings.TempExtension}" />
+                <TextBox Text="{Binding Repository.Settings.TempExtension, Mode=OneWay}" />
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="Tracking">
-                <CheckBox IsChecked="{Binding Settings.IsTrackingDirty}" />
+                <CheckBox IsChecked="{Binding Repository.Settings.IsTrackingDirty, Mode=OneWay}" />
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="BackupExtension">
-                <TextBox Text="{Binding Settings.BackupSettings.Extension}" />
+                <TextBox Text="{Binding Repository.Settings.BackupSettings.Extension, Mode=OneWay}" />
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="TimeStampFormat">
-                <TextBox Text="{Binding Settings.BackupSettings.TimeStampFormat}" />
+                <TextBox Text="{Binding Repository.Settings.BackupSettings.TimeStampFormat, Mode=OneWay}" />
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="CreateBackups">
-                <CheckBox IsChecked="{Binding Settings.BackupSettings.IsCreatingBackups}" />
+                <CheckBox IsChecked="{Binding Repository.Settings.BackupSettings.IsCreatingBackups, Mode=OneWay}" />
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="NumberOfBackups">
-                <TextBox Text="{Binding Settings.BackupSettings.NumberOfBackups}" />
+                <TextBox Text="{Binding Repository.Settings.BackupSettings.NumberOfBackups, Mode=OneWay}" />
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="MaxAgeInDays">
-                <TextBox Text="{Binding Settings.BackupSettings.MaxAgeInDays}" />
+                <TextBox Text="{Binding Repository.Settings.BackupSettings.MaxAgeInDays, Mode=OneWay}" />
             </HeaderedContentControl>
         </ItemsControl>
     </Grid>

@@ -28,6 +28,9 @@
         private static DirectoryInfo _default;
         public static DirectoryInfo Default => _default ?? (_default = PathAndSpecialFolder.Default.CreateDirectoryInfo());
 
+        private static DirectoryInfo _defaultBackup;
+        public static DirectoryInfo DefaultBackup => _defaultBackup ?? (_defaultBackup = PathAndSpecialFolder.DefaultBackup.CreateDirectoryInfo());
+
         internal static DirectoryInfo AppDirectory()
         {
             var directory = new DirectoryInfo(Environment.CurrentDirectory);

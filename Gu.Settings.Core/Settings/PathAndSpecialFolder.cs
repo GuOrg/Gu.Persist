@@ -28,6 +28,7 @@
             };
 
         public static readonly PathAndSpecialFolder Default = new PathAndSpecialFolder(Directories.AppDirectory().Name, Environment.SpecialFolder.ApplicationData);
+        public static readonly PathAndSpecialFolder DefaultBackup = new PathAndSpecialFolder($@"{Directories.AppDirectory().Name}\Backup", Environment.SpecialFolder.ApplicationData);
 
         public PathAndSpecialFolder(string path, Environment.SpecialFolder? specialFolder)
         {

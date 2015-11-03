@@ -5,20 +5,19 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Runtime.CompilerServices;
-
     using JetBrains.Annotations;
 
     [Serializable]
-    public class AutoSaveSetting : INotifyPropertyChanged
+    public class ManualSaveSetting : INotifyPropertyChanged
     {
         public static readonly IReadOnlyList<StringComparison> AllComparisons =
-            Enum.GetValues(typeof (StringComparison)).Cast<StringComparison>().ToArray();
+            Enum.GetValues(typeof(StringComparison)).Cast<StringComparison>().ToArray();
 
-        private int _value1;
-        private int _value2;
+        private int _value1 = 1;
+        private int _value2 = 2;
         private StringComparison _comparison;
 
-        private AutoSaveSetting()
+        private ManualSaveSetting()
         {
         }
 

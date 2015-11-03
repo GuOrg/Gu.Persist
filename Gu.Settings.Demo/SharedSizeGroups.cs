@@ -2,6 +2,6 @@
 {
     public static class SharedSizeGroups
     {
-        public static readonly string LabelColumn = "LabelColumn";
+        public static string LabelColumn { get; } = "LabelColumn";
     }
 }

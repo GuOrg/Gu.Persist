@@ -4,16 +4,24 @@
         xmlns:demo="clr-namespace:Gu.Settings.Demo"
         Title="MainWindow"
         Width="525"
-        Height="350"
-        >
-    <Grid >
-        <TabControl>
-            <TabItem Header="Repositories">
-                <demo:RepositoriesView/>
+        Height="350">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TabControl Grid.Column="0">
+            <TabItem Header="Setting">
+                <demo:ManualSaveSettingsView />
             </TabItem>
-            <TabItem Header="AutoSaveView">
-                <demo:AutoSaveSettingView/>
+            <TabItem Header="Auto Save Setting">
+                <demo:AutoSaveSettingView />
+            </TabItem>
+            <TabItem Header="Repository">
+                <demo:RepositoryView />
             </TabItem>
         </TabControl>
+
+        <ListBox Grid.Column="1" ItemsSource="{Binding Log, Source={x:Static demo:RepositoryVm.Instance}}" />
     </Grid>
 </Window>
