@@ -52,13 +52,14 @@ namespace Gu.Settings.Core
 
         /// <summary>
         /// Generic method for saving a file async
+        /// Creates or overwrites <paramref name="file"/>
         /// </summary>
         /// <param name="file"></param>
         /// <param name="stream"></param>
         /// <returns></returns>
         internal static async Task SaveAsync(this FileInfo file, Stream stream)
         {
-            using (var fileStream = file.OpenWrite())
+            using (var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 await stream.CopyToAsync(fileStream)
                             .ConfigureAwait(false);
@@ -66,13 +67,13 @@ namespace Gu.Settings.Core
         }
 
         /// <summary>
-        /// 
+        /// Creates or overwrites <paramref name="file"/>
         /// </summary>
         /// <param name="file"></param>
         /// <param name="stream"></param>
         internal static void Save(this FileInfo file, Stream stream)
         {
-            using (var fileStream = File.OpenWrite(file.FullName))
+            using (var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 stream.CopyTo(fileStream);
             }
@@ -142,6 +143,7 @@ namespace Gu.Settings.Core
             }
             oldName.MoveTo(newName);
         }
+
         internal static void MoveTo(this FileInfo source, FileInfo destination)
         {
             destination.Refresh();

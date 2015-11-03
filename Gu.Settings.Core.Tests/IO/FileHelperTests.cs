@@ -1,7 +1,7 @@
 ﻿namespace Gu.Settings.Core.Tests.IO
 {
     using System.IO;
-
+    using System.Threading.Tasks;
     using Gu.Settings.Core;
 
     using NUnit.Framework;
@@ -237,6 +237,64 @@
                 var fileInfo = FileHelper.CreateFileInfo(null, fn, ext);
                 Assert.AreEqual(expected, fileInfo.FullName);
             }
+        }
+
+        [Test]
+        public void Save()
+        {
+            var fileInfo = Directory.CreateFileInfoInDirectory("SaveTest.cfg");
+            var stream = new MemoryStream();
+            using (var writer = new StreamWriter(stream))
+            {
+                writer.Write("1 2");
+                writer.Flush();
+                stream.Position = 0;
+                FileHelper.Save(fileInfo, stream);
+            }
+
+            var text = File.ReadAllText(fileInfo.FullName);
+            Assert.AreEqual("1 2", text);
+
+            stream = new MemoryStream();
+            using (var writer = new StreamWriter(stream))
+            {
+                writer.Write("3");
+                writer.Flush();
+                stream.Position = 0;
+                FileHelper.Save(fileInfo, stream);
+            }
+
+            text = File.ReadAllText(fileInfo.FullName);
+            Assert.AreEqual("3", text);
+        }
+
+        [Test]
+        public async Task SaveAsync()
+        {
+            var fileInfo = Directory.CreateFileInfoInDirectory("SaveAsyncTest.cfg");
+            var stream = new MemoryStream();
+            using (var writer = new StreamWriter(stream))
+            {
+                writer.Write("1 2");
+                writer.Flush();
+                stream.Position = 0;
+                await FileHelper.SaveAsync(fileInfo, stream).ConfigureAwait(false);
+            }
+
+            var text = File.ReadAllText(fileInfo.FullName);
+            Assert.AreEqual("1 2", text);
+
+            stream = new MemoryStream();
+            using (var writer = new StreamWriter(stream))
+            {
+                writer.Write("3");
+                writer.Flush();
+                stream.Position = 0;
+                await FileHelper.SaveAsync(fileInfo, stream).ConfigureAwait(false);
+            }
+
+            text = File.ReadAllText(fileInfo.FullName);
+            Assert.AreEqual("3", text);
         }
     }
 }
