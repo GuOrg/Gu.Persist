@@ -5,7 +5,7 @@
     using System.Diagnostics;
     using System.Runtime.CompilerServices;
 
-    using Gu.Settings.Core.Properties;
+    using JetBrains.Annotations;
 
     [DebuggerDisplay("Type: {TypeName} TrackAs: {TrackAs}")]
     public class ChangeTrackerSpecialType : INotifyPropertyChanged

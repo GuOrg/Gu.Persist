@@ -1,19 +1,13 @@
 ﻿namespace Gu.Settings.Core
 {
     using System;
-    using System.ComponentModel;
     using System.IO;
-    using System.Runtime.CompilerServices;
-
-    using Gu.Settings.Core.Properties;
 
     [Serializable]
-    public class RepositorySettings : IRepositorySettings
+    public class RepositorySettings : FileSettings, IRepositorySettings
     {
-        protected static readonly string BackupDirectoryName = "Backup";
-        private string _directoryPath;
+        protected static readonly string DefaultBackupDirectoryName = "Backup";
         private BackupSettings _backupSettings;
-        private string _extension;
         private string _tempExtension;
         private bool _isTrackingDirty;
         private bool _isCaching;
@@ -39,6 +33,24 @@
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
+            : this(
+                PathAndSpecialFolder.Create(directory),
+                isTrackingDirty,
+                isCaching, 
+                backupSettings, 
+                extension,
+                tempExtension)
+        {
+        }
+
+        public RepositorySettings(
+            PathAndSpecialFolder directory,
+            bool isTrackingDirty,
+            bool isCaching,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
+            : base(directory, extension)
         {
             Ensure.NotNullOrEmpty(extension, nameof(extension));
             Ensure.NotNullOrEmpty(tempExtension, nameof(tempExtension));
@@ -46,57 +58,9 @@
 
             _isTrackingDirty = isTrackingDirty;
             _isCaching = isCaching;
-            _directoryPath = directory.FullName;
             _backupSettings = backupSettings;
-
-            _extension = FileHelper.PrependDotIfMissing(extension);
             _tempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
-
-        [field: NonSerialized]
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public DirectoryInfo Directory
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(DirectoryPath))
-                {
-                    return null;
-                }
-                return new DirectoryInfo(DirectoryPath);
-            }
-        }
-
-        public string DirectoryPath
-        {
-            get { return _directoryPath; }
-            set
-            {
-                if (value == _directoryPath)
-                {
-                    return;
-                }
-                _directoryPath = value;
-                OnPropertyChanged();
-                OnPropertyChanged("Directory");
-            }
-        }
-
-        public string Extension
-        {
-            get { return _extension; }
-            set
-            {
-                if (value == _extension)
-                {
-                    return;
-                }
-                _extension = value;
-                OnPropertyChanged();
-            }
-        }
-
         public BackupSettings BackupSettings
         {
             get { return _backupSettings; }
@@ -170,17 +134,7 @@
         /// <returns></returns>
         public static RepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new RepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(BackupDirectoryName)));
-        }
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            return new RepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
     }
 }

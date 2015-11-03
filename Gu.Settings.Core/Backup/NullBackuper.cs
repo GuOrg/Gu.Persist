@@ -82,7 +82,8 @@
             file.Refresh();
             if (file.Exists)
             {
-                throw new InvalidOperationException(string.Format("Trying to restore {0} when there is already an original: {1}", backup.FullName, file.FullName));
+                string message = $"Trying to restore {backup.FullName} when there is already an original: {file.FullName}";
+                throw new InvalidOperationException(message);
             }
             FileHelper.Restore(file, backup);
         }

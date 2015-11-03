@@ -8,11 +8,11 @@
 
     public class Backuper : IBackuper
     {
-        protected Backuper(BackupSettings setting)
+        protected Backuper(IBackupSettings setting)
         {
             Ensure.NotNull(setting, nameof(setting));
             Setting = setting;
-            setting.Directory.CreateIfNotExists();
+            setting.DirectoryPath.CreateDirectoryInfo().CreateIfNotExists();
         }
 
         /// <summary>
