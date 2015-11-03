@@ -40,7 +40,7 @@
         }
 
         /// <inheritdoc/>
-        public virtual bool TryBackup(FileInfo file)
+        public virtual bool BeforeSave(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");
@@ -140,7 +140,7 @@
         }
 
         /// <inheritdoc/>
-        public virtual void PurgeBackups(FileInfo file)
+        public virtual void AfterSuccessfulSave(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");

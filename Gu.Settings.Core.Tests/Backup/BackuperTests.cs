@@ -28,7 +28,7 @@ namespace Gu.Settings.Core.Tests.Backup
             AssertFile.Exists(false, File);
             AssertFile.Exists(false, Backup);
 
-            Assert.IsFalse(_backuper.TryBackup(File));
+            Assert.IsFalse(_backuper.BeforeSave(File));
 
             AssertFile.Exists(false, File);
             AssertFile.Exists(false, Backup);
@@ -130,7 +130,7 @@ namespace Gu.Settings.Core.Tests.Backup
         {
             Setting.NumberOfBackups = 2;
             Setting.MaxAgeInDays = 2;
-            _backuper.PurgeBackups(File);
+            _backuper.AfterSuccessfulSave(File);
             AssertFile.Exists(false, BackupOneMinuteOld);
             AssertFile.Exists(false, BackupOneHourOld);
             AssertFile.Exists(false, BackupOneDayOld);
@@ -150,7 +150,7 @@ namespace Gu.Settings.Core.Tests.Backup
             Setting.TimeStampFormat = BackupSettings.DefaultTimeStampFormat;
             Setting.NumberOfBackups = 3;
             Setting.MaxAgeInDays = int.MaxValue;
-            _backuper.PurgeBackups(File);
+            _backuper.AfterSuccessfulSave(File);
             AssertFile.Exists(true, BackupOneMinuteOld);
             AssertFile.Exists(true, BackupOneHourOld);
             AssertFile.Exists(true, BackupOneDayOld);
@@ -170,7 +170,7 @@ namespace Gu.Settings.Core.Tests.Backup
             Setting.TimeStampFormat = BackupSettings.DefaultTimeStampFormat;
             Setting.NumberOfBackups = int.MaxValue;
             Setting.MaxAgeInDays = 2;
-            _backuper.PurgeBackups(File);
+            _backuper.AfterSuccessfulSave(File);
             AssertFile.Exists(true, BackupOneMinuteOld);
             AssertFile.Exists(true, BackupOneHourOld);
             AssertFile.Exists(true, BackupOneDayOld);
@@ -185,7 +185,7 @@ namespace Gu.Settings.Core.Tests.Backup
             File.VoidCreate();
             SoftDelete.VoidCreate();
             Backup.VoidCreate();
-            _backuper.PurgeBackups(File);
+            _backuper.AfterSuccessfulSave(File);
             AssertFile.Exists(true, File);
             AssertFile.Exists(true, Backup);
             AssertFile.Exists(false, SoftDelete);
@@ -203,7 +203,7 @@ namespace Gu.Settings.Core.Tests.Backup
             Backup.VoidCreate();
             Setting.NumberOfBackups = int.MaxValue;
             Setting.MaxAgeInDays = int.MaxValue;
-            _backuper.PurgeBackups(File);
+            _backuper.AfterSuccessfulSave(File);
             AssertFile.Exists(true, File);
             AssertFile.Exists(true, Backup);
             AssertFile.Exists(false, SoftDelete);

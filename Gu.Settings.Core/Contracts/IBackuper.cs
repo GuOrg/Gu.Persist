@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        bool TryBackup(FileInfo file);
+        bool BeforeSave(FileInfo file);
 
         /// <summary>
         /// Creates a backup for <paramref name="file"/>
@@ -46,7 +46,7 @@
         /// Removes old backups for <paramref name="file"/>
         /// </summary>
         /// <param name="file"></param>
-        void PurgeBackups(FileInfo file);
+        void AfterSuccessfulSave(FileInfo file);
 
         bool CanRename(FileInfo file, string newName);
 

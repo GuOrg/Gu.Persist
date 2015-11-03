@@ -18,16 +18,14 @@
             Git.InitRepository(directoryInfo);
         }
 
-        public bool TryBackup(FileInfo file)
+        public bool BeforeSave(FileInfo file)
         {
-            Git.Stage(file);
-            return Git.Commit(file);
+            return false;
         }
 
         public void Backup(FileInfo file, FileInfo backup)
         {
-            Git.Stage(file);
-            Git.Commit(file);
+            Git.StageAndCommit(file);
         }
 
         public bool CanRestore(FileInfo file)
@@ -35,8 +33,6 @@
             var status = Git.GetStatus(file);
             switch (status)
             {
-                case FileStatus.Nonexistent:
-                case FileStatus.Unaltered:
                 case FileStatus.Added:
                 case FileStatus.Staged:
                 case FileStatus.Removed:
@@ -46,6 +42,8 @@
                 case FileStatus.TypeChanged:
                 case FileStatus.RenamedInWorkDir:
                     return true;
+                case FileStatus.Unaltered:
+                case FileStatus.Nonexistent:
                 case FileStatus.Untracked:
                 case FileStatus.Missing:
                 case FileStatus.Unreadable:
@@ -59,13 +57,16 @@
         public bool TryRestore(FileInfo file)
         {
             var canRestore = CanRestore(file);
-            Git.Revert(file);
+            if (canRestore)
+            {
+                Git.Revert(file);
+            }
             return canRestore;
         }
 
-        public void PurgeBackups(FileInfo file)
+        public void AfterSuccessfulSave(FileInfo file)
         {
-            // nop
+            Git.StageAndCommit(file);
         }
 
         public bool CanRename(FileInfo file, string newName)

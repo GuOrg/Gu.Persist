@@ -45,17 +45,22 @@
             }
         }
 
-        internal static bool Commit(FileInfo file)
+        internal static bool StageAndCommit(FileInfo file)
         {
+            if (!File.Exists(file.FullName))
+            {
+                return false;
+            }
             using (var repository = new LibGit2Sharp.Repository(file.DirectoryName))
             {
+                repository.Stage(file.FullName, new StageOptions { IncludeIgnored = true });
                 var status = repository.RetrieveStatus(file.FullName);
 
                 switch (status)
                 {
+                    case FileStatus.Nonexistent:
                     case FileStatus.Unaltered:
                         return false;
-                    case FileStatus.Nonexistent:
                     case FileStatus.Added:
                     case FileStatus.Staged:
                     case FileStatus.Removed:
