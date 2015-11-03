@@ -8,7 +8,7 @@
     [Serializable]
     [DebuggerDisplay("Path: {Path} SpecialFolder: {SpecialFolder}")]
 
-    public class PathAndSpecialFolder
+    public class PathAndSpecialFolder : IEquatable<PathAndSpecialFolder>
     {
         private static readonly char[] BackSlash = { '\\' };
         private static readonly Environment.SpecialFolder[] SpecialFolders =
@@ -135,6 +135,56 @@
             var specialFolderPath = Environment.GetFolderPath(SpecialFolder.Value);
             var path = System.IO.Path.Combine(specialFolderPath, Path);
             return new DirectoryInfo(path);
+        }
+
+        public static bool operator ==(PathAndSpecialFolder left, PathAndSpecialFolder right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(PathAndSpecialFolder left, PathAndSpecialFolder right)
+        {
+            return !Equals(left, right);
+        }
+
+        public bool Equals(PathAndSpecialFolder other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return string.Equals(Path, other.Path, StringComparison.OrdinalIgnoreCase) && SpecialFolder == other.SpecialFolder;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+            return Equals((PathAndSpecialFolder)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((Path != null
+                             ? StringComparer.OrdinalIgnoreCase.GetHashCode(Path)
+                             : 0) * 397) ^ SpecialFolder.GetHashCode();
+            }
         }
 
         private static PathAndSpecialFolder TryCreate(DirectoryInfo info, Environment.SpecialFolder specialFolder)
