@@ -29,6 +29,11 @@ namespace Gu.Settings.SystemXml
         {
         }
 
+        public XmlRepository(XmlRepositorySettings settings, IBackuper backuper)
+            : base(settings, backuper)
+        {
+        }
+
         protected override T FromStream<T>(Stream stream)
         {
             return XmlHelper.FromStream<T>(stream);

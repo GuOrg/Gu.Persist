@@ -40,7 +40,7 @@
         }
 
         /// <inheritdoc/>
-        public virtual bool TryBackup(FileInfo file)
+        public virtual bool BeforeSave(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");
@@ -134,13 +134,13 @@
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(backup, nameof(backup));
-            Ensure.DoesNotExist(file, string.Format("Trying to restore {0} when there is already an original: {1}", backup.FullName, file.FullName));
+            Ensure.DoesNotExist(file, $"Trying to restore {backup.FullName} when there is already an original: {file.FullName}");
             backup.DeleteSoftDeleteFileFor();
             FileHelper.Restore(file, backup);
         }
 
         /// <inheritdoc/>
-        public virtual void PurgeBackups(FileInfo file)
+        public virtual void AfterSuccessfulSave(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNotAnyOf(file, BackupExtensions, "file");

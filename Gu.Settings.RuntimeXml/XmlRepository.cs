@@ -35,6 +35,11 @@
         {
         }
 
+        public XmlRepository(RuntimeXmlRepositorySettings settings, IBackuper backuper)
+            : base(settings, backuper)
+        {
+        }
+
         /// <inheritdoc/>
         protected override T FromStream<T>(Stream stream)
         {

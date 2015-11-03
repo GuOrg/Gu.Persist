@@ -26,7 +26,7 @@
             AssertFile.Exists(false, File);
             AssertFile.Exists(false, Backup);
 
-            _backuper.TryBackup(File);
+            _backuper.BeforeSave(File);
 
             AssertFile.Exists(false, File);
             AssertFile.Exists(false, Backup);
@@ -128,7 +128,7 @@
         {
             Setting.NumberOfBackups = 2;
             Setting.MaxAgeInDays = 2;
-            _backuper.PurgeBackups(File);
+            _backuper.AfterSuccessfulSave(File);
             AssertFile.Exists(false, BackupOneMinuteOld);
             AssertFile.Exists(false, BackupOneHourOld);
             AssertFile.Exists(false, BackupOneDayOld);
@@ -148,7 +148,7 @@
             }
             Setting.NumberOfBackups = 3;
             Setting.MaxAgeInDays = int.MaxValue;
-            _backuper.PurgeBackups(File);
+            _backuper.AfterSuccessfulSave(File);
             AssertFile.Exists(true, File);
             AssertFile.Exists(true, BackupOneMinuteOld);
             AssertFile.Exists(true, BackupOneHourOld);
@@ -164,7 +164,7 @@
             File.VoidCreate();
             SoftDelete.VoidCreate();
             Backup.VoidCreate();
-            _backuper.PurgeBackups(File);
+            _backuper.AfterSuccessfulSave(File);
             AssertFile.Exists(true, File);
             AssertFile.Exists(true, Backup);
             AssertFile.Exists(false, SoftDelete);
@@ -182,7 +182,7 @@
             Backup.VoidCreate();
             Setting.NumberOfBackups = int.MaxValue;
             Setting.MaxAgeInDays = int.MaxValue;
-            _backuper.PurgeBackups(File);
+            _backuper.AfterSuccessfulSave(File);
             AssertFile.Exists(true, File);
             AssertFile.Exists(true, Backup);
             AssertFile.Exists(false, SoftDelete);

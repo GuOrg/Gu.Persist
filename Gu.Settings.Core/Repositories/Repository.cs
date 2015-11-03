@@ -544,7 +544,7 @@
         {
             if (item == null)
             {
-                FileHelper.HardDelete(file);
+                SaveStreamCore(null, file, null);
                 return;
             }
             CacheAndTrackCore(item, file);
@@ -562,12 +562,12 @@
                 FileHelper.HardDelete(file);
                 return;
             }
-            Backuper.TryBackup(file);
+            Backuper.BeforeSave(file);
             try
             {
                 FileHelper.Save(tempFile, stream);
                 tempFile.MoveTo(file);
-                Backuper.PurgeBackups(file);
+                Backuper.AfterSuccessfulSave(file);
             }
             catch (Exception)
             {
@@ -648,12 +648,12 @@
         /// <inheritdoc/>
         public virtual async Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile)
         {
-            Backuper.TryBackup(file);
+            Backuper.BeforeSave(file);
             try
             {
                 await tempFile.SaveAsync(stream).ConfigureAwait(false);
                 tempFile.MoveTo(file);
-                Backuper.PurgeBackups(file);
+                Backuper.AfterSuccessfulSave(file);
             }
             catch (Exception)
             {

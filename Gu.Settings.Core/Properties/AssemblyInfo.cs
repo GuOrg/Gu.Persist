@@ -45,4 +45,7 @@ using System.Resources;
 [assembly: InternalsVisibleTo("Gu.Settings.RuntimeBinary.Tests", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Settings.SystemXml", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Settings.SystemXml.Tests", AllInternalsVisible = true)]
+[assembly: InternalsVisibleTo("Gu.Settings.Git", AllInternalsVisible = true)]
+[assembly: InternalsVisibleTo("Gu.Settings.Git.Tests", AllInternalsVisible = true)]
+
 [assembly: NeutralResourcesLanguageAttribute("en")]
