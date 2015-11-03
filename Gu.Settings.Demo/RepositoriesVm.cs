@@ -2,14 +2,11 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.IO;
     using System.Runtime.CompilerServices;
 
     using Gu.Settings.Core;
-    using Gu.Settings.Core.Properties;
-    using Gu.Settings.NewtonsoftJson;
-    using Gu.Settings.RuntimeBinary;
-    using Gu.Settings.SystemXml;
+
+    using JetBrains.Annotations;
 
     public class RepositoriesVm : INotifyPropertyChanged
     {
@@ -19,7 +16,7 @@
 
         private RepositoriesVm()
         {
-            var directory = Directories.ExecutingDirectory.Subdirectory("Settings");
+            var directory = Directories.CurrentDirectory.Subdirectory("Settings");
             var backupSettings = new BackupSettings(directory, true, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, false, 5, 5);
             _settings = new RepositorySettings(directory, backupSettings);
             Repositories = new IRepository[]

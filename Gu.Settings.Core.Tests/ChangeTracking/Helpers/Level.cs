@@ -7,6 +7,8 @@
 
     using Gu.Settings.Core.Properties;
 
+    using JetBrains.Annotations;
+
     public class Level : INotifyPropertyChanged
     {
         private int _value;

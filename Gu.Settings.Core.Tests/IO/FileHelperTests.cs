@@ -101,7 +101,7 @@
         [Test]
         public void SoftDeleteWhenHasSoftFile()
         {
-            _file.WriteAllText( "File");
+            _file.WriteAllText("File");
             _softDeleteFile.WriteAllText("Soft");
             _file.SoftDelete();
             AssertFile.Exists(false, _file);
@@ -115,7 +115,7 @@
         {
             _backup.Delete();
             AssertFile.Exists(false, _file);
-            _file.Backup(_backup);
+            FileHelper.Backup(_file, _backup);
             AssertFile.Exists(false, _file);
             AssertFile.Exists(false, _backup);
         }
@@ -125,7 +125,7 @@
         {
             _backup.WriteAllText("Backup");
             AssertFile.Exists(false, _file);
-            _file.Backup(_backup);
+            FileHelper.Backup(_file, _backup);
             AssertFile.Exists(false, _file);
             AssertFile.Exists(true, _backup);
             Assert.AreEqual("Backup", _backup.ReadAllText());
@@ -135,7 +135,7 @@
         public void BackupWhenNoBackupFile()
         {
             _file.WriteAllText("File");
-            _file.Backup(_backup);
+            FileHelper.Backup(_file, _backup);
             AssertFile.Exists(false, _file);
             AssertFile.Exists(true, _backup);
             Assert.AreEqual("File", _backup.ReadAllText());
@@ -146,7 +146,7 @@
         {
             _file.WriteAllText("File");
             _backup.WriteAllText("Backup");
-            _file.Backup(_backup);
+            FileHelper.Backup(_file, _backup);
             AssertFile.Exists(false, _file);
             AssertFile.Exists(true, _backup);
             Assert.AreEqual("File", _backup.ReadAllText());
@@ -158,7 +158,7 @@
             _backupSoftDelete.WriteAllText("OldSoft");
             _file.WriteAllText("File");
             _backup.WriteAllText("Backup");
-            _file.Backup(_backup);
+            FileHelper.Backup(_file, _backup);
             AssertFile.Exists(false, _file);
             AssertFile.Exists(true, _backup);
             Assert.AreEqual("File", _backup.ReadAllText());
@@ -203,8 +203,8 @@
         [Test]
         public void RestoreWhenHasRestoreFile()
         {
-            _file.WriteAllText( "File");
-            _backup.WriteAllText( "Restore");
+            _file.WriteAllText("File");
+            _backup.WriteAllText("Restore");
             _file.Restore(_backup);
             AssertFile.Exists(true, _file);
             AssertFile.Exists(false, _backup);

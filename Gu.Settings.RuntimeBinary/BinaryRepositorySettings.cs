@@ -25,7 +25,7 @@
 
         public static BinaryRepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new BinaryRepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(BackupDirectoryName)));
+            return new BinaryRepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
     }
 }

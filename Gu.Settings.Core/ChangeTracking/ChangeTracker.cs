@@ -10,7 +10,7 @@
     using System.Reflection;
     using System.Runtime.CompilerServices;
 
-    using Gu.Settings.Core.Properties;
+    using JetBrains.Annotations;
 
     public abstract class ChangeTracker : ITracker
     {

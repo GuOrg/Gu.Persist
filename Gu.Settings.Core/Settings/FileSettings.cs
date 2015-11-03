@@ -5,32 +5,43 @@
     using System.IO;
     using System.Runtime.CompilerServices;
 
-    using Gu.Settings.Core.Properties;
+    using JetBrains.Annotations;
 
-    internal class FileSettings : IFileSettings
+    [Serializable]
+    public class FileSettings : IFileSettings
     {
-        private DirectoryInfo _directory;
         private string _extension;
+        private PathAndSpecialFolder _directoryPath;
+
+        protected FileSettings()
+        {
+        }
+
+        public FileSettings(PathAndSpecialFolder directoryPath, string extension)
+        {
+            _directoryPath = directoryPath;
+            _extension = FileHelper.PrependDotIfMissing(extension);
+        }
 
         public FileSettings(DirectoryInfo directory, string extension)
         {
-            _directory = directory;
-            _extension = extension;
+            _directoryPath = PathAndSpecialFolder.Create(directory);
+            _extension = FileHelper.PrependDotIfMissing(extension);
         }
 
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public DirectoryInfo Directory
+        public PathAndSpecialFolder DirectoryPath
         {
-            get { return _directory; }
-            private set
+            get { return _directoryPath; }
+            set
             {
-                if (Equals(value, _directory))
+                if (Equals(value, _directoryPath))
                 {
                     return;
                 }
-                _directory = value;
+                _directoryPath = value;
                 OnPropertyChanged();
             }
         }
@@ -38,7 +49,7 @@
         public string Extension
         {
             get { return _extension; }
-            private set
+            protected set
             {
                 if (value == _extension)
                 {
@@ -50,13 +61,9 @@
         }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

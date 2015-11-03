@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
 
-    using Gu.Settings.Demo.Annotations;
+    using JetBrains.Annotations;
 
     [Serializable]
     public class AutoSaveSetting : INotifyPropertyChanged
