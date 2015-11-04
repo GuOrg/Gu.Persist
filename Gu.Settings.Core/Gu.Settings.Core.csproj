@@ -53,18 +53,6 @@
     <Compile Include="AutoSave\AutoSaveMode.cs" />
     <Compile Include="AutoSave\AutoSaver.cs" />
     <Compile Include="AutoSave\AutoSaveSetting.cs" />
-    <Compile Include="ChangeTracking\CollectionItemTrackerCollection.cs" />
-    <Compile Include="ChangeTracking\Contracts\IValueTracker.cs" />
-    <Compile Include="ChangeTracking\Contracts\IPropertyTracker.cs" />
-    <Compile Include="ChangeTracking\Contracts\ValueTracker.cs" />
-    <Compile Include="ChangeTracking\Contracts\ITracker.cs" />
-    <Compile Include="ChangeTracking\PropertyChangeTracker.cs" />
-    <Compile Include="ChangeTracking\CollectionTracker.cs" />
-    <Compile Include="ChangeTracking\Contracts\PropertyTracker.cs" />
-    <Compile Include="ChangeTracking\TrackAs.cs" />
-    <Compile Include="ChangeTracking\ChangeTracker.cs" />
-    <Compile Include="ChangeTracking\PropertyTrackerCollection.cs" />
-    <Compile Include="ChangeTracking\TrackingAttribute.cs" />
     <Compile Include="Comparers\DirectoryInfoComparer.cs" />
     <Compile Include="Contracts\IAsyncFileNameRepository.cs" />
     <Compile Include="Contracts\IDirty.cs" />
@@ -72,7 +60,6 @@
     <Compile Include="Contracts\IRepositoryWithSettings.cs" />
     <Compile Include="Internals\DictionaryExt.cs" />
     <Compile Include="Internals\EnumerableEx.cs" />
-    <Compile Include="Internals\TypeExt.cs" />
     <Compile Include="IO\DirectoryInfoExt.cs" />
     <Compile Include="IO\FileInfoExt.cs" />
     <Compile Include="Backup\BackupFile.cs" />
@@ -104,8 +91,6 @@
     <Compile Include="Contracts\IBackuper.cs" />
     <Compile Include="Contracts\IBackupSettings.cs" />
     <Compile Include="Contracts\IRepositorySettings.cs" />
-    <Compile Include="Settings\ChangeTrackerSettings.cs" />
-    <Compile Include="Settings\ChangeTrackerSpecialType.cs" />
     <Compile Include="Settings\FileSettings.cs" />
     <Compile Include="Contracts\IDirectoryPath.cs" />
     <Compile Include="Settings\PathAndSpecialFolder.cs" />
@@ -122,6 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ChangeTracking\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
