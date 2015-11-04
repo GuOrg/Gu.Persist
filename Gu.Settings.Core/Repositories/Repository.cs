@@ -8,7 +8,7 @@
 
     using Gu.Settings.Core.Backup;
 
-    public abstract class Repository<TSetting> : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IAutoSavingRepository, IRepositoryWithSettings
+    public abstract class Repository<TSetting> : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings
         where TSetting : IRepositorySettings
     {
         private readonly object _gate = new object();
