@@ -19,8 +19,13 @@
 
         internal static void InitRepository(DirectoryInfo directory)
         {
-            directory.CreateIfNotExists();
-            if (!LibGit2Sharp.Repository.IsValid(directory.FullName))
+            if (!directory.Exists)
+            {
+                directory.CreateIfNotExists();
+                var init = LibGit2Sharp.Repository.Init(directory.FullName);
+                return;
+            }
+            if (!LibGit2Sharp.Repository.IsValid(directory.FullName)) // <- this throws an annoying first chance exception, ignore & continue works
             {
                 var init = LibGit2Sharp.Repository.Init(directory.FullName);
             }
