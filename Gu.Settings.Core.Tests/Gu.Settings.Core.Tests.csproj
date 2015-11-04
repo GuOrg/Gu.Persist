@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="Comparers\DirectoryInfoComparerTests.cs" />
     <Compile Include="Helpers\AssertFile.cs" />
-    <Compile Include="AutoSaver\AutoSaverTests.cs" />
     <Compile Include="Backup\BackupTests.cs" />
     <Compile Include="Helpers\DummyObservable.cs" />
     <Compile Include="Helpers\DummySerializable.cs" />
