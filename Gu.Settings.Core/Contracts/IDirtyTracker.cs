@@ -1,19 +1,17 @@
 namespace Gu.Settings.Core
 {
-    using System;
     using System.Collections.Generic;
-    using System.IO;
 
-    public interface IDirtyTracker : IDisposable
+    public interface IDirtyTracker
     {
-        bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer);
+        bool IsDirty<T>(T item, string fullFileName, IEqualityComparer<T> comparer);
 
-        void Track<T>(FileInfo file, T item);
+        void Track<T>(string fullFileName, T item);
 
-        void Rename(FileInfo oldName, FileInfo newName, bool owerWrite);
+        void Rename(string oldName, string newName, bool owerWrite);
       
         void ClearCache();
 
-        void RemoveFromCache(FileInfo file);
+        void RemoveFromCache(string fullFileName);
     }
 }

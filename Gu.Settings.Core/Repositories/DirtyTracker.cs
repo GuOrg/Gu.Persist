@@ -10,8 +10,8 @@
     public sealed class DirtyTracker : IDirtyTracker
     {
         private readonly ICloner _cloner;
-        private readonly ConcurrentDictionary<string, object> _cache = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        private bool _disposed;
+        private readonly ConcurrentDictionary<string, object> _clones = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        private readonly object _gate = new object();
 
         public DirtyTracker(ICloner cloner)
         {
@@ -19,33 +19,42 @@
             _cloner = cloner;
         }
 
-        public void Track<T>(FileInfo file, T item)
+        public void Track<T>(string fullFileName, T item)
         {
-            Ensure.NotNull(file, nameof(file));
-            VerifyDisposed();
+            Ensure.NotNull(fullFileName, nameof(fullFileName));
             var clone = _cloner.Clone(item);
-            _cache.AddOrUpdate(file.FullName, clone, (f, o) => clone);
+            lock (_gate)
+            {
+                _clones.AddOrUpdate(fullFileName, clone, (f, o) => clone);
+            }
         }
 
-        public void Rename(FileInfo oldName, FileInfo newName, bool owerWrite)
+        public void Rename(string oldName, string newName, bool owerWrite)
         {
             Ensure.NotNull(oldName, nameof(oldName));
             Ensure.NotNull(newName, nameof(newName));
-            VerifyDisposed();
-            _cache.ChangeKey(oldName.FullName, newName.FullName, owerWrite);
+            lock (_gate)
+            {
+                _clones.ChangeKey(oldName, newName, owerWrite);
+            }
         }
 
         public void ClearCache()
         {
-            _cache.Clear();
+            lock (_gate)
+            {
+                _clones.Clear();
+            }
         }
 
-        public void RemoveFromCache(FileInfo file)
+        public void RemoveFromCache(string fullFileName)
         {
-            Ensure.NotNull(file, nameof(file));
-            VerifyDisposed();
-            object temp;
-            _cache.TryRemove(file.FullName, out temp);
+            Ensure.NotNull(fullFileName, nameof(fullFileName));
+            lock (_gate)
+            {
+                object temp;
+                _clones.TryRemove(fullFileName, out temp);
+            }
         }
 
         /// <summary>
@@ -53,45 +62,19 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="item"></param>
-        /// <param name="file"></param>
+        /// <param name="fullFileName"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
+        public bool IsDirty<T>(T item, string fullFileName, IEqualityComparer<T> comparer)
         {
-            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(fullFileName, nameof(fullFileName));
             Ensure.NotNull(comparer, nameof(comparer));
-            VerifyDisposed();
             object clone;
-            if (_cache.TryGetValue(file.FullName, out clone))
+            lock (_gate)
             {
-                return !comparer.Equals((T)clone, item);
+                _clones.TryGetValue(fullFileName, out clone);
             }
-            return item != null;
-        }
-
-        /// <summary>
-        /// Make the class sealed when using this. 
-        /// Call VerifyDisposed at the start of all public methods
-        /// </summary>
-        public void Dispose()
-        {
-            if (_disposed)
-            {
-                return;
-            }
-            _disposed = true;
-            _cache.Clear();
-             // Dispose some stuff now
-        }
-
-        private void VerifyDisposed()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(
-                    GetType()
-                        .FullName);
-            }
+            return !comparer.Equals((T)clone, item);
         }
     }
 }
