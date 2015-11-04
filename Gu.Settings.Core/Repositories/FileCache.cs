@@ -6,22 +6,19 @@
 
     using Gu.Settings.Core.Internals;
 
-    public sealed class FileCache : IDisposable
+    public sealed class FileCache
     {
-        private readonly ConcurrentDictionary<string, WeakReference> _cache = new ConcurrentDictionary<string, WeakReference>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, object> _cache = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private readonly object _gate = new object();
-        private bool _disposed;
 
         public bool TryGetValue<T>(string fullFileName, out T cached)
         {
-            VerifyDisposed();
-            WeakReference wr;
-            if (_cache.TryGetValue(fullFileName, out wr))
+            lock (_gate)
             {
-                var target = (T)wr.Target;
-                if (target != null)
+                object value;
+                if (_cache.TryGetValue(fullFileName, out value))
                 {
-                    cached = target;
+                    cached = (T)value;
                     return true;
                 }
             }
@@ -36,15 +33,10 @@
             {
                 return;
             }
-            VerifyDisposed();
+
             lock (_gate)
             {
-                _cache.AddOrUpdate(fullName, new WeakReference(value),
-                    (key, wr) =>
-                        {
-                            wr.Target = value;
-                            return wr;
-                        });
+                _cache.AddOrUpdate(fullName, value, (_, __) => value);
             }
         }
 
@@ -52,14 +44,15 @@
         {
             Ensure.NotNullOrEmpty(fullName, nameof(fullName));
 
-            VerifyDisposed();
-            WeakReference temp;
-            return _cache.TryGetValue(fullName, out temp);
+            lock (_gate)
+            {
+                object temp;
+                return _cache.TryGetValue(fullName, out temp);
+            }
         }
 
         public void ChangeKey(string @from, string to, bool owerWrite)
         {
-            VerifyDisposed();
             lock (_gate)
             {
                 _cache.ChangeKey(@from, to, owerWrite);
@@ -70,39 +63,7 @@
         {
             lock (_gate)
             {
-                // not sure about disposing here.
-                //foreach (var reference in _cache.Values)
-                //{
-                //    var disposable = reference.Target as IDisposable;
-                //    if (disposable != null)
-                //    {
-                //        disposable.Dispose();
-                //    }
-                //}
                 _cache.Clear();
-            }
-        }
-
-        /// <summary>
-        /// Make the class sealed when using this. 
-        /// Call VerifyDisposed at the start of all public methods
-        /// </summary>
-        public void Dispose()
-        {
-            if (_disposed)
-            {
-                return;
-            }
-            _disposed = true;
-            Clear();
-            // Dispose some stuff now
-        }
-
-        private void VerifyDisposed()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(GetType().FullName);
             }
         }
 
@@ -110,12 +71,12 @@
         {
             lock (_gate)
             {
-                var matches = _cache.Where(kvp => kvp.Value != null && ReferenceEquals(kvp.Value.Target, item))
-                    .Select(x => x.Key)
-                    .ToArray();
+                var matches = _cache.Where(kvp => kvp.Value != null && ReferenceEquals(kvp.Value, item))
+                                    .Select(x => x.Key)
+                                    .ToArray();
                 foreach (var key in matches)
                 {
-                    WeakReference temp;
+                    object temp;
                     _cache.TryRemove(key, out temp);
                 }
             }

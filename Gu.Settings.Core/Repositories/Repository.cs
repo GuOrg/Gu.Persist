@@ -893,7 +893,6 @@
             _disposed = true;
             if (disposing)
             {
-                _fileCache.Dispose();
                 Tracker.Dispose();
                 // FileHelper.Finished.WaitOne();
                 // Intentional no-operation.
