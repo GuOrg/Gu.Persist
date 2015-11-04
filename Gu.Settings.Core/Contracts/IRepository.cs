@@ -7,7 +7,7 @@
     /// <summary>
     /// This interface should probably bot be exposed as it contains everythying.
     /// </summary>
-    public interface IRepository : ICloner, IDirty, IDisposable
+    public interface IRepository : ICloner, IDirty
     {
         /// <summary>
         /// Gets the <see cref="IDirtyTracker"/> that tracks if the file is dirty i.e. has changes since last save.
