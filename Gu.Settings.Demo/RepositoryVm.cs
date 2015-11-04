@@ -17,7 +17,7 @@
 
         private RepositoryVm()
         {
-            Repository = CreateJsonRepository();
+            Repository = CreateJsonRepositoryWithGitBackuper();
             ManualSaveSetting = Repository.ReadOrCreate(() => (ManualSaveSetting)Activator.CreateInstance(typeof(ManualSaveSetting), true));
             AutoSaveSetting = Repository.ReadOrCreate(() => (AutoSaveSetting)Activator.CreateInstance(typeof(AutoSaveSetting), true));
             AutoSaveSetting.PropertyChanged += (o, e) => Save((AutoSaveSetting)o);
