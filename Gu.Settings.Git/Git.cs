@@ -75,7 +75,7 @@
                     case FileStatus.Modified:
                     case FileStatus.Missing:
                     case FileStatus.TypeChanged:
-                    case FileStatus.RenamedInWorkDir:
+                    case FileStatus.RenamedInWorkdir:
                         {
                             var commit = repository.Commit(status.ToString(), CommitOptions);
                             return true;

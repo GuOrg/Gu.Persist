@@ -40,7 +40,7 @@
                 case FileStatus.StagedTypeChange:
                 case FileStatus.Modified:
                 case FileStatus.TypeChanged:
-                case FileStatus.RenamedInWorkDir:
+                case FileStatus.RenamedInWorkdir:
                     return true;
                 case FileStatus.Unaltered:
                 case FileStatus.Nonexistent:
