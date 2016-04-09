@@ -2,7 +2,7 @@
 {
     using System.IO;
     using System.Linq;
-    using System.Threading;
+
     using Core;
     using Gu.Settings.Core.Tests;
     using Gu.Settings.NewtonsoftJson;
