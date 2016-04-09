@@ -1,0 +1,9 @@
+NUGET
+  remote: http://www.nuget.org/api/v2
+  specs:
+    JetBrains.Annotations (10.0) - framework: >= net45
+    LibGit2Sharp (0.21.0.176)
+    Moq (4.2.1510.2205) - framework: >= net45
+    Newtonsoft.Json (7.0.1)
+    NuGet.CommandLine (3.3)
+    NUnit (2.6.4)
