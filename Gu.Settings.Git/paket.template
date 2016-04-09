@@ -1,0 +1,8 @@
+﻿type project
+tags xml json save settings git
+projectUrl https://github.com/JohanLarsson/Gu.Persistance
+licenseUrl http://opensource.org/licenses/MIT
+
+excludeddependencies
+  JetBrains.Annotations
+  StyleCop.Analyzers

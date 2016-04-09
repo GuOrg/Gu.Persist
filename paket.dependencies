@@ -1,0 +1,7 @@
+source http://www.nuget.org/api/v2/
+
+nuget JetBrains.Annotations 
+nuget LibGit2Sharp
+nuget Moq 
+nuget Newtonsoft.Json
+nuget NUnit 2.6.4
