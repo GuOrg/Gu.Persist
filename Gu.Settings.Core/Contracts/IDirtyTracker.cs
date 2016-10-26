@@ -9,7 +9,7 @@ namespace Gu.Settings.Core
         void Track<T>(string fullFileName, T item);
 
         void Rename(string oldName, string newName, bool owerWrite);
-      
+
         void ClearCache();
 
         void RemoveFromCache(string fullFileName);

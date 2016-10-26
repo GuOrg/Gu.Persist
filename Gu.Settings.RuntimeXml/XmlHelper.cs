@@ -8,6 +8,7 @@ namespace Gu.Settings.RuntimeXml
     public static class XmlHelper
     {
         internal static readonly ConcurrentDictionary<Type, DataContractSerializer> Serializers = new ConcurrentDictionary<Type, DataContractSerializer>();
+
         public static T FromStream<T>(Stream stream)
         {
             var serializer = Serializers.GetOrAdd(typeof(T), x => new DataContractSerializer(typeof(T)));

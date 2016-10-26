@@ -7,7 +7,7 @@
         [Test]
         public void Ctor()
         {
-            
+
         }
     }
 }

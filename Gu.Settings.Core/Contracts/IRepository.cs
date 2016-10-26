@@ -13,12 +13,12 @@
         /// Gets the <see cref="IDirtyTracker"/> that tracks if the file is dirty i.e. has changes since last save.
         /// </summary>
         IDirtyTracker Tracker { get; }
-        
+
         /// <summary>
         /// Gets the <see cref="IBackuper"/> that handles backup files
         /// </summary>
         IBackuper Backuper { get; }
-        
+
         /// <summary>
         /// Gets the settings used by the repository.
         /// </summary>
@@ -87,7 +87,7 @@
         /// </param>
         /// <returns></returns>
         bool Exists(string fileName);
-        
+
         /// <summary>
         /// Check if the file exists
         /// </summary>
@@ -136,7 +136,7 @@
 
         /// <summary>
         /// Reads from file for <typeparamref name="T"/>
-        /// If the file is missing an instance is created using <paramref name="creator"/>. 
+        /// If the file is missing an instance is created using <paramref name="creator"/>.
         /// The created instance is then saved.
         /// </summary>
         /// <remarks>
@@ -165,7 +165,7 @@
 
         /// <summary>
         /// Reads from file specified by <paramref name="fileName"/>.
-        /// If the file is missing an instance is created using <paramref name="creator"/>. 
+        /// If the file is missing an instance is created using <paramref name="creator"/>.
         /// The created instance is then saved.
         /// </summary>
         /// <remarks>
@@ -195,7 +195,7 @@
 
         /// <summary>
         /// Reads from file specified by <paramref name="file"/>.
-        /// If the file is missing an instance is created using <paramref name="creator"/>. 
+        /// If the file is missing an instance is created using <paramref name="creator"/>.
         /// The created instance is then saved.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -458,7 +458,7 @@
         /// <param name="owerWrite">If true the destination file is owerwritten if it exists.</param>
         /// <returns></returns>
         void Rename(FileInfo oldName, FileInfo newName, bool owerWrite);
-       
+
         /// <summary>
         /// Clears the cache.
         ///  </summary>
@@ -466,7 +466,7 @@
         /// Calling this means that singletons will no longer be resturned by the repository
         /// </remarks>
         void ClearCache();
-        
+
         /// <summary>
         /// Clears the cache of the <see cref="IDirtyTracker"/>
         /// </summary>

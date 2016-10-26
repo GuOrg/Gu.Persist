@@ -34,7 +34,11 @@
 
         public PathAndSpecialFolder DirectoryPath
         {
-            get { return this.directoryPath; }
+            get
+            {
+                return this.directoryPath;
+            }
+
             set
             {
                 if (Equals(value, this.directoryPath))
@@ -49,7 +53,11 @@
 
         public string Extension
         {
-            get { return this.extension; }
+            get
+            {
+                return this.extension;
+            }
+
             protected set
             {
                 if (value == this.extension)

@@ -86,7 +86,7 @@ namespace Gu.Settings.Core.Tests.Repositories
             if (this.IsBackingUp)
             {
                 var backupFileName = this.dummyFile.WithNewExtension(this.BackupSettings.Extension).Name;
-                this.dummyBackup = this.BackupSettings.DirectoryPath.CreateDirectoryInfo().CreateFileInfoInDirectory(backupFileName); 
+                this.dummyBackup = this.BackupSettings.DirectoryPath.CreateDirectoryInfo().CreateFileInfoInDirectory(backupFileName);
                 this.dummyBackupNewName = this.dummyBackup.WithNewName(NewName, this.BackupSettings);
             }
 

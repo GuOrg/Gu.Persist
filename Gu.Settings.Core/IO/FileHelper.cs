@@ -9,7 +9,7 @@ namespace Gu.Settings.Core
         public static readonly string SoftDeleteExtension = ".delete";
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="file"></param>

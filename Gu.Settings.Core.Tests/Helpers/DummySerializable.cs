@@ -4,8 +4,6 @@
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
-    using Gu.Settings.Core.Properties;
-
     using JetBrains.Annotations;
 
     [Serializable]
@@ -26,7 +24,11 @@
 
         public int Value
         {
-            get { return this.value; }
+            get
+            {
+                return this.value;
+            }
+
             set
             {
                 if (value == this.value)

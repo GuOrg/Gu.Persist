@@ -5,18 +5,14 @@
     /// <summary>
     /// A base class for comparers using serialization
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public abstract class SerializedEqualsComparer<T> : IEqualityComparer<T>
+    public abstract class SerializedEqualsComparer<T> : EqualityComparer<T>
     {
         private static readonly byte[] EmptyBytes = new byte[0];
 
         /// <summary>
         /// Serializes <paramref name="x"/> and <paramref name="y"/> and compares the bytes.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        public bool Equals(T x, T y)
+        public override bool Equals(T x, T y)
         {
             var xBytes = this.GetBytesInner(x);
             var yBytes = this.GetBytesInner(y);
@@ -41,9 +37,7 @@
         /// Serializes <paramref name="obj"/> and calculates hashcode from the bytes.
         /// http://stackoverflow.com/a/7244729/1069200
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public int GetHashCode(T obj)
+        public override int GetHashCode(T obj)
         {
             Ensure.NotNull(obj, nameof(obj));
             var bytes = this.GetBytesInner(obj);
@@ -53,7 +47,7 @@
                 // ReSharper disable once ForCanBeConvertedToForeach, for for perf here. Still going to be slow.
                 for (int i = 0; i < bytes.Length; i++)
                 {
-                    hash = hash * 31 + bytes[i];
+                    hash = (hash * 31) + bytes[i];
                 }
 
                 return hash;
@@ -63,8 +57,6 @@
         /// <summary>
         /// Serialize <paramref name="item"/> and return the bytes
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         protected abstract byte[] GetBytes(T item);
 
         private byte[] GetBytesInner(T item)

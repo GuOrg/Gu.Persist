@@ -26,7 +26,11 @@
 
         public int Value1
         {
-            get { return this.value1; }
+            get
+            {
+                return this.value1;
+            }
+
             set
             {
                 if (value == this.value1) return;
@@ -37,7 +41,11 @@
 
         public int Value2
         {
-            get { return this.value2; }
+            get
+            {
+                return this.value2;
+            }
+
             set
             {
                 if (value == this.value2) return;
@@ -48,7 +56,11 @@
 
         public StringComparison Comparison
         {
-            get { return this.comparison; }
+            get
+            {
+                return this.comparison;
+            }
+
             set
             {
                 if (value == this.comparison) return;

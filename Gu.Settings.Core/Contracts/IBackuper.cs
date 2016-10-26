@@ -41,7 +41,7 @@
         // void Restore(FileInfo file); // Not trivially solved with singletons
 
         // void Restore(FileInfo file, FileInfo backup);
-        
+
         /// <summary>
         /// Removes old backups for <paramref name="file"/>
         /// </summary>

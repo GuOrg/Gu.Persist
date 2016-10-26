@@ -4,17 +4,18 @@
     using System.Collections.Generic;
     using System.IO;
 
-    public class FileInfoComparer : IEqualityComparer<FileInfo>
+    public sealed class FileInfoComparer : EqualityComparer<FileInfo>
     {
-        public static readonly FileInfoComparer Default = new FileInfoComparer();
-        public bool Equals(FileInfo x, FileInfo y)
+        public new static readonly FileInfoComparer Default = new FileInfoComparer();
+
+        public override bool Equals(FileInfo x, FileInfo y)
         {
             x.Refresh();
             y.Refresh();
             return string.Equals(x.FullName, y.FullName, StringComparison.OrdinalIgnoreCase);
         }
 
-        public int GetHashCode(FileInfo obj)
+        public override int GetHashCode(FileInfo obj)
         {
             obj.Refresh();
             return StringComparer.OrdinalIgnoreCase.GetHashCode(obj.FullName);

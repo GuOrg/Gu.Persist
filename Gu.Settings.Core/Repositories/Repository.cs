@@ -17,6 +17,7 @@
         private IBackuper backuper;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
         /// Defaults to %AppDat%/ExecutingAssembly.Name/Settings
         /// </summary>
         protected Repository()
@@ -24,7 +25,8 @@
         }
 
         /// <summary>
-        /// Creates a new <see cref="Repository"/> with default settings.
+        /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
+        /// Creates a new <see cref="Repository{TSetting}"/> with default settings.
         /// If <paramref name="directory"/> contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
@@ -46,7 +48,8 @@
         }
 
         /// <summary>
-        /// Creates a new <see cref="Repository"/> with <paramref name="settings"/>.
+        /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
+        /// Creates a new <see cref="Repository{TSetting}"/> with <paramref name="settings"/>.
         /// </summary>
         /// <param name="settings"></param>
         protected Repository(TSetting settings)
@@ -55,7 +58,8 @@
         }
 
         /// <summary>
-        /// Creates a new <see cref="Repository"/> with <paramref name="settings"/>.
+        /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
+        /// Creates a new <see cref="Repository{TSetting}"/> with <paramref name="settings"/>.
         /// </summary>
         /// <param name="settings"></param>
         protected Repository(TSetting settings, IBackuper backuper)
@@ -71,7 +75,7 @@
 
         /// <inheritdoc/>
         public IRepositorySettings Settings { get; }
-       
+
         /// <inheritdoc/>
         public IDirtyTracker Tracker { get; }
 
@@ -79,10 +83,7 @@
         public IBackuper Backuper
         {
             get { return this.backuper ?? NullBackuper.Default; }
-            protected set
-            {
-                this.backuper = value;
-            }
+            protected set { this.backuper = value; }
         }
 
         /// <inheritdoc/>
@@ -98,14 +99,12 @@
             return this.GetFileInfoCore(fileName);
         }
 
-        /// <inheritdoc/>
         protected FileInfo GetFileInfoCore(string fileName)
         {
             var file = FileHelper.CreateFileInfo(fileName, this.Settings);
             return file;
         }
 
-        /// <inheritdoc/>
         protected FileInfo GetFileInfoCore<T>()
         {
             return FileHelper.CreateFileInfo<T>(this.Settings);
@@ -236,7 +235,7 @@
                     return cached;
                 }
 
-                // can't await  inside the lock. 
+                // can't await  inside the lock.
                 // If there are many threads reading the same only the first is used
                 // the other reads are wasted, can't think of anything better than this.
                 value = await FileHelper.ReadAsync<T>(file, this.FromStream<T>).ConfigureAwait(false);

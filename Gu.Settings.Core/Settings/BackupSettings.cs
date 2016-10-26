@@ -89,7 +89,11 @@
 
         public bool IsCreatingBackups
         {
-            get { return this.isCreatingBackups; }
+            get
+            {
+                return this.isCreatingBackups;
+            }
+
             set
             {
                 if (value == this.isCreatingBackups)
@@ -104,7 +108,11 @@
 
         public string TimeStampFormat
         {
-            get { return this.timeStampFormat; }
+            get
+            {
+                return this.timeStampFormat;
+            }
+
             set
             {
                 if (value == this.timeStampFormat)
@@ -123,7 +131,11 @@
         /// </summary>
         public bool Hidden
         {
-            get { return this.hidden; }
+            get
+            {
+                return this.hidden;
+            }
+
             set
             {
                 if (value == this.hidden)
@@ -141,7 +153,11 @@
         /// </summary>
         public int NumberOfBackups
         {
-            get { return this.numberOfBackups; }
+            get
+            {
+                return this.numberOfBackups;
+            }
+
             set
             {
                 if (value == this.numberOfBackups)
@@ -159,7 +175,11 @@
         /// </summary>
         public int MaxAgeInDays
         {
-            get { return this.maxAgeInDays; }
+            get
+            {
+                return this.maxAgeInDays;
+            }
+
             set
             {
                 if (value == this.maxAgeInDays)

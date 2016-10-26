@@ -3,7 +3,7 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// A repsository that reads and saves 
+    /// A repsository that reads and saves
     /// </summary>
     public interface IAsyncFileNameRepository : IFileNameRepository
     {

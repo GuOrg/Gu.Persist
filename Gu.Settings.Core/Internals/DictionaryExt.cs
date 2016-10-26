@@ -6,9 +6,9 @@
     public static class DictionaryExt
     {
         public static void ChangeKey<TKey, TValue>(
-            this ConcurrentDictionary<TKey, TValue> dictionary, 
+            this ConcurrentDictionary<TKey, TValue> dictionary,
             TKey fromKey,
-            TKey tokey, 
+            TKey tokey,
             bool owerWrite)
         {
                         TValue value;

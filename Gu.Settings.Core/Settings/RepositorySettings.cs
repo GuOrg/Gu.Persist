@@ -36,8 +36,8 @@
             : this(
                 PathAndSpecialFolder.Create(directory),
                 isTrackingDirty,
-                isCaching, 
-                backupSettings, 
+                isCaching,
+                backupSettings,
                 extension,
                 tempExtension)
         {
@@ -64,7 +64,11 @@
 
         public BackupSettings BackupSettings
         {
-            get { return this.backupSettings; }
+            get
+            {
+                return this.backupSettings;
+            }
+
             set
             {
                 if (Equals(value, this.backupSettings))
@@ -83,7 +87,11 @@
         /// </summary>
         public string TempExtension
         {
-            get { return this.tempExtension; }
+            get
+            {
+                return this.tempExtension;
+            }
+
             set
             {
                 if (value == this.tempExtension)
@@ -101,7 +109,11 @@
         /// </summary>
         public bool IsTrackingDirty
         {
-            get { return this.isTrackingDirty; }
+            get
+            {
+                return this.isTrackingDirty;
+            }
+
             set
             {
                 if (value == this.isTrackingDirty)
@@ -119,7 +131,11 @@
         /// </summary>
         public bool IsCaching
         {
-            get { return this.isCaching; }
+            get
+            {
+                return this.isCaching;
+            }
+
             set
             {
                 if (value == this.isCaching)

@@ -36,7 +36,7 @@
             }
 
             var xml = sb.ToString();
-            
+
             Console.Write(xml);
             XmlRepositorySettings roundtripped;
 

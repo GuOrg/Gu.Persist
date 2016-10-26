@@ -5,7 +5,7 @@
     public static class DirectoryInfoExt
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="directory"></param>
         /// <param name="name"></param>

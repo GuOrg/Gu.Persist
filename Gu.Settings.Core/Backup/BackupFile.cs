@@ -8,7 +8,7 @@
     using Gu.Settings.Core.Internals;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class BackupFile
     {

@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    public interface IFileNameRepository 
+    public interface IFileNameRepository
     {
         /// <see cref="IRepository.Delete(string, bool)"/>
         void Delete(string fileName, bool deleteBackups);
@@ -12,7 +12,7 @@
         bool Exists(string fileName);
 
         /// <summary>
-        /// Reads from file or cache if caching. 
+        /// Reads from file or cache if caching.
         /// If caching every read will get the same singleton instance.
         /// Adds the instance to cache if caching.
         /// Starts tracking the if tracking

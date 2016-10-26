@@ -6,7 +6,7 @@ namespace Gu.Settings.Core
         /// Gets the settings speciying how backups are handled.
         /// </summary>
         BackupSettings BackupSettings { get;  }
-        
+
         /// <summary>
         /// Gets the file extension used when saving files.
         /// On successful save the file extension is replaced.
