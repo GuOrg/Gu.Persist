@@ -61,6 +61,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Repositories\FileCache.cs" />
+    <Compile Include="Repositories\RestoreException.cs" />
     <Compile Include="Settings\BackupSettings.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="IO\Directories.cs" />
