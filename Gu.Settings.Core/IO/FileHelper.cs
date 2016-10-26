@@ -219,7 +219,7 @@ namespace Gu.Settings.Core
                 if (Path.HasExtension(fileName))
                 {
                     var ext = Path.GetExtension(fileName);
-                    if (!String.Equals(ext, extension, StringComparison.OrdinalIgnoreCase))
+                    if (!string.Equals(ext, extension, StringComparison.OrdinalIgnoreCase))
                     {
                         fileName = Path.ChangeExtension(fileName, extension);
                     }
@@ -241,7 +241,7 @@ namespace Gu.Settings.Core
 
         internal static string PrependDotIfMissing(string extension)
         {
-            if (String.IsNullOrEmpty(extension))
+            if (string.IsNullOrEmpty(extension))
             {
                 return extension;
             }

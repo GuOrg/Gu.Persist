@@ -64,7 +64,7 @@
         public void CreateForNoTimestamp(string expected)
         {
             this.File.VoidCreate();
-            var setting = new BackupSettings(this.File.Directory, true, BackupSettings.DefaultExtension, null, false, 1, Int32.MaxValue);
+            var setting = new BackupSettings(this.File.Directory, true, BackupSettings.DefaultExtension, null, false, 1, int.MaxValue);
             var backup = BackupFile.CreateFor(this.File, setting);
             Assert.AreEqual(expected, backup.FullName);
         }
@@ -82,7 +82,7 @@
         public void GetTimeStamp(string fileName)
         {
             var file = new FileInfo(fileName);
-            var setting = new BackupSettings(file.Directory, true, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, false, 1, Int32.MaxValue);
+            var setting = new BackupSettings(file.Directory, true, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, false, 1, int.MaxValue);
             var timeStamp = file.GetTimeStamp(setting);
             Assert.AreEqual(new DateTime(2015, 06, 13, 17, 05, 15), timeStamp);
         }

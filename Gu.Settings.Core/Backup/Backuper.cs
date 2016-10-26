@@ -170,7 +170,7 @@
                 }
             }
 
-            if (this.Setting.MaxAgeInDays > 0 && this.Setting.MaxAgeInDays < Int32.MaxValue)
+            if (this.Setting.MaxAgeInDays > 0 && this.Setting.MaxAgeInDays < int.MaxValue)
             {
                 while (true) // this is not efficient but the number of backups should be low
                 {

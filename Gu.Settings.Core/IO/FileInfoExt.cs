@@ -110,7 +110,7 @@
             }
             else
             {
-                newFile = file.Directory.CreateFileInfoInDirectory(String.Concat(newName, file.Extension));
+                newFile = file.Directory.CreateFileInfoInDirectory(string.Concat(newName, file.Extension));
             }
 
             var backupSettings = setting as IBackupSettings;
@@ -160,7 +160,7 @@
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(setting, nameof(setting));
 
-            if (String.IsNullOrWhiteSpace(setting.TimeStampFormat) && setting.NumberOfBackups <= 1)
+            if (string.IsNullOrWhiteSpace(setting.TimeStampFormat) && setting.NumberOfBackups <= 1)
             {
                 return file;
             }

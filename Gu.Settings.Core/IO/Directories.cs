@@ -43,9 +43,9 @@
         {
             var directory = new DirectoryInfo(Environment.CurrentDirectory);
             while (directory != null &&
-                   (String.Equals("bin", directory.Name, StringComparison.OrdinalIgnoreCase) ||
-                    String.Equals("debug", directory.Name, StringComparison.OrdinalIgnoreCase) ||
-                    String.Equals("release", directory.Name, StringComparison.OrdinalIgnoreCase)))
+                   (string.Equals("bin", directory.Name, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals("debug", directory.Name, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals("release", directory.Name, StringComparison.OrdinalIgnoreCase)))
             {
                 directory = directory.Parent;
             }

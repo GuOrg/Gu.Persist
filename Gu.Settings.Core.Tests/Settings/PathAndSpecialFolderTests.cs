@@ -12,8 +12,11 @@
         {
             var pathAndSpecialFolder = PathAndSpecialFolder.Default;
             Assert.AreEqual(Environment.SpecialFolder.ApplicationData, pathAndSpecialFolder.SpecialFolder);
-            Assert.AreEqual("Gu.Settings.Core.Tests", pathAndSpecialFolder.Path);
-            var expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gu.Settings.Core.Tests");
+            
+            // This is needed if R# shadow copies
+            var directoryName = Path.GetFileName(Directory.GetCurrentDirectory());
+            Assert.AreEqual(directoryName, pathAndSpecialFolder.Path);
+            var expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), directoryName);
             Assert.AreEqual(expected, pathAndSpecialFolder.CreateDirectoryInfo().FullName);
         }
 
