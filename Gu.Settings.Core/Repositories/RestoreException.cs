@@ -3,6 +3,7 @@ namespace Gu.Settings.Core
 {
     using System;
     using System.IO;
+    using System.Runtime.Serialization;
 
     public class RestoreException : IOException
     {
@@ -15,5 +16,9 @@ namespace Gu.Settings.Core
         public Exception Exception { get; }
 
         public Exception SaveException { get; }
+
+        protected RestoreException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
     }
 }
