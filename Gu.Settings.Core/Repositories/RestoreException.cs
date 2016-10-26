@@ -1,4 +1,3 @@
-// ReSharper disable All
 namespace Gu.Settings.Core
 {
     using System;
@@ -8,7 +7,7 @@ namespace Gu.Settings.Core
 
     /// <summary>
     /// This is thrown when restor fails.
-    /// The exception that was thrown in restore is the inner excdeption.
+    /// The exception that was thrown in restore is the inner exception.
     /// </summary>
     [Serializable]
     public class RestoreException : IOException
