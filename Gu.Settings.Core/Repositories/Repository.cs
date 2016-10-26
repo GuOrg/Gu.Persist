@@ -530,9 +530,16 @@
                 tempFile.MoveTo(file);
                 Backuper.AfterSuccessfulSave(file);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                Backuper.TryRestore(file);
+                try
+                {
+                    Backuper.TryRestore(file);
+                }
+                catch (Exception restoreException)
+                {
+                    throw new RestoreException(exception, restoreException);
+                }
                 throw;
             }
         }
