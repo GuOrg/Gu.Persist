@@ -11,16 +11,16 @@
 
     public class SimpleSample
     {
-        private FileInfo _settingsFile;
+        private FileInfo settingsFile;
 
         [SetUp]
         public void SetUp()
         {
             //Directories.Default = new DirectoryInfo(@"C:\Temp\Gu.Settings\SimpleSample");
-            _settingsFile = Directories.Default.CreateFileInfoInDirectory(nameof(XmlRepositorySettings) + ".cfg");
-            if (_settingsFile.Exists)
+            this.settingsFile = Directories.Default.CreateFileInfoInDirectory(nameof(XmlRepositorySettings) + ".cfg");
+            if (this.settingsFile.Exists)
             {
-                _settingsFile.Delete();
+                this.settingsFile.Delete();
             }
         }
 
@@ -30,8 +30,8 @@
             var repository = new XmlRepository();
             Console.WriteLine(repository.Settings.DirectoryPath);
 
-            Console.WriteLine(_settingsFile.FullName);
-            AssertFile.Exists(true, _settingsFile); // using the default constructor bootstraps with a settings file
+            Console.WriteLine(this.settingsFile.FullName);
+            AssertFile.Exists(true, this.settingsFile); // using the default constructor bootstraps with a settings file
 
             var setting = repository.ReadOrCreate(() => new DummySerializable());
             setting.Value++;

@@ -40,38 +40,39 @@
                     var directoryInfo = new DirectoryInfo(path);
                     if (IsSubDirectoryOfOrSame(directoryInfo.FullName, Environment.CurrentDirectory))
                     {
-                        Path = $".{directoryInfo.FullName.Substring(Environment.CurrentDirectory.Length)}";
-                        SpecialFolder = null;
+                        this.Path = $".{directoryInfo.FullName.Substring(Environment.CurrentDirectory.Length)}";
+                        this.SpecialFolder = null;
                     }
 
-                    if (Path == null)
+                    if (this.Path == null)
                     {
                         foreach (var folder in SpecialFolders)
                         {
                             var folderPath = Environment.GetFolderPath(folder);
                             if (IsSubDirectoryOfOrSame(directoryInfo.FullName, folderPath))
                             {
-                                Path = directoryInfo.FullName.Substring(folderPath.Length).Trim(BackSlash);
-                                SpecialFolder = folder;
+                                this.Path = directoryInfo.FullName.Substring(folderPath.Length).Trim(BackSlash);
+                                this.SpecialFolder = folder;
                                 break;
                             }
                         }
                     }
 
-                    if (Path == null)
+                    if (this.Path == null)
                     {
-                        Path = directoryInfo.FullName;
-                        SpecialFolder = null;
+                        this.Path = directoryInfo.FullName;
+                        this.SpecialFolder = null;
                     }
                 }
                 else
                 {
-                    Path = path;
+                    this.Path = path;
                     if (specialFolder == null)
                     {
                         throw new ArgumentNullException(nameof(specialFolder));
                     }
-                    SpecialFolder = specialFolder;
+
+                    this.SpecialFolder = specialFolder;
                 }
             }
             else
@@ -80,22 +81,23 @@
                 {
                     throw new ArgumentNullException(nameof(specialFolder));
                 }
-                SpecialFolder = specialFolder;
+
+                this.SpecialFolder = specialFolder;
             }
 
-            if (SpecialFolder == Environment.SpecialFolder.ApplicationData ||
-                SpecialFolder == Environment.SpecialFolder.CommonApplicationData ||
-                SpecialFolder == Environment.SpecialFolder.LocalApplicationData)
+            if (this.SpecialFolder == Environment.SpecialFolder.ApplicationData ||
+                this.SpecialFolder == Environment.SpecialFolder.CommonApplicationData ||
+                this.SpecialFolder == Environment.SpecialFolder.LocalApplicationData)
             {
-                if (string.IsNullOrEmpty(Path))
+                if (string.IsNullOrEmpty(this.Path))
                 {
-                    throw new ArgumentException($"Not allowed to save in {SpecialFolder} without subdirectory");
+                    throw new ArgumentException($"Not allowed to save in {this.SpecialFolder} without subdirectory");
                 }
             }
 
             else if (!string.IsNullOrEmpty(path) && path.StartsWith("."))
             {
-                if (SpecialFolder != null)
+                if (this.SpecialFolder != null)
                 {
                     string message = $"Special folder must be null when path starts with '.'";
                     throw new ArgumentException(message);
@@ -128,13 +130,13 @@
 
         public DirectoryInfo CreateDirectoryInfo()
         {
-            if (SpecialFolder == null)
+            if (this.SpecialFolder == null)
             {
-                return new DirectoryInfo(Path);
+                return new DirectoryInfo(this.Path);
             }
 
-            var specialFolderPath = Environment.GetFolderPath(SpecialFolder.Value);
-            var path = System.IO.Path.Combine(specialFolderPath, Path);
+            var specialFolderPath = Environment.GetFolderPath(this.SpecialFolder.Value);
+            var path = System.IO.Path.Combine(specialFolderPath, this.Path);
             return new DirectoryInfo(path);
         }
 
@@ -154,11 +156,13 @@
             {
                 return false;
             }
+
             if (ReferenceEquals(this, other))
             {
                 return true;
             }
-            return string.Equals(Path, other.Path, StringComparison.OrdinalIgnoreCase) && SpecialFolder == other.SpecialFolder;
+
+            return string.Equals(this.Path, other.Path, StringComparison.OrdinalIgnoreCase) && this.SpecialFolder == other.SpecialFolder;
         }
 
         public override bool Equals(object obj)
@@ -167,24 +171,27 @@
             {
                 return false;
             }
+
             if (ReferenceEquals(this, obj))
             {
                 return true;
             }
+
             if (obj.GetType() != this.GetType())
             {
                 return false;
             }
-            return Equals((PathAndSpecialFolder)obj);
+
+            return this.Equals((PathAndSpecialFolder)obj);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return ((Path != null
-                             ? StringComparer.OrdinalIgnoreCase.GetHashCode(Path)
-                             : 0) * 397) ^ SpecialFolder.GetHashCode();
+                return ((this.Path != null
+                             ? StringComparer.OrdinalIgnoreCase.GetHashCode(this.Path)
+                             : 0) * 397) ^ this.SpecialFolder.GetHashCode();
             }
         }
 
@@ -196,6 +203,7 @@
                 var relativePath = info.FullName.Substring(directory.Length);
                 return new PathAndSpecialFolder(relativePath, specialFolder);
             }
+
             return null;
         }
 
@@ -207,6 +215,7 @@
             {
                 return false;
             }
+
             if (l1 > l2)
             {
                 if (directory[l2] != '\\')
@@ -214,6 +223,7 @@
                     return false;
                 }
             }
+
             return string.Compare(directory, 0, potentialParent, 0, l2, true) == 0;
         }
 
@@ -223,6 +233,7 @@
             {
                 return directory.Length - 1;
             }
+
             return directory.Length;
         }
 

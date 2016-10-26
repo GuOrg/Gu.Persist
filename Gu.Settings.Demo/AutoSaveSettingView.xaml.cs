@@ -9,7 +9,7 @@
     {
         public AutoSaveSettingView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

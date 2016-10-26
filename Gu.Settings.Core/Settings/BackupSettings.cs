@@ -9,11 +9,11 @@
     {
         public static readonly string DefaultTimeStampFormat = "yyyy_MM_dd_HH_mm_ss";
         public static readonly string DefaultExtension = ".bak";
-        private bool _isCreatingBackups;
-        private string _timeStampFormat;
-        private bool _hidden;
-        private int _numberOfBackups;
-        private int _maxAgeInDays;
+        private bool isCreatingBackups;
+        private string timeStampFormat;
+        private bool hidden;
+        private int numberOfBackups;
+        private int maxAgeInDays;
 
         protected BackupSettings() // needed for XmlSerializer
         {
@@ -69,49 +69,52 @@
                 Ensure.NotNullOrEmpty(extension, nameof(extension));
                 ValidateTimestampFormat(timeStampFormat);
             }
-            _isCreatingBackups = isCreatingBackups;
+
+            this.isCreatingBackups = isCreatingBackups;
 
             if (!string.IsNullOrWhiteSpace(timeStampFormat))
             {
-                _timeStampFormat = timeStampFormat;
-            }
-            if (numberOfBackups > 1)
-            {
-                _timeStampFormat = DefaultTimeStampFormat;
+                this.timeStampFormat = timeStampFormat;
             }
 
-            _hidden = hidden;
-            _numberOfBackups = numberOfBackups;
-            _maxAgeInDays = maxAgeInDays;
+            if (numberOfBackups > 1)
+            {
+                this.timeStampFormat = DefaultTimeStampFormat;
+            }
+
+            this.hidden = hidden;
+            this.numberOfBackups = numberOfBackups;
+            this.maxAgeInDays = maxAgeInDays;
         }
 
         public bool IsCreatingBackups
         {
-            get { return _isCreatingBackups; }
+            get { return this.isCreatingBackups; }
             set
             {
-                if (value == _isCreatingBackups)
+                if (value == this.isCreatingBackups)
                 {
                     return;
                 }
-                _isCreatingBackups = value;
-                OnPropertyChanged();
+
+                this.isCreatingBackups = value;
+                this.OnPropertyChanged();
             }
         }
 
         public string TimeStampFormat
         {
-            get { return _timeStampFormat; }
+            get { return this.timeStampFormat; }
             set
             {
-                if (value == _timeStampFormat)
+                if (value == this.timeStampFormat)
                 {
                     return;
                 }
 
                 ValidateTimestampFormat(value);
-                _timeStampFormat = value;
-                OnPropertyChanged();
+                this.timeStampFormat = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -120,15 +123,16 @@
         /// </summary>
         public bool Hidden
         {
-            get { return _hidden; }
+            get { return this.hidden; }
             set
             {
-                if (value == _hidden)
+                if (value == this.hidden)
                 {
                     return;
                 }
-                _hidden = value;
-                OnPropertyChanged();
+
+                this.hidden = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -137,15 +141,16 @@
         /// </summary>
         public int NumberOfBackups
         {
-            get { return _numberOfBackups; }
+            get { return this.numberOfBackups; }
             set
             {
-                if (value == _numberOfBackups)
+                if (value == this.numberOfBackups)
                 {
                     return;
                 }
-                _numberOfBackups = value;
-                OnPropertyChanged();
+
+                this.numberOfBackups = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -154,15 +159,16 @@
         /// </summary>
         public int MaxAgeInDays
         {
-            get { return _maxAgeInDays; }
+            get { return this.maxAgeInDays; }
             set
             {
-                if (value == _maxAgeInDays)
+                if (value == this.maxAgeInDays)
                 {
                     return;
                 }
-                _maxAgeInDays = value;
-                OnPropertyChanged();
+
+                this.maxAgeInDays = value;
+                this.OnPropertyChanged();
             }
         }
 

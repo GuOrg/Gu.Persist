@@ -9,12 +9,12 @@
 
     public class XmlHelperTests
     {
-        private FileInfo _file;
+        private FileInfo file;
 
         [SetUp]
         public void SetUp()
         {
-            _file = new FileInfo(@"C:\Temp\XmlHelperTests.tmp");
+            this.file = new FileInfo(@"C:\Temp\XmlHelperTests.tmp");
         }
 
         [Test]
@@ -29,15 +29,16 @@
         [Test]
         public void FileRoundtrip()
         {
-            if (_file.Exists)
+            if (this.file.Exists)
             {
-                _file.Delete();
+                this.file.Delete();
             }
-            var dummy = new DummySerializable { Value = 1 };
-            XmlHelper.Save(dummy, _file);
-            AssertFile.Exists(true, _file);
 
-            var read = XmlHelper.Read<DummySerializable>(_file);
+            var dummy = new DummySerializable { Value = 1 };
+            XmlHelper.Save(dummy, this.file);
+            AssertFile.Exists(true, this.file);
+
+            var read = XmlHelper.Read<DummySerializable>(this.file);
             Assert.AreEqual(dummy.Value, read.Value);
             Assert.AreNotSame(dummy, read);
         }
@@ -45,15 +46,16 @@
         [Test]
         public async Task FileAsyncRoundtrip()
         {
-            if (_file.Exists)
+            if (this.file.Exists)
             {
-                _file.Delete();
+                this.file.Delete();
             }
-            var dummy = new DummySerializable { Value = 1 };
-            await XmlHelper.SaveAsync(dummy, _file).ConfigureAwait(false);
-            AssertFile.Exists(true, _file);
 
-            var read = await XmlHelper.ReadAsync<DummySerializable>(_file).ConfigureAwait(false);
+            var dummy = new DummySerializable { Value = 1 };
+            await XmlHelper.SaveAsync(dummy, this.file).ConfigureAwait(false);
+            AssertFile.Exists(true, this.file);
+
+            var read = await XmlHelper.ReadAsync<DummySerializable>(this.file).ConfigureAwait(false);
             Assert.AreEqual(dummy.Value, read.Value);
             Assert.AreNotSame(dummy, read);
         }

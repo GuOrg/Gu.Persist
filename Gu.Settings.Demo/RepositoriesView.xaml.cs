@@ -9,7 +9,7 @@
     {
         public RepositoryView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

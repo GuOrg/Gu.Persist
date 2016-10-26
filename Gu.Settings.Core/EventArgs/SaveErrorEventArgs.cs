@@ -8,7 +8,7 @@ namespace Gu.Settings.Core
         public SaveErrorEventArgs(object item, FileInfo file, Exception e)
             : base(item, file)
         {
-            Exception = e;
+            this.Exception = e;
         }
 
         public Exception Exception { get; private set; }

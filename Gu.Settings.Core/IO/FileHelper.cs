@@ -103,6 +103,7 @@ namespace Gu.Settings.Core
             {
                 return null;
             }
+
             var soft = file.WithAppendedExtension(SoftDeleteExtension);
             File.Delete(soft.FullName);
             try // Swallowing here, no way to know that the file has not been touched.
@@ -137,10 +138,12 @@ namespace Gu.Settings.Core
             {
                 Ensure.DoesNotExist(newName);
             }
+
             if (owerWrite)
             {
                 newName.Delete();
             }
+
             oldName.MoveTo(newName);
         }
 
@@ -151,6 +154,7 @@ namespace Gu.Settings.Core
             {
                 File.Delete(destination.FullName);
             }
+
             File.Move(source.FullName, destination.FullName);
         }
 
@@ -179,11 +183,13 @@ namespace Gu.Settings.Core
             {
                 return;
             }
+
             backup.Refresh();
             if (!backup.Exists)
             {
                 return;
             }
+
             file.Delete();
             backup.MoveTo(file);
         }
@@ -209,6 +215,7 @@ namespace Gu.Settings.Core
                 {
                     extension = "." + extension;
                 }
+
                 if (Path.HasExtension(fileName))
                 {
                     var ext = Path.GetExtension(fileName);
@@ -238,10 +245,12 @@ namespace Gu.Settings.Core
             {
                 return extension;
             }
+
             if (!extension.StartsWith("."))
             {
                 return "." + extension;
             }
+
             return extension;
         }
     }

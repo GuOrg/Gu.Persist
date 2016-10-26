@@ -11,10 +11,10 @@
     public abstract class Repository<TSetting> : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings
         where TSetting : IRepositorySettings
     {
-        private readonly object _gate = new object();
-        private readonly FileCache _fileCache = new FileCache();
+        private readonly object gate = new object();
+        private readonly FileCache fileCache = new FileCache();
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private IBackuper _backuper;
+        private IBackuper backuper;
 
         /// <summary>
         /// Defaults to %AppDat%/ExecutingAssembly.Name/Settings
@@ -34,14 +34,15 @@
         {
             Ensure.NotNull(directory, nameof(directory));
             directory.CreateIfNotExists();
-            Settings = settingsCreator();
-            if (Settings.IsTrackingDirty)
+            this.Settings = settingsCreator();
+            if (this.Settings.IsTrackingDirty)
             {
-                Tracker = new DirtyTracker(this);
+                this.Tracker = new DirtyTracker(this);
             }
-            Backuper = Backup.Backuper.Create(Settings.BackupSettings); // creating temp for TryRestore in ReadOrCreate
-            Settings = ReadOrCreateCore(() => (TSetting)Settings);
-            Backuper = Backup.Backuper.Create(Settings.BackupSettings);
+
+            this.Backuper = Backup.Backuper.Create(this.Settings.BackupSettings); // creating temp for TryRestore in ReadOrCreate
+            this.Settings = this.ReadOrCreateCore(() => (TSetting)this.Settings);
+            this.Backuper = Backup.Backuper.Create(this.Settings.BackupSettings);
         }
 
         /// <summary>
@@ -60,11 +61,11 @@
         protected Repository(TSetting settings, IBackuper backuper)
         {
             settings.DirectoryPath.CreateDirectoryInfo().CreateIfNotExists();
-            Settings = settings;
-            Backuper = backuper;
-            if (Settings.IsTrackingDirty)
+            this.Settings = settings;
+            this.Backuper = backuper;
+            if (this.Settings.IsTrackingDirty)
             {
-                Tracker = new DirtyTracker(this);
+                this.Tracker = new DirtyTracker(this);
             }
         }
 
@@ -77,67 +78,67 @@
         /// <inheritdoc/>
         public IBackuper Backuper
         {
-            get { return _backuper ?? NullBackuper.Default; }
+            get { return this.backuper ?? NullBackuper.Default; }
             protected set
             {
-                _backuper = value;
+                this.backuper = value;
             }
         }
 
         /// <inheritdoc/>
         public virtual FileInfo GetFileInfo<T>()
         {
-            return GetFileInfoCore<T>();
+            return this.GetFileInfoCore<T>();
         }
 
         /// <inheritdoc/>
         public virtual FileInfo GetFileInfo(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            return GetFileInfoCore(fileName);
+            return this.GetFileInfoCore(fileName);
         }
 
         /// <inheritdoc/>
         protected FileInfo GetFileInfoCore(string fileName)
         {
-            var file = FileHelper.CreateFileInfo(fileName, Settings);
+            var file = FileHelper.CreateFileInfo(fileName, this.Settings);
             return file;
         }
 
         /// <inheritdoc/>
         protected FileInfo GetFileInfoCore<T>()
         {
-            return FileHelper.CreateFileInfo<T>(Settings);
+            return FileHelper.CreateFileInfo<T>(this.Settings);
         }
 
         /// <inheritdoc/>
         public virtual void Delete<T>(bool deleteBackups)
         {
-            var file = GetFileInfo<T>();
-            Delete(file, deleteBackups);
+            var file = this.GetFileInfo<T>();
+            this.Delete(file, deleteBackups);
         }
 
         /// <inheritdoc/>
         public virtual void DeleteBackups<T>()
         {
-            var file = GetFileInfo<T>();
-            DeleteBackups(file);
+            var file = this.GetFileInfo<T>();
+            this.DeleteBackups(file);
         }
 
         /// <inheritdoc/>
         public virtual void Delete(string fileName, bool deleteBackups)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var file = GetFileInfoCore(fileName);
-            Delete(file, deleteBackups);
+            var file = this.GetFileInfoCore(fileName);
+            this.Delete(file, deleteBackups);
         }
 
         /// <inheritdoc/>
         public virtual void DeleteBackups(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var file = GetFileInfoCore(fileName);
-            DeleteBackups(file);
+            var file = this.GetFileInfoCore(fileName);
+            this.DeleteBackups(file);
         }
 
         /// <inheritdoc/>
@@ -148,7 +149,7 @@
             file.DeleteSoftDeleteFileFor();
             if (deleteBackups)
             {
-                DeleteBackups(file);
+                this.DeleteBackups(file);
             }
         }
 
@@ -156,34 +157,34 @@
         public virtual void DeleteBackups(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            Backuper.DeleteBackups(file);
+            this.Backuper.DeleteBackups(file);
         }
 
         /// <inheritdoc/>
         public virtual bool Exists<T>()
         {
-            return ExistsCore<T>();
+            return this.ExistsCore<T>();
         }
 
         protected bool ExistsCore<T>()
         {
-            var file = GetFileInfoCore<T>();
-            return ExistsCore(file);
+            var file = this.GetFileInfoCore<T>();
+            return this.ExistsCore(file);
         }
 
         /// <inheritdoc/>
         public virtual bool Exists(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var fileInfo = GetFileInfoCore(fileName);
-            return Exists(fileInfo);
+            var fileInfo = this.GetFileInfoCore(fileName);
+            return this.Exists(fileInfo);
         }
 
         /// <inheritdoc/>
         public virtual bool Exists(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            return ExistsCore(file);
+            return this.ExistsCore(file);
         }
 
         protected bool ExistsCore(FileInfo file)
@@ -195,31 +196,31 @@
         /// <inheritdoc/>
         public virtual Task<T> ReadAsync<T>()
         {
-            var file = GetFileInfo<T>();
-            return ReadAsync<T>(file);
+            var file = this.GetFileInfo<T>();
+            return this.ReadAsync<T>(file);
         }
 
         /// <inheritdoc/>
         public virtual Task<MemoryStream> ReadStreamAsync<T>()
         {
-            var file = GetFileInfo<T>();
-            return ReadStreamAsync(file);
+            var file = this.GetFileInfo<T>();
+            return this.ReadStreamAsync(file);
         }
 
         /// <inheritdoc/>
         public virtual Task<T> ReadAsync<T>(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var fileInfo = GetFileInfoCore(fileName);
-            return ReadAsync<T>(fileInfo);
+            var fileInfo = this.GetFileInfoCore(fileName);
+            return this.ReadAsync<T>(fileInfo);
         }
 
         /// <inheritdoc/>
         public virtual Task<MemoryStream> ReadStreamAsync(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var fileInfo = GetFileInfoCore(fileName);
-            return ReadStreamAsync(fileInfo);
+            var fileInfo = this.GetFileInfoCore(fileName);
+            return this.ReadStreamAsync(fileInfo);
         }
 
         /// <inheritdoc/>
@@ -227,10 +228,10 @@
         {
             Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
             T value;
-            if (Settings.IsCaching)
+            if (this.Settings.IsCaching)
             {
                 T cached;
-                if (_fileCache.TryGetValue(file.FullName, out cached))
+                if (this.fileCache.TryGetValue(file.FullName, out cached))
                 {
                     return cached;
                 }
@@ -238,26 +239,28 @@
                 // can't await  inside the lock. 
                 // If there are many threads reading the same only the first is used
                 // the other reads are wasted, can't think of anything better than this.
-                value = await FileHelper.ReadAsync<T>(file, FromStream<T>).ConfigureAwait(false);
+                value = await FileHelper.ReadAsync<T>(file, this.FromStream<T>).ConfigureAwait(false);
 
-                lock (_gate)
+                lock (this.gate)
                 {
-                    if (_fileCache.TryGetValue(file.FullName, out cached))
+                    if (this.fileCache.TryGetValue(file.FullName, out cached))
                     {
                         return cached;
                     }
-                    _fileCache.Add(file.FullName, value);
+
+                    this.fileCache.Add(file.FullName, value);
                 }
             }
             else
             {
-                value = await FileHelper.ReadAsync<T>(file, FromStream<T>).ConfigureAwait(false);
+                value = await FileHelper.ReadAsync<T>(file, this.FromStream<T>).ConfigureAwait(false);
             }
 
-            if (Settings.IsTrackingDirty)
+            if (this.Settings.IsTrackingDirty)
             {
-                Tracker.Track(file.FullName, value);
+                this.Tracker.Track(file.FullName, value);
             }
+
             return value;
         }
 
@@ -271,43 +274,43 @@
         /// <inheritdoc/>
         public virtual T Read<T>()
         {
-            return ReadCore<T>();
+            return this.ReadCore<T>();
         }
 
         /// <inheritdoc/>
         public virtual Stream ReadStream<T>()
         {
-            var file = GetFileInfoCore<T>();
-            return ReadStream(file);
+            var file = this.GetFileInfoCore<T>();
+            return this.ReadStream(file);
         }
 
         protected T ReadCore<T>()
         {
-            var file = GetFileInfoCore<T>();
-            return ReadCore<T>(file);
+            var file = this.GetFileInfoCore<T>();
+            return this.ReadCore<T>(file);
         }
 
         /// <inheritdoc/>
         public virtual T Read<T>(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var file = GetFileInfoCore(fileName);
-            return Read<T>(file);
+            var file = this.GetFileInfoCore(fileName);
+            return this.Read<T>(file);
         }
 
         /// <inheritdoc/>
         public virtual Stream ReadStream(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var file = GetFileInfoCore(fileName);
-            return ReadStream(file);
+            var file = this.GetFileInfoCore(fileName);
+            return this.ReadStream(file);
         }
 
         /// <inheritdoc/>
         public virtual T Read<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            return ReadCore<T>(file);
+            return this.ReadCore<T>(file);
         }
 
         /// <inheritdoc/>
@@ -321,32 +324,33 @@
         {
             Ensure.NotNull(file, nameof(file));
             T value;
-            if (Settings.IsCaching)
+            if (this.Settings.IsCaching)
             {
                 T cached;
-                if (_fileCache.TryGetValue(file.FullName, out cached))
+                if (this.fileCache.TryGetValue(file.FullName, out cached))
                 {
                     return (T)cached;
                 }
 
-                lock (_gate)
+                lock (this.gate)
                 {
-                    if (_fileCache.TryGetValue(file.FullName, out cached))
+                    if (this.fileCache.TryGetValue(file.FullName, out cached))
                     {
                         return (T)cached;
                     }
-                    value = FileHelper.Read<T>(file, FromStream<T>);
-                    _fileCache.Add(file.FullName, value);
+
+                    value = FileHelper.Read<T>(file, this.FromStream<T>);
+                    this.fileCache.Add(file.FullName, value);
                 }
             }
             else
             {
-                value = FileHelper.Read<T>(file, FromStream<T>);
+                value = FileHelper.Read<T>(file, this.FromStream<T>);
             }
 
-            if (Settings.IsTrackingDirty)
+            if (this.Settings.IsTrackingDirty)
             {
-                Tracker.Track(file.FullName, value);
+                this.Tracker.Track(file.FullName, value);
             }
 
             return value;
@@ -356,14 +360,14 @@
         public virtual T ReadOrCreate<T>(Func<T> creator)
         {
             Ensure.NotNull(creator, nameof(creator));
-            return ReadOrCreateCore(creator);
+            return this.ReadOrCreateCore(creator);
         }
 
         protected T ReadOrCreateCore<T>(Func<T> creator)
         {
             Ensure.NotNull(creator, nameof(creator));
-            var file = GetFileInfoCore<T>();
-            return ReadOrCreateCore(file, creator);
+            var file = this.GetFileInfoCore<T>();
+            return this.ReadOrCreateCore(file, creator);
         }
 
         /// <inheritdoc/>
@@ -371,8 +375,8 @@
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
             Ensure.NotNull(creator, nameof(creator));
-            var file = GetFileInfoCore(fileName);
-            return ReadOrCreate(file, creator);
+            var file = this.GetFileInfoCore(fileName);
+            return this.ReadOrCreate(file, creator);
         }
 
         /// <inheritdoc/>
@@ -380,7 +384,7 @@
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(creator, nameof(creator));
-            return ReadOrCreateCore(file, creator);
+            return this.ReadOrCreateCore(file, creator);
         }
 
         protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator)
@@ -388,131 +392,133 @@
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(creator, nameof(creator));
             T setting;
-            if (ExistsCore<T>())
+            if (this.ExistsCore<T>())
             {
-                setting = ReadCore<T>();
+                setting = this.ReadCore<T>();
             }
-            else if (Backuper.TryRestore(file))
+            else if (this.Backuper.TryRestore(file))
             {
-                setting = ReadCore<T>();
+                setting = this.ReadCore<T>();
             }
             else
             {
                 setting = creator();
-                SaveCore(setting);
+                this.SaveCore(setting);
             }
+
             return setting;
         }
 
         /// <inheritdoc/>
         public virtual void Save<T>(T item)
         {
-            SaveCore(item);
+            this.SaveCore(item);
         }
 
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item)
         {
-            var file = GetFileInfoCore<T>();
-            Save(item, file);
-            RemoveFromCache(item);
-            RemoveFromDirtyTracker(item);
+            var file = this.GetFileInfoCore<T>();
+            this.Save(item, file);
+            this.RemoveFromCache(item);
+            this.RemoveFromDirtyTracker(item);
         }
 
         protected void SaveCore<T>(T item)
         {
-            var file = GetFileInfoCore<T>();
-            SaveCore(item, file);
+            var file = this.GetFileInfoCore<T>();
+            this.SaveCore(item, file);
         }
 
         /// <inheritdoc/>
         public virtual void Save<T>(T item, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var file = GetFileInfoCore(fileName);
-            Save(item, file);
+            var file = this.GetFileInfoCore(fileName);
+            this.Save(item, file);
         }
 
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            Save(item, fileName);
-            RemoveFromCache(item);
-            RemoveFromDirtyTracker(item);
+            this.Save(item, fileName);
+            this.RemoveFromCache(item);
+            this.RemoveFromDirtyTracker(item);
         }
 
         /// <inheritdoc/>
         public virtual void Save<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            SaveCore(item, file);
+            this.SaveCore(item, file);
         }
 
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            SaveCore(item, file);
-            RemoveFromCache(item);
-            RemoveFromDirtyTracker(item);
+            this.SaveCore(item, file);
+            this.RemoveFromCache(item);
+            this.RemoveFromDirtyTracker(item);
         }
 
         protected void SaveCore<T>(T item, FileInfo file)
         {
-            var tempFile = file.WithNewExtension(Settings.TempExtension);
-            SaveCore(item, file, tempFile);
+            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
+            this.SaveCore(item, file, tempFile);
         }
 
         /// <inheritdoc/>
         public virtual void Save<T>(T item, FileInfo file, FileInfo tempFile)
         {
             Ensure.NotNull(file, nameof(file));
-            SaveCore(item, file, tempFile);
+            this.SaveCore(item, file, tempFile);
         }
 
         /// <inheritdoc/>
         public virtual void SaveStream<T>(Stream stream)
         {
-            var file = GetFileInfoCore<T>();
-            SaveStream(stream, file);
+            var file = this.GetFileInfoCore<T>();
+            this.SaveStream(stream, file);
         }
 
         /// <inheritdoc/>
         public virtual void SaveStream(Stream stream, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var file = GetFileInfoCore(fileName);
-            SaveStream(stream, file);
+            var file = this.GetFileInfoCore(fileName);
+            this.SaveStream(stream, file);
         }
 
         /// <inheritdoc/>
         public virtual void SaveStream(Stream stream, FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            var tempFile = file.WithNewExtension(Settings.TempExtension);
-            SaveStreamCore(stream, file, tempFile);
+            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
+            this.SaveStreamCore(stream, file, tempFile);
         }
 
         /// <inheritdoc/>
         public virtual void SaveStream(Stream stream, FileInfo file, FileInfo tempFile)
         {
             Ensure.NotNull(file, nameof(file));
-            SaveStreamCore(stream, file, tempFile);
+            this.SaveStreamCore(stream, file, tempFile);
         }
 
         protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
         {
             if (item == null)
             {
-                SaveStreamCore(null, file, null);
+                this.SaveStreamCore(null, file, null);
                 return;
             }
-            CacheAndTrackCore(item, file);
 
-            using (var stream = ToStream(item))
+            this.CacheAndTrackCore(item, file);
+
+            using (var stream = this.ToStream(item))
             {
-                SaveStreamCore(stream, file, tempFile);
+                this.SaveStreamCore(stream, file, tempFile);
             }
         }
 
@@ -523,23 +529,25 @@
                 FileHelper.HardDelete(file);
                 return;
             }
-            Backuper.BeforeSave(file);
+
+            this.Backuper.BeforeSave(file);
             try
             {
                 FileHelper.Save(tempFile, stream);
                 tempFile.MoveTo(file);
-                Backuper.AfterSuccessfulSave(file);
+                this.Backuper.AfterSuccessfulSave(file);
             }
             catch (Exception exception)
             {
                 try
                 {
-                    Backuper.TryRestore(file);
+                    this.Backuper.TryRestore(file);
                 }
                 catch (Exception restoreException)
                 {
                     throw new RestoreException(exception, restoreException);
                 }
+
                 throw;
             }
         }
@@ -547,24 +555,24 @@
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item)
         {
-            var file = GetFileInfo<T>();
-            return SaveAsync(item, file);
+            var file = this.GetFileInfo<T>();
+            return this.SaveAsync(item, file);
         }
 
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var fileInfo = GetFileInfoCore(fileName);
-            return SaveAsync(item, fileInfo);
+            var fileInfo = this.GetFileInfoCore(fileName);
+            return this.SaveAsync(item, fileInfo);
         }
 
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item, FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            var tempFile = file.WithNewExtension(Settings.TempExtension);
-            return SaveAsync(item, file, tempFile);
+            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
+            return this.SaveAsync(item, file, tempFile);
         }
 
         /// <inheritdoc/>
@@ -577,10 +585,11 @@
                 FileHelper.HardDelete(file);
                 return;
             }
-            CacheAndTrackCore(item, file);
-            using (var stream = ToStream(item))
+
+            this.CacheAndTrackCore(item, file);
+            using (var stream = this.ToStream(item))
             {
-                await SaveStreamAsync(stream, file, tempFile).ConfigureAwait(false);
+                await this.SaveStreamAsync(stream, file, tempFile).ConfigureAwait(false);
             }
         }
 
@@ -588,8 +597,8 @@
         public virtual Task SaveStreamAsync<T>(Stream stream)
         {
             Ensure.NotNull(stream, nameof(stream));
-            var file = GetFileInfo<T>();
-            return SaveStreamAsync(stream, file);
+            var file = this.GetFileInfo<T>();
+            return this.SaveStreamAsync(stream, file);
         }
 
         /// <inheritdoc/>
@@ -597,8 +606,8 @@
         {
             Ensure.NotNull(stream, nameof(stream));
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var file = GetFileInfoCore(fileName);
-            return SaveStreamAsync(stream, file);
+            var file = this.GetFileInfoCore(fileName);
+            return this.SaveStreamAsync(stream, file);
         }
 
         /// <inheritdoc/>
@@ -606,23 +615,23 @@
         {
             Ensure.NotNull(stream, nameof(stream));
             Ensure.NotNull(file, nameof(file));
-            var tempFile = file.WithNewExtension(Settings.TempExtension);
-            return SaveStreamAsync(stream, file, tempFile);
+            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
+            return this.SaveStreamAsync(stream, file, tempFile);
         }
 
         /// <inheritdoc/>
         public virtual async Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile)
         {
-            Backuper.BeforeSave(file);
+            this.Backuper.BeforeSave(file);
             try
             {
                 await tempFile.SaveAsync(stream).ConfigureAwait(false);
                 tempFile.MoveTo(file);
-                Backuper.AfterSuccessfulSave(file);
+                this.Backuper.AfterSuccessfulSave(file);
             }
             catch (Exception)
             {
-                Backuper.TryRestore(file);
+                this.Backuper.TryRestore(file);
                 throw;
             }
         }
@@ -630,29 +639,29 @@
         /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item)
         {
-            return IsDirty(item, DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(item, this.DefaultStructuralEqualityComparer<T>());
         }
 
         /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item, IEqualityComparer<T> comparer)
         {
-            var file = GetFileInfo<T>();
-            return IsDirty(item, file, comparer);
+            var file = this.GetFileInfo<T>();
+            return this.IsDirty(item, file, comparer);
         }
 
         /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            return IsDirty(item, fileName, DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(item, fileName, this.DefaultStructuralEqualityComparer<T>());
         }
 
         /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            var fileInfo = GetFileInfoCore(fileName);
-            return IsDirty(item, fileInfo, comparer);
+            var fileInfo = this.GetFileInfoCore(fileName);
+            return this.IsDirty(item, fileInfo, comparer);
         }
 
         /// <inheritdoc/>
@@ -660,18 +669,19 @@
         {
             Ensure.NotNull(file, nameof(file));
 
-            return IsDirty(item, file, DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(item, file, this.DefaultStructuralEqualityComparer<T>());
         }
 
         /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
         {
             Ensure.NotNull(file, nameof(file));
-            if (!Settings.IsTrackingDirty)
+            if (!this.Settings.IsTrackingDirty)
             {
                 throw new InvalidOperationException("Cannot check IsDirty if not Setting.IsTrackingDirty");
             }
-            return Tracker.IsDirty(item, file.FullName, comparer);
+
+            return this.Tracker.IsDirty(item, file.FullName, comparer);
         }
 
         /// <inheritdoc/>
@@ -679,16 +689,16 @@
         {
             Ensure.IsValidFileName(newName, nameof(newName));
 
-            var fileInfo = GetFileInfo<T>();
-            return CanRename(fileInfo, newName);
+            var fileInfo = this.GetFileInfo<T>();
+            return this.CanRename(fileInfo, newName);
         }
 
         /// <inheritdoc/>
         public void Rename<T>(string newName, bool owerWrite)
         {
             Ensure.IsValidFileName(newName, nameof(newName));
-            var fileInfo = GetFileInfo<T>();
-            Rename(fileInfo, newName, owerWrite);
+            var fileInfo = this.GetFileInfo<T>();
+            this.Rename(fileInfo, newName, owerWrite);
         }
 
         /// <inheritdoc/>
@@ -696,9 +706,9 @@
         {
             Ensure.IsValidFileName(oldName, nameof(oldName));
             Ensure.IsValidFileName(newName, nameof(newName));
-            var oldFile = GetFileInfoCore(oldName);
-            var newFile = GetFileInfoCore(newName);
-            return CanRename(oldFile, newFile);
+            var oldFile = this.GetFileInfoCore(oldName);
+            var newFile = this.GetFileInfoCore(newName);
+            return this.CanRename(oldFile, newFile);
         }
 
         /// <inheritdoc/>
@@ -706,9 +716,9 @@
         {
             Ensure.IsValidFileName(oldName, nameof(oldName));
             Ensure.IsValidFileName(newName, nameof(newName));
-            var oldFile = GetFileInfoCore(oldName);
-            var newFile = GetFileInfoCore(newName);
-            Rename(oldFile, newFile, owerWrite);
+            var oldFile = this.GetFileInfoCore(oldName);
+            var newFile = this.GetFileInfoCore(newName);
+            this.Rename(oldFile, newFile, owerWrite);
         }
 
         /// <inheritdoc/>
@@ -716,8 +726,8 @@
         {
             Ensure.NotNull(oldName, nameof(oldName));
             Ensure.IsValidFileName(newName, nameof(newName));
-            var newFile = GetFileInfoCore(newName);
-            return CanRename(oldName, newFile);
+            var newFile = this.GetFileInfoCore(newName);
+            return this.CanRename(oldName, newFile);
         }
 
         /// <inheritdoc/>
@@ -725,8 +735,8 @@
         {
             Ensure.Exists(oldName, nameof(oldName));
             Ensure.IsValidFileName(newName, nameof(newName));
-            var newFile = GetFileInfoCore(newName);
-            Rename(oldName, newFile, owerWrite);
+            var newFile = this.GetFileInfoCore(newName);
+            this.Rename(oldName, newFile, owerWrite);
         }
 
         /// <inheritdoc/>
@@ -739,20 +749,24 @@
             {
                 return false;
             }
+
             newName.Refresh();
             if (newName.Exists)
             {
                 return false;
             }
-            if (_fileCache.ContainsKey(newName.FullName))
+
+            if (this.fileCache.ContainsKey(newName.FullName))
             {
                 return false;
             }
-            if (Backuper != null)
+
+            if (this.Backuper != null)
             {
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(newName.FullName);
-                return Backuper.CanRename(oldName, fileNameWithoutExtension);
+                return this.Backuper.CanRename(oldName, fileNameWithoutExtension);
             }
+
             return true;
         }
 
@@ -762,15 +776,16 @@
             Ensure.NotNull(oldName, nameof(oldName));
             Ensure.NotNull(newName, nameof(newName));
             oldName.Rename(newName, owerWrite);
-            if (Backuper != null)
+            if (this.Backuper != null)
             {
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(newName.Name);
-                Backuper.Rename(oldName, fileNameWithoutExtension, owerWrite);
+                this.Backuper.Rename(oldName, fileNameWithoutExtension, owerWrite);
             }
-            _fileCache.ChangeKey(oldName.FullName, newName.FullName, owerWrite);
-            if (Settings.IsTrackingDirty && Tracker != null)
+
+            this.fileCache.ChangeKey(oldName.FullName, newName.FullName, owerWrite);
+            if (this.Settings.IsTrackingDirty && this.Tracker != null)
             {
-                Tracker.Rename(oldName.FullName, newName.FullName, owerWrite);
+                this.Tracker.Rename(oldName.FullName, newName.FullName, owerWrite);
             }
         }
 
@@ -778,45 +793,46 @@
         public virtual T Clone<T>(T item)
         {
             Ensure.NotNull(item, nameof(item));
-            return CloneCore(item);
+            return this.CloneCore(item);
         }
 
         public virtual T CloneCore<T>(T item)
         {
             Ensure.NotNull(item, nameof(item));
-            using (var stream = ToStream(item))
+            using (var stream = this.ToStream(item))
             {
-                return FromStream<T>(stream);
+                return this.FromStream<T>(stream);
             }
         }
 
         /// <inheritdoc/>
         public void ClearCache()
         {
-            _fileCache.Clear();
+            this.fileCache.Clear();
         }
 
         /// <inheritdoc/>
         public void RemoveFromCache<T>(T item)
         {
-            _fileCache.TryRemove(item);
+            this.fileCache.TryRemove(item);
         }
 
         /// <inheritdoc/>
         public void ClearTrackerCache()
         {
-            Tracker.ClearCache();
+            this.Tracker.ClearCache();
         }
 
         /// <inheritdoc/>
         public void RemoveFromDirtyTracker<T>(T item)
         {
-            var tracker = Tracker;
+            var tracker = this.Tracker;
             if (tracker == null)
             {
                 return;
             }
-            var fileInfo = GetFileInfo<T>();
+
+            var fileInfo = this.GetFileInfo<T>();
             tracker.RemoveFromCache(fileInfo.FullName);
         }
 
@@ -854,13 +870,13 @@
         /// <param name="file"></param>
         protected virtual void Cache<T>(T item, FileInfo file)
         {
-            CacheCore(item, file);
+            this.CacheCore(item, file);
         }
 
         protected void CacheCore<T>(T item, FileInfo file)
         {
             T cached;
-            if (_fileCache.TryGetValue(file.FullName, out cached))
+            if (this.fileCache.TryGetValue(file.FullName, out cached))
             {
                 if (!ReferenceEquals(item, cached))
                 {
@@ -869,20 +885,20 @@
             }
             else
             {
-                _fileCache.Add(file.FullName, item);
+                this.fileCache.Add(file.FullName, item);
             }
         }
 
         private void CacheAndTrackCore<T>(T item, FileInfo file)
         {
-            if (Settings.IsCaching)
+            if (this.Settings.IsCaching)
             {
-                Cache(item, file);
+                this.Cache(item, file);
             }
 
-            if (Settings.IsTrackingDirty)
+            if (this.Settings.IsTrackingDirty)
             {
-                Tracker.Track(file.FullName, item);
+                this.Tracker.Track(file.FullName, item);
             }
         }
     }

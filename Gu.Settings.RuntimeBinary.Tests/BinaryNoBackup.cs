@@ -13,12 +13,12 @@ namespace Gu.Settings.RuntimeBinary.Tests
         [Test]
         public void BackuperIsNone()
         {
-            Assert.AreSame(NullBackuper.Default, Repository.Backuper);
+            Assert.AreSame(NullBackuper.Default, this.Repository.Backuper);
         }
 
         protected override IRepository Create()
         {
-            var settings = new BinaryRepositorySettings(Directory, true, true, null, ".cfg", ".tmp");
+            var settings = new BinaryRepositorySettings(this.Directory, true, true, null, ".cfg", ".tmp");
             return new BinaryRepository(settings);
         }
 

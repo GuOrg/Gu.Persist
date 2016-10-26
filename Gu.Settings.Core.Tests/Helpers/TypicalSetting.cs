@@ -6,13 +6,13 @@
     [Serializable]
     public class TypicalSetting
     {
-        private List<DummySerializable> _dummies = new List<DummySerializable>();
+        private List<DummySerializable> dummies = new List<DummySerializable>();
         public string Name { get; set; }
 
         public List<DummySerializable> Dummies
         {
-            get { return _dummies; }
-            set { _dummies = value; }
+            get { return this.dummies; }
+            set { this.dummies = value; }
         }
 
         public double Value1 { get; set; }

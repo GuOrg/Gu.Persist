@@ -7,9 +7,10 @@ namespace Gu.Settings.Core
     {
         public SaveEventArgs(object item, FileInfo file)
         {
-            Item = item;
-            File = file;
+            this.Item = item;
+            this.File = file;
         }
+
         public object Item { get; private set; }
 
         public FileInfo File { get; private set; }

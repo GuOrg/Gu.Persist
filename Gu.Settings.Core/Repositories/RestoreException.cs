@@ -15,7 +15,7 @@ namespace Gu.Settings.Core
         public RestoreException(Exception saveException, Exception innerException)
             : base("Restore failed", innerException)
         {
-            SaveException = saveException;
+            this.SaveException = saveException;
         }
 
         public Exception SaveException { get; }
@@ -23,13 +23,13 @@ namespace Gu.Settings.Core
         protected RestoreException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            this.SaveException = (Exception)info.GetValue(nameof(SaveException), typeof(Exception));
+            this.SaveException = (Exception)info.GetValue(nameof(this.SaveException), typeof(Exception));
         }
 
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue(nameof(SaveException), this.SaveException, typeof(Exception));
+            info.AddValue(nameof(this.SaveException), this.SaveException, typeof(Exception));
             base.GetObjectData(info, context);
         }
     }

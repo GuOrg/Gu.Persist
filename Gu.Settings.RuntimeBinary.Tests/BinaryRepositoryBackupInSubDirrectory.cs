@@ -9,7 +9,7 @@ namespace Gu.Settings.RuntimeBinary.Tests
     {
         protected override IRepository Create()
         {
-            var settings = BinaryRepositorySettings.DefaultFor(Directory);
+            var settings = BinaryRepositorySettings.DefaultFor(this.Directory);
             return new BinaryRepository(settings);
         }
 

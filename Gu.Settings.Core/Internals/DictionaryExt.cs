@@ -32,6 +32,7 @@
                 {
                     return;
                 }
+
                 var message = string.Format("Could not add {0} to dictionary", fromKey);
                 throw new InvalidOperationException(message);
             }

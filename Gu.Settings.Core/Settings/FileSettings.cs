@@ -10,8 +10,8 @@
     [Serializable]
     public class FileSettings : IFileSettings
     {
-        private string _extension;
-        private PathAndSpecialFolder _directoryPath;
+        private string extension;
+        private PathAndSpecialFolder directoryPath;
 
         protected FileSettings()
         {
@@ -19,14 +19,14 @@
 
         public FileSettings(PathAndSpecialFolder directoryPath, string extension)
         {
-            _directoryPath = directoryPath;
-            _extension = FileHelper.PrependDotIfMissing(extension);
+            this.directoryPath = directoryPath;
+            this.extension = FileHelper.PrependDotIfMissing(extension);
         }
 
         public FileSettings(DirectoryInfo directory, string extension)
         {
-            _directoryPath = PathAndSpecialFolder.Create(directory);
-            _extension = FileHelper.PrependDotIfMissing(extension);
+            this.directoryPath = PathAndSpecialFolder.Create(directory);
+            this.extension = FileHelper.PrependDotIfMissing(extension);
         }
 
         [field: NonSerialized]
@@ -34,36 +34,38 @@
 
         public PathAndSpecialFolder DirectoryPath
         {
-            get { return _directoryPath; }
+            get { return this.directoryPath; }
             set
             {
-                if (Equals(value, _directoryPath))
+                if (Equals(value, this.directoryPath))
                 {
                     return;
                 }
-                _directoryPath = value;
-                OnPropertyChanged();
+
+                this.directoryPath = value;
+                this.OnPropertyChanged();
             }
         }
 
         public string Extension
         {
-            get { return _extension; }
+            get { return this.extension; }
             protected set
             {
-                if (value == _extension)
+                if (value == this.extension)
                 {
                     return;
                 }
-                _extension = value;
-                OnPropertyChanged();
+
+                this.extension = value;
+                this.OnPropertyChanged();
             }
         }
 
         [NotifyPropertyChangedInvocator]
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

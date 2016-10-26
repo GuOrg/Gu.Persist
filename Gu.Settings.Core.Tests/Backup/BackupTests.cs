@@ -24,61 +24,61 @@ namespace Gu.Settings.Core.Tests.Backup
 
         public BackupTests()
         {
-            Directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + GetType().Name);
-            Directory.CreateIfNotExists();
+            this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + this.GetType().Name);
+            this.Directory.CreateIfNotExists();
 
-            Setting = new BackupSettings(Directory, true, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, false, 2, 3);
+            this.Setting = new BackupSettings(this.Directory, true, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, false, 2, 3);
 
-            File = Directory.CreateFileInfoInDirectory("Meh.cfg");
-            SoftDelete = File.WithAppendedExtension(FileHelper.SoftDeleteExtension);
-            Backup = Directory.CreateFileInfoInDirectory("Meh.bak");
+            this.File = this.Directory.CreateFileInfoInDirectory("Meh.cfg");
+            this.SoftDelete = this.File.WithAppendedExtension(FileHelper.SoftDeleteExtension);
+            this.Backup = this.Directory.CreateFileInfoInDirectory("Meh.bak");
 
-            BackupOneMinuteOld = Backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), Setting);
-            BackupOneHourOld = Backup.WithTimeStamp(DateTime.Now.AddHours(-1), Setting);
-            BackupOneDayOld = Backup.WithTimeStamp(DateTime.Now.AddDays(-1), Setting);
-            BackupOneMonthOld = Backup.WithTimeStamp(DateTime.Now.AddMonths(-1), Setting);
-            BackupOneYearOld = Backup.WithTimeStamp(DateTime.Now.AddYears(-1), Setting);
+            this.BackupOneMinuteOld = this.Backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), this.Setting);
+            this.BackupOneHourOld = this.Backup.WithTimeStamp(DateTime.Now.AddHours(-1), this.Setting);
+            this.BackupOneDayOld = this.Backup.WithTimeStamp(DateTime.Now.AddDays(-1), this.Setting);
+            this.BackupOneMonthOld = this.Backup.WithTimeStamp(DateTime.Now.AddMonths(-1), this.Setting);
+            this.BackupOneYearOld = this.Backup.WithTimeStamp(DateTime.Now.AddYears(-1), this.Setting);
 
-            OtherBackup = Directory.CreateFileInfoInDirectory("Other.bak").WithTimeStamp(DateTime.Now.AddHours(1), Setting);
+            this.OtherBackup = this.Directory.CreateFileInfoInDirectory("Other.bak").WithTimeStamp(DateTime.Now.AddHours(1), this.Setting);
 
-            TimestampedBackups = new[]
+            this.TimestampedBackups = new[]
                                       {
-                                          BackupOneMinuteOld,
-                                          BackupOneHourOld,
-                                          BackupOneDayOld,
-                                          BackupOneMonthOld,
-                                          BackupOneYearOld
+                                          this.BackupOneMinuteOld,
+                                          this.BackupOneHourOld,
+                                          this.BackupOneDayOld,
+                                          this.BackupOneMonthOld,
+                                          this.BackupOneYearOld
                                       };
         }
 
         [SetUp]
         public virtual void SetUp()
         {
-            File.Delete();
-            Backup.Delete();
-            foreach (var backup in TimestampedBackups)
+            this.File.Delete();
+            this.Backup.Delete();
+            foreach (var backup in this.TimestampedBackups)
             {
                 backup.Delete();
             }
 
-            OtherBackup.Delete();
-            OtherBackup.VoidCreate();
-            SoftDelete.Delete();
+            this.OtherBackup.Delete();
+            this.OtherBackup.VoidCreate();
+            this.SoftDelete.Delete();
         }
 
         [TearDown]
         public void TearDown()
         {
-            File.Delete();
-            Backup.Delete();
+            this.File.Delete();
+            this.Backup.Delete();
 
-            foreach (var backup in TimestampedBackups)
+            foreach (var backup in this.TimestampedBackups)
             {
                 backup.Delete();
             }
 
-            OtherBackup.Delete();
-            SoftDelete.Delete();
+            this.OtherBackup.Delete();
+            this.SoftDelete.Delete();
         }
     }
 }

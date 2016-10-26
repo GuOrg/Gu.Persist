@@ -14,13 +14,13 @@
     [Explicit("Longrunning benchmarks")]
     public class BenchmarkTests
     {
-        private TypicalSetting _setting1;
-        private TypicalSetting _setting2;
+        private TypicalSetting setting1;
+        private TypicalSetting setting2;
 
         [SetUp]
         public void SetUp()
         {
-            _setting1 = new TypicalSetting
+            this.setting1 = new TypicalSetting
             {
                 Name = "Johan Larsson",
                 Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
@@ -30,7 +30,7 @@
                 Value4 = 4,
                 Value5 = 5
             };
-            _setting2 = new TypicalSetting
+            this.setting2 = new TypicalSetting
             {
                 Name = "Johan Larsson",
                 Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
@@ -47,12 +47,13 @@
         public void XmlEquals(ComparerData data)
         {
             var comparer = XmlEqualsComparer<TypicalSetting>.Default;
-            var warmup = comparer.Equals(_setting1, _setting2);
+            var warmup = comparer.Equals(this.setting1, this.setting2);
             var sw = Stopwatch.StartNew();
             for (int i = 0; i < data.Times; i++)
             {
-                var result = comparer.Equals(_setting1, _setting2);
+                var result = comparer.Equals(this.setting1, this.setting2);
             }
+
             sw.Stop();
             Console.WriteLine(
                 "{0}.Equals(_setting1, _setting2) {1} times took: {2} ms total ({3} ms each)",
@@ -66,12 +67,13 @@
         public void GetHashCode(ComparerData data)
         {
             var comparer = XmlEqualsComparer<TypicalSetting>.Default;
-            var warmup = comparer.GetHashCode(_setting1);
+            var warmup = comparer.GetHashCode(this.setting1);
             var sw = Stopwatch.StartNew();
             for (int i = 0; i < data.Times; i++)
             {
-                var result = comparer.GetHashCode(_setting1);
+                var result = comparer.GetHashCode(this.setting1);
             }
+
             sw.Stop();
             Console.WriteLine(
                 "{0}.GetHashCode(_setting1) {1} times took: {2} ms total ({3} ms each)",
@@ -85,7 +87,7 @@
         {
             public ComparerSource()
             {
-                Add(new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000));
+                this.Add(new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000));
             }
         }
 
@@ -96,8 +98,8 @@
 
             public ComparerData(IEqualityComparer<TypicalSetting> comparer, int times)
             {
-                Comparer = comparer;
-                Times = times;
+                this.Comparer = comparer;
+                this.Times = times;
             }
 
             public string ComparerName
@@ -106,7 +108,7 @@
                 {
                     return string.Format(
                         "{0}<{1}>",
-                        Comparer.GetType()
+                        this.Comparer.GetType()
                                 .Name.Replace("`1", ""),
                         typeof(TypicalSetting).Name);
                 }
@@ -114,7 +116,7 @@
 
             public override string ToString()
             {
-                return string.Format("{0} {1} times", ComparerName, Times);
+                return string.Format("{0} {1} times", this.ComparerName, this.Times);
             }
         }
     }

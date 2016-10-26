@@ -17,8 +17,8 @@
             Ensure.Exists(file);
             Ensure.NotNull(setting, nameof(setting));
 
-            File = file;
-            TimeStamp = file.GetTimeStamp(setting);
+            this.File = file;
+            this.TimeStamp = file.GetTimeStamp(setting);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"File: {File}, TimeStamp: {TimeStamp}";
+            return $"File: {this.File}, TimeStamp: {this.TimeStamp}";
         }
 
         internal static FileInfo GetRestoreFileFor(FileInfo file, IBackupSettings setting)
@@ -44,6 +44,7 @@
             {
                 return null;
             }
+
             return allBackups.MaxBy(x => x.TimeStamp).File;
         }
 
@@ -66,6 +67,7 @@
             {
                 return backup;
             }
+
             return backup.WithTimeStamp(DateTime.Now, setting);
         }
 

@@ -64,6 +64,7 @@
                 {
                     throw new InvalidOperationException("Sequence was empty");
                 }
+
                 TSource min = sourceIterator.Current;
                 TKey minKey = selector(min);
                 while (sourceIterator.MoveNext())
@@ -76,6 +77,7 @@
                         minKey = candidateProjected;
                     }
                 }
+
                 return min;
             }
         }
@@ -130,6 +132,7 @@
                 {
                     throw new InvalidOperationException("Sequence was empty");
                 }
+
                 TSource max = sourceIterator.Current;
                 TKey maxKey = selector(max);
                 while (sourceIterator.MoveNext())
@@ -142,6 +145,7 @@
                         maxKey = candidateProjected;
                     }
                 }
+
                 return max;
             }
         }

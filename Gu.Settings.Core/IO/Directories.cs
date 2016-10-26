@@ -25,11 +25,11 @@
         public static DirectoryInfo DesktopDirectory => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
         public static DirectoryInfo TempDirectory => new DirectoryInfo(Path.GetTempPath());
 
-        private static DirectoryInfo _default;
-        public static DirectoryInfo Default => _default ?? (_default = PathAndSpecialFolder.Default.CreateDirectoryInfo());
+        private static DirectoryInfo @default;
+        public static DirectoryInfo Default => @default ?? (@default = PathAndSpecialFolder.Default.CreateDirectoryInfo());
 
-        private static DirectoryInfo _defaultBackup;
-        public static DirectoryInfo DefaultBackup => _defaultBackup ?? (_defaultBackup = PathAndSpecialFolder.DefaultBackup.CreateDirectoryInfo());
+        private static DirectoryInfo defaultBackup;
+        public static DirectoryInfo DefaultBackup => defaultBackup ?? (defaultBackup = PathAndSpecialFolder.DefaultBackup.CreateDirectoryInfo());
 
         internal static DirectoryInfo AppDirectory()
         {

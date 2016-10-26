@@ -18,12 +18,13 @@
         /// <returns></returns>
         public bool Equals(T x, T y)
         {
-            var xBytes = GetBytesInner(x);
-            var yBytes = GetBytesInner(y);
+            var xBytes = this.GetBytesInner(x);
+            var yBytes = this.GetBytesInner(y);
             if (xBytes.Length != yBytes.Length)
             {
                 return false;
             }
+
             // ReSharper disable once LoopCanBeConvertedToQuery, clearer with for imo
             for (int i = 0; i < xBytes.Length; i++)
             {
@@ -32,6 +33,7 @@
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -44,7 +46,7 @@
         public int GetHashCode(T obj)
         {
             Ensure.NotNull(obj, nameof(obj));
-            var bytes = GetBytesInner(obj);
+            var bytes = this.GetBytesInner(obj);
             unchecked
             {
                 int hash = 17;
@@ -53,6 +55,7 @@
                 {
                     hash = hash * 31 + bytes[i];
                 }
+
                 return hash;
             }
         }
@@ -70,7 +73,8 @@
             {
                 return EmptyBytes;
             }
-            return GetBytes(item);
+
+            return this.GetBytes(item);
         }
     }
 }

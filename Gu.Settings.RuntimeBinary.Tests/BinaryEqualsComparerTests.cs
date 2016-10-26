@@ -8,13 +8,13 @@
 
     public class BinaryEqualsComparerTests
     {
-        private TypicalSetting _setting1;
-        private TypicalSetting _setting2;
+        private TypicalSetting setting1;
+        private TypicalSetting setting2;
 
         [SetUp]
         public void SetUp()
         {
-            _setting1 = new TypicalSetting
+            this.setting1 = new TypicalSetting
                             {
                                 Name = "Johan Larsson",
                                 Dummies = Enumerable.Range(0, 1)
@@ -27,7 +27,7 @@
                                 Value5 = 5
                             };
 
-            _setting2 = new TypicalSetting
+            this.setting2 = new TypicalSetting
                             {
                                 Name = "Johan Larsson",
                                 Dummies = Enumerable.Range(0, 1)
@@ -45,19 +45,19 @@
         public void WhenEqual()
         {
             var comparer = BinaryEqualsComparer<TypicalSetting>.Default;
-            Assert.IsTrue(comparer.Equals(_setting1, _setting2));
-            Assert.AreEqual(comparer.GetHashCode(_setting1), comparer.GetHashCode(_setting2));
+            Assert.IsTrue(comparer.Equals(this.setting1, this.setting2));
+            Assert.AreEqual(comparer.GetHashCode(this.setting1), comparer.GetHashCode(this.setting2));
         }
 
         [Test]
         public void WhenNotEqual()
         {
             var comparer = BinaryEqualsComparer<TypicalSetting>.Default;
-            _setting2.Value1++;
-            Assert.AreNotEqual(_setting1.Value1, _setting2.Value1);
-            Assert.IsFalse(comparer.Equals(_setting1, _setting2));
+            this.setting2.Value1++;
+            Assert.AreNotEqual(this.setting1.Value1, this.setting2.Value1);
+            Assert.IsFalse(comparer.Equals(this.setting1, this.setting2));
 
-            Assert.AreNotEqual(comparer.GetHashCode(_setting1), comparer.GetHashCode(_setting2));
+            Assert.AreNotEqual(comparer.GetHashCode(this.setting1), comparer.GetHashCode(this.setting2));
         }
     }
 }

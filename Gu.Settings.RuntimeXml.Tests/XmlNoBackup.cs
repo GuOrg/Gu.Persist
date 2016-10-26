@@ -13,12 +13,12 @@ namespace Gu.Settings.RuntimeXml.Tests
         [Test]
         public void BackuperIsNone()
         {
-            Assert.AreSame(NullBackuper.Default, Repository.Backuper);
+            Assert.AreSame(NullBackuper.Default, this.Repository.Backuper);
         }
 
         protected override IRepository Create()
         {
-            var settings = new RuntimeXmlRepositorySettings(Directory, null);
+            var settings = new RuntimeXmlRepositorySettings(this.Directory, null);
             return new XmlRepository(settings);
         }
 

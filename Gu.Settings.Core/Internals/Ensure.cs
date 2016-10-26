@@ -27,6 +27,7 @@
                 {
                     throw new ArgumentNullException(parameterName);
                 }
+
                 throw new ArgumentNullException(parameterName, message);
             }
         }
@@ -39,6 +40,7 @@
                 {
                     throw new ArgumentNullException(paramName);
                 }
+
                 throw new ArgumentNullException(paramName, message);
             }
         }
@@ -85,6 +87,7 @@
                 {
                     throw new ArgumentException(string.Format("Expected extension: {0}, was: {1}", extension, file.Extension), parameterName);
                 }
+
                 throw new ArgumentNullException(parameterName, message);
             }
         }
@@ -99,6 +102,7 @@
                 {
                     throw new ArgumentException(string.Format("Expected extension to not be {0}", extension), parameterName);
                 }
+
                 throw new ArgumentNullException(parameterName, message);
             }
         }
@@ -114,6 +118,7 @@
                 {
                     throw new ArgumentException(string.Format("Expected not be any of {{{0}}}, was: {1}", string.Join(", ", extensions), file.Extension), parameterName);
                 }
+
                 throw new ArgumentNullException(parameterName, message);
             }
         }
@@ -128,6 +133,7 @@
                 {
                     throw new InvalidOperationException(string.Format("Expected file {0} to exist", file.FullName));
                 }
+
                 throw new InvalidOperationException(message);
             }
         }
@@ -142,6 +148,7 @@
                 {
                     throw new InvalidOperationException(string.Format("Expected file {0} to not exist", file.FullName));
                 }
+
                 throw new InvalidOperationException(message);
             }
         }

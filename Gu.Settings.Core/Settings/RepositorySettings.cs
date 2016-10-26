@@ -7,10 +7,10 @@
     public class RepositorySettings : FileSettings, IRepositorySettings
     {
         protected static readonly string DefaultBackupDirectoryName = "Backup";
-        private BackupSettings _backupSettings;
-        private string _tempExtension;
-        private bool _isTrackingDirty;
-        private bool _isCaching;
+        private BackupSettings backupSettings;
+        private string tempExtension;
+        private bool isTrackingDirty;
+        private bool isCaching;
 
         protected RepositorySettings() // needed for XmlSerializer
         {
@@ -56,22 +56,24 @@
             Ensure.NotNullOrEmpty(tempExtension, nameof(tempExtension));
             Ensure.NotNull(directory, nameof(directory));
 
-            _isTrackingDirty = isTrackingDirty;
-            _isCaching = isCaching;
-            _backupSettings = backupSettings;
-            _tempExtension = FileHelper.PrependDotIfMissing(tempExtension);
+            this.isTrackingDirty = isTrackingDirty;
+            this.isCaching = isCaching;
+            this.backupSettings = backupSettings;
+            this.tempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
+
         public BackupSettings BackupSettings
         {
-            get { return _backupSettings; }
+            get { return this.backupSettings; }
             set
             {
-                if (Equals(value, _backupSettings))
+                if (Equals(value, this.backupSettings))
                 {
                     return;
                 }
-                _backupSettings = value;
-                OnPropertyChanged();
+
+                this.backupSettings = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -81,15 +83,16 @@
         /// </summary>
         public string TempExtension
         {
-            get { return _tempExtension; }
+            get { return this.tempExtension; }
             set
             {
-                if (value == _tempExtension)
+                if (value == this.tempExtension)
                 {
                     return;
                 }
-                _tempExtension = value;
-                OnPropertyChanged();
+
+                this.tempExtension = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -98,15 +101,16 @@
         /// </summary>
         public bool IsTrackingDirty
         {
-            get { return _isTrackingDirty; }
+            get { return this.isTrackingDirty; }
             set
             {
-                if (value == _isTrackingDirty)
+                if (value == this.isTrackingDirty)
                 {
                     return;
                 }
-                _isTrackingDirty = value;
-                OnPropertyChanged();
+
+                this.isTrackingDirty = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -115,15 +119,16 @@
         /// </summary>
         public bool IsCaching
         {
-            get { return _isCaching; }
+            get { return this.isCaching; }
             set
             {
-                if (value == _isCaching)
+                if (value == this.isCaching)
                 {
                     return;
                 }
-                _isCaching = value;
-                OnPropertyChanged();
+
+                this.isCaching = value;
+                this.OnPropertyChanged();
             }
         }
 

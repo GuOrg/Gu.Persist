@@ -17,10 +17,10 @@
 
         private RepositoryVm()
         {
-            Repository = CreateJsonRepositoryWithGitBackuper();
-            ManualSaveSetting = Repository.ReadOrCreate(() => (ManualSaveSetting)Activator.CreateInstance(typeof(ManualSaveSetting), true));
-            AutoSaveSetting = Repository.ReadOrCreate(() => (AutoSaveSetting)Activator.CreateInstance(typeof(AutoSaveSetting), true));
-            AutoSaveSetting.PropertyChanged += (o, e) => Save((AutoSaveSetting)o);
+            this.Repository = CreateJsonRepositoryWithGitBackuper();
+            this.ManualSaveSetting = this.Repository.ReadOrCreate(() => (ManualSaveSetting)Activator.CreateInstance(typeof(ManualSaveSetting), true));
+            this.AutoSaveSetting = this.Repository.ReadOrCreate(() => (AutoSaveSetting)Activator.CreateInstance(typeof(AutoSaveSetting), true));
+            this.AutoSaveSetting.PropertyChanged += (o, e) => this.Save((AutoSaveSetting)o);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -36,13 +36,13 @@
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         internal void Save<T>(T item)
         {
-            Repository?.Save(item);
-            Log.Add($"Saved: {typeof(T).Name}");
+            this.Repository?.Save(item);
+            this.Log.Add($"Saved: {typeof(T).Name}");
         }
 
         private static JsonRepository CreateJsonRepository()

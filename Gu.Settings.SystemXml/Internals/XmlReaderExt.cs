@@ -22,11 +22,13 @@ namespace Gu.Settings.SystemXml
             {
                 return null;
             }
+
             if (reader.IsEmptyElement)
             {
                 reader.ReadStartElement();
                 return null;
             }
+
             reader.ReadStartElement(elementName);
             var directory = reader.ReadElementPathAndSpecialFolder(nameof(BackupSettings.DirectoryPath));
             var extension = reader.ReadElementString(nameof(BackupSettings.Extension));
@@ -60,6 +62,7 @@ namespace Gu.Settings.SystemXml
             {
                 return null;
             }
+
             var e = (T)Enum.Parse(typeof(T), value);
             return e;
         }

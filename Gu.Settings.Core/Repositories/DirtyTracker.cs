@@ -9,23 +9,23 @@
 
     public sealed class DirtyTracker : IDirtyTracker
     {
-        private readonly ICloner _cloner;
-        private readonly ConcurrentDictionary<string, object> _clones = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        private readonly object _gate = new object();
+        private readonly ICloner cloner;
+        private readonly ConcurrentDictionary<string, object> clones = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        private readonly object gate = new object();
 
         public DirtyTracker(ICloner cloner)
         {
             Ensure.NotNull(cloner, nameof(cloner));
-            _cloner = cloner;
+            this.cloner = cloner;
         }
 
         public void Track<T>(string fullFileName, T item)
         {
             Ensure.NotNull(fullFileName, nameof(fullFileName));
-            var clone = _cloner.Clone(item);
-            lock (_gate)
+            var clone = this.cloner.Clone(item);
+            lock (this.gate)
             {
-                _clones.AddOrUpdate(fullFileName, clone, (f, o) => clone);
+                this.clones.AddOrUpdate(fullFileName, clone, (f, o) => clone);
             }
         }
 
@@ -33,27 +33,27 @@
         {
             Ensure.NotNull(oldName, nameof(oldName));
             Ensure.NotNull(newName, nameof(newName));
-            lock (_gate)
+            lock (this.gate)
             {
-                _clones.ChangeKey(oldName, newName, owerWrite);
+                this.clones.ChangeKey(oldName, newName, owerWrite);
             }
         }
 
         public void ClearCache()
         {
-            lock (_gate)
+            lock (this.gate)
             {
-                _clones.Clear();
+                this.clones.Clear();
             }
         }
 
         public void RemoveFromCache(string fullFileName)
         {
             Ensure.NotNull(fullFileName, nameof(fullFileName));
-            lock (_gate)
+            lock (this.gate)
             {
                 object temp;
-                _clones.TryRemove(fullFileName, out temp);
+                this.clones.TryRemove(fullFileName, out temp);
             }
         }
 
@@ -70,10 +70,11 @@
             Ensure.NotNull(fullFileName, nameof(fullFileName));
             Ensure.NotNull(comparer, nameof(comparer));
             object clone;
-            lock (_gate)
+            lock (this.gate)
             {
-                _clones.TryGetValue(fullFileName, out clone);
+                this.clones.TryGetValue(fullFileName, out clone);
             }
+
             return !comparer.Equals((T)clone, item);
         }
     }

@@ -14,9 +14,9 @@
         public static readonly IReadOnlyList<StringComparison> AllComparisons =
             Enum.GetValues(typeof (StringComparison)).Cast<StringComparison>().ToArray();
 
-        private int _value1;
-        private int _value2;
-        private StringComparison _comparison;
+        private int value1;
+        private int value2;
+        private StringComparison comparison;
 
         private AutoSaveSetting()
         {
@@ -27,41 +27,41 @@
 
         public int Value1
         {
-            get { return _value1; }
+            get { return this.value1; }
             set
             {
-                if (value == _value1) return;
-                _value1 = value;
-                OnPropertyChanged();
+                if (value == this.value1) return;
+                this.value1 = value;
+                this.OnPropertyChanged();
             }
         }
 
         public int Value2
         {
-            get { return _value2; }
+            get { return this.value2; }
             set
             {
-                if (value == _value2) return;
-                _value2 = value;
-                OnPropertyChanged();
+                if (value == this.value2) return;
+                this.value2 = value;
+                this.OnPropertyChanged();
             }
         }
 
         public StringComparison Comparison
         {
-            get { return _comparison; }
+            get { return this.comparison; }
             set
             {
-                if (value == _comparison) return;
-                _comparison = value;
-                OnPropertyChanged();
+                if (value == this.comparison) return;
+                this.comparison = value;
+                this.OnPropertyChanged();
             }
         }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

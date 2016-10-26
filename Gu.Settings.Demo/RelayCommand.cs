@@ -6,8 +6,8 @@ namespace Gu.Settings.Demo.RemoveItemBox
 
     public class RelayCommand : ICommand
     {
-        private readonly Action<object> _execute;
-        private readonly Predicate<object> _canExecute;
+        private readonly Action<object> execute;
+        private readonly Predicate<object> canExecute;
 
         public RelayCommand(Action<object> execute)
             : this(execute, null)
@@ -18,8 +18,8 @@ namespace Gu.Settings.Demo.RemoveItemBox
         {
             Ensure.NotNull(execute, nameof(execute));
 
-            _execute = execute;
-            _canExecute = canExecute ?? (_ => true);
+            this.execute = execute;
+            this.canExecute = canExecute ?? (_ => true);
         }
 
         public event EventHandler CanExecuteChanged
@@ -30,12 +30,12 @@ namespace Gu.Settings.Demo.RemoveItemBox
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute(parameter);
+            return this.canExecute(parameter);
         }
 
         public virtual void Execute(object parameter)
         {
-            _execute(parameter);
+            this.execute(parameter);
         }
     }
 }

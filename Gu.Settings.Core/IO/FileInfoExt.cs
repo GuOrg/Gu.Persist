@@ -24,6 +24,7 @@
             {
                 return false;
             }
+
             var withNewName = file.WithNewName(newName, settings);
             return !withNewName.Exists;
         }
@@ -49,6 +50,7 @@
             {
                 return file;
             }
+
             return directory.CreateFileInfoInDirectory(file.Name);
         }
 
@@ -80,6 +82,7 @@
             {
                 throw new ArgumentException("Fail", "extension");
             }
+
             string fileName = file.FullName.Substring(0, (file.FullName.Length - extension.Length));
             return new FileInfo(fileName);
         }
@@ -97,8 +100,10 @@
                 {
                     newName = newName.Substring(0, (newName.Length - FileHelper.SoftDeleteExtension.Length));
                 }
+
                 file = file.WithRemovedExtension(FileHelper.SoftDeleteExtension);
             }
+
             if (Path.HasExtension(newName))
             {
                 newFile = file.Directory.CreateFileInfoInDirectory(newName);
@@ -107,16 +112,19 @@
             {
                 newFile = file.Directory.CreateFileInfoInDirectory(String.Concat(newName, file.Extension));
             }
+
             var backupSettings = setting as IBackupSettings;
             if (backupSettings != null)
             {
                 var timeStamp = file.GetTimeStamp(backupSettings);
                 newFile = newFile.WithTimeStamp(timeStamp, backupSettings);
             }
+
             if (isSoftDeleteFile && !newFile.GetIsSoftDeleteFile())
             {
                 newFile = newFile.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             }
+
             return newFile;
         }
 
@@ -133,6 +141,7 @@
             {
                 return file.CreationTime;
             }
+
             var pattern = setting.TimeStampPattern();
             var timeAsString = Regex.Match(file.FullName, pattern, RegexOptions.RightToLeft | RegexOptions.Singleline)
                                     .Groups["timestamp"]
@@ -141,6 +150,7 @@
             {
                 return file.CreationTime;
             }
+
             var timeStamp = DateTime.ParseExact(timeAsString, setting.TimeStampFormat, CultureInfo.InvariantCulture);
             return timeStamp;
         }
@@ -154,6 +164,7 @@
             {
                 return file;
             }
+
             var timestamp = string.Format(".{0}{1}", time.ToString(setting.TimeStampFormat, CultureInfo.InvariantCulture), file.Extension);
             var timestamped = file.WithNewExtension(timestamp);
             return timestamped;
@@ -167,6 +178,7 @@
             {
                 return file;
             }
+
             var pattern = setting.TimeStampPattern();
             var stripped = Regex.Replace(file.FullName, pattern, "", RegexOptions.RightToLeft | RegexOptions.Singleline);
             return new FileInfo(stripped);
@@ -178,6 +190,7 @@
             {
                 return "";
             }
+
             var format = setting.TimeStampFormat;
             var pattern = TimeStampPatternMap.GetOrAdd(format, CreateTimeStampPattern);
             return pattern;

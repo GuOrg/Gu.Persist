@@ -59,13 +59,13 @@
         /// <inheritdoc/>
         protected override T FromStream<T>(Stream stream)
         {
-            return JsonHelper.FromStream<T>(stream, Settings.JsonSerializerSettings);
+            return JsonHelper.FromStream<T>(stream, this.Settings.JsonSerializerSettings);
         }
 
         /// <inheritdoc/>
         protected override Stream ToStream<T>(T item)
         {
-            return JsonHelper.ToStream(item, Settings.JsonSerializerSettings);
+            return JsonHelper.ToStream(item, this.Settings.JsonSerializerSettings);
         }
 
         /// <inheritdoc/>

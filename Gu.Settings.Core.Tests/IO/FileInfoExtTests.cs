@@ -12,24 +12,24 @@
 
     public class FileInfoExtTests
     {
-        private BackupSettings _setting;
-        private FileInfo _file;
-        private readonly DirectoryInfo _directoryInfo = new DirectoryInfo(@"C:\Temp");
-        private FileInfo _backupFile;
+        private BackupSettings setting;
+        private FileInfo file;
+        private readonly DirectoryInfo directoryInfo = new DirectoryInfo(@"C:\Temp");
+        private FileInfo backupFile;
 
         [SetUp]
         public void SetUp()
         {
-            _setting = new BackupSettings(
-                _directoryInfo,
+            this.setting = new BackupSettings(
+                this.directoryInfo,
                 true,
                 BackupSettings.DefaultExtension,
                 BackupSettings.DefaultTimeStampFormat,
                 false,
                 3,
                 3);
-            _file = _directoryInfo.CreateFileInfoInDirectory("Meh.cfg");
-            _backupFile = _file.WithNewExtension(_setting.Extension);
+            this.file = this.directoryInfo.CreateFileInfoInDirectory("Meh.cfg");
+            this.backupFile = this.file.WithNewExtension(this.setting.Extension);
         }
 
         [TestCase("New", true)]
@@ -42,7 +42,7 @@
         [TestCase(".bak", @"C:\Temp\Meh.bak")]
         public void ChangeExtension(string extension, string expected)
         {
-            var newFile = _file.WithNewExtension(extension);
+            var newFile = this.file.WithNewExtension(extension);
             Assert.AreEqual(expected, newFile.FullName);
         }
 
@@ -50,7 +50,7 @@
         [TestCase(".delete", @"C:\Temp\Meh.cfg.delete")]
         public void AppendExtension(string extension, string expected)
         {
-            var newFile = _file.WithAppendedExtension(extension);
+            var newFile = this.file.WithAppendedExtension(extension);
             Assert.AreEqual(expected, newFile.FullName);
         }
 
@@ -61,12 +61,12 @@
         {
             if (expected != null)
             {
-                var newFile = _file.WithRemovedExtension(extension);
+                var newFile = this.file.WithRemovedExtension(extension);
                 Assert.AreEqual(expected, newFile.FullName);
             }
             else
             {
-                Assert.Throws<ArgumentException>(() => _file.WithRemovedExtension(extension));
+                Assert.Throws<ArgumentException>(() => this.file.WithRemovedExtension(extension));
             }
         }
 
@@ -116,7 +116,7 @@
         public void AddTimeStamp()
         {
             var time = new DateTime(2015, 06, 14, 16, 54, 12);
-            var timestamped = _file.WithTimeStamp(time, _setting);
+            var timestamped = this.file.WithTimeStamp(time, this.setting);
             Assert.AreEqual(@"C:\Temp\Meh.2015_06_14_16_54_12.cfg", timestamped.FullName);
         }
 
@@ -124,7 +124,7 @@
         public void GetTimeStamp()
         {
             var timestamped = new FileInfo(@"C:\Temp\Meh.2015_06_14_16_54_12.bak");
-            var actual = timestamped.GetTimeStamp(_setting);
+            var actual = timestamped.GetTimeStamp(this.setting);
             var expected = new DateTime(2015, 06, 14, 16, 54, 12);
             Assert.AreEqual(expected, actual);
         }
@@ -133,31 +133,31 @@
         public void TimeStampRoundtrip()
         {
             var time = new DateTime(2015, 06, 14, 16, 54, 12);
-            var timestamped = _backupFile.WithTimeStamp(time, _setting);
-            var actual = timestamped.GetTimeStamp(_setting);
+            var timestamped = this.backupFile.WithTimeStamp(time, this.setting);
+            var actual = timestamped.GetTimeStamp(this.setting);
             Assert.AreEqual(time, actual);
 
-            var removeTimeStamp = timestamped.WithRemovedTimeStamp(_setting);
-            Assert.AreEqual(_backupFile.FullName, removeTimeStamp.FullName);
+            var removeTimeStamp = timestamped.WithRemovedTimeStamp(this.setting);
+            Assert.AreEqual(this.backupFile.FullName, removeTimeStamp.FullName);
         }
 
         [Test]
         public void TimeStampRoundtrip2()
         {
             var time = new DateTime(2015, 06, 14, 16, 54, 12);
-            var timestamped = _file.WithTimeStamp(time, _setting);
-            var actual = timestamped.GetTimeStamp(_setting);
+            var timestamped = this.file.WithTimeStamp(time, this.setting);
+            var actual = timestamped.GetTimeStamp(this.setting);
             Assert.AreEqual(time, actual);
 
-            var removeTimeStamp = timestamped.WithRemovedTimeStamp(_setting);
-            Assert.AreEqual(_file.FullName, removeTimeStamp.FullName);
+            var removeTimeStamp = timestamped.WithRemovedTimeStamp(this.setting);
+            Assert.AreEqual(this.file.FullName, removeTimeStamp.FullName);
         }
 
         [Test]
         public void RemoveTimeStamp()
         {
-            var fileInfo = _file.WithRemovedTimeStamp(_setting);
-            Assert.AreEqual(_file.FullName, fileInfo.FullName);
+            var fileInfo = this.file.WithRemovedTimeStamp(this.setting);
+            Assert.AreEqual(this.file.FullName, fileInfo.FullName);
         }
 
         [Test]

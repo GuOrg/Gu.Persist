@@ -14,8 +14,8 @@
         [Test]
         public void RoundtripRepositorySettingsWithRepo()
         {
-            var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Settings\" + GetType().Name + @"\Backup"));
-            var directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + GetType().Name);
+            var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Settings\" + this.GetType().Name + @"\Backup"));
+            var directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + this.GetType().Name);
             var settings = new XmlRepositorySettings(directory, true, true, backupSettings, ".cfg", ".tmp");
             var repository = new XmlRepository(settings);
             repository.Save(settings);
@@ -25,8 +25,8 @@
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Settings\" + GetType().Name + @"\Backup"));
-            var directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + GetType().Name);
+            var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Settings\" + this.GetType().Name + @"\Backup"));
+            var directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + this.GetType().Name);
             var settings = new XmlRepositorySettings(directory, true, true, backupSettings, ".cfg", ".tmp");
             var sb = new StringBuilder();
             var serializer = new XmlSerializer(settings.GetType());
@@ -34,6 +34,7 @@
             {
                 serializer.Serialize(writer, settings);
             }
+
             var xml = sb.ToString();
             
             Console.Write(xml);
@@ -43,6 +44,7 @@
             {
                 roundtripped = (XmlRepositorySettings)serializer.Deserialize(reader);
             }
+
             AssertProperties(settings, roundtripped);
         }
 
@@ -52,10 +54,12 @@
             {
                 return;
             }
+
             if (expected == null || actual == null)
             {
                 throw new AssertionException("Assert failed");
             }
+
             foreach (var propertyInfo in expected.GetType().GetProperties())
             {
                 var expectedValue = propertyInfo.GetValue(expected);

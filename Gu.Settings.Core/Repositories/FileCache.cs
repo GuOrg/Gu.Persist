@@ -8,20 +8,21 @@
 
     public sealed class FileCache
     {
-        private readonly ConcurrentDictionary<string, object> _cache = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        private readonly object _gate = new object();
+        private readonly ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        private readonly object gate = new object();
 
         public bool TryGetValue<T>(string fullFileName, out T cached)
         {
-            lock (_gate)
+            lock (this.gate)
             {
                 object value;
-                if (_cache.TryGetValue(fullFileName, out value))
+                if (this.cache.TryGetValue(fullFileName, out value))
                 {
                     cached = (T)value;
                     return true;
                 }
             }
+
             cached = default(T);
             return false;
         }
@@ -34,9 +35,9 @@
                 return;
             }
 
-            lock (_gate)
+            lock (this.gate)
             {
-                _cache.AddOrUpdate(fullName, value, (_, __) => value);
+                this.cache.AddOrUpdate(fullName, value, (_, __) => value);
             }
         }
 
@@ -44,40 +45,40 @@
         {
             Ensure.NotNullOrEmpty(fullName, nameof(fullName));
 
-            lock (_gate)
+            lock (this.gate)
             {
                 object temp;
-                return _cache.TryGetValue(fullName, out temp);
+                return this.cache.TryGetValue(fullName, out temp);
             }
         }
 
         public void ChangeKey(string @from, string to, bool owerWrite)
         {
-            lock (_gate)
+            lock (this.gate)
             {
-                _cache.ChangeKey(@from, to, owerWrite);
+                this.cache.ChangeKey(@from, to, owerWrite);
             }
         }
 
         public void Clear()
         {
-            lock (_gate)
+            lock (this.gate)
             {
-                _cache.Clear();
+                this.cache.Clear();
             }
         }
 
         public void TryRemove<T>(T item)
         {
-            lock (_gate)
+            lock (this.gate)
             {
-                var matches = _cache.Where(kvp => kvp.Value != null && ReferenceEquals(kvp.Value, item))
+                var matches = this.cache.Where(kvp => kvp.Value != null && ReferenceEquals(kvp.Value, item))
                                     .Select(x => x.Key)
                                     .ToArray();
                 foreach (var key in matches)
                 {
                     object temp;
-                    _cache.TryRemove(key, out temp);
+                    this.cache.TryRemove(key, out temp);
                 }
             }
         }

@@ -14,7 +14,7 @@
         [Test]
         public void SavesSettingsFile()
         {
-            AssertFile.Exists(true, RepoSettingFile);
+            AssertFile.Exists(true, this.RepoSettingFile);
         }
 
         protected override IRepository Create()

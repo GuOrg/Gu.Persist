@@ -9,9 +9,9 @@
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var backupDir = new DirectoryInfo($@"C:\Temp\Gu.Settings\{GetType().Name}\Backup");
+            var backupDir = new DirectoryInfo($@"C:\Temp\Gu.Settings\{this.GetType().Name}\Backup");
             var backupSettings = new BackupSettings(backupDir);
-            var directory = new DirectoryInfo($@"C:\Temp\Gu.Settings\{GetType().Name}");
+            var directory = new DirectoryInfo($@"C:\Temp\Gu.Settings\{this.GetType().Name}");
             var settings = new JsonRepositorySettings(directory,
                                                       JsonRepositorySettings.DefaultJsonSettings,
                                                       true,

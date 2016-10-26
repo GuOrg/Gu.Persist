@@ -12,23 +12,24 @@
     {
         protected override IRepository Create()
         {
-            var settings = JsonRepositorySettings.DefaultFor(Directory);
+            var settings = JsonRepositorySettings.DefaultFor(this.Directory);
             return new JsonRepository(settings);
         }
 
         [Test]
         public void SaveAndCheckJson()
         {
-            var fileInfo = Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
             var value = new DummySerializable
             {
                 Value = 1
             };
-            Repository.Save(value, fileInfo);
+            this.Repository.Save(value, fileInfo);
             var json = File.ReadAllText(fileInfo.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
             File.Delete(fileInfo.FullName);
         }
+
         protected override void Save<T>(T item, FileInfo file)
         {
             TestHelper.Save(item, file);

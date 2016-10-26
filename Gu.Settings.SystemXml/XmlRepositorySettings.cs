@@ -41,23 +41,23 @@ namespace Gu.Settings.SystemXml
         public void ReadXml(XmlReader reader)
         {
             reader.ReadStartElement();
-            DirectoryPath = reader.ReadElementPathAndSpecialFolder(nameof(DirectoryPath));
-            Extension = reader.ReadElementString(nameof(Extension));
-            TempExtension = reader.ReadElementString(nameof(TempExtension));
-            IsTrackingDirty = reader.ReadElementBool(nameof(IsTrackingDirty));
-            IsCaching = reader.ReadElementBool(nameof(IsCaching));
-            BackupSettings = reader.ReadElementBackupSettings(nameof(BackupSettings));
+            this.DirectoryPath = reader.ReadElementPathAndSpecialFolder(nameof(this.DirectoryPath));
+            this.Extension = reader.ReadElementString(nameof(this.Extension));
+            this.TempExtension = reader.ReadElementString(nameof(this.TempExtension));
+            this.IsTrackingDirty = reader.ReadElementBool(nameof(this.IsTrackingDirty));
+            this.IsCaching = reader.ReadElementBool(nameof(this.IsCaching));
+            this.BackupSettings = reader.ReadElementBackupSettings(nameof(this.BackupSettings));
             reader.ReadEndElement();
         }
 
         public void WriteXml(XmlWriter writer)
         {
-            writer.WriteElementString(nameof(DirectoryPath), DirectoryPath);
-            writer.WriteElementString(nameof(Extension), Extension);
-            writer.WriteElementString(nameof(TempExtension), TempExtension);
-            writer.WriteElementString(nameof(IsTrackingDirty), IsTrackingDirty);
-            writer.WriteElementString(nameof(IsCaching), IsCaching);
-            writer.WriteElementString(nameof(BackupSettings), BackupSettings);
+            writer.WriteElementString(nameof(this.DirectoryPath), this.DirectoryPath);
+            writer.WriteElementString(nameof(this.Extension), this.Extension);
+            writer.WriteElementString(nameof(this.TempExtension), this.TempExtension);
+            writer.WriteElementString(nameof(this.IsTrackingDirty), this.IsTrackingDirty);
+            writer.WriteElementString(nameof(this.IsCaching), this.IsCaching);
+            writer.WriteElementString(nameof(this.BackupSettings), this.BackupSettings);
         }
     }
 }

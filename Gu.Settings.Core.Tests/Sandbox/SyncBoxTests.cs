@@ -27,6 +27,7 @@
             {
                 slim.Wait();
             }
+
             for (int i = 0; i < n; i++)
             {
                 slim.Release();
@@ -42,6 +43,7 @@
             {
                 Monitor.Enter(@lock);
             }
+
             for (int i = 0; i < n; i++)
             {
                 Monitor.Exit(@lock);

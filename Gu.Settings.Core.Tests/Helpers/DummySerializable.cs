@@ -11,7 +11,7 @@
     [Serializable]
     public class DummySerializable : INotifyPropertyChanged, IEquatable<DummySerializable>
     {
-        private int _value;
+        private int value;
 
         public DummySerializable()
         {
@@ -19,22 +19,23 @@
 
         public DummySerializable(int value)
         {
-            Value = value;
+            this.Value = value;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public int Value
         {
-            get { return _value; }
+            get { return this.value; }
             set
             {
-                if (value == _value)
+                if (value == this.value)
                 {
                     return;
                 }
-                _value = value;
-                OnPropertyChanged();
+
+                this.value = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -44,11 +45,13 @@
             {
                 return false;
             }
+
             if (ReferenceEquals(this, other))
             {
                 return true;
             }
-            return _value == other._value;
+
+            return this.value == other.value;
         }
 
         public override bool Equals(object obj)
@@ -57,20 +60,23 @@
             {
                 return false;
             }
+
             if (ReferenceEquals(this, obj))
             {
                 return true;
             }
+
             if (obj.GetType() != this.GetType())
             {
                 return false;
             }
-            return Equals((DummySerializable)obj);
+
+            return this.Equals((DummySerializable)obj);
         }
 
         public override int GetHashCode()
         {
-            return _value;
+            return this.value;
         }
 
         public static bool operator ==(DummySerializable left, DummySerializable right)
@@ -86,7 +92,7 @@
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var handler = PropertyChanged;
+            var handler = this.PropertyChanged;
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));

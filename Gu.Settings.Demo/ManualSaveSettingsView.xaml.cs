@@ -9,7 +9,7 @@ namespace Gu.Settings.Demo
     {
         public ManualSaveSettingsView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

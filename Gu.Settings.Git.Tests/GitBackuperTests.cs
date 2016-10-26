@@ -11,40 +11,41 @@
 
     public class GitBackuperTests
     {
-        private DummySerializable _dummy;
-        private JsonRepository _repository;
-        private readonly DirectoryInfo _directory;
+        private DummySerializable dummy;
+        private JsonRepository repository;
+        private readonly DirectoryInfo directory;
 
         public GitBackuperTests()
         {
-            _directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + GetType().Name);
+            this.directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + this.GetType().Name);
         }
 
         [SetUp]
         public void SetUp()
         {
-            if (_directory.Exists)
+            if (this.directory.Exists)
             {
-                DeleteRepositoryDirectory(_directory.FullName);
+                DeleteRepositoryDirectory(this.directory.FullName);
             }
-            _directory.Create();
-            var settings = new JsonRepositorySettings(_directory, null);
+
+            this.directory.Create();
+            var settings = new JsonRepositorySettings(this.directory, null);
             var gitBackuper = new GitBackuper(settings.DirectoryPath);
-            _repository = new JsonRepository(settings, gitBackuper);
-            _dummy = new DummySerializable(1);
+            this.repository = new JsonRepository(settings, gitBackuper);
+            this.dummy = new DummySerializable(1);
         }
 
         [Test]
         public void SaveCommits()
         {
-            using (var repository = new LibGit2Sharp.Repository(_directory.FullName))
+            using (var repository = new LibGit2Sharp.Repository(this.directory.FullName))
             {
                 Assert.AreEqual(0, repository.Commits.Count());
             }
 
-            _repository.Save(_dummy);
+            this.repository.Save(this.dummy);
 
-            using (var repository = new LibGit2Sharp.Repository(_directory.FullName))
+            using (var repository = new LibGit2Sharp.Repository(this.directory.FullName))
             {
                 Assert.AreEqual(1, repository.Commits.Count());
             }
@@ -53,14 +54,15 @@
         [Test]
         public void ReadOrCreate()
         {
-            using (var repository = new LibGit2Sharp.Repository(_directory.FullName))
+            using (var repository = new LibGit2Sharp.Repository(this.directory.FullName))
             {
                 Assert.AreEqual(0, repository.Commits.Count());
             }
-            var fileInfo = _directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
-            var readOrCreate = _repository.ReadOrCreate(fileInfo, () => _dummy);
-            Assert.AreSame(readOrCreate, _dummy);
-            using (var repository = new LibGit2Sharp.Repository(_directory.FullName))
+
+            var fileInfo = this.directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
+            var readOrCreate = this.repository.ReadOrCreate(fileInfo, () => this.dummy);
+            Assert.AreSame(readOrCreate, this.dummy);
+            using (var repository = new LibGit2Sharp.Repository(this.directory.FullName))
             {
                 Assert.AreEqual(1, repository.Commits.Count());
             }
@@ -69,21 +71,21 @@
         [Test]
         public void Restore()
         {
-            var fileInfo = _directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
-            Assert.AreEqual(false, _repository.Backuper.CanRestore(fileInfo));
-            _repository.Save(_dummy, fileInfo);
+            var fileInfo = this.directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
+            Assert.AreEqual(false, this.repository.Backuper.CanRestore(fileInfo));
+            this.repository.Save(this.dummy, fileInfo);
             var json = File.ReadAllText(fileInfo.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
-            Assert.AreEqual(false, _repository.Backuper.CanRestore(fileInfo));
-            _dummy.Value++;
-            Save(_dummy, fileInfo);
+            Assert.AreEqual(false, this.repository.Backuper.CanRestore(fileInfo));
+            this.dummy.Value++;
+            this.Save(this.dummy, fileInfo);
             json = File.ReadAllText(fileInfo.FullName);
             Assert.AreEqual("{\"Value\":2}", json);
-            Assert.AreEqual(true, _repository.Backuper.CanRestore(fileInfo), "CanRestore after save");
-            Assert.AreEqual(true, _repository.Backuper.TryRestore(fileInfo), "TryRestore");
-            Assert.AreEqual(false, _repository.Backuper.CanRestore(fileInfo), "CanRestore after restore");
-            var restored = Read<DummySerializable>(fileInfo);
-            Assert.AreEqual(_dummy.Value - 1, restored.Value);
+            Assert.AreEqual(true, this.repository.Backuper.CanRestore(fileInfo), "CanRestore after save");
+            Assert.AreEqual(true, this.repository.Backuper.TryRestore(fileInfo), "TryRestore");
+            Assert.AreEqual(false, this.repository.Backuper.CanRestore(fileInfo), "CanRestore after restore");
+            var restored = this.Read<DummySerializable>(fileInfo);
+            Assert.AreEqual(this.dummy.Value - 1, restored.Value);
         }
 
         protected void Save<T>(T item, FileInfo file)
@@ -106,6 +108,7 @@
             {
                 DeleteRepositoryDirectory(subdirectory);
             }
+
             foreach (var fileName in Directory.EnumerateFiles(directory))
             {
                 var fileInfo = new FileInfo(fileName)
@@ -114,6 +117,7 @@
                 };
                 fileInfo.Delete();
             }
+
             Directory.Delete(directory);
         }
     }

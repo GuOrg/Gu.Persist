@@ -12,14 +12,14 @@ namespace Gu.Settings.RuntimeBinary.Tests
         [Test]
         public void DefaultSettings()
         {
-            var defaultSettings = BinaryRepositorySettings.DefaultFor(Directory);
+            var defaultSettings = BinaryRepositorySettings.DefaultFor(this.Directory);
             var comparer = new BinaryEqualsComparer<IRepositorySettings>();
-            Assert.IsTrue(comparer.Equals(defaultSettings, Repository.Settings));
+            Assert.IsTrue(comparer.Equals(defaultSettings, this.Repository.Settings));
         }
 
         protected override IRepository Create()
         {
-            var settings = BinaryRepositorySettings.DefaultFor(Directory);
+            var settings = BinaryRepositorySettings.DefaultFor(this.Directory);
             return new BinaryRepository(settings);
         }
 

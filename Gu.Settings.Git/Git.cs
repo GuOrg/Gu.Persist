@@ -25,6 +25,7 @@
                 var init = LibGit2Sharp.Repository.Init(directory.FullName);
                 return;
             }
+
             if (!LibGit2Sharp.Repository.IsValid(directory.FullName)) // <- this throws an annoying first chance exception, ignore & continue works
             {
                 var init = LibGit2Sharp.Repository.Init(directory.FullName);
@@ -56,6 +57,7 @@
             {
                 return false;
             }
+
             using (var repository = new LibGit2Sharp.Repository(file.DirectoryName))
             {
                 repository.Stage(file.FullName, new StageOptions { IncludeIgnored = true });
@@ -80,6 +82,7 @@
                             var commit = repository.Commit(status.ToString(), CommitOptions);
                             return true;
                         }
+
                     case FileStatus.Unreadable:
                     case FileStatus.Ignored:
                         throw new InvalidOperationException($"FileStatus: {status}");

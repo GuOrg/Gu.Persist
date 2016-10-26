@@ -36,6 +36,7 @@
             {
                 return true;
             }
+
             return false;
         }
 
@@ -50,14 +51,16 @@
             {
                 return false;
             }
+
             try
             {
                 var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
                 if (softDelete.Exists)
                 {
-                    Restore(file, softDelete);
+                    this.Restore(file, softDelete);
                     return true;
                 }
+
                 return false;
             }
             catch (Exception)
@@ -71,7 +74,7 @@
             var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             if (softDelete.Exists)
             {
-                Restore(file, softDelete);
+                this.Restore(file, softDelete);
             }
         }
 
@@ -85,6 +88,7 @@
                 string message = $"Trying to restore {backup.FullName} when there is already an original: {file.FullName}";
                 throw new InvalidOperationException(message);
             }
+
             FileHelper.Restore(file, backup);
         }
 

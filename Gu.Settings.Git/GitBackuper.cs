@@ -9,11 +9,11 @@
 
     public class GitBackuper : IBackuper
     {
-        private readonly PathAndSpecialFolder _directory;
+        private readonly PathAndSpecialFolder directory;
 
         public GitBackuper(PathAndSpecialFolder directory)
         {
-            _directory = directory;
+            this.directory = directory;
             var directoryInfo = directory.CreateDirectoryInfo();
             Git.InitRepository(directoryInfo);
         }
@@ -56,11 +56,12 @@
 
         public bool TryRestore(FileInfo file)
         {
-            var canRestore = CanRestore(file);
+            var canRestore = this.CanRestore(file);
             if (canRestore)
             {
                 Git.Revert(file);
             }
+
             return canRestore;
         }
 

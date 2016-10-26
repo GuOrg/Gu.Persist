@@ -9,215 +9,215 @@
     public class FileHelperTests
     {
         private readonly DirectoryInfo Directory;
-        private FileInfo _file;
-        private FileInfo _softDeleteFile;
-        private FileInfo _backup;
-        private FileInfo _backupSoftDelete;
+        private FileInfo file;
+        private FileInfo softDeleteFile;
+        private FileInfo backup;
+        private FileInfo backupSoftDelete;
 
         public FileHelperTests()
         {
-            Directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + GetType().Name);
-            Directory.CreateIfNotExists();
+            this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + this.GetType().Name);
+            this.Directory.CreateIfNotExists();
 
         }
 
         [SetUp]
         public void SetUp()
         {
-            _file = Directory.CreateFileInfoInDirectory("Setting.cfg");
-            _softDeleteFile = _file.GetSoftDeleteFileFor();
-            _backup = _file.WithNewExtension(BackupSettings.DefaultExtension);
-            _backupSoftDelete = _backup.GetSoftDeleteFileFor();
-            _backup.VoidCreate();
+            this.file = this.Directory.CreateFileInfoInDirectory("Setting.cfg");
+            this.softDeleteFile = this.file.GetSoftDeleteFileFor();
+            this.backup = this.file.WithNewExtension(BackupSettings.DefaultExtension);
+            this.backupSoftDelete = this.backup.GetSoftDeleteFileFor();
+            this.backup.VoidCreate();
         }
 
         [TearDown]
         public void TearDown()
         {
-            _file.Delete();
-            _backup.Delete();
-            _softDeleteFile.Delete();
+            this.file.Delete();
+            this.backup.Delete();
+            this.softDeleteFile.Delete();
         }
 
         [Test]
         public void HardDeleteWhenNoFile()
         {
-            _file.HardDelete();
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(false, _softDeleteFile);
-            AssertFile.Exists(true, _backup);
+            this.file.HardDelete();
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(false, this.softDeleteFile);
+            AssertFile.Exists(true, this.backup);
         }
 
         [Test]
         public void HardDeleteWhenNoSoftFile()
         {
-            _file.VoidCreate();
-            _file.HardDelete();
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(false, _softDeleteFile);
-            AssertFile.Exists(true, _backup);
+            this.file.VoidCreate();
+            this.file.HardDelete();
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(false, this.softDeleteFile);
+            AssertFile.Exists(true, this.backup);
         }
 
         [Test]
         public void HardDeleteWhenHasSoftFile()
         {
-            _file.VoidCreate();
-            _softDeleteFile.VoidCreate();
-            _file.HardDelete();
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(false, _softDeleteFile);
-            AssertFile.Exists(true, _backup);
+            this.file.VoidCreate();
+            this.softDeleteFile.VoidCreate();
+            this.file.HardDelete();
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(false, this.softDeleteFile);
+            AssertFile.Exists(true, this.backup);
         }
 
         [Test]
         public void HardDeleteWhenOnlySoftFile()
         {
-            _softDeleteFile.VoidCreate();
-            _file.HardDelete();
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(false, _softDeleteFile);
-            AssertFile.Exists(true, _backup);
+            this.softDeleteFile.VoidCreate();
+            this.file.HardDelete();
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(false, this.softDeleteFile);
+            AssertFile.Exists(true, this.backup);
         }
 
         [Test]
         public void SoftDeleteWhenNoFile()
         {
-            _file.SoftDelete();
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(false, _softDeleteFile);
-            AssertFile.Exists(true, _backup);
+            this.file.SoftDelete();
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(false, this.softDeleteFile);
+            AssertFile.Exists(true, this.backup);
         }
 
         [Test]
         public void SoftDeleteWhenNoSoftFile()
         {
-            _file.VoidCreate();
-            _file.SoftDelete();
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(true, _softDeleteFile);
-            AssertFile.Exists(true, _backup);
+            this.file.VoidCreate();
+            this.file.SoftDelete();
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(true, this.softDeleteFile);
+            AssertFile.Exists(true, this.backup);
         }
 
         [Test]
         public void SoftDeleteWhenHasSoftFile()
         {
-            _file.WriteAllText("File");
-            _softDeleteFile.WriteAllText("Soft");
-            _file.SoftDelete();
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(true, _softDeleteFile);
-            Assert.AreEqual("File", _softDeleteFile.ReadAllText());
-            AssertFile.Exists(true, _backup);
+            this.file.WriteAllText("File");
+            this.softDeleteFile.WriteAllText("Soft");
+            this.file.SoftDelete();
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(true, this.softDeleteFile);
+            Assert.AreEqual("File", this.softDeleteFile.ReadAllText());
+            AssertFile.Exists(true, this.backup);
         }
 
         [Test]
         public void BackupWhenNoFile()
         {
-            _backup.Delete();
-            AssertFile.Exists(false, _file);
-            FileHelper.Backup(_file, _backup);
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(false, _backup);
+            this.backup.Delete();
+            AssertFile.Exists(false, this.file);
+            FileHelper.Backup(this.file, this.backup);
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(false, this.backup);
         }
 
         [Test]
         public void BackupWhenNoFileButHasBackup()
         {
-            _backup.WriteAllText("Backup");
-            AssertFile.Exists(false, _file);
-            FileHelper.Backup(_file, _backup);
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(true, _backup);
-            Assert.AreEqual("Backup", _backup.ReadAllText());
+            this.backup.WriteAllText("Backup");
+            AssertFile.Exists(false, this.file);
+            FileHelper.Backup(this.file, this.backup);
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(true, this.backup);
+            Assert.AreEqual("Backup", this.backup.ReadAllText());
         }
 
         [Test]
         public void BackupWhenNoBackupFile()
         {
-            _file.WriteAllText("File");
-            FileHelper.Backup(_file, _backup);
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(true, _backup);
-            Assert.AreEqual("File", _backup.ReadAllText());
+            this.file.WriteAllText("File");
+            FileHelper.Backup(this.file, this.backup);
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(true, this.backup);
+            Assert.AreEqual("File", this.backup.ReadAllText());
         }
 
         [Test]
         public void BackupWhenHasBackupFile()
         {
-            _file.WriteAllText("File");
-            _backup.WriteAllText("Backup");
-            FileHelper.Backup(_file, _backup);
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(true, _backup);
-            Assert.AreEqual("File", _backup.ReadAllText());
+            this.file.WriteAllText("File");
+            this.backup.WriteAllText("Backup");
+            FileHelper.Backup(this.file, this.backup);
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(true, this.backup);
+            Assert.AreEqual("File", this.backup.ReadAllText());
         }
 
         [Test]
         public void BackupWhenHasBackupFileAndBackupHasSoftDelete()
         {
-            _backupSoftDelete.WriteAllText("OldSoft");
-            _file.WriteAllText("File");
-            _backup.WriteAllText("Backup");
-            FileHelper.Backup(_file, _backup);
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(true, _backup);
-            Assert.AreEqual("File", _backup.ReadAllText());
-            AssertFile.Exists(true, _backupSoftDelete);
-            Assert.AreEqual("Backup", _backupSoftDelete.ReadAllText());
+            this.backupSoftDelete.WriteAllText("OldSoft");
+            this.file.WriteAllText("File");
+            this.backup.WriteAllText("Backup");
+            FileHelper.Backup(this.file, this.backup);
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(true, this.backup);
+            Assert.AreEqual("File", this.backup.ReadAllText());
+            AssertFile.Exists(true, this.backupSoftDelete);
+            Assert.AreEqual("Backup", this.backupSoftDelete.ReadAllText());
         }
 
         [Test]
         public void RestoreWhenNoFile()
         {
-            _backup.Delete();
-            AssertFile.Exists(false, _file);
-            _file.Restore(_backup);
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(false, _backup);
+            this.backup.Delete();
+            AssertFile.Exists(false, this.file);
+            this.file.Restore(this.backup);
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(false, this.backup);
         }
 
         [Test]
         public void RestoreWhenSoftDeleteFile()
         {
-            _softDeleteFile.WriteAllText("Soft");
-            _backup.Delete();
-            AssertFile.Exists(false, _file);
-            _file.Restore(_softDeleteFile);
-            AssertFile.Exists(true, _file);
-            Assert.AreEqual("Soft", _file.ReadAllText());
-            AssertFile.Exists(false, _backup);
-            AssertFile.Exists(false, _softDeleteFile);
+            this.softDeleteFile.WriteAllText("Soft");
+            this.backup.Delete();
+            AssertFile.Exists(false, this.file);
+            this.file.Restore(this.softDeleteFile);
+            AssertFile.Exists(true, this.file);
+            Assert.AreEqual("Soft", this.file.ReadAllText());
+            AssertFile.Exists(false, this.backup);
+            AssertFile.Exists(false, this.softDeleteFile);
         }
 
         [Test]
         public void RestoreWhenNoRestoreFile()
         {
-            _backup.Delete();
-            _file.WriteAllText("File");
-            _file.Restore(_backup);
-            AssertFile.Exists(true, _file);
-            AssertFile.Exists(false, _backup);
-            Assert.AreEqual("File", _file.ReadAllText());
+            this.backup.Delete();
+            this.file.WriteAllText("File");
+            this.file.Restore(this.backup);
+            AssertFile.Exists(true, this.file);
+            AssertFile.Exists(false, this.backup);
+            Assert.AreEqual("File", this.file.ReadAllText());
         }
 
         [Test]
         public void RestoreWhenHasRestoreFile()
         {
-            _file.WriteAllText("File");
-            _backup.WriteAllText("Restore");
-            _file.Restore(_backup);
-            AssertFile.Exists(true, _file);
-            AssertFile.Exists(false, _backup);
-            Assert.AreEqual("Restore", _file.ReadAllText());
+            this.file.WriteAllText("File");
+            this.backup.WriteAllText("Restore");
+            this.file.Restore(this.backup);
+            AssertFile.Exists(true, this.file);
+            AssertFile.Exists(false, this.backup);
+            Assert.AreEqual("Restore", this.file.ReadAllText());
         }
 
         [Test]
         public void SoftDeleteWhenOnlySoftFile()
         {
-            _softDeleteFile.VoidCreate();
-            _file.SoftDelete();
-            AssertFile.Exists(false, _file);
-            AssertFile.Exists(true, _softDeleteFile);
+            this.softDeleteFile.VoidCreate();
+            this.file.SoftDelete();
+            AssertFile.Exists(false, this.file);
+            AssertFile.Exists(true, this.softDeleteFile);
         }
 
         [TestCase(@"C:\Temp", "Setting", "cfg", @"C:\Temp\Setting.cfg")]
@@ -242,7 +242,7 @@
         [Test]
         public void Save()
         {
-            var fileInfo = Directory.CreateFileInfoInDirectory("SaveTest.cfg");
+            var fileInfo = this.Directory.CreateFileInfoInDirectory("SaveTest.cfg");
             var stream = new MemoryStream();
             using (var writer = new StreamWriter(stream))
             {
@@ -271,7 +271,7 @@
         [Test]
         public async Task SaveAsync()
         {
-            var fileInfo = Directory.CreateFileInfoInDirectory("SaveAsyncTest.cfg");
+            var fileInfo = this.Directory.CreateFileInfoInDirectory("SaveAsyncTest.cfg");
             var stream = new MemoryStream();
             using (var writer = new StreamWriter(stream))
             {

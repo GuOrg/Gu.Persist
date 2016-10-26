@@ -47,6 +47,7 @@
             {
                 serializer.Serialize(writer, item);
             }
+
             stream.Flush();
             stream.Position = 0;
             return stream;

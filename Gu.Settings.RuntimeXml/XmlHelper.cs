@@ -26,6 +26,7 @@ namespace Gu.Settings.RuntimeXml
             {
                 serializer.WriteObject(ms, o);
             }
+
             ms.Flush();
             ms.Position = 0;
             return ms;

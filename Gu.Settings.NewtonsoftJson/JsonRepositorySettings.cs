@@ -20,13 +20,13 @@ namespace Gu.Settings.NewtonsoftJson
         public JsonRepositorySettings(DirectoryInfo directory)
             : base(directory)
         {
-            JsonSerializerSettings = DefaultJsonSettings;
+            this.JsonSerializerSettings = DefaultJsonSettings;
         }
 
         public JsonRepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
             : base(directory, backupSettings)
         {
-            JsonSerializerSettings = DefaultJsonSettings;
+            this.JsonSerializerSettings = DefaultJsonSettings;
         }
 
         public JsonRepositorySettings(
@@ -75,7 +75,7 @@ namespace Gu.Settings.NewtonsoftJson
             string tempExtension = ".tmp")
             : base(directoryPath, isTrackingDirty, isCaching, backupSettings, extension, tempExtension)
         {
-            JsonSerializerSettings = jsonSerializerSettings;
+            this.JsonSerializerSettings = jsonSerializerSettings;
         }
 
         public static new JsonRepositorySettings DefaultFor(DirectoryInfo directory)

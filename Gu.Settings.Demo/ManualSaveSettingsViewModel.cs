@@ -7,9 +7,9 @@
     {
         public ManualSaveSettingsViewModel()
         {
-            ManualSaveSetting = RepositoryVm.Instance.ManualSaveSetting;
-            SaveCommand = new RelayCommand(_ => RepositoryVm.Instance.Save(ManualSaveSetting),
-                _ => RepositoryVm.Instance.Repository.IsDirty(ManualSaveSetting));
+            this.ManualSaveSetting = RepositoryVm.Instance.ManualSaveSetting;
+            this.SaveCommand = new RelayCommand(_ => RepositoryVm.Instance.Save(this.ManualSaveSetting),
+                _ => RepositoryVm.Instance.Repository.IsDirty(this.ManualSaveSetting));
         }
 
         public ManualSaveSetting ManualSaveSetting { get; }
