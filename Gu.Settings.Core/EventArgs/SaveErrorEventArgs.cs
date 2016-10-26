@@ -3,6 +3,7 @@ namespace Gu.Settings.Core
     using System;
     using System.IO;
 
+    /// <inheritdoc/>
     public class SaveErrorEventArgs : SaveEventArgs
     {
         public SaveErrorEventArgs(object item, FileInfo file, Exception e)

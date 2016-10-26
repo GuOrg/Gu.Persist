@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>Gu.Settings.Core.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Gu.Settings.Core1.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,7 +29,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>Gu.Settings.Core.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Gu.Settings.Core1.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Release\Gu.Settings.Core.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -79,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Gu.Settings.Core.ruleset" />
+    <None Include="Gu.Settings.Core1.ruleset" />
     <None Include="paket.references" />
     <None Include="paket.template" />
   </ItemGroup>

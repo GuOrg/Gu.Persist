@@ -3,6 +3,7 @@ namespace Gu.Settings.Core
     using System;
     using System.IO;
 
+    /// <inheritdoc/>
     public class SaveEventArgs : EventArgs
     {
         public SaveEventArgs(object item, FileInfo file)
