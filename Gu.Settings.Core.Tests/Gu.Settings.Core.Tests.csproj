@@ -61,6 +61,7 @@
     <Compile Include="IO\DirectoriesTests.cs" />
     <Compile Include="IO\DirectoryInfoExtTests.cs" />
     <Compile Include="IO\FileInfoExtTests.cs" />
+    <Compile Include="Repositories\RestoreExceptionTest.cs" />
     <Compile Include="Settings\PathAndSpecialFolderTests.cs" />
     <Compile Include="Repositories\FileCacheTests.cs" />
     <Compile Include="IO\RepositorySettingTests.cs" />
