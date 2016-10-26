@@ -1,5 +1,6 @@
 ﻿namespace Gu.Settings.Core
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -39,7 +40,11 @@
         /// </summary>
         public override int GetHashCode(T obj)
         {
-            Ensure.NotNull(obj, nameof(obj));
+            if (obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+
             var bytes = this.GetBytesInner(obj);
             unchecked
             {

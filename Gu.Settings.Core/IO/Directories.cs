@@ -1,4 +1,5 @@
-﻿namespace Gu.Settings.Core
+﻿// ReSharper disable UnusedMember.Global
+namespace Gu.Settings.Core
 {
     using System;
     using System.IO;

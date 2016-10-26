@@ -100,21 +100,11 @@
                 this.Times = times;
             }
 
-            public string ComparerName
-            {
-                get
-                {
-                    return string.Format(
-                        "{0}<{1}>",
-                        this.Comparer.GetType()
-                                .Name.Replace("`1", ""),
-                        typeof(TypicalSetting).Name);
-                }
-            }
+            public string ComparerName => $"{this.Comparer.GetType().Name.Replace("`1", string.Empty)}<{typeof(TypicalSetting).Name}>";
 
             public override string ToString()
             {
-                return string.Format("{0} {1} times", this.ComparerName, this.Times);
+                return $"{this.ComparerName} {this.Times} times";
             }
         }
     }

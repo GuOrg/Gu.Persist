@@ -328,14 +328,14 @@
                 T cached;
                 if (this.fileCache.TryGetValue(file.FullName, out cached))
                 {
-                    return (T)cached;
+                    return cached;
                 }
 
                 lock (this.gate)
                 {
                     if (this.fileCache.TryGetValue(file.FullName, out cached))
                     {
-                        return (T)cached;
+                        return cached;
                     }
 
                     value = FileHelper.Read<T>(file, this.FromStream<T>);
@@ -794,13 +794,21 @@
         /// <inheritdoc/>
         public virtual T Clone<T>(T item)
         {
-            Ensure.NotNull(item, nameof(item));
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             return this.CloneCore(item);
         }
 
         public virtual T CloneCore<T>(T item)
         {
-            Ensure.NotNull(item, nameof(item));
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             using (var stream = this.ToStream(item))
             {
                 return this.FromStream<T>(stream);

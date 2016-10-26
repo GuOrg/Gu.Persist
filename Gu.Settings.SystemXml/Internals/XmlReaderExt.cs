@@ -55,7 +55,8 @@ namespace Gu.Settings.SystemXml
             return value;
         }
 
-        internal static T? ReadElementNullableEnum<T>(this XmlReader reader, string elementName) where T : struct
+        internal static T? ReadElementNullableEnum<T>(this XmlReader reader, string elementName)
+            where T : struct
         {
             var value = reader.ReadElementString(elementName);
             if (string.IsNullOrEmpty(value))

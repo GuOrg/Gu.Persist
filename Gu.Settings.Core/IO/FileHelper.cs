@@ -4,7 +4,7 @@ namespace Gu.Settings.Core
     using System.IO;
     using System.Threading.Tasks;
 
-    public static class FileHelper
+    internal static class FileHelper
     {
         public static readonly string SoftDeleteExtension = ".delete";
 
@@ -118,6 +118,7 @@ namespace Gu.Settings.Core
             return soft;
         }
 
+        // ReSharper disable once UnusedMember.Global
         internal static void SetIsVisible(this FileInfo file, bool isVisible)
         {
             Ensure.Exists(file, nameof(file));

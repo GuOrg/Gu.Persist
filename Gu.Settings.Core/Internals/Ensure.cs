@@ -8,26 +8,13 @@
 
     internal static class Ensure
     {
-        internal static void NotNull(object o, string parameterName, [CallerMemberName] string caller = null)
+        internal static void NotNull<T>(T value, string parameterName, [CallerMemberName] string caller = null)
+            where T : class
         {
-            Debug.Assert(!string.IsNullOrEmpty(parameterName));
-            if (o == null)
+            Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
+            if (value == null)
             {
                 var message = $"Expected parameter {parameterName} in member {caller} to not be null";
-                throw new ArgumentNullException(parameterName, message);
-            }
-        }
-
-        internal static void NotNull(object o, string parameterName, string message, [CallerMemberName] string caller = null)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(parameterName));
-            if (o == null)
-            {
-                if (message == null)
-                {
-                    throw new ArgumentNullException(parameterName);
-                }
-
                 throw new ArgumentNullException(parameterName, message);
             }
         }
@@ -45,47 +32,38 @@
             }
         }
 
-        public static void NotEqual<T>(T value, T other, string parameterName)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(parameterName));
-            if (Equals(value, other))
-            {
-                var message = $"Expected {value} to not equal {other}";
-                throw new ArgumentException(message, parameterName);
-            }
-        }
-
         internal static void IsValidFileName(string s, string parameterName)
         {
-            Debug.Assert(!string.IsNullOrEmpty(parameterName));
+            Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (!FileInfoExt.IsValidFileName(s))
             {
                 var illegalCahrs = FileInfoExt.InvalidFileNameChars.Where(c => s.IndexOf(c) != -1).ToArray();
-                var illegals = string.Join(", ", illegalCahrs.Select(x => string.Format("'{0}'", x)));
-                var message = string.Format(@"{0} is not a valid filename. Contains: {{{1}}}", s, illegals);
+                var illegals = string.Join(", ", illegalCahrs.Select(x => $"'{x}'"));
+                var message = $@"{s} is not a valid filename. Contains: {{{illegals}}}";
                 IsValidFileName(s, parameterName, message);
             }
         }
 
         internal static void IsValidFileName(string s, string parameterName, string message)
         {
-            Debug.Assert(!string.IsNullOrEmpty(parameterName));
+            Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (!FileInfoExt.IsValidFileName(s))
             {
                 throw new ArgumentException(parameterName, message);
             }
         }
 
+        // ReSharper disable once UnusedMember.Global
         internal static void HasExtension(FileInfo file, string extension, string parameterName, string message = null)
         {
             NotNull(file, "file");
             NotNullOrEmpty(extension, "extension");
-            Debug.Assert(!string.IsNullOrEmpty(parameterName));
+            Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (!string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase))
             {
                 if (message == null)
                 {
-                    throw new ArgumentException(string.Format("Expected extension: {0}, was: {1}", extension, file.Extension), parameterName);
+                    throw new ArgumentException($"Expected extension: {extension}, was: {file.Extension}", parameterName);
                 }
 
                 throw new ArgumentNullException(parameterName, message);
@@ -95,12 +73,12 @@
         internal static void ExtensionIsNot(FileInfo file, string extension, string parameterName, string message = null)
         {
             NotNull(file, "file");
-            Debug.Assert(!string.IsNullOrEmpty(parameterName));
+            Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase))
             {
                 if (message == null)
                 {
-                    throw new ArgumentException(string.Format("Expected extension to not be {0}", extension), parameterName);
+                    throw new ArgumentException($"Expected extension to not be {extension}", parameterName);
                 }
 
                 throw new ArgumentNullException(parameterName, message);
@@ -111,12 +89,13 @@
         {
             NotNull(file, "file");
             NotNull(extensions, "extensions");
-            Debug.Assert(!string.IsNullOrEmpty(parameterName));
+            Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (extensions.Any(x => string.Equals(file.Extension, x, StringComparison.OrdinalIgnoreCase)))
             {
                 if (message == null)
                 {
-                    throw new ArgumentException(string.Format("Expected not be any of {{{0}}}, was: {1}", string.Join(", ", extensions), file.Extension), parameterName);
+                    throw new ArgumentException(
+                        $"Expected not be any of {{{string.Join(", ", extensions)}}}, was: {file.Extension}", parameterName);
                 }
 
                 throw new ArgumentNullException(parameterName, message);
@@ -131,7 +110,7 @@
             {
                 if (message == null)
                 {
-                    throw new InvalidOperationException(string.Format("Expected file {0} to exist", file.FullName));
+                    throw new InvalidOperationException($"Expected file {file.FullName} to exist");
                 }
 
                 throw new InvalidOperationException(message);
@@ -146,7 +125,7 @@
             {
                 if (message == null)
                 {
-                    throw new InvalidOperationException(string.Format("Expected file {0} to not exist", file.FullName));
+                    throw new InvalidOperationException($"Expected file {file.FullName} to not exist");
                 }
 
                 throw new InvalidOperationException(message);

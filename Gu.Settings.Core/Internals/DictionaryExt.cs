@@ -1,11 +1,11 @@
-﻿namespace Gu.Settings.Core.Internals
+﻿namespace Gu.Settings.Core
 {
     using System;
     using System.Collections.Concurrent;
 
-    public static class DictionaryExt
+    internal static class DictionaryExt
     {
-        public static void ChangeKey<TKey, TValue>(
+        internal static void ChangeKey<TKey, TValue>(
             this ConcurrentDictionary<TKey, TValue> dictionary,
             TKey fromKey,
             TKey tokey,
@@ -20,8 +20,7 @@
                 }
                 else
                 {
-                    var message = string.Format("Changing key from {0} to {1} failed. Dictionary already has tokey", fromKey,
-    tokey);
+                    var message = $"Changing key from {fromKey} to {tokey} failed. Dictionary already has tokey";
                     throw new InvalidOperationException(message);
                 }
             }
@@ -33,7 +32,7 @@
                     return;
                 }
 
-                var message = string.Format("Could not add {0} to dictionary", fromKey);
+                var message = $"Could not add {fromKey} to dictionary";
                 throw new InvalidOperationException(message);
             }
         }

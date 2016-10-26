@@ -6,23 +6,23 @@
     /// <summary>
     /// A backuper that does not create any backups
     /// </summary>
-    public class NullBackuper : IBackuper
+    public sealed class NullBackuper : IBackuper
     {
         public static readonly NullBackuper Default = new NullBackuper();
 
-        protected NullBackuper()
+        private NullBackuper()
         {
         }
 
         /// <inheritdoc/>
-        public virtual bool BeforeSave(FileInfo file)
+        public bool BeforeSave(FileInfo file)
         {
             var softDelete = file.SoftDelete();
             return softDelete != null;
         }
 
         /// <inheritdoc/>
-        public virtual void Backup(FileInfo file, FileInfo backup)
+        public void Backup(FileInfo file, FileInfo backup)
         {
             FileHelper.Backup(file, backup);
         }
@@ -41,7 +41,7 @@
         }
 
         /// <inheritdoc/>
-        public virtual bool TryRestore(FileInfo file)
+        public bool TryRestore(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");
@@ -69,31 +69,8 @@
             }
         }
 
-        internal virtual void Restore(FileInfo file)
-        {
-            var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
-            if (softDelete.Exists)
-            {
-                this.Restore(file, softDelete);
-            }
-        }
-
-        internal virtual void Restore(FileInfo file, FileInfo backup)
-        {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(backup, nameof(backup));
-            file.Refresh();
-            if (file.Exists)
-            {
-                string message = $"Trying to restore {backup.FullName} when there is already an original: {file.FullName}";
-                throw new InvalidOperationException(message);
-            }
-
-            FileHelper.Restore(file, backup);
-        }
-
         /// <inheritdoc/>
-        public virtual void AfterSuccessfulSave(FileInfo file)
+        public void AfterSuccessfulSave(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");
@@ -137,6 +114,30 @@
         {
             var soft = file.GetSoftDeleteFileFor();
             soft?.Delete();
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        internal void Restore(FileInfo file)
+        {
+            var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
+            if (softDelete.Exists)
+            {
+                this.Restore(file, softDelete);
+            }
+        }
+
+        internal void Restore(FileInfo file, FileInfo backup)
+        {
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(backup, nameof(backup));
+            file.Refresh();
+            if (file.Exists)
+            {
+                string message = $"Trying to restore {backup.FullName} when there is already an original: {file.FullName}";
+                throw new InvalidOperationException(message);
+            }
+
+            FileHelper.Restore(file, backup);
         }
     }
 }

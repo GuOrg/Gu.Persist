@@ -37,7 +37,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinaryEqualsComparer`1.cs" />
+    <Compile Include="BinaryEqualsComparer{T}.cs" />
     <Compile Include="BinaryHelper.cs" />
     <Compile Include="BinaryRepository.cs" />
     <Compile Include="BinaryRepositorySettings.cs" />

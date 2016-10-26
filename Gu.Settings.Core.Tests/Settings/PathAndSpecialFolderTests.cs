@@ -1,6 +1,7 @@
 ﻿namespace Gu.Settings.Core.Tests.Settings
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Reflection;
     using NUnit.Framework;
@@ -12,7 +13,7 @@
         {
             var pathAndSpecialFolder = PathAndSpecialFolder.Default;
             Assert.AreEqual(Environment.SpecialFolder.ApplicationData, pathAndSpecialFolder.SpecialFolder);
-            
+
             // This is needed if R# shadow copies
             var directoryName = Path.GetFileName(Directory.GetCurrentDirectory());
             Assert.AreEqual(directoryName, pathAndSpecialFolder.Path);
@@ -43,12 +44,13 @@
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void AppDataWithoutSubDirThrows()
         {
             var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             Assert.Throws<ArgumentException>(() => new PathAndSpecialFolder(path, null));
             Assert.Throws<ArgumentException>(() => new PathAndSpecialFolder(path, Environment.SpecialFolder.ApplicationData));
-            Assert.Throws<ArgumentException>(() => new PathAndSpecialFolder("", Environment.SpecialFolder.ApplicationData));
+            Assert.Throws<ArgumentException>(() => new PathAndSpecialFolder(string.Empty, Environment.SpecialFolder.ApplicationData));
             Assert.Throws<ArgumentException>(() => new PathAndSpecialFolder(null, Environment.SpecialFolder.ApplicationData));
             Assert.Throws<ArgumentException>(() => PathAndSpecialFolder.Create(path));
             Assert.Throws<ArgumentException>(() => PathAndSpecialFolder.Create(new DirectoryInfo(path)));
@@ -123,7 +125,7 @@
         public void CurrentDirectorySubDirectory()
         {
             var path = @".\Settings";
-            var fullName = System.IO.Path.Combine(Environment.CurrentDirectory, "Settings");
+            var fullName = Path.Combine(Environment.CurrentDirectory, "Settings");
             var actuals = new[]
                               {
                                   PathAndSpecialFolder.Create(path),
@@ -156,7 +158,7 @@
             var method = typeof(PathAndSpecialFolder).GetMethod("IsSubDirectoryOfOrSame",
                 BindingFlags.Static | BindingFlags.NonPublic);
 
-            Assert.AreEqual(expected, method.Invoke(null, new[] { path, potentialParent }));
+            Assert.AreEqual(expected, method.Invoke(null, new object[] { path, potentialParent }));
         }
     }
 }

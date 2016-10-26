@@ -4,8 +4,6 @@
     using System.IO;
     using System.Linq;
 
-    using Gu.Settings.Core.Internals;
-
     public class Backuper : IBackuper
     {
         protected Backuper(IBackupSettings setting)
@@ -114,7 +112,7 @@
             }
         }
 
-        /// <inheritdoc/>
+        // ReSharper disable once UnusedMember.Global
         internal virtual void Restore(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));

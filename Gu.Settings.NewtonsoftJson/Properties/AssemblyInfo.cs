@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Resources;
+using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Gu.Settings.Json")]
 [assembly: AssemblyDescription("A repository using Newtonsoft.Json")]

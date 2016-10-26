@@ -37,13 +37,14 @@ namespace Gu.Settings.NewtonsoftJson
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
-            : this(PathAndSpecialFolder.Create(directory),
-                   jsonSerializerSettings,
-                   isTrackingDirty,
-                   isCaching,
-                   backupSettings,
-                   extension,
-                   tempExtension)
+            : this(
+                PathAndSpecialFolder.Create(directory),
+                jsonSerializerSettings,
+                isTrackingDirty,
+                isCaching,
+                backupSettings,
+                extension,
+                tempExtension)
         {
         }
 

@@ -4,8 +4,6 @@
     using System.Collections.Concurrent;
     using System.Linq;
 
-    using Gu.Settings.Core.Internals;
-
     public sealed class FileCache
     {
         private readonly ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);

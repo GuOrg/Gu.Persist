@@ -6,13 +6,14 @@
     using System.IO;
     using System.Text.RegularExpressions;
 
-    public static class FileInfoExt
+    internal static class FileInfoExt
     {
-        private static ConcurrentDictionary<string, string> TimeStampPatternMap = new ConcurrentDictionary<string, string>();
         public static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
+        // ReSharper disable once UnusedMember.Global
         public static readonly char[] InvalidPathChars = Path.GetInvalidPathChars();
+        private static readonly ConcurrentDictionary<string, string> TimeStampPatternMap = new ConcurrentDictionary<string, string>();
 
-        public static bool IsValidFileName(string filename)
+        internal static bool IsValidFileName(string filename)
         {
             var indexOfAny = filename.IndexOfAny(InvalidFileNameChars);
             return indexOfAny == -1;
@@ -33,9 +34,6 @@
         /// Changes extension and returns the new fileinfo.
         /// No IO
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="newExtension"></param>
-        /// <returns></returns>
         internal static FileInfo WithNewExtension(this FileInfo file, string newExtension)
         {
             newExtension = FileHelper.PrependDotIfMissing(newExtension);
@@ -128,6 +126,7 @@
             return newFile;
         }
 
+        // ReSharper disable once UnusedMember.Global
         internal static string GetFileNameWithoutExtension(this FileInfo file)
         {
             return Path.GetFileNameWithoutExtension(file.Name);
@@ -165,7 +164,7 @@
                 return file;
             }
 
-            var timestamp = string.Format(".{0}{1}", time.ToString(setting.TimeStampFormat, CultureInfo.InvariantCulture), file.Extension);
+            var timestamp = $".{time.ToString(setting.TimeStampFormat, CultureInfo.InvariantCulture)}{file.Extension}";
             var timestamped = file.WithNewExtension(timestamp);
             return timestamped;
         }
@@ -180,7 +179,7 @@
             }
 
             var pattern = setting.TimeStampPattern();
-            var stripped = Regex.Replace(file.FullName, pattern, "", RegexOptions.RightToLeft | RegexOptions.Singleline);
+            var stripped = Regex.Replace(file.FullName, pattern, string.Empty, RegexOptions.RightToLeft | RegexOptions.Singleline);
             return new FileInfo(stripped);
         }
 
@@ -188,7 +187,7 @@
         {
             if (setting == null || string.IsNullOrEmpty(setting.TimeStampFormat))
             {
-                return "";
+                return string.Empty;
             }
 
             var format = setting.TimeStampFormat;
@@ -205,7 +204,7 @@
             pattern = Regex.Replace(pattern, "(m+)", @"\d+", RegexOptions.IgnoreCase);
             pattern = Regex.Replace(pattern, "(h+)", @"\d+", RegexOptions.IgnoreCase);
             pattern = Regex.Replace(pattern, "(s+)", @"\d+", RegexOptions.IgnoreCase);
-            return string.Format(@"\.(?<timestamp>{0})", pattern);
+            return $@"\.(?<timestamp>{pattern})";
         }
     }
 }

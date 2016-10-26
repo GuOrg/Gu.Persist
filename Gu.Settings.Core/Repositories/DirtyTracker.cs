@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using Gu.Settings.Core.Internals;
 
     public sealed class DirtyTracker : IDirtyTracker
     {

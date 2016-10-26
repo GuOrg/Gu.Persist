@@ -2,14 +2,13 @@
 {
     using System.IO;
 
-    public static class DirectoryInfoExt
+    internal static class DirectoryInfoExt
     {
         /// <summary>
-        ///
+        /// Create a subdirector in <paramref name="directory"/> named <paramref name="name"/>
         /// </summary>
-        /// <param name="directory"></param>
-        /// <param name="name"></param>
         /// <returns>A new DirectoryInfo that is a subdirectory</returns>
+        // ReSharper disable once UnusedMember.Global
         public static DirectoryInfo Subdirectory(this DirectoryInfo directory, string name)
         {
             var path = Path.Combine(directory.FullName, name);

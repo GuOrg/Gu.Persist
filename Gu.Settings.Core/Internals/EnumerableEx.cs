@@ -1,4 +1,4 @@
-﻿namespace Gu.Settings.Core.Internals
+﻿namespace Gu.Settings.Core
 {
     using System;
     using System.Collections.Generic;
@@ -9,12 +9,6 @@
     /// </summary>
     internal static class EnumerableEx
     {
-        internal static IEnumerable<T> DistinctBy<T, TKey>(this IEnumerable<T> col, Func<T, TKey> key, IEqualityComparer<TKey> comparer = null)
-        {
-            var set = new HashSet<TKey>(comparer ?? EqualityComparer<TKey>.Default);
-            return col.Where(x => set.Add(key(x)));
-        }
-
         /// <summary>
         /// Returns the minimal element of the given sequence, based on
         /// the given projection.

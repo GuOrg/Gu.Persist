@@ -12,9 +12,9 @@
 
     public class FileInfoExtTests
     {
+        private readonly DirectoryInfo directoryInfo = new DirectoryInfo(@"C:\Temp");
         private BackupSettings setting;
         private FileInfo file;
-        private readonly DirectoryInfo directoryInfo = new DirectoryInfo(@"C:\Temp");
         private FileInfo backupFile;
 
         [SetUp]
@@ -78,10 +78,10 @@
         public void WithNewNameTimeStamped(string filename, string newName, string expected)
         {
             var settings = Mock.Of<IBackupSettings>(x => x.TimeStampFormat == BackupSettings.DefaultTimeStampFormat);
-            var file = new FileInfo(filename);
-            var newFile = file.WithNewName(newName, settings);
+            var originalFile = new FileInfo(filename);
+            var newFile = originalFile.WithNewName(newName, settings);
             Assert.AreEqual(expected, newFile.FullName);
-            Assert.AreEqual(filename, file.FullName);
+            Assert.AreEqual(filename, originalFile.FullName);
         }
 
         [TestCase(@"C:\Temp\Old.cfg", "New", @"C:\Temp\New.cfg")]
@@ -92,10 +92,10 @@
         public void WithNewNameNoTimestampBackup(string filename, string newName, string expected)
         {
             var settings = Mock.Of<IBackupSettings>(x => x.TimeStampFormat == (string)null);
-            var file = new FileInfo(filename);
-            var newFile = file.WithNewName(newName, settings);
+            var originalFile = new FileInfo(filename);
+            var newFile = originalFile.WithNewName(newName, settings);
             Assert.AreEqual(expected, newFile.FullName);
-            Assert.AreEqual(filename, file.FullName);
+            Assert.AreEqual(filename, originalFile.FullName);
         }
 
         [TestCase(@"C:\Temp\Old.cfg", "New", @"C:\Temp\New.cfg")]
@@ -105,11 +105,10 @@
         public void WithNewNameNoTimestamp(string filename, string newName, string expected)
         {
             var settings = Mock.Of<IFileSettings>();
-            var file = new FileInfo(filename);
-
-            var newFile = file.WithNewName(newName, settings);
+            var originalFile = new FileInfo(filename);
+            var newFile = originalFile.WithNewName(newName, settings);
             Assert.AreEqual(expected, newFile.FullName);
-            Assert.AreEqual(filename, file.FullName);
+            Assert.AreEqual(filename, originalFile.FullName);
         }
 
         [Test]
@@ -167,7 +166,7 @@
             var pattern = FileInfoExt.CreateTimeStampPattern(format);
             var dateTime = new DateTime(2015, 06, 14, 12, 33, 24);
             var s = "." + dateTime.ToString(format, CultureInfo.InvariantCulture);
-            var strictPattern = string.Format("^{0}$", pattern);
+            var strictPattern = $"^{pattern}$";
             Console.WriteLine(pattern);
             Assert.AreEqual(@"\.(?<timestamp>\d+_\d+_\d+_\d+_\d+_\d+)", pattern);
             StringAssert.IsMatch(strictPattern, s);

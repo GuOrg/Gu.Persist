@@ -1,7 +1,7 @@
-﻿using System.Windows.Controls;
-
-namespace Gu.Settings.Demo
+﻿namespace Gu.Settings.Demo
 {
+    using System.Windows.Controls;
+
     /// <summary>
     /// Interaction logic for ManualSaveSettingsView.xaml
     /// </summary>

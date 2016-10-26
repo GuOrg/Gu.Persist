@@ -5,8 +5,6 @@
     using System.IO;
     using System.Linq;
 
-    using Gu.Settings.Core.Internals;
-
     /// <summary>
     ///
     /// </summary>
