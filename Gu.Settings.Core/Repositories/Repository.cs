@@ -507,47 +507,53 @@
 
         protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
         {
-            if (item == null)
+            lock (this.gate)
             {
-                this.SaveStreamCore(null, file, null);
-                return;
-            }
+                if (item == null)
+                {
+                    this.SaveStreamCore(null, file, null);
+                    return;
+                }
 
-            this.CacheAndTrackCore(item, file);
+                this.CacheAndTrackCore(item, file);
 
-            using (var stream = this.ToStream(item))
-            {
-                this.SaveStreamCore(stream, file, tempFile);
+                using (var stream = this.ToStream(item))
+                {
+                    this.SaveStreamCore(stream, file, tempFile);
+                }
             }
         }
 
         protected void SaveStreamCore(Stream stream, FileInfo file, FileInfo tempFile)
         {
-            if (stream == null)
+            lock (this.gate)
             {
-                FileHelper.HardDelete(file);
-                return;
-            }
+                if (stream == null)
+                {
+                    FileHelper.HardDelete(file);
+                    return;
+                }
 
-            this.Backuper.BeforeSave(file);
-            try
-            {
-                FileHelper.Save(tempFile, stream);
-                tempFile.MoveTo(file);
-                this.Backuper.AfterSuccessfulSave(file);
-            }
-            catch (Exception exception)
-            {
+                this.Backuper.BeforeSave(file);
                 try
                 {
-                    this.Backuper.TryRestore(file);
+                    FileHelper.Save(tempFile, stream);
+                    tempFile.MoveTo(file);
+                    this.Backuper.AfterSuccessfulSave(file);
                 }
-                catch (Exception restoreException)
+                catch (Exception exception)
                 {
-                    throw new RestoreException(exception, restoreException);
-                }
+                    try
+                    {
+                        this.Backuper.TryRestore(file);
+                    }
+                    catch (Exception restoreException)
+                    {
+                        throw new RestoreException(exception, restoreException);
+                    }
 
-                throw;
+                    throw;
+                }
             }
         }
 
