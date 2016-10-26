@@ -3,8 +3,6 @@
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
 
-    using Gu.Settings.Core;
-
     public static class TestHelper
     {
         public static T Read<T>(this FileInfo file)

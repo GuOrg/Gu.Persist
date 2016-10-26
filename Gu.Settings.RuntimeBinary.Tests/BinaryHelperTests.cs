@@ -2,8 +2,6 @@
 {
     using System.IO;
     using System.Threading.Tasks;
-
-    using Gu.Settings.Core;
     using Gu.Settings.RuntimeBinary;
 
     using NUnit.Framework;

@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using System.Reflection;
 
     public static class Directories
     {

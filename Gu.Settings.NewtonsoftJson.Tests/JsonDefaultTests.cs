@@ -1,7 +1,6 @@
 ﻿namespace Gu.Settings.NewtonsoftJson.Tests
 {
     using System.IO;
-    using System.Runtime.InteropServices;
     using Core.Tests;
     using Gu.Settings.Core;
     using Gu.Settings.Core.Tests.Repositories;

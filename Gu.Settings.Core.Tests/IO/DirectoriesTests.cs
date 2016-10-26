@@ -1,7 +1,6 @@
 ﻿namespace Gu.Settings.Core.Tests.IO
 {
     using System;
-    using System.IO;
     using Gu.Settings.Core;
 
     using NUnit.Framework;

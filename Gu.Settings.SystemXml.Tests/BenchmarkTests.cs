@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-
-    using Gu.Settings.Core;
     using Gu.Settings.Core.Tests;
     using Gu.Settings.SystemXml;
 

@@ -3,7 +3,6 @@
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.IO;
     using System.Runtime.CompilerServices;
     using Git;
     using Gu.Settings.Core;

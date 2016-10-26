@@ -1,6 +1,5 @@
 ﻿namespace Gu.Settings.Core.Tests.Comparers
 {
-    using System;
     using System.IO;
     using NUnit.Framework;
 

@@ -1,9 +1,6 @@
 ﻿namespace Gu.Settings.SystemXml.Tests
 {
-    using System.Collections.Generic;
     using System.Linq;
-
-    using Gu.Settings.Core;
     using Gu.Settings.Core.Tests;
 
     using NUnit.Framework;
