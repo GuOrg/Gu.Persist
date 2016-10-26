@@ -1,7 +1,17 @@
 source http://www.nuget.org/api/v2/
+framework: >= net45
 
-nuget JetBrains.Annotations 
+nuget Newtonsoft.Json 8.0.3
 nuget LibGit2Sharp
-nuget Moq 
-nuget Newtonsoft.Json
-nuget NUnit 2.6.4
+
+group Analyzers
+  source http://www.nuget.org/api/v2/
+  framework: >= net45
+  nuget JetBrains.Annotations
+  nuget StyleCop.Analyzers
+
+group Test
+  source http://www.nuget.org/api/v2/
+  framework: >= net45
+  nuget Moq 
+  nuget NUnit

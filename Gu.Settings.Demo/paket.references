@@ -1,3 +1,6 @@
-JetBrains.Annotations
 LibGit2Sharp
 Newtonsoft.Json
+
+group Analyzers
+  StyleCop.Analyzers
+  JetBrains.Annotations

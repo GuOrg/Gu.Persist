@@ -1,9 +1,3 @@
-Newtonsoft.Json
-
 group Analyzers
   StyleCop.Analyzers
   JetBrains.Annotations
-
-group Test
-  Moq
-  NUnit
