@@ -14,8 +14,8 @@ using System.Resources;
 
 [assembly: ComVisible(false)]
 [assembly: Guid("d254e6a5-a3a4-4a75-8ed1-41812208bca6")]
-[assembly: AssemblyVersion("1.3.1.0")]
-[assembly: AssemblyFileVersion("1.3.1.0")]
+[assembly: AssemblyVersion("1.3.2.0")]
+[assembly: AssemblyFileVersion("1.3.2.0")]
 [assembly: InternalsVisibleTo("Gu.Settings.Core.Tests", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Settings.Demo", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Settings.NewtonsoftJson", AllInternalsVisible = true)]

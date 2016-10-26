@@ -507,20 +507,17 @@
 
         protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
         {
-            lock (this.gate)
+            if (item == null)
             {
-                if (item == null)
-                {
-                    this.SaveStreamCore(null, file, null);
-                    return;
-                }
+                this.SaveStreamCore(null, file, null);
+                return;
+            }
 
-                this.CacheAndTrackCore(item, file);
+            this.CacheAndTrackCore(item, file);
 
-                using (var stream = this.ToStream(item))
-                {
-                    this.SaveStreamCore(stream, file, tempFile);
-                }
+            using (var stream = this.ToStream(item))
+            {
+                this.SaveStreamCore(stream, file, tempFile);
             }
         }
 
