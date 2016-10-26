@@ -1,4 +1,7 @@
 # Gu.Settings
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Build status](https://ci.appveyor.com/api/projects/status/uwvp9b7lp0fh9e2a/branch/master?svg=true)](https://ci.appveyor.com/project/JohanLarsson/gu-settings/branch/master)
+
 A small framework for managing settings.
 
 - XmlRepository is a baseclass for managing xml files.
