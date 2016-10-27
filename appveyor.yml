@@ -1,10 +1,11 @@
 version: 1.0.{build}
 configuration: Release
 platform: Any CPU
-max_jobs: 1
 cache: 
   - packages -> paket.lock
 
 build:
   project: Gu.Persist.sln
   verbosity: minimal
+
+nunit3-console *Test.dll --result=myresults.xml;format=AppVeyor
