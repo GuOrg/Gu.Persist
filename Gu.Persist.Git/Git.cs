@@ -13,11 +13,7 @@ namespace Gu.Persist.Git
         private static readonly CommitOptions CommitOptions = new CommitOptions { AllowEmptyCommit = false };
         private static readonly CheckoutOptions ForceCheckoutOptions = new CheckoutOptions { CheckoutModifiers = CheckoutModifiers.Force };
         private static readonly Signature Signature = new Signature(new Identity("Gu.Persist.Git", "Gu.Persist.Git@github.com"), DateTimeOffset.UtcNow);
-
-        internal static bool IsValid(DirectoryInfo directory)
-        {
-            return LibGit2Sharp.Repository.IsValid(directory.FullName);
-        }
+        private static readonly StageOptions StageOptionsIncludeIgnored = new StageOptions { IncludeIgnored = true };
 
         internal static void InitRepository(DirectoryInfo directory)
         {
@@ -28,7 +24,7 @@ namespace Gu.Persist.Git
                 return;
             }
 
-            if (!LibGit2Sharp.Repository.IsValid(directory.FullName))
+            if (!Repository.IsValid(directory.FullName))
             {
                 Repository.Init(directory.FullName);
             }
@@ -36,20 +32,12 @@ namespace Gu.Persist.Git
 
         internal static FileStatus GetStatus(FileInfo file)
         {
-            using (var repository = new LibGit2Sharp.Repository(file.DirectoryName))
+            using (var repository = new Repository(file.DirectoryName))
             {
                 repository.Stage(file.FullName);
                 var status = repository.RetrieveStatus(file.FullName);
                 repository.Unstage(file.FullName);
                 return status;
-            }
-        }
-
-        internal static void Stage(FileInfo file)
-        {
-            using (var repository = new LibGit2Sharp.Repository(file.DirectoryName))
-            {
-                repository.Stage(file.FullName);
             }
         }
 
@@ -60,9 +48,9 @@ namespace Gu.Persist.Git
                 return false;
             }
 
-            using (var repository = new LibGit2Sharp.Repository(file.DirectoryName))
+            using (var repository = new Repository(file.DirectoryName))
             {
-                repository.Stage(file.FullName, new StageOptions { IncludeIgnored = true });
+                repository.Stage(file.FullName, StageOptionsIncludeIgnored);
                 var status = repository.RetrieveStatus(file.FullName);
 
                 switch (status)
@@ -80,11 +68,8 @@ namespace Gu.Persist.Git
                     case FileStatus.DeletedFromWorkdir:
                     case FileStatus.TypeChangeInWorkdir:
                     case FileStatus.RenamedInWorkdir:
-                        {
-                            repository.Commit("Created backup", Signature, Signature, CommitOptions);
-                            return true;
-                        }
-
+                        repository.Commit($"Create backup for {file.Name}", Signature, Signature, CommitOptions);
+                        return true;
                     case FileStatus.Unreadable:
                     case FileStatus.Ignored:
                         throw new InvalidOperationException($"FileStatus: {status}");
@@ -96,7 +81,7 @@ namespace Gu.Persist.Git
 
         internal static void Revert(FileInfo file)
         {
-            using (var repository = new LibGit2Sharp.Repository(file.DirectoryName))
+            using (var repository = new Repository(file.DirectoryName))
             {
                 repository.CheckoutPaths(repository.Head.FriendlyName, new[] { file.FullName }, ForceCheckoutOptions);
             }

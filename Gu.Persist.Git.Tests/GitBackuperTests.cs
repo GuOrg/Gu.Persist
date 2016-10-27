@@ -125,7 +125,7 @@
                 fileInfo.Delete();
             }
 
-            Directory.Delete(directory);
+            Directory.Delete(directory, true);
         }
     }
 }
