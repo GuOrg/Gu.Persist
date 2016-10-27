@@ -8,4 +8,5 @@ build:
   project: Gu.Persist.sln
   verbosity: minimal
 
-nunit3-console *Test.dll --result=myresults.xml;format=AppVeyor
+test_script:
+  nunit3-console *Test.dll --result=myresults.xml;format=AppVeyor
