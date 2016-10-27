@@ -16,7 +16,7 @@
         private TypicalSetting setting1;
         private TypicalSetting setting2;
 
-        public static readonly ComparerData[] ComparerSource =
+        public static ComparerData[] ComparerSource { get; } =
         {
             new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000)
         };
