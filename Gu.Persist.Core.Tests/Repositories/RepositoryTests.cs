@@ -41,7 +41,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         protected RepositoryTests()
         {
-            this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
+            this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().FullName);
             this.dummy = new DummySerializable(1);
         }
 
@@ -126,6 +126,15 @@ namespace Gu.Persist.Core.Tests.Repositories
             {
                 this.backup.Delete();
                 this.dummyBackup.Delete();
+            }
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            if (this.Directory.Exists)
+            {
+                this.Directory.Delete(true);
             }
         }
 

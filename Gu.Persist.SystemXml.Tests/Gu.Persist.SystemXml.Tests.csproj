@@ -56,9 +56,9 @@
     <Compile Include="Helpers\TestHelper.cs" />
     <Compile Include="SettingsTests.cs" />
     <Compile Include="XmlHelperTests.cs" />
-    <Compile Include="RspositoryTests\XmlRepositoryTests.cs" />
-    <Compile Include="RspositoryTests\XmlDefault.cs" />
-    <Compile Include="RspositoryTests\XmlNoBackup.cs" />
+    <Compile Include="RepositoryTests\XmlRepositoryTests.cs" />
+    <Compile Include="RepositoryTests\XmlDefault.cs" />
+    <Compile Include="RepositoryTests\XmlNoBackup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gu.Persist.Core.Tests\Gu.Persist.Core.Tests.csproj">

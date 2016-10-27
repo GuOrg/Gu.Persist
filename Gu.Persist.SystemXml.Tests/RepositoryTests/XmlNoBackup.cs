@@ -1,4 +1,4 @@
-namespace Gu.Persist.SystemXml.Tests.RspositoryTests
+namespace Gu.Persist.SystemXml.Tests.RepositoryTests
 {
     using System.IO;
 
@@ -25,7 +25,7 @@ namespace Gu.Persist.SystemXml.Tests.RspositoryTests
 
         protected override void Save<T>(T item, FileInfo file)
         {
-            TestHelper.Save(item, file);
+            TestHelper.Save(file, item);
         }
 
         protected override T Read<T>(FileInfo file)

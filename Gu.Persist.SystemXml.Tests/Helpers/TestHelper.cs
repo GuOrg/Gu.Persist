@@ -6,12 +6,12 @@
 
     public static class TestHelper
     {
-        public static T Read<T>(FileInfo file)
+        public static T Read<T>(this FileInfo file)
         {
             return FileHelper.Read(file, XmlHelper.FromStream<T>);
         }
 
-        public static void Save<T>(T o, FileInfo file)
+        public static void Save<T>(this FileInfo file, T o)
         {
             using (var stream = XmlHelper.ToStream(o))
             {
