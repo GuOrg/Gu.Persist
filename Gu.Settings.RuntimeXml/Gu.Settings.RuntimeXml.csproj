@@ -39,7 +39,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RuntimeXmlRepositorySettings.cs" />
+    <Compile Include="XmlRepositorySettings.cs" />
     <Compile Include="XmlEqualsComparer.cs" />
     <Compile Include="XmlHelper.cs" />
     <Compile Include="XmlRepository.cs" />

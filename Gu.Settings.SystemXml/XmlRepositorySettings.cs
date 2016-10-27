@@ -12,9 +12,7 @@ namespace Gu.Settings.SystemXml
     /// </summary>
     public class XmlRepositorySettings : RepositorySettings, IXmlSerializable
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlRepositorySettings"/> class.
-        /// </summary>
+        /// <summary> Initializes a new instance of the <see cref="XmlRepositorySettings"/> class. </summary>
         public XmlRepositorySettings(DirectoryInfo directory)
             : base(directory)
         {

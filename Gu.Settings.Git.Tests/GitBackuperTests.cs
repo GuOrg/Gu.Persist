@@ -92,7 +92,7 @@
         public void TouchDirectoryProp()
         {
             // just so it is not flagged as unused member
-            Assert.AreEqual(this.directory, ((GitBackuper)this.repository.Backuper).Directory);
+            Assert.AreEqual(this.directory.Name, ((GitBackuper)this.repository.Backuper).Directory.CreateDirectoryInfo().Name);
         }
 
         protected void Save<T>(T item, FileInfo file)

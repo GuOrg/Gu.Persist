@@ -49,6 +49,34 @@ namespace Gu.Settings.Core
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
+        /// Creates a new <see cref="Repository{TSetting}"/> with default settings.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new default setting is created and saved.
+        /// </summary>
+        /// <param name="directory">The directory where files will be saved.</param>
+        /// <param name="backuper">
+        /// The backuper.
+        /// Note that a custom backuper may not use the backupsettings.
+        /// </param>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        protected Repository(DirectoryInfo directory, IBackuper backuper, Func<TSetting> settingsCreator)
+        {
+            Ensure.NotNull(directory, nameof(directory));
+            Ensure.NotNull(backuper, nameof(backuper));
+            Ensure.NotNull(settingsCreator, nameof(settingsCreator));
+            directory.CreateIfNotExists();
+            this.Settings = settingsCreator();
+            if (this.Settings.IsTrackingDirty)
+            {
+                this.Tracker = new DirtyTracker(this);
+            }
+
+            this.Backuper = backuper;
+            this.Settings = this.ReadOrCreateCore(() => (TSetting)this.Settings);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
         /// Creates a new <see cref="Repository{TSetting}"/> with <paramref name="settings"/>.
         /// </summary>
         protected Repository(TSetting settings)
@@ -60,6 +88,10 @@ namespace Gu.Settings.Core
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
         /// Creates a new <see cref="Repository{TSetting}"/> with <paramref name="settings"/>.
         /// </summary>
+        /// <param name="backuper">
+        /// The backuper.
+        /// Note that a custom backuper may not use the backupsettings.
+        /// </param>
         protected Repository(TSetting settings, IBackuper backuper)
         {
             settings.DirectoryPath.CreateDirectoryInfo()

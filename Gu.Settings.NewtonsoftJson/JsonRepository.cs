@@ -38,6 +38,15 @@ namespace Gu.Settings.NewtonsoftJson
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
+        /// </summary>
+        public JsonRepository(PathAndSpecialFolder directory)
+            : this(directory.CreateDirectoryInfo())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
         /// It will use JsonRepositorySettings.DefaultFor(directory) as settings.
         /// This creates a setting file for the repository in the directory if it does not exist.
         /// After this the settings file will be used.
@@ -64,8 +73,51 @@ namespace Gu.Settings.NewtonsoftJson
         /// If not a new setting is created and saved.
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
+        public JsonRepository(PathAndSpecialFolder directory, Func<JsonRepositorySettings> settingsCreator)
+            : base(directory.CreateDirectoryInfo(), settingsCreator)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new setting is created and saved.
+        /// </summary>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
         public JsonRepository(DirectoryInfo directory, Func<JsonRepositorySettings> settingsCreator)
             : base(directory, settingsCreator)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new setting is created and saved.
+        /// </summary>
+        /// <param name="directory">The directory where files will be saved.</param>
+        /// <param name="backuper">
+        /// The backuper.
+        /// Note that a custom backuper may not use the backupsettings.
+        /// </param>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        public JsonRepository(PathAndSpecialFolder directory, IBackuper backuper, Func<JsonRepositorySettings> settingsCreator)
+            : base(directory.CreateDirectoryInfo(), backuper, settingsCreator)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new setting is created and saved.
+        /// </summary>
+        /// <param name="directory">The directory where files will be saved.</param>
+        /// <param name="backuper">
+        /// The backuper.
+        /// Note that a custom backuper may not use the backupsettings.
+        /// </param>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        public JsonRepository(DirectoryInfo directory, IBackuper backuper, Func<JsonRepositorySettings> settingsCreator)
+            : base(directory, backuper, settingsCreator)
         {
         }
 

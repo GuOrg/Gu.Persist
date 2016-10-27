@@ -18,7 +18,7 @@ namespace Gu.Settings.RuntimeXml.Tests
 
         protected override IRepository Create()
         {
-            var settings = new RuntimeXmlRepositorySettings(this.Directory, null);
+            var settings = new XmlRepositorySettings(this.Directory, null);
             return new XmlRepository(settings);
         }
 

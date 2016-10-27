@@ -10,7 +10,7 @@ namespace Gu.Settings.RuntimeXml
     /// <summary>
     /// A repository reading and saving files using <see cref="System.Runtime.Serialization.DataContractSerializer"/>
     /// </summary>
-    public class XmlRepository : Repository<RuntimeXmlRepositorySettings>
+    public class XmlRepository : Repository<XmlRepositorySettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlRepository"/> class.
@@ -25,8 +25,17 @@ namespace Gu.Settings.RuntimeXml
         /// Initializes a new instance of the <see cref="XmlRepository"/> class.
         /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
+        public XmlRepository(PathAndSpecialFolder directory)
+            : this(directory.CreateDirectoryInfo())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
+        /// </summary>
         public XmlRepository(DirectoryInfo directory)
-            : base(directory, () => RuntimeXmlRepositorySettings.DefaultFor(directory))
+            : base(directory, () => XmlRepositorySettings.DefaultFor(directory))
         {
         }
 
@@ -36,15 +45,58 @@ namespace Gu.Settings.RuntimeXml
         /// If not a new default setting is created and saved.
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public XmlRepository(DirectoryInfo directory, Func<RuntimeXmlRepositorySettings> settingsCreator)
+        public XmlRepository(PathAndSpecialFolder directory, Func<XmlRepositorySettings> settingsCreator)
+            : base(directory.CreateDirectoryInfo(), settingsCreator)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new default setting is created and saved.
+        /// </summary>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        public XmlRepository(DirectoryInfo directory, Func<XmlRepositorySettings> settingsCreator)
             : base(directory, settingsCreator)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new setting is created and saved.
         /// </summary>
-        public XmlRepository(RuntimeXmlRepositorySettings settings)
+        /// <param name="directory">The directory where files will be saved.</param>
+        /// <param name="backuper">
+        /// The backuper.
+        /// Note that a custom backuper may not use the backupsettings.
+        /// </param>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        public XmlRepository(PathAndSpecialFolder directory, IBackuper backuper, Func<XmlRepositorySettings> settingsCreator)
+            : base(directory.CreateDirectoryInfo(), backuper, settingsCreator)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new setting is created and saved.
+        /// </summary>
+        /// <param name="directory">The directory where files will be saved.</param>
+        /// <param name="backuper">
+        /// The backuper.
+        /// Note that a custom backuper may not use the backupsettings.
+        /// </param>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        public XmlRepository(DirectoryInfo directory, IBackuper backuper, Func<XmlRepositorySettings> settingsCreator)
+            : base(directory, backuper, settingsCreator)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// </summary>
+        public XmlRepository(XmlRepositorySettings settings)
             : base(settings)
         {
         }
@@ -52,7 +104,7 @@ namespace Gu.Settings.RuntimeXml
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlRepository"/> class.
         /// </summary>
-        public XmlRepository(RuntimeXmlRepositorySettings settings, IBackuper backuper)
+        public XmlRepository(XmlRepositorySettings settings, IBackuper backuper)
             : base(settings, backuper)
         {
         }
