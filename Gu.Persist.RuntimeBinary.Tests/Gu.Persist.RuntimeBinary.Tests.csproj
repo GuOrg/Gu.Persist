@@ -51,6 +51,7 @@
     <Compile Include="BinaryFileTests.cs" />
     <Compile Include="Repository\BinaryNoBackup.cs" />
     <Compile Include="Repository\BackupInSubDirrectory.cs" />
+    <Compile Include="Repository\BinaryRepositoryTests.cs" />
     <Compile Include="Repository\WithDefaultSettings.cs" />
     <Compile Include="Repository\NullSettings.cs" />
     <Compile Include="BinaryEqualsComparerTests.cs" />
