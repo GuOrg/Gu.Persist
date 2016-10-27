@@ -782,9 +782,9 @@
             }
 
             this.fileCache.ChangeKey(oldName.FullName, newName.FullName, owerWrite);
-            if (this.Settings.IsTrackingDirty && this.Tracker != null)
+            if (this.Settings.IsTrackingDirty)
             {
-                this.Tracker.Rename(oldName.FullName, newName.FullName, owerWrite);
+                this.Tracker?.Rename(oldName.FullName, newName.FullName, owerWrite);
             }
         }
 

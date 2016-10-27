@@ -136,7 +136,7 @@ namespace Gu.Settings.Core.Tests.Backup
             AssertFile.Exists(false, this.BackupOneDayOld);
             AssertFile.Exists(false, this.BackupOneMonthOld);
             AssertFile.Exists(false, this.BackupOneYearOld);
-            //AssertFile.Exists(false, _softDelete);
+            ////AssertFile.Exists(false, _softDelete);
         }
 
         [Test]

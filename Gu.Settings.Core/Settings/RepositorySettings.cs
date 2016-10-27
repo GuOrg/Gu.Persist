@@ -151,8 +151,6 @@
         /// <summary>
         /// Creates a <see cref="RepositorySettings"/> for <paramref name="directory"/>
         /// </summary>
-        /// <param name="directory"></param>
-        /// <returns></returns>
         public static RepositorySettings DefaultFor(DirectoryInfo directory)
         {
             return new RepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));

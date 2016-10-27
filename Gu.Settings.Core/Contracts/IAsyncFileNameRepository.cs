@@ -7,10 +7,14 @@
     /// </summary>
     public interface IAsyncFileNameRepository : IFileNameRepository
     {
+        /// <summary>
         /// <see cref="IRepository.ReadAsync{T}(string)"/>
+        /// </summary>
         Task<T> ReadAsync<T>(string fileName);
 
+        /// <summary>
         /// <see cref="IRepository.SaveAsync{T}(T,string)"/>
+        /// </summary>
         Task SaveAsync<T>(T item, string fileName);
     }
 }

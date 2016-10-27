@@ -6,7 +6,7 @@
     using System.Linq;
 
     /// <summary>
-    ///
+    /// Helper for managing backup files.
     /// </summary>
     public class BackupFile
     {

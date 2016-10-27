@@ -7,16 +7,11 @@ namespace Gu.Settings.NewtonsoftJson
 
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// Settings used in <see cref="JsonRepository"/>
+    /// </summary>
     public class JsonRepositorySettings : RepositorySettings
     {
-        public static readonly JsonSerializerSettings DefaultJsonSettings = new JsonSerializerSettings
-        {
-            MissingMemberHandling = MissingMemberHandling.Error,
-            Formatting = Formatting.Indented,
-            Culture = CultureInfo.InvariantCulture,
-            FloatFormatHandling = FloatFormatHandling.DefaultValue
-        };
-
         public JsonRepositorySettings(DirectoryInfo directory)
             : base(directory)
         {
@@ -55,7 +50,8 @@ namespace Gu.Settings.NewtonsoftJson
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
-            : this(PathAndSpecialFolder.Default,
+            : this(
+                PathAndSpecialFolder.Default,
                 jsonSerializerSettings,
                 isTrackingDirty,
                 isCaching,
@@ -78,6 +74,14 @@ namespace Gu.Settings.NewtonsoftJson
         {
             this.JsonSerializerSettings = jsonSerializerSettings;
         }
+
+        public static JsonSerializerSettings DefaultJsonSettings => new JsonSerializerSettings
+        {
+            MissingMemberHandling = MissingMemberHandling.Error,
+            Formatting = Formatting.Indented,
+            Culture = CultureInfo.InvariantCulture,
+            FloatFormatHandling = FloatFormatHandling.DefaultValue
+        };
 
         public static new JsonRepositorySettings DefaultFor(DirectoryInfo directory)
         {

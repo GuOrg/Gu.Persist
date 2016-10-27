@@ -4,11 +4,17 @@ namespace Gu.Settings.RuntimeXml
     using System.Collections.Concurrent;
     using System.IO;
     using System.Runtime.Serialization;
+    using System.Threading.Tasks;
+
+    using Gu.Settings.Core;
 
     public static class XmlHelper
     {
-        internal static readonly ConcurrentDictionary<Type, DataContractSerializer> Serializers = new ConcurrentDictionary<Type, DataContractSerializer>();
+        private static readonly ConcurrentDictionary<Type, DataContractSerializer> Serializers = new ConcurrentDictionary<Type, DataContractSerializer>();
 
+        /// <summary>
+        /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
+        /// </summary>
         public static T FromStream<T>(Stream stream)
         {
             var serializer = Serializers.GetOrAdd(typeof(T), x => new DataContractSerializer(typeof(T)));
@@ -19,18 +25,59 @@ namespace Gu.Settings.RuntimeXml
             }
         }
 
-        public static MemoryStream ToStream<T>(T o)
+        /// <summary>
+        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
+        /// </summary>
+        public static MemoryStream ToStream<T>(T item)
         {
             var ms = new MemoryStream();
-            var serializer = Serializers.GetOrAdd(o.GetType(), x => new DataContractSerializer(o.GetType()));
+            var serializer = Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
             lock (serializer)
             {
-                serializer.WriteObject(ms, o);
+                serializer.WriteObject(ms, item);
             }
 
             ms.Flush();
             ms.Position = 0;
             return ms;
+        }
+
+        /// <summary>
+        /// Read the contents of <paramref name="file"/> and serialize it to <typeparamref name="T"/>
+        /// </summary>
+        public static T Read<T>(FileInfo file)
+        {
+            return FileHelper.Read(file, FromStream<T>);
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
+        public static Task<T> ReadAsync<T>(FileInfo file)
+        {
+            return FileHelper.ReadAsync(file, FromStream<T>);
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as xml
+        /// </summary>
+        public static void Save<T>(T item, FileInfo file)
+        {
+            using (var stream = ToStream(item))
+            {
+                FileHelper.Save(file, stream);
+            }
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as xml
+        /// </summary>
+        public static Task SaveAsync<T>(T item, FileInfo file)
+        {
+            using (var stream = ToStream(item))
+            {
+                return FileHelper.SaveAsync(file, stream);
+            }
         }
     }
 }

@@ -88,7 +88,7 @@
 
         public override int GetHashCode()
         {
-            // ReSharper disable once NonReadonlyMemberInGetHashCode, hack here 
+            // ReSharper disable once NonReadonlyMemberInGetHashCode, hack here but not important as it is just a helper in a test.
             return this.value;
         }
 

@@ -8,6 +8,9 @@
 
     public static class BinaryHelper
     {
+        /// <summary>
+        /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
+        /// </summary>
         public static T FromStream<T>(Stream stream)
         {
             var formatter = new BinaryFormatter();
@@ -15,11 +18,14 @@
             return setting;
         }
 
-        public static MemoryStream ToStream<T>(T o)
+        /// <summary>
+        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
+        /// </summary>
+        public static MemoryStream ToStream<T>(T item)
         {
             var formatter = new BinaryFormatter();
             var ms = new MemoryStream();
-            formatter.Serialize(ms, o);
+            formatter.Serialize(ms, item);
             ms.Flush();
             ms.Position = 0;
             return ms;
@@ -45,16 +51,15 @@
         }
 
         /// <summary>
-        /// Reads an xml file and deserializes the contents
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
-        /// <param name="file">The filename including path and extension</param>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             return FileHelper.ReadAsync(file, FromStream<T>);
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as xml
+        /// Save the binary representation of <paramref name="item"/>.
         /// </summary>
         public static Task SaveAsync<T>(T item, FileInfo file)
         {
@@ -65,7 +70,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as xml
+        /// Save the binary representation of <paramref name="item"/>.
         /// </summary>
         public static void Save<T>(T item, FileInfo file)
         {

@@ -9,6 +9,11 @@ namespace Gu.Settings.SystemXml
 
     public class XmlRepositorySettings : RepositorySettings, IXmlSerializable
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepositorySettings"/> class.
+        /// Needed for serialization
+        /// </summary>
+        // ReSharper disable once UnusedMember.Local
         private XmlRepositorySettings()
         {
         }
@@ -28,7 +33,7 @@ namespace Gu.Settings.SystemXml
         {
         }
 
-        public static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
+        public new static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
         {
             return new XmlRepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }

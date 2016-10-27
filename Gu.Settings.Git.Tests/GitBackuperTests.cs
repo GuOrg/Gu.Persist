@@ -11,9 +11,9 @@
 
     public class GitBackuperTests
     {
+        private readonly DirectoryInfo directory;
         private DummySerializable dummy;
         private JsonRepository repository;
-        private readonly DirectoryInfo directory;
 
         public GitBackuperTests()
         {

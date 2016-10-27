@@ -7,10 +7,17 @@
 
     using LibGit2Sharp;
 
+    /// <summary>
+    /// An implementation of <see cref="IBackuper"/> that uses a git repository for backups.
+    /// </summary>
     public class GitBackuper : IBackuper
     {
         private readonly PathAndSpecialFolder directory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GitBackuper"/> class.
+        /// Creates a git repository in <paramref name="directory"/>
+        /// </summary>
         public GitBackuper(PathAndSpecialFolder directory)
         {
             this.directory = directory;
@@ -18,16 +25,19 @@
             Git.InitRepository(directoryInfo);
         }
 
+        /// <inheritdoc/>
         public bool BeforeSave(FileInfo file)
         {
             return false;
         }
 
+        /// <inheritdoc/>
         public void Backup(FileInfo file, FileInfo backup)
         {
             Git.StageAndCommit(file);
         }
 
+        /// <inheritdoc/>
         public bool CanRestore(FileInfo file)
         {
             var status = Git.GetStatus(file);
@@ -54,6 +64,7 @@
             }
         }
 
+        /// <inheritdoc/>
         public bool TryRestore(FileInfo file)
         {
             var canRestore = this.CanRestore(file);
@@ -65,22 +76,26 @@
             return canRestore;
         }
 
+        /// <inheritdoc/>
         public void AfterSuccessfulSave(FileInfo file)
         {
             Git.StageAndCommit(file);
         }
 
+        /// <inheritdoc/>
         public bool CanRename(FileInfo file, string newName)
         {
             return true;
         }
 
-        public void Rename(FileInfo file, string newName, bool owerWrite)
+        /// <inheritdoc/>
+        void IBackuper.Rename(FileInfo file, string newName, bool owerWrite)
         {
             // nop
         }
 
-        public void DeleteBackups(FileInfo file)
+        /// <inheritdoc/>
+        void IBackuper.DeleteBackups(FileInfo file)
         {
             // nop
         }

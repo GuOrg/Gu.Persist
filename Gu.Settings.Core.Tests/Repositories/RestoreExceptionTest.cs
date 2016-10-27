@@ -16,7 +16,7 @@
             {
                 binaryFormatter.Serialize(steram, exception);
                 steram.Position = 0;
-                var roundtripped =(RestoreException) binaryFormatter.Deserialize(steram);
+                var roundtripped = (RestoreException)binaryFormatter.Deserialize(steram);
                 Assert.AreEqual("Save failed", roundtripped.SaveException.Message);
                 Assert.AreEqual("Restore failed", roundtripped.InnerException.Message);
             }

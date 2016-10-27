@@ -71,7 +71,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\FileHelperTests.cs" />
     <Compile Include="RemindersTests.cs" />
-    <Compile Include="Sandbox\FakesTests.cs" />
     <Compile Include="Sandbox\SyncBoxTests.cs" />
   </ItemGroup>
   <ItemGroup>

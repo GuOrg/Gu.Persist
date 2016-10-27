@@ -4,10 +4,14 @@
 
     public interface IGenericAsyncRepository : IGenericRepository
     {
-        /// <see cref="IRepository.Read{T}()"/>
+        /// <summary>
+        /// <see cref="IRepository.ReadAsync{T}(T)"/>
+        /// </summary>
         Task<T> ReadAsync<T>();
 
-        /// <see cref="IRepository.Save{T}(T)"/>
+        /// <summary>
+        /// <see cref="IRepository.SaveAsync{T}(T)"/>
+        /// </summary>
         Task SaveAsync<T>(T item);
     }
 }

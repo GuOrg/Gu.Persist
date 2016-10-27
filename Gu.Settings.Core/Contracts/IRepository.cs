@@ -107,7 +107,9 @@
         /// </param>
         Task<T> ReadAsync<T>(string fileName);
 
+        /// <summary>
         /// <see cref="IRepository.Read{T}(FileInfo)"/>
+        /// </summary>
         Task<T> ReadAsync<T>(FileInfo file);
 
         /// <summary>
@@ -153,7 +155,6 @@
         /// <remarks>
         /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
@@ -180,13 +181,19 @@
         /// </summary>
         T ReadOrCreate<T>(FileInfo file, Func<T> creator);
 
+        /// <summary>
         /// <see cref="IRepository.ReadStreamAsync{T}()"/>
+        /// </summary>
         Task<MemoryStream> ReadStreamAsync<T>();
 
+        /// <summary>
         /// <see cref="IRepository.ReadStreamAsync(string)"/>
+        /// </summary>
         Task<MemoryStream> ReadStreamAsync(string fileName);
 
-        /// <see cref="IRepository.ReadStreamAsync(FileInfo)"/>
+        /// <summary>
+        ///  <see cref="IRepository.ReadStreamAsync(FileInfo)"/>
+        /// </summary>
         Task<MemoryStream> ReadStreamAsync(FileInfo file);
 
         /// <summary>
@@ -258,16 +265,24 @@
         /// <param name="tempFile">The file to use as temporary file when saving</param>
         void Save<T>(T item, FileInfo file, FileInfo tempFile);
 
+        /// <summary>
         /// <see cref="IRepository.Save{T}(T)"/>
+        /// </summary>
         Task SaveAsync<T>(T item);
 
+        /// <summary>
         /// <see cref="IRepository.SaveAsync{T}(T, string)"/>
+        /// </summary>
         Task SaveAsync<T>(T item, string fileName);
 
+        /// <summary>
         /// <see cref="IRepository.SaveAsync{T}(T, FileInfo)"/>
+        /// </summary>
         Task SaveAsync<T>(T item, FileInfo file);
 
+        /// <summary>
         /// <see cref="IRepository.SaveAsync{T}(T, FileInfo, FileInfo)"/>
+        /// </summary>
         Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile);
 
         /// <summary>
@@ -299,16 +314,24 @@
         /// </summary>
         void SaveStream(Stream stream, FileInfo file, FileInfo tempFile);
 
+        /// <summary>
         /// <see cref="IRepository.SaveStreamAsync{T}(Stream)"/>
+        /// </summary>
         Task SaveStreamAsync<T>(Stream stream);
 
+        /// <summary>
         /// <see cref="IRepository.SaveStreamAsync(Stream, string)"/>
+        /// </summary>
         Task SaveStreamAsync(Stream stream, string fileName);
 
+        /// <summary>
         /// <see cref="IRepository.SaveStreamAsync(Stream, FileInfo)"/>
+        /// </summary>
         Task SaveStreamAsync(Stream stream, FileInfo file);
 
+        /// <summary>
         /// <see cref="IRepository.SaveStreamAsync(Stream, FileInfo, FileInfo)"/>
+        /// </summary>
         Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile);
 
         /// <summary>

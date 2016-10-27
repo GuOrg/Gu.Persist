@@ -108,6 +108,16 @@
 
         public Environment.SpecialFolder? SpecialFolder { get; }
 
+        public static bool operator ==(PathAndSpecialFolder left, PathAndSpecialFolder right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(PathAndSpecialFolder left, PathAndSpecialFolder right)
+        {
+            return !Equals(left, right);
+        }
+
         public static PathAndSpecialFolder Create(DirectoryInfo info)
         {
             Ensure.NotNull(info, nameof(info));
@@ -137,16 +147,6 @@
             var specialFolderPath = Environment.GetFolderPath(this.SpecialFolder.Value);
             var path = System.IO.Path.Combine(specialFolderPath, this.Path);
             return new DirectoryInfo(path);
-        }
-
-        public static bool operator ==(PathAndSpecialFolder left, PathAndSpecialFolder right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(PathAndSpecialFolder left, PathAndSpecialFolder right)
-        {
-            return !Equals(left, right);
         }
 
         public bool Equals(PathAndSpecialFolder other)

@@ -4,7 +4,7 @@
 
     public class XmlEqualsComparer<T> : SerializedEqualsComparer<T>
     {
-        public static readonly XmlEqualsComparer<T> Default = new XmlEqualsComparer<T>();
+        public new static readonly XmlEqualsComparer<T> Default = new XmlEqualsComparer<T>();
 
         /// <inheritdoc/>
         protected override byte[] GetBytes(T item)

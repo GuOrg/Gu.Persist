@@ -13,42 +13,46 @@
     /// </summary>
     public class JsonRepository : Repository<JsonRepositorySettings>
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// Uses <see cref="Directories.Default"/>
+        /// </summary>
         public JsonRepository()
             : this(Directories.Default)
         {
         }
 
-        /// <inheritdoc/>
         public JsonRepository(JsonSerializerSettings jsonSettings)
             : base(Directories.Default, () => JsonRepositorySettings.DefaultFor(Directories.Default, jsonSettings))
         {
         }
 
-        /// <inheritdoc/>
         public JsonRepository(DirectoryInfo directory)
             : base(directory, () => JsonRepositorySettings.DefaultFor(directory))
         {
         }
 
-        /// <inheritdoc/>
         public JsonRepository(DirectoryInfo directory, Func<JsonRepositorySettings> settingsCreator)
             : base(directory, settingsCreator)
         {
         }
 
-        /// <inheritdoc/>
         public JsonRepository(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
             : base(directory, () => JsonRepositorySettings.DefaultFor(directory, jsonSettings))
         {
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// </summary>
         public JsonRepository(JsonRepositorySettings settings)
             : base(settings)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// </summary>
         public JsonRepository(JsonRepositorySettings settings, IBackuper backuper)
             : base(settings, backuper)
         {

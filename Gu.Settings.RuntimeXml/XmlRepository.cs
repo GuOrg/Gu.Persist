@@ -11,25 +11,31 @@
     /// </summary>
     public class XmlRepository : Repository<RuntimeXmlRepositorySettings>
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// Uses <see cref="Directories.Default"/>
+        /// </summary>
         public XmlRepository()
             : this(Directories.Default)
         {
         }
 
-        /// <inheritdoc/>
         public XmlRepository(DirectoryInfo directory)
             : base(directory, () => RuntimeXmlRepositorySettings.DefaultFor(directory))
         {
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new default setting is created and saved.
+        /// </summary>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
         public XmlRepository(DirectoryInfo directory, Func<RuntimeXmlRepositorySettings> settingsCreator)
             : base(directory, settingsCreator)
         {
         }
 
-        /// <inheritdoc/>
         public XmlRepository(RuntimeXmlRepositorySettings settings)
             : base(settings)
         {

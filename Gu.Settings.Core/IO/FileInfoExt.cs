@@ -9,7 +9,7 @@
     internal static class FileInfoExt
     {
         public static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
-        // ReSharper disable once UnusedMember.Global
+        //// ReSharper disable once UnusedMember.Global
         public static readonly char[] InvalidPathChars = Path.GetInvalidPathChars();
         private static readonly ConcurrentDictionary<string, string> TimeStampPatternMap = new ConcurrentDictionary<string, string>();
 
@@ -81,7 +81,7 @@
                 throw new ArgumentException("Fail", "extension");
             }
 
-            string fileName = file.FullName.Substring(0, (file.FullName.Length - extension.Length));
+            string fileName = file.FullName.Substring(0, file.FullName.Length - extension.Length);
             return new FileInfo(fileName);
         }
 
@@ -96,7 +96,7 @@
             {
                 if (newName.EndsWith(FileHelper.SoftDeleteExtension, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    newName = newName.Substring(0, (newName.Length - FileHelper.SoftDeleteExtension.Length));
+                    newName = newName.Substring(0, newName.Length - FileHelper.SoftDeleteExtension.Length);
                 }
 
                 file = file.WithRemovedExtension(FileHelper.SoftDeleteExtension);

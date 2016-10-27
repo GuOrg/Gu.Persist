@@ -23,7 +23,7 @@ namespace Gu.Settings.RuntimeXml
         {
         }
 
-        public static RuntimeXmlRepositorySettings DefaultFor(DirectoryInfo directory)
+        public new static RuntimeXmlRepositorySettings DefaultFor(DirectoryInfo directory)
         {
             return new RuntimeXmlRepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }

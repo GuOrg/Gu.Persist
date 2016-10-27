@@ -8,6 +8,7 @@
     /// </summary>
     public abstract class SerializedEqualsComparer<T> : EqualityComparer<T>
     {
+        // ReSharper disable once StaticMemberInGenericType
         private static readonly byte[] EmptyBytes = new byte[0];
 
         /// <summary>
@@ -23,7 +24,7 @@
             }
 
             // ReSharper disable once LoopCanBeConvertedToQuery, clearer with for imo
-            for (int i = 0; i < xBytes.Length; i++)
+            for (var i = 0; i < xBytes.Length; i++)
             {
                 if (xBytes[i] != yBytes[i])
                 {
@@ -48,9 +49,8 @@
             var bytes = this.GetBytesInner(obj);
             unchecked
             {
-                int hash = 17;
-                // ReSharper disable once ForCanBeConvertedToForeach, for for perf here. Still going to be slow.
-                for (int i = 0; i < bytes.Length; i++)
+                var hash = 17;
+                for (var i = 0; i < bytes.Length; i++)
                 {
                     hash = (hash * 31) + bytes[i];
                 }

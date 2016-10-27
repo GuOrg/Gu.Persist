@@ -8,15 +8,24 @@
 
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// Helper methods for serializing and deserializing xml.
+    /// </summary>
     public static class JsonHelper
     {
         public static readonly UTF8Encoding DefaultEncoding = new UTF8Encoding(false, true);
 
+        /// <summary>
+        /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
+        /// </summary>
         public static T FromStream<T>(Stream stream)
         {
             return FromStream<T>(stream, null);
         }
 
+        /// <summary>
+        /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static T FromStream<T>(Stream stream, JsonSerializerSettings settings)
         {
@@ -30,11 +39,17 @@
             }
         }
 
+        /// <summary>
+        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
+        /// </summary>
         public static MemoryStream ToStream<T>(T item)
         {
             return ToStream(item, null);
         }
 
+        /// <summary>
+        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
+        /// </summary>
         public static MemoryStream ToStream<T>(T item, JsonSerializerSettings settings)
         {
             var stream = new MemoryStream();
@@ -54,9 +69,6 @@
         /// <summary>
         /// Serializes to memorystream, then returns the deserialized object
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public static T Clone<T>(T item)
         {
             using (var stream = ToStream(item))
@@ -66,47 +78,89 @@
         }
 
         /// <summary>
-        ///
+        /// Serializes to memorystream, then returns the deserialized object
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="file"></param>
-        /// <returns></returns>
+        public static T Clone<T>(T item, JsonSerializerSettings settings)
+        {
+            using (var stream = ToStream(item, settings))
+            {
+                return FromStream<T>(stream, settings);
+            }
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
         public static T Read<T>(FileInfo file)
         {
             return FileHelper.Read(file, FromStream<T>);
         }
 
         /// <summary>
-        /// Reads an xml file and deserializes the contents
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="file">The filename including path and extension</param>
-        /// <returns></returns>
+        public static T Read<T>(FileInfo file, JsonSerializerSettings settings)
+        {
+            return FileHelper.Read(file, s => FromStream<T>(s, settings));
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             return FileHelper.ReadAsync(file, FromStream<T>);
         }
 
         /// <summary>
-        /// Saves as xml
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="o"></param>
-        /// <param name="file">The filename including path and extension</param>
-        /// <returns></returns>
-        public static Task SaveAsync<T>(T o, FileInfo file)
+        public static Task<T> ReadAsync<T>(FileInfo file, JsonSerializerSettings settings)
         {
-            using (var stream = ToStream(o))
+            return FileHelper.ReadAsync(file, s => FromStream<T>(s, settings));
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static void Save<T>(T item, FileInfo file)
+        {
+            using (var stream = ToStream(item))
+            {
+                FileHelper.Save(file, stream);
+            }
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static void Save<T>(T item, FileInfo file, JsonSerializerSettings settings)
+        {
+            using (var stream = ToStream(item, settings))
+            {
+                FileHelper.Save(file, stream);
+            }
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static Task SaveAsync<T>(T item, FileInfo file)
+        {
+            using (var stream = ToStream(item))
             {
                 return FileHelper.SaveAsync(file, stream);
             }
         }
 
-        public static void Save<T>(T o, FileInfo file)
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static Task SaveAsync<T>(T item, FileInfo file, JsonSerializerSettings settings)
         {
-            using (var stream = ToStream(o))
+            using (var stream = ToStream(item, settings))
             {
-                FileHelper.Save(file, stream);
+                return FileHelper.SaveAsync(file, stream);
             }
         }
     }

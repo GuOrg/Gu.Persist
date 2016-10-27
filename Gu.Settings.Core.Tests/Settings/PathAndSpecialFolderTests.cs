@@ -150,13 +150,12 @@
         [TestCase(@"c:\foo\bar\", @"c:\foo\", true)]
         [TestCase(@"c:\foo\bar", @"c:\foo\", true)]
         [TestCase(@"c:\foobar", @"c:\foo", false)]
-        //[TestCase(@"c:\foo\..\bar\baz", @"c:\foo", false)]
-        //[TestCase(@"c:\foo\..\bar\baz", @"c:\bar", true)]
-        //[TestCase(@"c:\foo\..\bar\baz", @"c:\barr", false)]
+        ////[TestCase(@"c:\foo\..\bar\baz", @"c:\foo", false)]
+        ////[TestCase(@"c:\foo\..\bar\baz", @"c:\bar", true)]
+        ////[TestCase(@"c:\foo\..\bar\baz", @"c:\barr", false)]
         public void IsSubDirectoryOfOrSame(string path, string potentialParent, bool expected)
         {
-            var method = typeof(PathAndSpecialFolder).GetMethod("IsSubDirectoryOfOrSame",
-                BindingFlags.Static | BindingFlags.NonPublic);
+            var method = typeof(PathAndSpecialFolder).GetMethod("IsSubDirectoryOfOrSame", BindingFlags.Static | BindingFlags.NonPublic);
 
             Assert.AreEqual(expected, method.Invoke(null, new object[] { path, potentialParent }));
         }

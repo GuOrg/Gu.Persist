@@ -42,7 +42,6 @@ namespace Gu.Settings.Core.Tests.Repositories
         protected RepositoryTests()
         {
             this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + this.GetType().Name);
-            //Directories.Default = Directory;
             this.dummy = new DummySerializable(1);
         }
 
@@ -597,17 +596,17 @@ namespace Gu.Settings.Core.Tests.Repositories
         public void Restore()
         {
             Assert.Inconclusive("Not sure how to solve this and caching. Don't want to do reflection and copy properties I think");
-            //Repository.Save(_dummy, _file);
-            //_dummy.Value++;
-            //Repository.Save(_dummy, _file); // Save twice so there is a backup
-            //AssertFile.Exists(true, _file);
-            //AssertFile.Exists(true, _backup);
-            //Repository.Backuper.Restore(_file, _backup);
+            ////Repository.Save(_dummy, _file);
+            ////_dummy.Value++;
+            ////Repository.Save(_dummy, _file); // Save twice so there is a backup
+            ////AssertFile.Exists(true, _file);
+            ////AssertFile.Exists(true, _backup);
+            ////Repository.Backuper.Restore(_file, _backup);
 
-            //AssertFile.Exists(true, _file);
-            //AssertFile.Exists(false, _backup);
-            //var read = Read<DummySerializable>(_file);
-            //Assert.AreEqual(_dummy.Value - 1, read.Value);
+            ////AssertFile.Exists(true, _file);
+            ////AssertFile.Exists(false, _backup);
+            ////var read = Read<DummySerializable>(_file);
+            ////Assert.AreEqual(_dummy.Value - 1, read.Value);
         }
 
         protected abstract IRepository Create();

@@ -6,8 +6,15 @@ namespace Gu.Settings.SystemXml
 
     using Gu.Settings.Core;
 
+    /// <summary>
+    /// A repository reading and saving files using <see cref="System.Xml.Serialization.XmlSerializer"/>
+    /// </summary>
     public class XmlRepository : Repository<XmlRepositorySettings>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// Uses <see cref="Directories.Default"/>
+        /// </summary>
         public XmlRepository()
             : this(Directories.Default)
         {
@@ -18,7 +25,12 @@ namespace Gu.Settings.SystemXml
         {
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new default setting is created and saved.
+        /// </summary>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
         public XmlRepository(DirectoryInfo directory, Func<XmlRepositorySettings> settingsCreator)
             : base(directory, settingsCreator)
         {

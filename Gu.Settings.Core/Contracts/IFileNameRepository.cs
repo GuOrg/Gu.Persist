@@ -5,10 +5,14 @@
 
     public interface IFileNameRepository
     {
+        /// <summary>
         /// <see cref="IRepository.Delete(string, bool)"/>
+        /// </summary>
         void Delete(string fileName, bool deleteBackups);
 
+        /// <summary>
         /// <see cref="IRepository.Exists(string)"/>
+        /// </summary>
         bool Exists(string fileName);
 
         /// <summary>

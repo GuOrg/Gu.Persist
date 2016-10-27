@@ -12,7 +12,7 @@
     public class AutoSaveSetting : INotifyPropertyChanged
     {
         public static readonly IReadOnlyList<StringComparison> AllComparisons =
-            Enum.GetValues(typeof (StringComparison)).Cast<StringComparison>().ToArray();
+            Enum.GetValues(typeof(StringComparison)).Cast<StringComparison>().ToArray();
 
         private int value1;
         private int value2;
