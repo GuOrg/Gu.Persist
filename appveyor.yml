@@ -1,7 +1,10 @@
 version: 1.0.{build}
 configuration: Release
 platform: Any CPU
-cache: packages -> paket.lock
+max_jobs: 1
+cache: 
+  - packages -> paket.lock
+
 build:
   project: Gu.Persist.sln
   verbosity: minimal
