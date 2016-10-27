@@ -61,12 +61,14 @@
         /// <summary>
         /// Creates the directory if not exists
         /// </summary>
-        internal static void CreateIfNotExists(this DirectoryInfo directory)
+        internal static DirectoryInfo CreateIfNotExists(this DirectoryInfo directory)
         {
             if (!directory.Exists)
             {
                 directory.Create();
             }
+
+            return directory;
         }
     }
 }

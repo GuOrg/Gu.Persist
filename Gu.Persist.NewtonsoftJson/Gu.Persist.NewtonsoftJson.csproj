@@ -39,7 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JsonEqualsComparer{T}.cs" />
-    <Compile Include="JsonHelper.cs" />
+    <Compile Include="JsonFile.cs" />
     <Compile Include="JsonRepository.cs" />
     <Compile Include="JsonRepositorySettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

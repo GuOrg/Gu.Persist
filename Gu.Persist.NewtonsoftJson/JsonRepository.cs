@@ -145,13 +145,13 @@ namespace Gu.Persist.NewtonsoftJson
         /// <inheritdoc/>
         protected override T FromStream<T>(Stream stream)
         {
-            return JsonHelper.FromStream<T>(stream, this.Settings.JsonSerializerSettings);
+            return JsonFile.FromStream<T>(stream, this.Settings.JsonSerializerSettings);
         }
 
         /// <inheritdoc/>
         protected override Stream ToStream<T>(T item)
         {
-            return JsonHelper.ToStream(item, this.Settings.JsonSerializerSettings);
+            return JsonFile.ToStream(item, this.Settings.JsonSerializerSettings);
         }
 
         /// <inheritdoc/>

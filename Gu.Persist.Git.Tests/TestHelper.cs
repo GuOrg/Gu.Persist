@@ -9,12 +9,12 @@
     {
         public static T Read<T>(FileInfo file)
         {
-            return FileHelper.Read(file, JsonHelper.FromStream<T>);
+            return FileHelper.Read(file, JsonFile.FromStream<T>);
         }
 
         public static void Save<T>(T o, FileInfo file)
         {
-            using (var stream = JsonHelper.ToStream(o))
+            using (var stream = JsonFile.ToStream(o))
             {
                 FileHelper.Save(file, stream);
             }

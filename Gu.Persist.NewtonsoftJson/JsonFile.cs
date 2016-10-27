@@ -11,7 +11,7 @@
     /// <summary>
     /// Helper methods for serializing and deserializing json.
     /// </summary>
-    public static class JsonHelper
+    public static class JsonFile
     {
         /// <summary>
         /// Returns the default encoding UTF8.
@@ -29,7 +29,6 @@
         /// <summary>
         /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static T FromStream<T>(Stream stream, JsonSerializerSettings settings)
         {
             var serializer = settings != null
@@ -126,7 +125,7 @@
         /// <summary>
         /// Saves <paramref name="item"/> as json
         /// </summary>
-        public static void Save<T>(T item, FileInfo file)
+        public static void Save<T>(FileInfo file, T item)
         {
             using (var stream = ToStream(item))
             {
@@ -137,7 +136,7 @@
         /// <summary>
         /// Saves <paramref name="item"/> as json
         /// </summary>
-        public static void Save<T>(T item, FileInfo file, JsonSerializerSettings settings)
+        public static void Save<T>(FileInfo file, T item, JsonSerializerSettings settings)
         {
             using (var stream = ToStream(item, settings))
             {
@@ -148,7 +147,7 @@
         /// <summary>
         /// Saves <paramref name="item"/> as json
         /// </summary>
-        public static Task SaveAsync<T>(T item, FileInfo file)
+        public static Task SaveAsync<T>(FileInfo file, T item)
         {
             using (var stream = ToStream(item))
             {
@@ -159,7 +158,7 @@
         /// <summary>
         /// Saves <paramref name="item"/> as json
         /// </summary>
-        public static Task SaveAsync<T>(T item, FileInfo file, JsonSerializerSettings settings)
+        public static Task SaveAsync<T>(FileInfo file, T item, JsonSerializerSettings settings)
         {
             using (var stream = ToStream(item, settings))
             {

@@ -6,20 +6,32 @@
 
     public class SettingsTests
     {
+        private readonly DirectoryInfo directory;
+
+        public SettingsTests()
+        {
+            this.directory = new DirectoryInfo($@"C:\Temp\Gu.Persist\{this.GetType().Name}");
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            this.directory.Delete(true);
+        }
+
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var backupDir = new DirectoryInfo($@"C:\Temp\Gu.Persist\{this.GetType().Name}\Backup");
+            var backupDir = this.directory.CreateSubdirectory("Backup");
             var backupSettings = new BackupSettings(backupDir);
-            var directory = new DirectoryInfo($@"C:\Temp\Gu.Persist\{this.GetType().Name}");
             var settings = new JsonRepositorySettings(
-                               directory,
-                               JsonRepositorySettings.CreateDefaultJsonSettings(),
-                               true,
-                               true,
-                               backupSettings,
-                               ".cfg",
-                               ".tmp");
+                this.directory,
+                JsonRepositorySettings.CreateDefaultJsonSettings(),
+                true,
+                true,
+                backupSettings,
+                ".cfg",
+                ".tmp");
             var repository = new JsonRepository(settings);
             repository.Save(settings);
             var repositorySettings = repository.Read<JsonRepositorySettings>();

@@ -13,7 +13,7 @@
         /// <inheritdoc/>
         protected override byte[] GetBytes(T item)
         {
-            using (var stream = JsonHelper.ToStream(item))
+            using (var stream = JsonFile.ToStream(item))
             {
                 return stream.ToArray();
             }
