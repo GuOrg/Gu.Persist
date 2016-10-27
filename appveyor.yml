@@ -9,4 +9,4 @@ build:
   verbosity: minimal
 
 test_script:
-  nunit3-console *Test.dll --result=myresults.xml;format=AppVeyor
+  nunit3-console \Gu.Persist.Core.Tests\bin\Release\Gu.Persist.Core.Tests.dll --result=myresults.xml;format=AppVeyor
