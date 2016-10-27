@@ -11,7 +11,7 @@
     /// <summary>
     /// Helper methods for serializing and deserializing xml.
     /// </summary>
-    public static class XmlHelper
+    public static class XmlFile
     {
         private static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();
 
@@ -75,22 +75,22 @@
         /// <summary>
         /// Saves <paramref name="item"/> as xml
         /// </summary>
-        public static Task SaveAsync<T>(T item, FileInfo file)
+        public static void Save<T>(FileInfo file, T item)
         {
             using (var stream = ToStream(item))
             {
-                return FileHelper.SaveAsync(file, stream);
+                FileHelper.Save(file, stream);
             }
         }
 
         /// <summary>
         /// Saves <paramref name="item"/> as xml
         /// </summary>
-        public static void Save<T>(T item, FileInfo file)
+        public static Task SaveAsync<T>(FileInfo file, T item)
         {
             using (var stream = ToStream(item))
             {
-                FileHelper.Save(file, stream);
+                return FileHelper.SaveAsync(file, stream);
             }
         }
     }

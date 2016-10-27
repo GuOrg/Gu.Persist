@@ -50,15 +50,13 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BenchmarkTests.cs" />
+    <Compile Include="Repository\XmlRepositoryTests.cs" />
     <Compile Include="XmlEqualsComparerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helpers\SimpleSample.cs" />
-    <Compile Include="Helpers\XmlTestHelper.cs" />
     <Compile Include="SettingsTests.cs" />
-    <Compile Include="XmlHelperTests.cs" />
-    <Compile Include="RepositoryTests\XmlRepositoryTests.cs" />
-    <Compile Include="RepositoryTests\XmlDefault.cs" />
-    <Compile Include="RepositoryTests\XmlNoBackup.cs" />
+    <Compile Include="XmlFileTests.cs" />
+    <Compile Include="Repository\Default.cs" />
+    <Compile Include="Repository\NoBackup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gu.Persist.Core.Tests\Gu.Persist.Core.Tests.csproj">

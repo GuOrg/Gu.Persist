@@ -108,13 +108,13 @@ namespace Gu.Persist.SystemXml
         /// <inheritdoc/>
         protected override T FromStream<T>(Stream stream)
         {
-            return XmlHelper.FromStream<T>(stream);
+            return XmlFile.FromStream<T>(stream);
         }
 
         /// <inheritdoc/>
         protected override Stream ToStream<T>(T item)
         {
-            return XmlHelper.ToStream(item);
+            return XmlFile.ToStream(item);
         }
 
         /// <inheritdoc/>
