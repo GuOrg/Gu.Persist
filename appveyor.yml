@@ -4,9 +4,9 @@ platform: Any CPU
 cache: 
   - packages -> paket.lock
 
+Set-AppveyorBuildVariable 'NumberOfTestWorkers' '1'
+
 build:
   project: Gu.Persist.sln
   verbosity: minimal
 
-test_script:
-  nunit3-console \Gu.Persist.Core.Tests\bin\Release\Gu.Persist.Core.Tests.dll --result=myresults.xml;format=AppVeyor
