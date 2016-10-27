@@ -8,3 +8,11 @@ build:
   project: Gu.Persist.sln
   verbosity: minimal
 
+test_script:
+  - nunit3-console.exe Gu.Persist.Core.Tests\bin\Release\Gu.Persist.Core.Tests.dll --result=myresults.xml;format=AppVeyor --workers=1
+  - nunit3-console.exe Gu.Persist.Git.Tests\bin\Release\Gu.Persist.Git.Tests.dll --result=myresults.xml;format=AppVeyor --workers=1
+  - nunit3-console.exe Gu.Persist.NewtonsoftJson.Tests\bin\Release\Gu.Persist.NewtonsoftJson.Tests.dll --result=myresults.xml;format=AppVeyor --workers=1
+  - nunit3-console.exe Gu.Persist.RuntimeBinary.Tests\bin\Release\Gu.Persist.RuntimeBinary.Tests.dll --result=myresults.xml;format=AppVeyor --workers=1
+  - nunit3-console.exe Gu.Persist.RuntimeXml.Tests\bin\Release\Gu.Persist.RuntimeXml.Tests.dll --result=myresults.xml;format=AppVeyor --workers=1
+  - nunit3-console.exe Gu.Persist.SystemXml.Tests\bin\Release\Gu.Persist.SystemXml.Tests.dll --result=myresults.xml;format=AppVeyor --workers=1
+
