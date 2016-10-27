@@ -47,7 +47,7 @@
             }
 
             this.repository.Save(this.dummy);
-            await Task.Delay(100);
+            await Task.Delay(100).ConfigureAwait(false);
             using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
                 Assert.AreEqual(1, git.Commits.Count());
@@ -100,12 +100,12 @@
 
         protected void Save<T>(T item, FileInfo file)
         {
-            TestHelper.Save(item, file);
+            JsonFile.Save(file, file);
         }
 
         protected T Read<T>(FileInfo file)
         {
-            return TestHelper.Read<T>(file);
+            return JsonFile.Read<T>(file);
         }
 
         /// <summary>
