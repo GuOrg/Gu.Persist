@@ -18,7 +18,7 @@ namespace Gu.Settings.NewtonsoftJson
         public JsonRepositorySettings(DirectoryInfo directory)
             : base(directory)
         {
-            this.JsonSerializerSettings = DefaultJsonSettings;
+            this.JsonSerializerSettings = CreateDefaultJsonSettings();
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Gu.Settings.NewtonsoftJson
         public JsonRepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
             : base(directory, backupSettings)
         {
-            this.JsonSerializerSettings = DefaultJsonSettings;
+            this.JsonSerializerSettings = CreateDefaultJsonSettings();
         }
 
         /// <summary>
@@ -91,17 +91,6 @@ namespace Gu.Settings.NewtonsoftJson
         }
 
         /// <summary>
-        /// The <see cref="JsonSerializerSettings"/> that will be used if none are specified.
-        /// </summary>
-        public static JsonSerializerSettings DefaultJsonSettings => new JsonSerializerSettings
-        {
-            MissingMemberHandling = MissingMemberHandling.Error,
-            Formatting = Formatting.Indented,
-            Culture = CultureInfo.InvariantCulture,
-            FloatFormatHandling = FloatFormatHandling.DefaultValue
-        };
-
-        /// <summary>
         /// The settings controlling json serialization.
         /// </summary>
         public JsonSerializerSettings JsonSerializerSettings { get; private set; }
@@ -112,7 +101,7 @@ namespace Gu.Settings.NewtonsoftJson
         /// </summary>
         public new static JsonRepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return DefaultFor(directory, DefaultJsonSettings);
+            return DefaultFor(directory, CreateDefaultJsonSettings());
         }
 
         /// <summary>
@@ -121,6 +110,20 @@ namespace Gu.Settings.NewtonsoftJson
         public static JsonRepositorySettings DefaultFor(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
         {
             return new JsonRepositorySettings(PathAndSpecialFolder.Create(directory), jsonSettings, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+        }
+
+        /// <summary>
+        /// The <see cref="JsonSerializerSettings"/> that will be used if none are specified.
+        /// </summary>
+        public static JsonSerializerSettings CreateDefaultJsonSettings()
+        {
+            return new JsonSerializerSettings
+            {
+                MissingMemberHandling = MissingMemberHandling.Error,
+                Formatting = Formatting.Indented,
+                Culture = CultureInfo.InvariantCulture,
+                FloatFormatHandling = FloatFormatHandling.DefaultValue
+            };
         }
     }
 }

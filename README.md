@@ -7,7 +7,6 @@ A small framework for managing settings.
 - XmlRepository is a baseclass for managing xml files.
 - BinaryRepository is a baseclass for managing binary files.
 - JsonRepository is a baseclass for managing json files.
-- AutoSaver is a baseclass for saving files on changes.
 
 Features:
 - T Clone<T>(T item); deep clone by serializing and then deserializing an instance.

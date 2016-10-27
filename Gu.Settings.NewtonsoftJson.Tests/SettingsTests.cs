@@ -14,7 +14,7 @@
             var directory = new DirectoryInfo($@"C:\Temp\Gu.Settings\{this.GetType().Name}");
             var settings = new JsonRepositorySettings(
                                directory,
-                               JsonRepositorySettings.DefaultJsonSettings,
+                               JsonRepositorySettings.CreateDefaultJsonSettings(),
                                true,
                                true,
                                backupSettings,

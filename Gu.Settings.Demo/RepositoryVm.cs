@@ -46,7 +46,7 @@
 
         private static JsonRepository CreateJsonRepositoryWithGitBackuper()
         {
-            var jsonSerializerSettings = JsonRepositorySettings.DefaultJsonSettings;
+            var jsonSerializerSettings = JsonRepositorySettings.CreateDefaultJsonSettings();
             var jsonRepositorySettings = new JsonRepositorySettings(jsonSerializerSettings, true, true, null);
             var gitBackuper = new GitBackuper(jsonRepositorySettings.DirectoryPath);
             return new JsonRepository(jsonRepositorySettings, gitBackuper);
