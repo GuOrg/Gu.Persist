@@ -68,7 +68,7 @@
                     throw new ArgumentException($"Expected extension: {extension}, was: {file.Extension}", parameterName);
                 }
 
-                throw new ArgumentNullException(parameterName, message);
+                throw new ArgumentException(parameterName, message);
             }
         }
 
@@ -83,7 +83,7 @@
                     throw new ArgumentException($"Expected extension to not be {extension}", parameterName);
                 }
 
-                throw new ArgumentNullException(parameterName, message);
+                throw new ArgumentException(parameterName, message);
             }
         }
 
@@ -96,11 +96,10 @@
             {
                 if (message == null)
                 {
-                    throw new ArgumentException(
-                        $"Expected not be any of {{{string.Join(", ", extensions)}}}, was: {file.Extension}", parameterName);
+                    throw new ArgumentException($"Expected not be any of {{{string.Join(", ", extensions)}}}, was: {file.Extension}", parameterName);
                 }
 
-                throw new ArgumentNullException(parameterName, message);
+                throw new ArgumentException(parameterName, message);
             }
         }
 
@@ -112,10 +111,10 @@
             {
                 if (message == null)
                 {
-                    throw new InvalidOperationException($"Expected file {file.FullName} to exist");
+                    throw new FileNotFoundException($"Expected file {file.FullName} to exist");
                 }
 
-                throw new InvalidOperationException(message);
+                throw new FileNotFoundException(message);
             }
         }
 
