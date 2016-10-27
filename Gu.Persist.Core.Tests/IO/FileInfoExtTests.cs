@@ -167,7 +167,7 @@
             var dateTime = new DateTime(2015, 06, 14, 12, 33, 24);
             var s = "." + dateTime.ToString(format, CultureInfo.InvariantCulture);
             var strictPattern = $"^{pattern}$";
-            Console.WriteLine(pattern);
+            ////Console.WriteLine(pattern);
             Assert.AreEqual(@"\.(?<timestamp>\d+_\d+_\d+_\d+_\d+_\d+)", pattern);
             StringAssert.IsMatch(strictPattern, s);
         }

@@ -38,7 +38,7 @@
 
             var xml = sb.ToString();
 
-            Console.Write(xml);
+            ////Console.Write(xml);
             XmlRepositorySettings roundtripped;
 
             using (var reader = new StringReader(xml))

@@ -8,6 +8,7 @@
     public class DirectoriesTests
     {
         [Test]
+        [Explicit]
         public void Default()
         {
             var directoryInfo = Directories.Default;
@@ -15,6 +16,7 @@
         }
 
         [Test]
+        [Explicit]
         public void MyDocuments()
         {
             var directoryInfo = Directories.MyDocuments;
