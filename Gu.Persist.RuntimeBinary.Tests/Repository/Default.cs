@@ -4,7 +4,7 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
     using Gu.Persist.Core.Tests;
     using NUnit.Framework;
 
-    public class NullSettings : BinaryRepositoryTests
+    public class Default : BinaryRepositoryTests
     {
         [Test]
         public void SavesSettingsFile()

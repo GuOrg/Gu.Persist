@@ -8,7 +8,10 @@ namespace Gu.Persist.RuntimeXml
 
     using Gu.Persist.Core;
 
-    public static class XmlHelper
+    /// <summary>
+    /// Helper class for serializing and deserializing using <see cref="DataContractSerializer"/>
+    /// </summary>
+    public static class XmlFile
     {
         private static readonly ConcurrentDictionary<Type, DataContractSerializer> Serializers = new ConcurrentDictionary<Type, DataContractSerializer>();
 
@@ -43,6 +46,17 @@ namespace Gu.Persist.RuntimeXml
         }
 
         /// <summary>
+        /// Serializes to memorystream, then returns the deserialized object
+        /// </summary>
+        public static T Clone<T>(T item)
+        {
+            using (var stream = ToStream(item))
+            {
+                return FromStream<T>(stream);
+            }
+        }
+
+        /// <summary>
         /// Read the contents of <paramref name="file"/> and serialize it to <typeparamref name="T"/>
         /// </summary>
         public static T Read<T>(FileInfo file)
@@ -61,7 +75,7 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Saves <paramref name="item"/> as xml
         /// </summary>
-        public static void Save<T>(T item, FileInfo file)
+        public static void Save<T>(FileInfo file, T item)
         {
             using (var stream = ToStream(item))
             {
@@ -72,7 +86,7 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Saves <paramref name="item"/> as xml
         /// </summary>
-        public static Task SaveAsync<T>(T item, FileInfo file)
+        public static Task SaveAsync<T>(FileInfo file, T item)
         {
             using (var stream = ToStream(item))
             {

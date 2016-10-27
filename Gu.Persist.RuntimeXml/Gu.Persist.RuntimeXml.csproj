@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="XmlRepositorySettings.cs" />
     <Compile Include="XmlEqualsComparer.cs" />
-    <Compile Include="XmlHelper.cs" />
+    <Compile Include="XmlFile.cs" />
     <Compile Include="XmlRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
