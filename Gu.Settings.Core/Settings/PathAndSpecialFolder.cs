@@ -10,7 +10,14 @@
 
     public class PathAndSpecialFolder : IEquatable<PathAndSpecialFolder>
     {
+        /// <summary>
+        /// The default is %ApplicationData%/ApplicationName
+        /// </summary>
         public static readonly PathAndSpecialFolder Default = new PathAndSpecialFolder(Directories.AppDirectory().Name, Environment.SpecialFolder.ApplicationData);
+
+        /// <summary>
+        /// The default is %ApplicationData%/ApplicationName/Backup
+        /// </summary>
         public static readonly PathAndSpecialFolder DefaultBackup = new PathAndSpecialFolder($@"{Directories.AppDirectory().Name}\Backup", Environment.SpecialFolder.ApplicationData);
 
         private static readonly char[] BackSlash = { '\\' };
@@ -30,6 +37,18 @@
                 Environment.SpecialFolder.DesktopDirectory,
             };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PathAndSpecialFolder"/> class.
+        /// </summary>
+        /// <param name="path">
+        /// Can be either of:
+        /// - A full rooted path
+        /// - Just a name ex 'Settings' this will then be combined with <paramref name="specialFolder"/> %SpecialFolder/Settings
+        /// - A relative path ex './Settings'
+        /// </param>
+        /// <param name="specialFolder">
+        /// An <see cref="Environment.SpecialFolder"/>
+        /// </param>
         public PathAndSpecialFolder(string path, Environment.SpecialFolder? specialFolder)
         {
             if (!string.IsNullOrEmpty(path))
@@ -130,6 +149,9 @@
             return new PathAndSpecialFolder(path, null);
         }
 
+        /// <summary>
+        /// The default is %ApplicationData%/assembly.GetName().Name
+        /// </summary>
         public static PathAndSpecialFolder DefaultFor(Assembly assembly)
         {
             Ensure.NotNull(assembly, nameof(assembly));
@@ -149,6 +171,7 @@
             return new DirectoryInfo(path);
         }
 
+        /// <inheritdoc/>
         public bool Equals(PathAndSpecialFolder other)
         {
             if (ReferenceEquals(null, other))
@@ -164,6 +187,7 @@
             return string.Equals(this.Path, other.Path, StringComparison.OrdinalIgnoreCase) && this.SpecialFolder == other.SpecialFolder;
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -184,6 +208,7 @@
             return this.Equals((PathAndSpecialFolder)obj);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             unchecked
