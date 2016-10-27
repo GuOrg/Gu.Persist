@@ -48,7 +48,7 @@
     </When>
   </Choose>
   <ItemGroup>
-    <Compile Include="BinaryHelperTests.cs" />
+    <Compile Include="BinaryFileTests.cs" />
     <Compile Include="BinaryNoBackup.cs" />
     <Compile Include="BinaryRepositoryBackupInSubDirrectory.cs" />
     <Compile Include="BinaryRepositoryDefaultSettings.cs" />

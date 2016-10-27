@@ -23,12 +23,12 @@ namespace Gu.Persist.RuntimeBinary.Tests
 
         protected override void Save<T>(T item, FileInfo file)
         {
-            BinaryHelper.Save(item, file);
+            BinaryFile.Save(item, file);
         }
 
         protected override T Read<T>(FileInfo file)
         {
-            return BinaryHelper.Read<T>(file);
+            return BinaryFile.Read<T>(file);
         }
     }
 }

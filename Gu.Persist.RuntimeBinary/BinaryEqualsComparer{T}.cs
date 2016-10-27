@@ -11,7 +11,7 @@
         /// <inheritdoc/>
         protected override byte[] GetBytes(T item)
         {
-            using (var stream = BinaryHelper.ToStream(item))
+            using (var stream = BinaryFile.ToStream(item))
             {
                 return stream.ToArray();
             }

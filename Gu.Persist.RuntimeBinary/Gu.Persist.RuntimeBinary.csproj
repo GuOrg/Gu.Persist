@@ -38,7 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryEqualsComparer{T}.cs" />
-    <Compile Include="BinaryHelper.cs" />
+    <Compile Include="BinaryFile.cs" />
     <Compile Include="BinaryRepository.cs" />
     <Compile Include="BinaryRepositorySettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

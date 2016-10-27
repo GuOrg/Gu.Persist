@@ -104,13 +104,13 @@ namespace Gu.Persist.RuntimeBinary
         /// <inheritdoc/>
         protected override T FromStream<T>(Stream stream)
         {
-            return BinaryHelper.FromStream<T>(stream);
+            return BinaryFile.FromStream<T>(stream);
         }
 
         /// <inheritdoc/>
         protected override Stream ToStream<T>(T item)
         {
-            return BinaryHelper.ToStream(item);
+            return BinaryFile.ToStream(item);
         }
 
         /// <inheritdoc/>

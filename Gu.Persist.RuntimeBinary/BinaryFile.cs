@@ -9,7 +9,7 @@
     /// <summary>
     /// Helper methods for reading  json.
     /// </summary>
-    public static class BinaryHelper
+    public static class BinaryFile
     {
         /// <summary>
         /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
@@ -64,22 +64,22 @@
         /// <summary>
         /// Save the binary representation of <paramref name="item"/>.
         /// </summary>
-        public static Task SaveAsync<T>(T item, FileInfo file)
+        public static void Save<T>(FileInfo file, T item)
         {
             using (var stream = ToStream(item))
             {
-                return FileHelper.SaveAsync(file, stream);
+                FileHelper.Save(file, stream);
             }
         }
 
         /// <summary>
         /// Save the binary representation of <paramref name="item"/>.
         /// </summary>
-        public static void Save<T>(T item, FileInfo file)
+        public static Task SaveAsync<T>(FileInfo file, T item)
         {
             using (var stream = ToStream(item))
             {
-                FileHelper.Save(file, stream);
+                return FileHelper.SaveAsync(file, stream);
             }
         }
     }
