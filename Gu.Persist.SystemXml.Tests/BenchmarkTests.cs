@@ -16,6 +16,11 @@
         private TypicalSetting setting1;
         private TypicalSetting setting2;
 
+        public static readonly ComparerData[] ComparerSource =
+        {
+            new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000)
+        };
+
         [SetUp]
         public void SetUp()
         {
@@ -41,7 +46,7 @@
             };
         }
 
-        [TestCaseSource(typeof(ComparerSource))]
+        [TestCaseSource(nameof(ComparerSource))]
         [SuppressMessage("ReSharper", "UnusedVariable")]
         public void XmlEquals(ComparerData data)
         {
@@ -62,7 +67,7 @@
                 sw.Elapsed.TotalMilliseconds / data.Times);
         }
 
-        [TestCaseSource(typeof(ComparerSource))]
+        [TestCaseSource(nameof(ComparerSource))]
         [SuppressMessage("ReSharper", "UnusedVariable")]
         public void GetHashCode(ComparerData data)
         {
@@ -81,14 +86,6 @@
                 data.Times,
                 sw.ElapsedMilliseconds,
                 sw.Elapsed.TotalMilliseconds / data.Times);
-        }
-
-        public class ComparerSource : List<ComparerData>
-        {
-            public ComparerSource()
-            {
-                this.Add(new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000));
-            }
         }
 
         public class ComparerData

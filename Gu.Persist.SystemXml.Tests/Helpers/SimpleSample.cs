@@ -9,6 +9,7 @@
 
     using NUnit.Framework;
 
+    [Explicit("Sample")]
     public class SimpleSample
     {
         private FileInfo settingsFile;
