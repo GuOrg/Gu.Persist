@@ -14,8 +14,8 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 [assembly: Guid("d254e6a5-a3a4-4a75-8ed1-41812208bca6")]
-[assembly: AssemblyVersion("1.3.2.0")]
-[assembly: AssemblyFileVersion("1.3.2.0")]
+[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyFileVersion("0.1.0.0")]
 [assembly: InternalsVisibleTo("Gu.Persist.Core.Tests", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Persist.Demo", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Persist.NewtonsoftJson", AllInternalsVisible = true)]
