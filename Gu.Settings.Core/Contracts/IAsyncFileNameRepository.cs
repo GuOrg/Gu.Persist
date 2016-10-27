@@ -3,14 +3,14 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// A repsository that reads and saves
+    /// A repository that reads and saves async.
     /// </summary>
     public interface IAsyncFileNameRepository : IFileNameRepository
     {
-        /// <see cref="IRepository.Read{T}(string)"/>
+        /// <see cref="IRepository.ReadAsync{T}(string)"/>
         Task<T> ReadAsync<T>(string fileName);
 
-        /// <see cref="IRepository.Save{T}(T,string)"/>
+        /// <see cref="IRepository.SaveAsync{T}(T,string)"/>
         Task SaveAsync<T>(T item, string fileName);
     }
 }

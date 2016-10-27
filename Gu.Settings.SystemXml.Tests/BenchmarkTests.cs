@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Gu.Settings.Core.Tests;
     using Gu.Settings.SystemXml;
@@ -38,10 +39,10 @@
                 Value4 = 4,
                 Value5 = 5
             };
-
         }
 
         [TestCaseSource(typeof(ComparerSource))]
+        [SuppressMessage("ReSharper", "UnusedVariable")]
         public void XmlEquals(ComparerData data)
         {
             var comparer = XmlEqualsComparer<TypicalSetting>.Default;

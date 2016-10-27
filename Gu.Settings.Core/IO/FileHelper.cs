@@ -9,12 +9,9 @@ namespace Gu.Settings.Core
         public static readonly string SoftDeleteExtension = ".delete";
 
         /// <summary>
-        ///
+        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="file"></param>
-        /// <param name="fromStream">Reading from from file to T</param>
-        /// <returns></returns>
+        /// <param name="fromStream">Deserializer</param>
         internal static T Read<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
             using (var stream = File.OpenRead(file.FullName))
@@ -24,11 +21,9 @@ namespace Gu.Settings.Core
         }
 
         /// <summary>
-        /// Reads the contents of the file to a memorystream
+        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="fromStream">Reading from stream to T</param>
-        /// <returns></returns>
+        /// <param name="fromStream">Deserializer</param>
         internal static async Task<T> ReadAsync<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
             using (var ms = await ReadAsync(file).ConfigureAwait(false))
@@ -54,9 +49,6 @@ namespace Gu.Settings.Core
         /// Generic method for saving a file async
         /// Creates or overwrites <paramref name="file"/>
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="stream"></param>
-        /// <returns></returns>
         internal static async Task SaveAsync(this FileInfo file, Stream stream)
         {
             using (var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
@@ -69,8 +61,6 @@ namespace Gu.Settings.Core
         /// <summary>
         /// Creates or overwrites <paramref name="file"/>
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="stream"></param>
         internal static void Save(this FileInfo file, Stream stream)
         {
             using (var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
@@ -90,10 +80,7 @@ namespace Gu.Settings.Core
         {
             Ensure.NotNull(file, nameof(file));
             var softDelete = file.GetSoftDeleteFileFor();
-            if (softDelete != null)
-            {
-                softDelete.Delete();
-            }
+            softDelete?.Delete();
         }
 
         internal static FileInfo SoftDelete(this FileInfo file)
@@ -106,12 +93,13 @@ namespace Gu.Settings.Core
 
             var soft = file.WithAppendedExtension(SoftDeleteExtension);
             File.Delete(soft.FullName);
-            try // Swallowing here, no way to know that the file has not been touched.
+            try
             {
                 File.Move(file.FullName, soft.FullName);
             }
             catch (Exception)
             {
+                // Swallowing here, no way to know that the file has not been touched.
                 return null;
             }
 

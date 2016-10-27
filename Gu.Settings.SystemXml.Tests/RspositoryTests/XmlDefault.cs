@@ -1,4 +1,4 @@
-namespace Gu.Settings.SystemXml.Tests
+namespace Gu.Settings.SystemXml.Tests.RspositoryTests
 {
     using System.IO;
 
@@ -8,6 +8,8 @@ namespace Gu.Settings.SystemXml.Tests
     using Gu.Settings.SystemXml;
 
     using NUnit.Framework;
+
+    using TestHelper = Gu.Settings.SystemXml.Tests.Helpers.TestHelper;
 
     public class XmlDefault : RepositoryTests
     {

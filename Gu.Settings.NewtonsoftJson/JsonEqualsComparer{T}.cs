@@ -2,10 +2,12 @@
 {
     using Gu.Settings.Core;
 
-    public class JsonEqualsComparer<T> : SerializedEqualsComparer<T>
+    /// <inheritdoc/>
+    public sealed class JsonEqualsComparer<T> : SerializedEqualsComparer<T>
     {
-        public static readonly JsonEqualsComparer<T> Default = new JsonEqualsComparer<T>();
+        public new static readonly JsonEqualsComparer<T> Default = new JsonEqualsComparer<T>();
 
+        /// <inheritdoc/>
         protected override byte[] GetBytes(T item)
         {
             using (var stream = JsonHelper.ToStream(item))

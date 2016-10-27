@@ -4,7 +4,7 @@
 
     public class BinaryEqualsComparer<T> : SerializedEqualsComparer<T>
     {
-        public static readonly BinaryEqualsComparer<T> Default = new BinaryEqualsComparer<T>();
+        public new static readonly BinaryEqualsComparer<T> Default = new BinaryEqualsComparer<T>();
 
         /// <inheritdoc/>
         protected override byte[] GetBytes(T item)

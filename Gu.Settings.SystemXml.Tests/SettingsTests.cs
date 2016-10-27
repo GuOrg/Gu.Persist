@@ -19,7 +19,8 @@
             var settings = new XmlRepositorySettings(directory, true, true, backupSettings, ".cfg", ".tmp");
             var repository = new XmlRepository(settings);
             repository.Save(settings);
-            var repositorySettings = repository.Read<XmlRepositorySettings>();
+            var roundtripped = repository.Read<XmlRepositorySettings>();
+            Assert.AreEqual(settings.DirectoryPath, roundtripped.DirectoryPath);
         }
 
         [Test]

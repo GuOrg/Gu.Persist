@@ -28,9 +28,6 @@
         /// <summary>
         /// Serializes to memorystream, then returns the deserialized object
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public static T Clone<T>(T item)
         {
             using (var stream = ToStream(item))
@@ -40,11 +37,8 @@
         }
 
         /// <summary>
-        ///
+        /// Read the contents of <paramref name="file"/> and serialize it to <typeparamref name="T"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="file"></param>
-        /// <returns></returns>
         public static T Read<T>(FileInfo file)
         {
             return FileHelper.Read(file, FromStream<T>);
@@ -53,32 +47,29 @@
         /// <summary>
         /// Reads an xml file and deserializes the contents
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="file">The filename including path and extension</param>
-        /// <returns></returns>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             return FileHelper.ReadAsync(file, FromStream<T>);
         }
 
         /// <summary>
-        /// Saves as xml
+        /// Saves <paramref name="item"/> as xml
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="o"></param>
-        /// <param name="file">The filename including path and extension</param>
-        /// <returns></returns>
-        public static Task SaveAsync<T>(T o, FileInfo file)
+        public static Task SaveAsync<T>(T item, FileInfo file)
         {
-            using (var stream = ToStream(o))
+            using (var stream = ToStream(item))
             {
                 return FileHelper.SaveAsync(file, stream);
             }
         }
 
-        public static void Save<T>(T o, FileInfo file)
+        /// <summary>
+        /// Saves <paramref name="item"/> as xml
+        /// </summary>
+        public static void Save<T>(T item, FileInfo file)
         {
-            using (var stream = ToStream(o))
+            using (var stream = ToStream(item))
             {
                 FileHelper.Save(file, stream);
             }

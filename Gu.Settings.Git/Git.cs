@@ -11,6 +11,7 @@
     {
         private static readonly CommitOptions CommitOptions = new CommitOptions { AllowEmptyCommit = false };
         private static readonly CheckoutOptions ForceCheckoutOptions = new CheckoutOptions { CheckoutModifiers = CheckoutModifiers.Force };
+        private static readonly Signature Signature = new Signature(new Identity("Gu.Settings.Git", "Gu.Settings.Git@github.com"), DateTimeOffset.UtcNow);
 
         internal static bool IsValid(DirectoryInfo directory)
         {
@@ -22,13 +23,13 @@
             if (!directory.Exists)
             {
                 directory.CreateIfNotExists();
-                var init = LibGit2Sharp.Repository.Init(directory.FullName);
+                Repository.Init(directory.FullName);
                 return;
             }
 
-            if (!LibGit2Sharp.Repository.IsValid(directory.FullName)) // <- this throws an annoying first chance exception, ignore & continue works
+            if (!LibGit2Sharp.Repository.IsValid(directory.FullName))
             {
-                var init = LibGit2Sharp.Repository.Init(directory.FullName);
+                Repository.Init(directory.FullName);
             }
         }
 
@@ -68,18 +69,18 @@
                     case FileStatus.Nonexistent:
                     case FileStatus.Unaltered:
                         return false;
-                    case FileStatus.Added:
-                    case FileStatus.Staged:
-                    case FileStatus.Removed:
+                    case FileStatus.NewInIndex:
+                    case FileStatus.ModifiedInIndex:
+                    case FileStatus.DeletedFromIndex:
                     case FileStatus.RenamedInIndex:
-                    case FileStatus.StagedTypeChange:
-                    case FileStatus.Untracked:
-                    case FileStatus.Modified:
-                    case FileStatus.Missing:
-                    case FileStatus.TypeChanged:
+                    case FileStatus.TypeChangeInIndex:
+                    case FileStatus.NewInWorkdir:
+                    case FileStatus.ModifiedInWorkdir:
+                    case FileStatus.DeletedFromWorkdir:
+                    case FileStatus.TypeChangeInWorkdir:
                     case FileStatus.RenamedInWorkdir:
                         {
-                            var commit = repository.Commit(status.ToString(), CommitOptions);
+                            repository.Commit("Created backup", Signature, Signature, CommitOptions);
                             return true;
                         }
 
@@ -96,7 +97,7 @@
         {
             using (var repository = new LibGit2Sharp.Repository(file.DirectoryName))
             {
-                repository.CheckoutPaths(repository.Head.Name, new[] { file.FullName }, ForceCheckoutOptions);
+                repository.CheckoutPaths(repository.Head.FriendlyName, new[] { file.FullName }, ForceCheckoutOptions);
             }
         }
     }

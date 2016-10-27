@@ -33,7 +33,11 @@
 
             set
             {
-                if (value == this.value1) return;
+                if (value == this.value1)
+                {
+                    return;
+                }
+
                 this.value1 = value;
                 this.OnPropertyChanged();
             }
@@ -48,7 +52,11 @@
 
             set
             {
-                if (value == this.value2) return;
+                if (value == this.value2)
+                {
+                    return;
+                }
+
                 this.value2 = value;
                 this.OnPropertyChanged();
             }
@@ -63,7 +71,11 @@
 
             set
             {
-                if (value == this.comparison) return;
+                if (value == this.comparison)
+                {
+                    return;
+                }
+
                 this.comparison = value;
                 this.OnPropertyChanged();
             }

@@ -12,7 +12,6 @@
     {
         public static readonly UTF8Encoding DefaultEncoding = new UTF8Encoding(false, true);
 
-
         public static T FromStream<T>(Stream stream)
         {
             return FromStream<T>(stream, null);

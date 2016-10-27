@@ -10,7 +10,7 @@
 
     public static class XmlHelper
     {
-        internal static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();
+        private static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();
 
         public static T FromStream<T>(Stream stream)
         {
@@ -39,9 +39,6 @@
         /// <summary>
         /// Serializes to memorystream, then returns the deserialized object
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public static T Clone<T>(T item)
         {
             using (var stream = ToStream(item))
@@ -53,9 +50,6 @@
         /// <summary>
         /// Reads an xml file and deserialize the contents
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="file">The filename including path and extension</param>
-        /// <returns></returns>
         public static T Read<T>(FileInfo file)
         {
             return FileHelper.Read(file, FromStream<T>);
@@ -64,9 +58,6 @@
         /// <summary>
         /// Reads an xml file and deserialize the contents
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="file">The filename including path and extension</param>
-        /// <returns></returns>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             return FileHelper.ReadAsync(file, FromStream<T>);

@@ -27,7 +27,6 @@
         /// If <paramref name="setting"/> is null a <see cref="NullBackuper"/> is returned.
         /// </remarks>
         /// <param name="setting">The setting to use for backups.</param>
-        /// <returns></returns>
         public static IBackuper Create(BackupSettings setting)
         {
             if (setting != null)
@@ -160,7 +159,8 @@
 
             if (this.Setting.NumberOfBackups > 0)
             {
-                while (allBackups.Count > this.Setting.NumberOfBackups) // this is not efficient but the number of backups should be low
+                // this is not efficient but the number of backups should be low
+                while (allBackups.Count > this.Setting.NumberOfBackups)
                 {
                     var backupFile = allBackups.MinBy(x => x.TimeStamp);
                     backupFile.File.HardDelete();
@@ -170,7 +170,8 @@
 
             if (this.Setting.MaxAgeInDays > 0 && this.Setting.MaxAgeInDays < int.MaxValue)
             {
-                while (true) // this is not efficient but the number of backups should be low
+                // this is not efficient but the number of backups should be low
+                while (true)
                 {
                     var backupFile = allBackups.MinBy(x => x.TimeStamp);
                     var days = (DateTime.Now - backupFile.TimeStamp).Days;
@@ -250,24 +251,19 @@
         public void DeleteBackups(FileInfo file)
         {
             var soft = file.GetSoftDeleteFileFor();
-            if (soft != null)
-            {
-                soft.Delete();
-            }
+            soft?.Delete();
 
             var allBackups = BackupFile.GetAllBackupsFor(file, this.Setting);
             foreach (var backup in allBackups)
             {
-                if (backup.File != null)
-                {
-                    backup.File.Delete();
-                }
+                backup.File?.Delete();
             }
         }
 
         [Obsolete("Implement")]
         private void MoveBackups<T>()
         {
+            throw new NotImplementedException("Implement");
         }
     }
 }

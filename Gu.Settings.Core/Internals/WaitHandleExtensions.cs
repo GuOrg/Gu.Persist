@@ -10,22 +10,37 @@ namespace Gu.Settings.Core
     /// </summary>
     public static class WaitHandleExtensions
     {
+        /// <summary>
+        /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>
+        /// </summary>
         public static Task AsTask(this WaitHandle handle)
         {
             return AsTask(handle, Timeout.InfiniteTimeSpan);
         }
 
+        /// <summary>
+        /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>
+        /// </summary>
         public static Task AsTask(this WaitHandle handle, TimeSpan timeout)
         {
             var tcs = new TaskCompletionSource<object>();
-            var registration = ThreadPool.RegisterWaitForSingleObject(handle, (state, timedOut) =>
-            {
-                var localTcs = (TaskCompletionSource<object>)state;
-                if (timedOut)
-                    localTcs.TrySetCanceled();
-                else
-                    localTcs.TrySetResult(null);
-            }, tcs, timeout, executeOnlyOnce: true);
+            var registration = ThreadPool.RegisterWaitForSingleObject(
+                handle,
+                (state, timedOut) =>
+                    {
+                        var localTcs = (TaskCompletionSource<object>)state;
+                        if (timedOut)
+                        {
+                            localTcs.TrySetCanceled();
+                        }
+                        else
+                        {
+                            localTcs.TrySetResult(null);
+                        }
+                    },
+                tcs,
+                timeout,
+                executeOnlyOnce: true);
             tcs.Task.ContinueWith((_, state) => ((RegisteredWaitHandle)state).Unregister(null), registration, TaskScheduler.Default);
             return tcs.Task;
         }

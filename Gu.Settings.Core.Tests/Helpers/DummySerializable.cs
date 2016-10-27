@@ -41,6 +41,16 @@
             }
         }
 
+        public static bool operator ==(DummySerializable left, DummySerializable right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(DummySerializable left, DummySerializable right)
+        {
+            return !Equals(left, right);
+        }
+
         public bool Equals(DummySerializable other)
         {
             if (ReferenceEquals(null, other))
@@ -78,27 +88,14 @@
 
         public override int GetHashCode()
         {
+            // ReSharper disable once NonReadonlyMemberInGetHashCode, hack here 
             return this.value;
-        }
-
-        public static bool operator ==(DummySerializable left, DummySerializable right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(DummySerializable left, DummySerializable right)
-        {
-            return !Equals(left, right);
         }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var handler = this.PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

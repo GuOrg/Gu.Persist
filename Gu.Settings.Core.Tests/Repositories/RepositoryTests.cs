@@ -2,6 +2,7 @@ namespace Gu.Settings.Core.Tests.Repositories
 {
     using System;
     using System.IO;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using Gu.Settings.Core;
@@ -9,11 +10,15 @@ namespace Gu.Settings.Core.Tests.Repositories
 
     using NUnit.Framework;
 
-    [RequiresSTA]
+    [Apartment(ApartmentState.STA)]
     public abstract class RepositoryTests
     {
         private const string NewName = "New";
         protected readonly DirectoryInfo Directory;
+        protected FileInfo RepoSettingFile;
+
+        private readonly DummySerializable dummy;
+
         private FileInfo file;
         private FileInfo fileTemp;
         private FileInfo fileSoftDelete;
@@ -22,10 +27,6 @@ namespace Gu.Settings.Core.Tests.Repositories
         private FileInfo backup;
         private FileInfo backupSoftDelete;
         private FileInfo backupNewName;
-
-        protected FileInfo RepoSettingFile;
-
-        private readonly DummySerializable dummy;
 
         private FileInfo dummyFile;
         private FileInfo dummyNewName;
@@ -38,18 +39,18 @@ namespace Gu.Settings.Core.Tests.Repositories
 
         public IRepository Repository;
 
-        protected RepositorySettings Settings => (RepositorySettings)this.Repository.Settings;
-
-        protected BackupSettings BackupSettings => this.Settings.BackupSettings;
-
-        protected bool IsBackingUp => this.BackupSettings != null && this.BackupSettings.IsCreatingBackups;
-
         protected RepositoryTests()
         {
             this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + this.GetType().Name);
             //Directories.Default = Directory;
             this.dummy = new DummySerializable(1);
         }
+
+        protected RepositorySettings Settings => (RepositorySettings)this.Repository.Settings;
+
+        protected BackupSettings BackupSettings => this.Settings.BackupSettings;
+
+        protected bool IsBackingUp => this.BackupSettings != null && this.BackupSettings.IsCreatingBackups;
 
         [SetUp]
         public void SetUp()
@@ -429,8 +430,6 @@ namespace Gu.Settings.Core.Tests.Repositories
             Assert.AreSame(this.dummy, read);
             read = this.Read<DummySerializable>(this.file);
             Assert.AreEqual(this.dummy, read);
-            var createsBackups = this.Settings.BackupSettings != null && this.Settings.BackupSettings.IsCreatingBackups;
-
             for (int i = 2; i < 3; i++)
             {
                 this.dummy.Value++;

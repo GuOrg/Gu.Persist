@@ -9,13 +9,13 @@
         /// </summary>
         /// <returns>A new DirectoryInfo that is a subdirectory</returns>
         // ReSharper disable once UnusedMember.Global
-        public static DirectoryInfo Subdirectory(this DirectoryInfo directory, string name)
+        internal static DirectoryInfo Subdirectory(this DirectoryInfo directory, string name)
         {
             var path = Path.Combine(directory.FullName, name);
             return new DirectoryInfo(path);
         }
 
-        public static bool IsSubDirectoryOfOrSame(this DirectoryInfo directoryInfo, DirectoryInfo potentialParent)
+        internal static bool IsSubDirectoryOfOrSame(this DirectoryInfo directoryInfo, DirectoryInfo potentialParent)
         {
             if (DirectoryInfoComparer.Default.Equals(directoryInfo, potentialParent))
             {
@@ -28,11 +28,9 @@
         /// <summary>
         /// Check if <paramref name="directoryInfo"/> is a subdirectory of <paramref name="potentialParent"></paramref>
         /// </summary>
-        /// <param name="directoryInfo"></param>
-        /// <param name="potentialParent"></param>
         /// <returns>True if if <paramref name="directoryInfo"/> is a subdirectory of <paramref name="potentialParent"></paramref>
         /// False if they are the same directory or otherwise</returns>
-        public static bool IsStrictSubDirectoryOf(this DirectoryInfo directoryInfo, DirectoryInfo potentialParent)
+        internal static bool IsStrictSubDirectoryOf(this DirectoryInfo directoryInfo, DirectoryInfo potentialParent)
         {
             while (directoryInfo.Parent != null)
             {
@@ -50,10 +48,8 @@
         /// <summary>
         /// Creates a fileinfo in <paramref name="directory"/>
         /// </summary>
-        /// <param name="directory"></param>
-        /// <param name="fileName"></param>
-        /// <returns>A FileInfo in the driectory</returns>
-        public static FileInfo CreateFileInfoInDirectory(this DirectoryInfo directory, string fileName)
+        /// <returns>A FileInfo in the directory</returns>
+        internal static FileInfo CreateFileInfoInDirectory(this DirectoryInfo directory, string fileName)
         {
             Ensure.NotNull(directory, nameof(directory));
             Ensure.NotNullOrEmpty(fileName, nameof(fileName));
@@ -65,7 +61,6 @@
         /// <summary>
         /// Creates the directory if not exists
         /// </summary>
-        /// <param name="directory"></param>
         internal static void CreateIfNotExists(this DirectoryInfo directory)
         {
             if (!directory.Exists)

@@ -18,14 +18,18 @@ namespace Gu.Settings.Core
             this.SaveException = saveException;
         }
 
-        public Exception SaveException { get; }
-
         protected RestoreException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             this.SaveException = (Exception)info.GetValue(nameof(this.SaveException), typeof(Exception));
         }
 
+        /// <summary>
+        /// The exception that was thrown during the failed save the triggered the restore.
+        /// </summary>
+        public Exception SaveException { get; }
+
+        /// <inheritdoc/>
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

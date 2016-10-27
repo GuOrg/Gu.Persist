@@ -33,19 +33,19 @@
             var status = Git.GetStatus(file);
             switch (status)
             {
-                case FileStatus.Added:
-                case FileStatus.Staged:
-                case FileStatus.Removed:
+                case FileStatus.NewInIndex:
+                case FileStatus.ModifiedInIndex:
+                case FileStatus.DeletedFromIndex:
                 case FileStatus.RenamedInIndex:
-                case FileStatus.StagedTypeChange:
-                case FileStatus.Modified:
-                case FileStatus.TypeChanged:
+                case FileStatus.TypeChangeInIndex:
+                case FileStatus.ModifiedInWorkdir:
+                case FileStatus.TypeChangeInWorkdir:
                 case FileStatus.RenamedInWorkdir:
                     return true;
                 case FileStatus.Unaltered:
                 case FileStatus.Nonexistent:
-                case FileStatus.Untracked:
-                case FileStatus.Missing:
+                case FileStatus.NewInWorkdir:
+                case FileStatus.DeletedFromWorkdir:
                 case FileStatus.Unreadable:
                 case FileStatus.Ignored:
                     return false;

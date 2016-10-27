@@ -18,7 +18,6 @@
         {
             this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Settings\" + this.GetType().Name);
             this.Directory.CreateIfNotExists();
-
         }
 
         [SetUp]

@@ -30,7 +30,6 @@
         /// If <paramref name="directory"/> contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="directory"></param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         protected Repository(DirectoryInfo directory, Func<TSetting> settingsCreator)
         {
@@ -51,7 +50,6 @@
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
         /// Creates a new <see cref="Repository{TSetting}"/> with <paramref name="settings"/>.
         /// </summary>
-        /// <param name="settings"></param>
         protected Repository(TSetting settings)
             : this(settings, Backup.Backuper.Create(settings.BackupSettings))
         {
@@ -61,7 +59,6 @@
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
         /// Creates a new <see cref="Repository{TSetting}"/> with <paramref name="settings"/>.
         /// </summary>
-        /// <param name="settings"></param>
         protected Repository(TSetting settings, IBackuper backuper)
         {
             settings.DirectoryPath.CreateDirectoryInfo().CreateIfNotExists();
@@ -849,24 +846,16 @@
         /// <summary>
         /// Deserialize from <paramref name="stream"/> to an instance of <typeparamref name="T"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="stream"></param>
-        /// <returns></returns>
         protected abstract T FromStream<T>(Stream stream);
 
         /// <summary>
         /// Serialize from <paramref name="item"/> to a <see cref="Stream"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <returns></returns>
         protected abstract Stream ToStream<T>(T item);
 
         /// <summary>
         /// Gets the comparer to use when checking <see cref="IDirty.IsDirty{T}(T)"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         protected abstract IEqualityComparer<T> DefaultStructuralEqualityComparer<T>();
 
         /// <summary>
@@ -875,9 +864,6 @@
         /// <remarks>
         /// Calls <see cref="CacheCore{T}(T, FileInfo)"/>
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="file"></param>
         protected virtual void Cache<T>(T item, FileInfo file)
         {
             this.CacheCore(item, file);

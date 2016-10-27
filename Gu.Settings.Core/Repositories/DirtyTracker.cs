@@ -57,11 +57,6 @@
         /// <summary>
         /// Only checks the cache, does not read from file.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="fullFileName"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
         public bool IsDirty<T>(T item, string fullFileName, IEqualityComparer<T> comparer)
         {
             Ensure.NotNull(fullFileName, nameof(fullFileName));

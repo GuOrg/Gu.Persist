@@ -5,7 +5,8 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// This interface should probably bot be exposed as it contains everythying.
+    /// This interface should probably bot be exposed as it contains everything.
+    /// There are smaller interfaces that provide better API for most situations.
     /// </summary>
     public interface IRepository : ICloner, IDirty
     {
@@ -25,10 +26,8 @@
         IRepositorySettings Settings { get; }
 
         /// <summary>
-        /// This gets the fileinfo used for reading & writing files of type <typeparam name="T"></typeparam>
+        /// This gets the fileinfo used for reading and writing files of type <typeparamref name="T"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         FileInfo GetFileInfo<T>();
 
         /// <summary>
@@ -40,7 +39,6 @@
         /// FileName.cfg
         /// FileName
         /// </param>
-        /// <returns></returns>
         FileInfo GetFileInfo(string fileName);
 
         /// <summary>
@@ -59,21 +57,16 @@
         /// FileName
         /// </param>
         /// <param name="deleteBackups">If true backups are deleted</param>
-        /// <returns></returns>
         void Delete(string fileName, bool deleteBackups);
 
         /// <summary>
         /// Delete the file.
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="deleteBackups"></param>
         void Delete(FileInfo file, bool deleteBackups);
 
         /// <summary>
         /// Check if the file for <typeparamref name="T"/> exists.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         bool Exists<T>();
 
         /// <summary>
@@ -85,14 +78,11 @@
         /// FileName.cfg
         /// FileName
         /// </param>
-        /// <returns></returns>
         bool Exists(string fileName);
 
         /// <summary>
         /// Check if the file exists
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
         bool Exists(FileInfo file);
 
         /// <summary>
@@ -101,8 +91,6 @@
         /// <remarks>
         /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         Task<T> ReadAsync<T>();
 
         /// <summary>
@@ -111,14 +99,12 @@
         /// <remarks>
         /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
         /// FileName
         /// </param>
-        /// <returns></returns>
         Task<T> ReadAsync<T>(string fileName);
 
         /// <see cref="IRepository.Read{T}(FileInfo)"/>
@@ -127,11 +113,9 @@
         /// <summary>
         /// Reads from file for <typeparamref name="T"/>
         /// </summary>
-        ///  <remarks>
+        /// <remarks>
         /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         T Read<T>();
 
         /// <summary>
@@ -142,9 +126,9 @@
         /// <remarks>
         /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="creator"></param>
-        /// <returns></returns>
+        /// <param name="creator">
+        /// A <see cref="Func{TResult}"/> that is used for creating an instance if the file is missing.
+        /// </param>
         T ReadOrCreate<T>(Func<T> creator);
 
         /// <summary>
@@ -153,14 +137,12 @@
         /// <remarks>
         /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
         /// FileName
         /// </param>
-        /// <returns></returns>
         T Read<T>(string fileName);
 
         /// <summary>
@@ -178,8 +160,9 @@
         /// FileName.cfg
         /// FileName
         /// </param>
-        /// <param name="creator"></param>
-        /// <returns></returns>
+        /// <param name="creator">
+        /// A <see cref="Func{TResult}"/> that is used for creating an instance if the file is missing.
+        /// </param>
         T ReadOrCreate<T>(string fileName, Func<T> creator);
 
         /// <summary>
@@ -188,9 +171,6 @@
         /// <remarks>
         /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="file"></param>
-        /// <returns></returns>
         T Read<T>(FileInfo file);
 
         /// <summary>
@@ -198,20 +178,15 @@
         /// If the file is missing an instance is created using <paramref name="creator"/>.
         /// The created instance is then saved.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="file"></param>
-        /// <param name="creator"></param>
-        /// <returns></returns>
         T ReadOrCreate<T>(FileInfo file, Func<T> creator);
 
-
-        /// <see cref="IRepository.ReadStream{T}()"/>
+        /// <see cref="IRepository.ReadStreamAsync{T}()"/>
         Task<MemoryStream> ReadStreamAsync<T>();
 
-        /// <see cref="IRepository.ReadStream(string)"/>
+        /// <see cref="IRepository.ReadStreamAsync(string)"/>
         Task<MemoryStream> ReadStreamAsync(string fileName);
 
-        /// <see cref="IRepository.ReadStream(FileInfo)"/>
+        /// <see cref="IRepository.ReadStreamAsync(FileInfo)"/>
         Task<MemoryStream> ReadStreamAsync(FileInfo file);
 
         /// <summary>
@@ -220,8 +195,6 @@
         /// <remarks>
         /// This overload is a poor fit for large files.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
         Stream ReadStream<T>();
 
         /// <summary>
@@ -236,14 +209,11 @@
         /// FileName.cfg
         /// FileName
         /// </param>
-        /// <returns></returns>
         Stream ReadStream(string fileName);
 
         /// <summary>
         /// Reads the file <paramref name="file"/> and returns the contents in a memorystream
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
         Stream ReadStream(FileInfo file);
 
         /// <summary>
@@ -253,8 +223,6 @@
         /// <remarks>
         /// If <paramref name="item"/> is null the file is deleted.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
         void Save<T>(T item);
 
         /// <summary>
@@ -264,8 +232,6 @@
         /// <remarks>
         /// If <paramref name="item"/> is null the file is deleted.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
@@ -281,9 +247,6 @@
         /// <remarks>
         /// If <paramref name="item"/> is null the file is deleted.
         /// </remarks>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="file"></param>
         void Save<T>(T item, FileInfo file);
 
         /// <summary>
@@ -292,36 +255,30 @@
         /// 3) Saves <paramref name="item"/> to <paramref name="tempFile"/>
         /// 4 a)If save is successful <paramref name="tempFile"/> is renamed to <paramref name="file"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="file"></param>
-        /// <param name="tempFile">The file to use as temporayr file when saving</param>
+        /// <param name="tempFile">The file to use as temporary file when saving</param>
         void Save<T>(T item, FileInfo file, FileInfo tempFile);
 
         /// <see cref="IRepository.Save{T}(T)"/>
         Task SaveAsync<T>(T item);
 
-        /// <see cref="IRepository.Save{T}(T, string)"/>
+        /// <see cref="IRepository.SaveAsync{T}(T, string)"/>
         Task SaveAsync<T>(T item, string fileName);
 
-        /// <see cref="IRepository.Save{T}(T, FileInfo)"/>
+        /// <see cref="IRepository.SaveAsync{T}(T, FileInfo)"/>
         Task SaveAsync<T>(T item, FileInfo file);
 
-        /// <see cref="IRepository.Save{T}(T, FileInfo, FileInfo)"/>
+        /// <see cref="IRepository.SaveAsync{T}(T, FileInfo, FileInfo)"/>
         Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile);
 
         /// <summary>
         /// Saves <paramref name="stream"/> to a file specified by <typeparamref name="T"/>
         /// <seealso cref="IRepository.Save{T}(T, FileInfo, FileInfo)"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="stream"></param>
         void SaveStream<T>(Stream stream);
 
         /// <summary>
         /// Saves <paramref name="stream"/> to a file specified by  <paramref name="fileName"/>
         /// </summary>
-        /// <param name="stream"></param>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
@@ -334,28 +291,24 @@
         /// Saves the stream and creates backups.
         /// </summary>
         /// <param name="stream">If the stream is null the file is deleted</param>
-        /// <param name="file"></param>
         void SaveStream(Stream stream, FileInfo file);
 
         /// <summary>
         /// Saves <paramref name="stream"/> to <paramref name="file"/>
         /// <seealso cref="IRepository.Save{T}(T, FileInfo, FileInfo)"/>
         /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="file"></param>
-        /// <param name="tempFile"></param>
         void SaveStream(Stream stream, FileInfo file, FileInfo tempFile);
 
-        /// <see cref="IRepository.SaveStream{T}(Stream)"/>
+        /// <see cref="IRepository.SaveStreamAsync{T}(Stream)"/>
         Task SaveStreamAsync<T>(Stream stream);
 
-        /// <see cref="IRepository.SaveStream(Stream, string)"/>
+        /// <see cref="IRepository.SaveStreamAsync(Stream, string)"/>
         Task SaveStreamAsync(Stream stream, string fileName);
 
-        /// <see cref="IRepository.SaveStream(Stream, FileInfo)"/>
+        /// <see cref="IRepository.SaveStreamAsync(Stream, FileInfo)"/>
         Task SaveStreamAsync(Stream stream, FileInfo file);
 
-        /// <see cref="IRepository.SaveStream(Stream, FileInfo, FileInfo)"/>
+        /// <see cref="IRepository.SaveStreamAsync(Stream, FileInfo, FileInfo)"/>
         Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile);
 
         /// <summary>
@@ -363,8 +316,6 @@
         /// <seealso cref="IRepository.Save{T}(T, string)"/>
         /// <seealso cref="IRepository.RemoveFromCache{T}(T)"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
         void SaveAndClose<T>(T item);
 
         /// <summary>
@@ -372,8 +323,6 @@
         /// <seealso cref="IRepository.Save{T}(T, string)"/>
         /// <seealso cref="IRepository.RemoveFromCache{T}(T)"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
@@ -387,76 +336,50 @@
         /// <seealso cref="IRepository.Save{T}(T, string)"/>
         /// <seealso cref="IRepository.RemoveFromCache{T}(T)"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
-        /// <param name="file"></param>
         void SaveAndClose<T>(T item, FileInfo file);
 
         /// <summary>
         /// Checks if the file for <typeparamref name="T"/> can be renamed to <paramref name="newName"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="newName"></param>
-        /// <returns></returns>
         bool CanRename<T>(string newName);
 
         /// <summary>
         /// Renames the file for <typeparamref name="T"/> to <paramref name="newName"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="newName"></param>
-        /// <param name="owerWrite">If true the destination file is owerwritten if it exists.</param>
+        /// <param name="owerWrite">If true the destination file is overwritten if it exists.</param>
         void Rename<T>(string newName, bool owerWrite);
 
         /// <summary>
         /// Checks if <paramref name="oldName"/> can be renamed to <paramref name="newName"/>
         /// </summary>
-        /// <param name="oldName"></param>
-        /// <param name="newName"></param>
-        /// <returns></returns>
         bool CanRename(string oldName, string newName);
 
         /// <summary>
         /// Renames the file <paramref name="oldName"/> to <paramref name="newName"/>
         /// </summary>
-        /// <param name="oldName"></param>
-        /// <param name="newName"></param>
-        /// <param name="owerWrite">If true the destination file is owerwritten if it exists.</param>
-        /// <returns></returns>
+        /// <param name="owerWrite">If true the destination file is overwritten if it exists.</param>
         void Rename(string oldName, string newName, bool owerWrite);
 
         /// <summary>
         /// Checks if <paramref name="oldName"/> can be renamed to <paramref name="newName"/>
         /// </summary>
-        /// <param name="oldName"></param>
-        /// <param name="newName"></param>
-        /// <returns></returns>
         bool CanRename(FileInfo oldName, string newName);
 
         /// <summary>
         /// Checks if <paramref name="oldName"/> can be renamed to <paramref name="newName"/>
         /// </summary>
-        /// <param name="oldName"></param>
-        /// <param name="newName"></param>
-        /// <param name="owerWrite">If true the destination file is owerwritten if it exists.</param>
-        /// <returns></returns>
+        /// <param name="owerWrite">If true the destination file is overwritten if it exists.</param>
         void Rename(FileInfo oldName, string newName, bool owerWrite);
 
         /// <summary>
         /// Checks if <paramref name="oldName"/> can be renamed to <paramref name="newName"/>
         /// </summary>
-        /// <param name="oldName"></param>
-        /// <param name="newName"></param>
-        /// <returns></returns>
         bool CanRename(FileInfo oldName, FileInfo newName);
 
         /// <summary>
         /// Checks if <paramref name="oldName"/> can be renamed to <paramref name="newName"/>
         /// </summary>
-        /// <param name="oldName"></param>
-        /// <param name="newName"></param>
-        /// <param name="owerWrite">If true the destination file is owerwritten if it exists.</param>
-        /// <returns></returns>
+        /// <param name="owerWrite">If true the destination file is overwritten if it exists.</param>
         void Rename(FileInfo oldName, FileInfo newName, bool owerWrite);
 
         /// <summary>
@@ -476,21 +399,16 @@
         /// Removes <paramref name="item"/> from cache.
         /// Next read will read a new instance from disk.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
         void RemoveFromCache<T>(T item);
 
         /// <summary>
         /// Removes <paramref name="item"/> from the <see cref="IDirtyTracker"/> cache
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item"></param>
         void RemoveFromDirtyTracker<T>(T item);
 
         /// <summary>
         /// Deletes the backups for the file specified by <typerparamref name="T"/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         void DeleteBackups<T>();
 
         /// <summary>
@@ -507,7 +425,6 @@
         /// <summary>
         /// Deletes backups for <paramref name="file"/>
         /// </summary>
-        /// <param name="file"></param>
         void DeleteBackups(FileInfo file);
     }
 }

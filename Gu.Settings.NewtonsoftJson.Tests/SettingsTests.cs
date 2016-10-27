@@ -12,13 +12,14 @@
             var backupDir = new DirectoryInfo($@"C:\Temp\Gu.Settings\{this.GetType().Name}\Backup");
             var backupSettings = new BackupSettings(backupDir);
             var directory = new DirectoryInfo($@"C:\Temp\Gu.Settings\{this.GetType().Name}");
-            var settings = new JsonRepositorySettings(directory,
-                                                      JsonRepositorySettings.DefaultJsonSettings,
-                                                      true,
-                                                      true,
-                                                      backupSettings,
-                                                      ".cfg",
-                                                      ".tmp");
+            var settings = new JsonRepositorySettings(
+                               directory,
+                               JsonRepositorySettings.DefaultJsonSettings,
+                               true,
+                               true,
+                               backupSettings,
+                               ".cfg",
+                               ".tmp");
             var repository = new JsonRepository(settings);
             repository.Save(settings);
             var repositorySettings = repository.Read<JsonRepositorySettings>();

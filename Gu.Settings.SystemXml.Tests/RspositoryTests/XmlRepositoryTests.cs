@@ -1,10 +1,11 @@
-namespace Gu.Settings.SystemXml.Tests
+namespace Gu.Settings.SystemXml.Tests.RspositoryTests
 {
     using System.IO;
 
     using Gu.Settings.Core;
     using Gu.Settings.Core.Tests.Repositories;
     using Gu.Settings.SystemXml;
+    using Gu.Settings.SystemXml.Tests.Helpers;
 
     public class XmlRepositoryTests : RepositoryTests
     {

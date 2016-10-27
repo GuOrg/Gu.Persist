@@ -94,7 +94,6 @@
                     throw new ArgumentException($"Not allowed to save in {this.SpecialFolder} without subdirectory");
                 }
             }
-
             else if (!string.IsNullOrEmpty(path) && path.StartsWith("."))
             {
                 if (this.SpecialFolder != null)
