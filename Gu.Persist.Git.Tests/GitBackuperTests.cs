@@ -74,20 +74,20 @@
         [Test]
         public void Restore()
         {
-            var fileInfo = this.directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
-            Assert.AreEqual(false, this.repository.Backuper.CanRestore(fileInfo));
-            this.repository.Save(this.dummy, fileInfo);
-            var json = File.ReadAllText(fileInfo.FullName);
+            var file = this.directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
+            Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));
+            this.repository.Save(this.dummy, file);
+            var json = File.ReadAllText(file.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
-            Assert.AreEqual(false, this.repository.Backuper.CanRestore(fileInfo));
+            Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));
             this.dummy.Value++;
-            this.Save(this.dummy, fileInfo);
-            json = File.ReadAllText(fileInfo.FullName);
+            JsonFile.Save(file, this.dummy);
+            json = File.ReadAllText(file.FullName);
             Assert.AreEqual("{\"Value\":2}", json);
-            Assert.AreEqual(true, this.repository.Backuper.CanRestore(fileInfo), "CanRestore after save");
-            Assert.AreEqual(true, this.repository.Backuper.TryRestore(fileInfo), "TryRestore");
-            Assert.AreEqual(false, this.repository.Backuper.CanRestore(fileInfo), "CanRestore after restore");
-            var restored = this.Read<DummySerializable>(fileInfo);
+            Assert.AreEqual(true, this.repository.Backuper.CanRestore(file), "CanRestore after save");
+            Assert.AreEqual(true, this.repository.Backuper.TryRestore(file), "TryRestore");
+            Assert.AreEqual(false, this.repository.Backuper.CanRestore(file), "CanRestore after restore");
+            var restored = JsonFile.Read<DummySerializable>(file);
             Assert.AreEqual(this.dummy.Value - 1, restored.Value);
         }
 
@@ -96,16 +96,6 @@
         {
             // just so it is not flagged as unused member
             Assert.AreEqual(this.directory.Name, ((GitBackuper)this.repository.Backuper).Directory.CreateDirectoryInfo().Name);
-        }
-
-        protected void Save<T>(T item, FileInfo file)
-        {
-            JsonFile.Save(file, file);
-        }
-
-        protected T Read<T>(FileInfo file)
-        {
-            return JsonFile.Read<T>(file);
         }
 
         /// <summary>
