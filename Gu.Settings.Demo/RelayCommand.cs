@@ -1,8 +1,9 @@
-namespace Gu.Settings.Demo.RemoveItemBox
+namespace Gu.Settings.Demo
 {
     using System;
     using System.Windows.Input;
-    using Core;
+
+    using Gu.Settings.Core;
 
     public class RelayCommand : ICommand
     {

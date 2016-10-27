@@ -13,10 +13,6 @@
         private string extension;
         private PathAndSpecialFolder directoryPath;
 
-        protected FileSettings()
-        {
-        }
-
         public FileSettings(PathAndSpecialFolder directoryPath, string extension)
         {
             this.directoryPath = directoryPath;
@@ -27,6 +23,10 @@
         {
             this.directoryPath = PathAndSpecialFolder.Create(directory);
             this.extension = FileHelper.PrependDotIfMissing(extension);
+        }
+
+        protected FileSettings()
+        {
         }
 
         [field: NonSerialized]

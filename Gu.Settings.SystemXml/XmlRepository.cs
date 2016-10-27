@@ -1,3 +1,4 @@
+#pragma warning disable 1573
 namespace Gu.Settings.SystemXml
 {
     using System;
@@ -20,6 +21,10 @@ namespace Gu.Settings.SystemXml
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
+        /// </summary>
         public XmlRepository(DirectoryInfo directory)
             : base(directory, () => XmlRepositorySettings.DefaultFor(directory))
         {
@@ -36,26 +41,31 @@ namespace Gu.Settings.SystemXml
         {
         }
 
+        /// <summary>Initializes a new instance of the <see cref="XmlRepository"/> class.</summary>
         public XmlRepository(XmlRepositorySettings settings)
             : base(settings)
         {
         }
 
+        /// <summary>Initializes a new instance of the <see cref="XmlRepository"/> class.</summary>
         public XmlRepository(XmlRepositorySettings settings, IBackuper backuper)
             : base(settings, backuper)
         {
         }
 
+        /// <inheritdoc/>
         protected override T FromStream<T>(Stream stream)
         {
             return XmlHelper.FromStream<T>(stream);
         }
 
+        /// <inheritdoc/>
         protected override Stream ToStream<T>(T item)
         {
             return XmlHelper.ToStream(item);
         }
 
+        /// <inheritdoc/>
         protected override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
         {
             return XmlEqualsComparer<T>.Default;

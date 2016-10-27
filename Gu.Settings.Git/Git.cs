@@ -1,4 +1,5 @@
-﻿namespace Gu.Settings.Git
+﻿#pragma warning disable SA1600 // Elements must be documented
+namespace Gu.Settings.Git
 {
     using System;
     using System.IO;

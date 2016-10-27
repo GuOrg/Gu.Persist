@@ -1,3 +1,4 @@
+// ReSharper disable HeuristicUnreachableCode
 namespace Gu.Settings.Core.Tests.Repositories
 {
     using System;
@@ -13,10 +14,11 @@ namespace Gu.Settings.Core.Tests.Repositories
     [Apartment(ApartmentState.STA)]
     public abstract class RepositoryTests
     {
-        private const string NewName = "New";
+        public IRepository Repository;
         protected readonly DirectoryInfo Directory;
         protected FileInfo RepoSettingFile;
 
+        private const string NewName = "New";
         private readonly DummySerializable dummy;
 
         private FileInfo file;
@@ -36,8 +38,6 @@ namespace Gu.Settings.Core.Tests.Repositories
 
         private FileInfo dummyBackup;
         private FileInfo dummyBackupNewName;
-
-        public IRepository Repository;
 
         protected RepositoryTests()
         {
@@ -174,7 +174,7 @@ namespace Gu.Settings.Core.Tests.Repositories
                 this.Save(this.dummy, this.dummyFile);
             }
 
-            var read = this.Repository.ReadOrCreate<DummySerializable>(() => this.dummy);
+            var read = this.Repository.ReadOrCreate(() => this.dummy);
             AssertFile.Exists(true, this.dummyFile);
             Assert.AreEqual(this.dummy.Value, read.Value);
         }

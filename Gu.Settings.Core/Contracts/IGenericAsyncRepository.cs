@@ -5,7 +5,7 @@
     public interface IGenericAsyncRepository : IGenericRepository
     {
         /// <summary>
-        /// <see cref="IRepository.ReadAsync{T}(T)"/>
+        /// <see cref="IRepository.ReadAsync{T}()"/>
         /// </summary>
         Task<T> ReadAsync<T>();
 

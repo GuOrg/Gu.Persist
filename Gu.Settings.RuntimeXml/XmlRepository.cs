@@ -1,4 +1,5 @@
-﻿namespace Gu.Settings.RuntimeXml
+﻿#pragma warning disable 1573
+namespace Gu.Settings.RuntimeXml
 {
     using System;
     using System.Collections.Generic;
@@ -20,6 +21,10 @@
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
+        /// </summary>
         public XmlRepository(DirectoryInfo directory)
             : base(directory, () => RuntimeXmlRepositorySettings.DefaultFor(directory))
         {
@@ -36,11 +41,17 @@
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// </summary>
         public XmlRepository(RuntimeXmlRepositorySettings settings)
             : base(settings)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepository"/> class.
+        /// </summary>
         public XmlRepository(RuntimeXmlRepositorySettings settings, IBackuper backuper)
             : base(settings, backuper)
         {

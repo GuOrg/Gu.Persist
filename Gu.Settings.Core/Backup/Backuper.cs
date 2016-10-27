@@ -111,35 +111,6 @@
             }
         }
 
-        // ReSharper disable once UnusedMember.Global
-        internal virtual void Restore(FileInfo file)
-        {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.ExtensionIsNotAnyOf(file, this.BackupExtensions, "file");
-
-            var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
-            if (softDelete.Exists)
-            {
-                this.Restore(file, softDelete);
-                return;
-            }
-
-            var backup = BackupFile.GetRestoreFileFor(file, this.Setting);
-            if (backup != null)
-            {
-                this.Restore(file, backup);
-            }
-        }
-
-        internal virtual void Restore(FileInfo file, FileInfo backup)
-        {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(backup, nameof(backup));
-            Ensure.DoesNotExist(file, $"Trying to restore {backup.FullName} when there is already an original: {file.FullName}");
-            backup.DeleteSoftDeleteFileFor();
-            FileHelper.Restore(file, backup);
-        }
-
         /// <inheritdoc/>
         public virtual void AfterSuccessfulSave(FileInfo file)
         {
@@ -260,10 +231,33 @@
             }
         }
 
-        [Obsolete("Implement")]
-        private void MoveBackups<T>()
+        // ReSharper disable once UnusedMember.Global
+        internal virtual void Restore(FileInfo file)
         {
-            throw new NotImplementedException("Implement");
+            Ensure.NotNull(file, nameof(file));
+            Ensure.ExtensionIsNotAnyOf(file, this.BackupExtensions, "file");
+
+            var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
+            if (softDelete.Exists)
+            {
+                this.Restore(file, softDelete);
+                return;
+            }
+
+            var backup = BackupFile.GetRestoreFileFor(file, this.Setting);
+            if (backup != null)
+            {
+                this.Restore(file, backup);
+            }
+        }
+
+        protected virtual void Restore(FileInfo file, FileInfo backup)
+        {
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(backup, nameof(backup));
+            Ensure.DoesNotExist(file, $"Trying to restore {backup.FullName} when there is already an original: {file.FullName}");
+            backup.DeleteSoftDeleteFileFor();
+            FileHelper.Restore(file, backup);
         }
     }
 }

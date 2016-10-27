@@ -1,5 +1,4 @@
-﻿
-namespace Gu.Settings.Core.Tests.Backup
+﻿namespace Gu.Settings.Core.Tests.Backup
 {
     using System;
 

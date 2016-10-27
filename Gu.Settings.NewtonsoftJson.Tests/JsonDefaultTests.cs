@@ -9,12 +9,6 @@
 
     public class JsonDefaultTests : RepositoryTests
     {
-        protected override IRepository Create()
-        {
-            var settings = JsonRepositorySettings.DefaultFor(this.Directory);
-            return new JsonRepository(settings);
-        }
-
         [Test]
         public void SaveAndCheckJson()
         {
@@ -27,6 +21,12 @@
             var json = File.ReadAllText(fileInfo.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
             File.Delete(fileInfo.FullName);
+        }
+
+        protected override IRepository Create()
+        {
+            var settings = JsonRepositorySettings.DefaultFor(this.Directory);
+            return new JsonRepository(settings);
         }
 
         protected override void Save<T>(T item, FileInfo file)

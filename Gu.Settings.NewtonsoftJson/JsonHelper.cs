@@ -9,10 +9,13 @@
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Helper methods for serializing and deserializing xml.
+    /// Helper methods for serializing and deserializing json.
     /// </summary>
     public static class JsonHelper
     {
+        /// <summary>
+        /// Returns the default encoding UTF8.
+        /// </summary>
         public static readonly UTF8Encoding DefaultEncoding = new UTF8Encoding(false, true);
 
         /// <summary>

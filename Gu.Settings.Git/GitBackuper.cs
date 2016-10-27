@@ -12,18 +12,21 @@
     /// </summary>
     public class GitBackuper : IBackuper
     {
-        private readonly PathAndSpecialFolder directory;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GitBackuper"/> class.
         /// Creates a git repository in <paramref name="directory"/>
         /// </summary>
         public GitBackuper(PathAndSpecialFolder directory)
         {
-            this.directory = directory;
+            this.Directory = directory;
             var directoryInfo = directory.CreateDirectoryInfo();
             Git.InitRepository(directoryInfo);
         }
+
+        /// <summary>
+        /// The director wwhere the repostory is.
+        /// </summary>
+        public PathAndSpecialFolder Directory { get; }
 
         /// <inheritdoc/>
         public bool BeforeSave(FileInfo file)

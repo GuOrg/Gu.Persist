@@ -20,6 +20,7 @@
         /// <inheritdoc/>
         public override int GetHashCode(FileInfo obj)
         {
+            Ensure.NotNull(obj, nameof(obj));
             obj.Refresh();
             return StringComparer.OrdinalIgnoreCase.GetHashCode(obj.FullName);
         }

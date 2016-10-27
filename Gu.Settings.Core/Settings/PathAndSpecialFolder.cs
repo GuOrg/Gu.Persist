@@ -10,6 +10,9 @@
 
     public class PathAndSpecialFolder : IEquatable<PathAndSpecialFolder>
     {
+        public static readonly PathAndSpecialFolder Default = new PathAndSpecialFolder(Directories.AppDirectory().Name, Environment.SpecialFolder.ApplicationData);
+        public static readonly PathAndSpecialFolder DefaultBackup = new PathAndSpecialFolder($@"{Directories.AppDirectory().Name}\Backup", Environment.SpecialFolder.ApplicationData);
+
         private static readonly char[] BackSlash = { '\\' };
         private static readonly Environment.SpecialFolder[] SpecialFolders =
             {
@@ -26,9 +29,6 @@
                 Environment.SpecialFolder.CommonVideos,
                 Environment.SpecialFolder.DesktopDirectory,
             };
-
-        public static readonly PathAndSpecialFolder Default = new PathAndSpecialFolder(Directories.AppDirectory().Name, Environment.SpecialFolder.ApplicationData);
-        public static readonly PathAndSpecialFolder DefaultBackup = new PathAndSpecialFolder($@"{Directories.AppDirectory().Name}\Backup", Environment.SpecialFolder.ApplicationData);
 
         public PathAndSpecialFolder(string path, Environment.SpecialFolder? specialFolder)
         {
@@ -194,18 +194,6 @@
             }
         }
 
-        private static PathAndSpecialFolder TryCreate(DirectoryInfo info, Environment.SpecialFolder specialFolder)
-        {
-            var directory = Environment.GetFolderPath(specialFolder);
-            if (info.IsSubDirectoryOfOrSame(new DirectoryInfo(directory)))
-            {
-                var relativePath = info.FullName.Substring(directory.Length);
-                return new PathAndSpecialFolder(relativePath, specialFolder);
-            }
-
-            return null;
-        }
-
         private static bool IsSubDirectoryOfOrSame(string directory, string potentialParent)
         {
             var l1 = GetPathLength(directory);
@@ -234,11 +222,6 @@
             }
 
             return directory.Length;
-        }
-
-        private static string GetDefaultName()
-        {
-            return Directories.AppDirectory()?.Name;
         }
     }
 }

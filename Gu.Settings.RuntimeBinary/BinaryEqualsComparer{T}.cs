@@ -2,8 +2,10 @@
 {
     using Gu.Settings.Core;
 
+    /// <inheritdoc/>
     public class BinaryEqualsComparer<T> : SerializedEqualsComparer<T>
     {
+        /// <summary> The default instance. </summary>
         public new static readonly BinaryEqualsComparer<T> Default = new BinaryEqualsComparer<T>();
 
         /// <inheritdoc/>

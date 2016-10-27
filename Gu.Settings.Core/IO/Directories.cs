@@ -6,6 +6,9 @@ namespace Gu.Settings.Core
 
     public static class Directories
     {
+        private static DirectoryInfo @default;
+        private static DirectoryInfo defaultBackup;
+
         public static DirectoryInfo CurrentDirectory => new DirectoryInfo(Environment.CurrentDirectory);
 
         public static DirectoryInfo ApplicationData => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
@@ -32,11 +35,7 @@ namespace Gu.Settings.Core
 
         public static DirectoryInfo TempDirectory => new DirectoryInfo(Path.GetTempPath());
 
-        private static DirectoryInfo @default;
-
         public static DirectoryInfo Default => @default ?? (@default = PathAndSpecialFolder.Default.CreateDirectoryInfo());
-
-        private static DirectoryInfo defaultBackup;
 
         public static DirectoryInfo DefaultBackup => defaultBackup ?? (defaultBackup = PathAndSpecialFolder.DefaultBackup.CreateDirectoryInfo());
 

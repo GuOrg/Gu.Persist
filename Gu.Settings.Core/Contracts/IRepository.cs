@@ -1,4 +1,5 @@
-﻿namespace Gu.Settings.Core
+﻿#pragma warning disable 1573
+namespace Gu.Settings.Core
 {
     using System;
     using System.IO;

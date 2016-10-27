@@ -1,7 +1,9 @@
-﻿namespace Gu.Settings.Core.Tests.IO
+﻿namespace Gu.Settings.RuntimeBinary.Tests
 {
     using System.IO;
     using System.Threading.Tasks;
+
+    using Gu.Settings.Core.Tests;
     using Gu.Settings.RuntimeBinary;
 
     using NUnit.Framework;

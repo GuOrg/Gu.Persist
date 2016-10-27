@@ -52,7 +52,6 @@
     <Compile Include="Comparers\DirectoryInfoComparerTests.cs" />
     <Compile Include="Helpers\AssertFile.cs" />
     <Compile Include="Backup\BackupTests.cs" />
-    <Compile Include="Helpers\DummyObservable.cs" />
     <Compile Include="Helpers\DummySerializable.cs" />
     <Compile Include="Helpers\FileInfoExt.cs" />
     <Compile Include="Helpers\RepositoryExt.cs" />

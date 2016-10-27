@@ -78,7 +78,7 @@
             extension = FileHelper.PrependDotIfMissing(extension);
             if (ext != extension)
             {
-                throw new ArgumentException("Fail", "extension");
+                throw new ArgumentException("Fail", nameof(extension));
             }
 
             string fileName = file.FullName.Substring(0, file.FullName.Length - extension.Length);

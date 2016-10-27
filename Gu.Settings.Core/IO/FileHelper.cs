@@ -1,3 +1,4 @@
+#pragma warning disable 1573
 namespace Gu.Settings.Core
 {
     using System;
@@ -6,7 +7,7 @@ namespace Gu.Settings.Core
 
     internal static class FileHelper
     {
-        public static readonly string SoftDeleteExtension = ".delete";
+        internal static readonly string SoftDeleteExtension = ".delete";
 
         /// <summary>
         /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
@@ -147,6 +148,18 @@ namespace Gu.Settings.Core
             File.Move(source.FullName, destination.FullName);
         }
 
+        internal static FileInfo CreateFileInfo<T>(IFileSettings setting)
+        {
+            return CreateFileInfo(typeof(T).Name, setting);
+        }
+
+        internal static FileInfo CreateFileInfo(string fileName, IFileSettings settings)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            var file = CreateFileInfo(settings.DirectoryPath.CreateDirectoryInfo(), fileName, settings.Extension);
+            return file;
+        }
+
         internal static void Backup(FileInfo file, FileInfo backup)
         {
             if (backup == null)
@@ -181,18 +194,6 @@ namespace Gu.Settings.Core
 
             file.Delete();
             backup.MoveTo(file);
-        }
-
-        public static FileInfo CreateFileInfo<T>(IFileSettings setting)
-        {
-            return CreateFileInfo(typeof(T).Name, setting);
-        }
-
-        public static FileInfo CreateFileInfo(string fileName, IFileSettings settings)
-        {
-            Ensure.NotNull(fileName, nameof(fileName));
-            var file = CreateFileInfo(settings.DirectoryPath.CreateDirectoryInfo(), fileName, settings.Extension);
-            return file;
         }
 
         internal static FileInfo CreateFileInfo(DirectoryInfo directory, string fileName, string extension)

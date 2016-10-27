@@ -1,4 +1,5 @@
-﻿namespace Gu.Settings.NewtonsoftJson
+﻿#pragma warning disable 1573
+namespace Gu.Settings.NewtonsoftJson
 {
     using System;
     using System.Collections.Generic;
@@ -16,29 +17,55 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonRepository"/> class.
         /// Uses <see cref="Directories.Default"/>
+        /// This creates a setting file for the repository in the directory if it does not exist.
+        /// After this the settings file will be used.
         /// </summary>
         public JsonRepository()
             : this(Directories.Default)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// It will use JsonRepositorySettings.DefaultFor(Directories.Default, jsonSettings)) as settings.
+        /// This creates a setting file for the repository in the directory if it does not exist.
+        /// After this the settings file will be used.
+        /// </summary>
         public JsonRepository(JsonSerializerSettings jsonSettings)
             : base(Directories.Default, () => JsonRepositorySettings.DefaultFor(Directories.Default, jsonSettings))
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// It will use JsonRepositorySettings.DefaultFor(directory) as settings.
+        /// This creates a setting file for the repository in the directory if it does not exist.
+        /// After this the settings file will be used.
+        /// </summary>
         public JsonRepository(DirectoryInfo directory)
             : base(directory, () => JsonRepositorySettings.DefaultFor(directory))
         {
         }
 
-        public JsonRepository(DirectoryInfo directory, Func<JsonRepositorySettings> settingsCreator)
-            : base(directory, settingsCreator)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// It will use  JsonRepositorySettings.DefaultFor(directory, jsonSettings) to create the setting if no settings file exists.
+        /// This creates a setting file for the repository in the directory if it does not exist.
+        /// After this the settings file will be used.
+        /// </summary>
+        public JsonRepository(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
+            : base(directory, () => JsonRepositorySettings.DefaultFor(directory, jsonSettings))
         {
         }
 
-        public JsonRepository(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
-            : base(directory, () => JsonRepositorySettings.DefaultFor(directory, jsonSettings))
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If not a new setting is created and saved.
+        /// </summary>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        public JsonRepository(DirectoryInfo directory, Func<JsonRepositorySettings> settingsCreator)
+            : base(directory, settingsCreator)
         {
         }
 
@@ -58,6 +85,9 @@
         {
         }
 
+        /// <summary>
+        /// The settings used by the repository.
+        /// </summary>
         public new JsonRepositorySettings Settings => (JsonRepositorySettings)base.Settings;
 
         /// <inheritdoc/>

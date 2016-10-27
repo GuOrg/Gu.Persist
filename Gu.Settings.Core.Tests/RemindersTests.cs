@@ -1,4 +1,5 @@
-﻿namespace Gu.Settings.Core.Tests
+﻿// ReSharper disable HeuristicUnreachableCode
+namespace Gu.Settings.Core.Tests
 {
     using NUnit.Framework;
 

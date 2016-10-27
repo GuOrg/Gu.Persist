@@ -1,3 +1,4 @@
+#pragma warning disable 1573
 namespace Gu.Settings.RuntimeBinary
 {
     using System;
@@ -20,6 +21,10 @@ namespace Gu.Settings.RuntimeBinary
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
+        /// It will use BinaryRepositorySettings.DefaultFor(directory) as settings.
+        /// </summary>
         public BinaryRepository(DirectoryInfo directory)
             : base(directory, () => BinaryRepositorySettings.DefaultFor(directory))
         {
@@ -36,6 +41,9 @@ namespace Gu.Settings.RuntimeBinary
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
+        /// </summary>
         public BinaryRepository(BinaryRepositorySettings settings)
             : base(settings)
         {

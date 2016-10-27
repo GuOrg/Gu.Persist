@@ -12,20 +12,25 @@
         private bool isTrackingDirty;
         private bool isCaching;
 
-        protected RepositorySettings() // needed for XmlSerializer
-        {
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
+        /// </summary>
         public RepositorySettings(DirectoryInfo directory)
             : this(directory, BackupSettings.DefaultFor(directory))
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
+        /// </summary>
         public RepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
             : this(directory, true, true, backupSettings)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
+        /// </summary>
         public RepositorySettings(
             DirectoryInfo directory,
             bool isTrackingDirty,
@@ -43,6 +48,9 @@
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
+        /// </summary>
         public RepositorySettings(
             PathAndSpecialFolder directory,
             bool isTrackingDirty,
@@ -60,6 +68,14 @@
             this.isCaching = isCaching;
             this.backupSettings = backupSettings;
             this.tempExtension = FileHelper.PrependDotIfMissing(tempExtension);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
+        /// Needed for XmlSerializer
+        /// </summary>
+        protected RepositorySettings()
+        {
         }
 
         public BackupSettings BackupSettings
@@ -150,6 +166,7 @@
 
         /// <summary>
         /// Creates a <see cref="RepositorySettings"/> for <paramref name="directory"/>
+        /// Uses BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)) as backup settings.
         /// </summary>
         public static RepositorySettings DefaultFor(DirectoryInfo directory)
         {

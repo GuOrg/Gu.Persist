@@ -12,8 +12,6 @@
 
     public class RepositoryVm : INotifyPropertyChanged
     {
-        public static RepositoryVm Instance { get; } = new RepositoryVm();
-
         private RepositoryVm()
         {
             this.Repository = CreateJsonRepositoryWithGitBackuper();
@@ -24,6 +22,8 @@
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public static RepositoryVm Instance { get; } = new RepositoryVm();
+
         public IRepository Repository { get; }
 
         public ManualSaveSetting ManualSaveSetting { get; }
@@ -32,24 +32,16 @@
 
         public ObservableCollection<string> Log { get; } = new ObservableCollection<string>();
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         internal void Save<T>(T item)
         {
             this.Repository?.Save(item);
             this.Log.Add($"Saved: {typeof(T).Name}");
         }
 
-        private static JsonRepository CreateJsonRepository()
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var jsonSerializerSettings = JsonRepositorySettings.DefaultJsonSettings;
-            var backupSettings = new BackupSettings(Directories.DefaultBackup, 10, 2);
-            var jsonRepositorySettings = new JsonRepositorySettings(jsonSerializerSettings, true, true, backupSettings);
-            return new JsonRepository(jsonRepositorySettings);
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private static JsonRepository CreateJsonRepositoryWithGitBackuper()

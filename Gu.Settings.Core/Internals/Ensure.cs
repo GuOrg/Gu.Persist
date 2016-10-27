@@ -8,6 +8,7 @@
 
     internal static class Ensure
     {
+        [JetBrains.Annotations.ContractAnnotation("halt <= value:null")]
         internal static void NotNull<T>(T value, string parameterName, [CallerMemberName] string caller = null)
             where T : class
         {
@@ -19,9 +20,10 @@
             }
         }
 
-        internal static void NotNullOrEmpty(string s, string paramName, string message = null)
+        [JetBrains.Annotations.ContractAnnotation("halt <= text:null")]
+        internal static void NotNullOrEmpty(string text, string paramName, string message = null)
         {
-            if (string.IsNullOrEmpty(s))
+            if (string.IsNullOrEmpty(text))
             {
                 if (message == null)
                 {

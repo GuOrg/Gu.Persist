@@ -38,33 +38,33 @@
         [Test]
         public void SaveCommits()
         {
-            using (var repository = new LibGit2Sharp.Repository(this.directory.FullName))
+            using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
-                Assert.AreEqual(0, repository.Commits.Count());
+                Assert.AreEqual(0, git.Commits.Count());
             }
 
             this.repository.Save(this.dummy);
 
-            using (var repository = new LibGit2Sharp.Repository(this.directory.FullName))
+            using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
-                Assert.AreEqual(1, repository.Commits.Count());
+                Assert.AreEqual(1, git.Commits.Count());
             }
         }
 
         [Test]
         public void ReadOrCreate()
         {
-            using (var repository = new LibGit2Sharp.Repository(this.directory.FullName))
+            using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
-                Assert.AreEqual(0, repository.Commits.Count());
+                Assert.AreEqual(0, git.Commits.Count());
             }
 
             var fileInfo = this.directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
             var readOrCreate = this.repository.ReadOrCreate(fileInfo, () => this.dummy);
             Assert.AreSame(readOrCreate, this.dummy);
-            using (var repository = new LibGit2Sharp.Repository(this.directory.FullName))
+            using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
-                Assert.AreEqual(1, repository.Commits.Count());
+                Assert.AreEqual(1, git.Commits.Count());
             }
         }
 
@@ -88,6 +88,13 @@
             Assert.AreEqual(this.dummy.Value - 1, restored.Value);
         }
 
+        [Test]
+        public void TouchDirectoryProp()
+        {
+            // just so it is not flagged as unused member
+            Assert.AreEqual(this.directory, ((GitBackuper)this.repository.Backuper).Directory);
+        }
+
         protected void Save<T>(T item, FileInfo file)
         {
             TestHelper.Save(item, file);
@@ -102,7 +109,7 @@
         /// Recursively deletes a directory as well as any subdirectories and files. If the files are read-only, they are flagged as normal and then deleted.
         /// </summary>
         /// <param name="directory">The name of the directory to remove.</param>
-        public static void DeleteRepositoryDirectory(string directory)
+        private static void DeleteRepositoryDirectory(string directory)
         {
             foreach (var subdirectory in Directory.EnumerateDirectories(directory))
             {

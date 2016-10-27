@@ -4,6 +4,9 @@
     using System.Globalization;
     using System.IO;
 
+    /// <summary>
+    /// Specifies the behavior of an <see cref="IBackuper"/>
+    /// </summary>
     [Serializable]
     public class BackupSettings : FileSettings, IBackupSettings
     {
@@ -15,25 +18,25 @@
         private int numberOfBackups;
         private int maxAgeInDays;
 
-        protected BackupSettings() // needed for XmlSerializer
-        {
-        }
-
+        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
         public BackupSettings(DirectoryInfo directory)
             : this(directory, true, DefaultExtension, null, false, 1, int.MaxValue)
         {
         }
 
+        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
         public BackupSettings(DirectoryInfo directory, int numberOfBackups)
             : this(directory, true, DefaultExtension, DefaultTimeStampFormat, false, numberOfBackups, int.MaxValue)
         {
         }
 
+        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
         public BackupSettings(DirectoryInfo directory, int numberOfBackups, int maxAgeInDays)
             : this(directory, true, DefaultExtension, DefaultTimeStampFormat, false, numberOfBackups, maxAgeInDays)
         {
         }
 
+        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
         public BackupSettings(
             DirectoryInfo directory,
             bool isCreatingBackups,
@@ -53,6 +56,7 @@
         {
         }
 
+        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
         public BackupSettings(
             PathAndSpecialFolder directory,
             bool isCreatingBackups,
@@ -85,6 +89,11 @@
             this.hidden = hidden;
             this.numberOfBackups = numberOfBackups;
             this.maxAgeInDays = maxAgeInDays;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
+        protected BackupSettings() // needed for XmlSerializer
+        {
         }
 
         public bool IsCreatingBackups

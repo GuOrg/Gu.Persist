@@ -63,6 +63,7 @@
         }
 
         [TestCaseSource(typeof(ComparerSource))]
+        [SuppressMessage("ReSharper", "UnusedVariable")]
         public void GetHashCode(ComparerData data)
         {
             var comparer = XmlEqualsComparer<TypicalSetting>.Default;

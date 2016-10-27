@@ -6,6 +6,9 @@
 
     using Gu.Settings.Core;
 
+    /// <summary>
+    /// Helper methods for reading  json.
+    /// </summary>
     public static class BinaryHelper
     {
         /// <summary>

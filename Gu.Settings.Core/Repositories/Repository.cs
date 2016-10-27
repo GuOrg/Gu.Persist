@@ -1,4 +1,5 @@
-﻿namespace Gu.Settings.Core
+﻿#pragma warning disable 1573
+namespace Gu.Settings.Core
 {
     using System;
     using System.Collections.Generic;
@@ -61,7 +62,8 @@
         /// </summary>
         protected Repository(TSetting settings, IBackuper backuper)
         {
-            settings.DirectoryPath.CreateDirectoryInfo().CreateIfNotExists();
+            settings.DirectoryPath.CreateDirectoryInfo()
+                    .CreateIfNotExists();
             this.Settings = settings;
             this.Backuper = backuper;
             if (this.Settings.IsTrackingDirty)
@@ -94,17 +96,6 @@
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
             return this.GetFileInfoCore(fileName);
-        }
-
-        protected FileInfo GetFileInfoCore(string fileName)
-        {
-            var file = FileHelper.CreateFileInfo(fileName, this.Settings);
-            return file;
-        }
-
-        protected FileInfo GetFileInfoCore<T>()
-        {
-            return FileHelper.CreateFileInfo<T>(this.Settings);
         }
 
         /// <inheritdoc/>
@@ -162,12 +153,6 @@
             return this.ExistsCore<T>();
         }
 
-        protected bool ExistsCore<T>()
-        {
-            var file = this.GetFileInfoCore<T>();
-            return this.ExistsCore(file);
-        }
-
         /// <inheritdoc/>
         public virtual bool Exists(string fileName)
         {
@@ -181,12 +166,6 @@
         {
             Ensure.NotNull(file, nameof(file));
             return this.ExistsCore(file);
-        }
-
-        protected bool ExistsCore(FileInfo file)
-        {
-            file.Refresh();
-            return file.Exists;
         }
 
         /// <inheritdoc/>
@@ -235,7 +214,7 @@
                 // can't await  inside the lock.
                 // If there are many threads reading the same only the first is used
                 // the other reads are wasted, can't think of anything better than this.
-                value = await FileHelper.ReadAsync<T>(file, this.FromStream<T>).ConfigureAwait(false);
+                value = await FileHelper.ReadAsync(file, this.FromStream<T>).ConfigureAwait(false);
 
                 lock (this.gate)
                 {
@@ -249,7 +228,7 @@
             }
             else
             {
-                value = await FileHelper.ReadAsync<T>(file, this.FromStream<T>).ConfigureAwait(false);
+                value = await FileHelper.ReadAsync(file, this.FromStream<T>).ConfigureAwait(false);
             }
 
             if (this.Settings.IsTrackingDirty)
@@ -278,12 +257,6 @@
         {
             var file = this.GetFileInfoCore<T>();
             return this.ReadStream(file);
-        }
-
-        protected T ReadCore<T>()
-        {
-            var file = this.GetFileInfoCore<T>();
-            return this.ReadCore<T>(file);
         }
 
         /// <inheritdoc/>
@@ -316,54 +289,11 @@
             return file.OpenRead();
         }
 
-        protected T ReadCore<T>(FileInfo file)
-        {
-            Ensure.NotNull(file, nameof(file));
-            T value;
-            if (this.Settings.IsCaching)
-            {
-                T cached;
-                if (this.fileCache.TryGetValue(file.FullName, out cached))
-                {
-                    return cached;
-                }
-
-                lock (this.gate)
-                {
-                    if (this.fileCache.TryGetValue(file.FullName, out cached))
-                    {
-                        return cached;
-                    }
-
-                    value = FileHelper.Read<T>(file, this.FromStream<T>);
-                    this.fileCache.Add(file.FullName, value);
-                }
-            }
-            else
-            {
-                value = FileHelper.Read<T>(file, this.FromStream<T>);
-            }
-
-            if (this.Settings.IsTrackingDirty)
-            {
-                this.Tracker.Track(file.FullName, value);
-            }
-
-            return value;
-        }
-
         /// <inheritdoc/>
         public virtual T ReadOrCreate<T>(Func<T> creator)
         {
             Ensure.NotNull(creator, nameof(creator));
             return this.ReadOrCreateCore(creator);
-        }
-
-        protected T ReadOrCreateCore<T>(Func<T> creator)
-        {
-            Ensure.NotNull(creator, nameof(creator));
-            var file = this.GetFileInfoCore<T>();
-            return this.ReadOrCreateCore(file, creator);
         }
 
         /// <inheritdoc/>
@@ -383,28 +313,6 @@
             return this.ReadOrCreateCore(file, creator);
         }
 
-        protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator)
-        {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(creator, nameof(creator));
-            T setting;
-            if (this.ExistsCore<T>())
-            {
-                setting = this.ReadCore<T>();
-            }
-            else if (this.Backuper.TryRestore(file))
-            {
-                setting = this.ReadCore<T>();
-            }
-            else
-            {
-                setting = creator();
-                this.SaveCore(setting);
-            }
-
-            return setting;
-        }
-
         /// <inheritdoc/>
         public virtual void Save<T>(T item)
         {
@@ -418,12 +326,6 @@
             this.Save(item, file);
             this.RemoveFromCache(item);
             this.RemoveFromDirtyTracker(item);
-        }
-
-        protected void SaveCore<T>(T item)
-        {
-            var file = this.GetFileInfoCore<T>();
-            this.SaveCore(item, file);
         }
 
         /// <inheritdoc/>
@@ -457,12 +359,6 @@
             this.SaveCore(item, file);
             this.RemoveFromCache(item);
             this.RemoveFromDirtyTracker(item);
-        }
-
-        protected void SaveCore<T>(T item, FileInfo file)
-        {
-            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
-            this.SaveCore(item, file, tempFile);
         }
 
         /// <inheritdoc/>
@@ -500,55 +396,6 @@
         {
             Ensure.NotNull(file, nameof(file));
             this.SaveStreamCore(stream, file, tempFile);
-        }
-
-        protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
-        {
-            if (item == null)
-            {
-                this.SaveStreamCore(null, file, null);
-                return;
-            }
-
-            this.CacheAndTrackCore(item, file);
-
-            using (var stream = this.ToStream(item))
-            {
-                this.SaveStreamCore(stream, file, tempFile);
-            }
-        }
-
-        protected void SaveStreamCore(Stream stream, FileInfo file, FileInfo tempFile)
-        {
-            lock (this.gate)
-            {
-                if (stream == null)
-                {
-                    FileHelper.HardDelete(file);
-                    return;
-                }
-
-                this.Backuper.BeforeSave(file);
-                try
-                {
-                    FileHelper.Save(tempFile, stream);
-                    tempFile.MoveTo(file);
-                    this.Backuper.AfterSuccessfulSave(file);
-                }
-                catch (Exception exception)
-                {
-                    try
-                    {
-                        this.Backuper.TryRestore(file);
-                    }
-                    catch (Exception restoreException)
-                    {
-                        throw new RestoreException(exception, restoreException);
-                    }
-
-                    throw;
-                }
-            }
         }
 
         /// <inheritdoc/>
@@ -799,19 +646,6 @@
             return this.CloneCore(item);
         }
 
-        public virtual T CloneCore<T>(T item)
-        {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
-
-            using (var stream = this.ToStream(item))
-            {
-                return this.FromStream<T>(stream);
-            }
-        }
-
         /// <inheritdoc/>
         public void ClearCache()
         {
@@ -841,6 +675,229 @@
 
             var fileInfo = this.GetFileInfo<T>();
             tracker.RemoveFromCache(fileInfo.FullName);
+        }
+
+        /// <summary>
+        /// Gets the fileinfo for that is used for the given filename
+        /// </summary>
+        /// <param name="fileName">
+        /// Filename can be either of:
+        /// C:\Temp\FileName.cfg
+        /// FileName.cfg
+        /// FileName
+        /// </param>
+        protected FileInfo GetFileInfoCore(string fileName)
+        {
+            var file = FileHelper.CreateFileInfo(fileName, this.Settings);
+            return file;
+        }
+
+        /// <summary>
+        /// Get the file that corresponds to <typeparamref name="T"/>
+        /// </summary>
+        protected FileInfo GetFileInfoCore<T>()
+        {
+            return FileHelper.CreateFileInfo<T>(this.Settings);
+        }
+
+        /// <summary>
+        /// Read the file corresponding to <typeparamref name="T"/> and return it's contents deserialized to an instance of <typeparamref name="T"/>
+        /// </summary>
+        protected T ReadCore<T>()
+        {
+            var file = this.GetFileInfoCore<T>();
+            return this.ReadCore<T>(file);
+        }
+
+        /// <summary>
+        /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/>
+        /// </summary>
+        protected T ReadCore<T>(FileInfo file)
+        {
+            Ensure.NotNull(file, nameof(file));
+            T value;
+            if (this.Settings.IsCaching)
+            {
+                T cached;
+                if (this.fileCache.TryGetValue(file.FullName, out cached))
+                {
+                    return cached;
+                }
+
+                lock (this.gate)
+                {
+                    if (this.fileCache.TryGetValue(file.FullName, out cached))
+                    {
+                        return cached;
+                    }
+
+                    value = FileHelper.Read(file, this.FromStream<T>);
+                    this.fileCache.Add(file.FullName, value);
+                }
+            }
+            else
+            {
+                value = FileHelper.Read(file, this.FromStream<T>);
+            }
+
+            if (this.Settings.IsTrackingDirty)
+            {
+                this.Tracker.Track(file.FullName, value);
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Read the file corresponding to <typeparamref name="T"/> return it's contents deserialized to an instance of <typeparamref name="T"/> if it exists.
+        /// If the file does not exist a new instance is created and saved, then this instance is returned.
+        /// </summary>
+        protected T ReadOrCreateCore<T>(Func<T> creator)
+        {
+            Ensure.NotNull(creator, nameof(creator));
+            var file = this.GetFileInfoCore<T>();
+            return this.ReadOrCreateCore(file, creator);
+        }
+
+        /// <summary>
+        /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/> if it exists.
+        /// If the file does not exist a new instance is created and saved, then this instance is returned.
+        /// </summary>
+        protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator)
+        {
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(creator, nameof(creator));
+            T setting;
+            if (this.ExistsCore<T>())
+            {
+                setting = this.ReadCore<T>();
+            }
+            else if (this.Backuper.TryRestore(file))
+            {
+                setting = this.ReadCore<T>();
+            }
+            else
+            {
+                setting = creator();
+                this.SaveCore(setting);
+            }
+
+            return setting;
+        }
+
+        /// <summary>
+        /// Save <paramref name="item"/> to a file corresponding to <typeparamref name="T"/>
+        /// </summary>
+        protected void SaveCore<T>(T item)
+        {
+            var file = this.GetFileInfoCore<T>();
+            this.SaveCore(item, file);
+        }
+
+        /// <summary>
+        /// Calls <see cref="SaveCore{T}(T,FileInfo,FileInfo)"/>
+        /// Uses file.WithNewExtension(this.Settings.TempExtension) as temp file.
+        /// </summary>
+        protected void SaveCore<T>(T item, FileInfo file)
+        {
+            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
+            this.SaveCore(item, file, tempFile);
+        }
+
+        /// <summary>
+        /// Caches and tracks if needed.
+        /// Then serializes and saves.
+        /// </summary>
+        protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
+        {
+            if (item == null)
+            {
+                this.SaveStreamCore(null, file, null);
+                return;
+            }
+
+            this.CacheAndTrackCore(item, file);
+
+            using (var stream = this.ToStream(item))
+            {
+                this.SaveStreamCore(stream, file, tempFile);
+            }
+        }
+
+        /// <summary>
+        /// 1) If file exists it is renamed to file.delete
+        /// 2) The contents of <paramref name="stream"/> is saved to tempFile
+        /// 3.a 1) On success tempfile is renamed to <paramref name="file"/>
+        ///     2.a) If backup file.delete is renamed to backup name.
+        ///     2.b) If no backup file.delete is deleted
+        /// 3.b 1) file.delete is renamed back to file
+        ///     2) tempfile is deleted
+        /// </summary>
+        protected void SaveStreamCore(Stream stream, FileInfo file, FileInfo tempFile)
+        {
+            lock (this.gate)
+            {
+                if (stream == null)
+                {
+                    FileHelper.HardDelete(file);
+                    return;
+                }
+
+                this.Backuper.BeforeSave(file);
+                try
+                {
+                    FileHelper.Save(tempFile, stream);
+                    tempFile.MoveTo(file);
+                    this.Backuper.AfterSuccessfulSave(file);
+                }
+                catch (Exception exception)
+                {
+                    try
+                    {
+                        this.Backuper.TryRestore(file);
+                    }
+                    catch (Exception restoreException)
+                    {
+                        throw new RestoreException(exception, restoreException);
+                    }
+
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clone <paramref name="item"/> by serializing then deserializing
+        /// </summary>
+        protected virtual T CloneCore<T>(T item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            using (var stream = this.ToStream(item))
+            {
+                return this.FromStream<T>(stream);
+            }
+        }
+
+        /// <summary>
+        /// Check if the file corresponding to <typeparamref name="T"/> exists
+        /// </summary>
+        protected bool ExistsCore<T>()
+        {
+            var file = this.GetFileInfoCore<T>();
+            return this.ExistsCore(file);
+        }
+
+        /// <summary>
+        /// Check if <paramref name="file"/> exists
+        /// </summary>
+        protected bool ExistsCore(FileInfo file)
+        {
+            file.Refresh();
+            return file.Exists;
         }
 
         /// <summary>
