@@ -1,6 +1,5 @@
 ﻿namespace Gu.Persist.SystemXml.Tests
 {
-    using System;
     using System.IO;
     using System.Text;
     using System.Xml.Serialization;

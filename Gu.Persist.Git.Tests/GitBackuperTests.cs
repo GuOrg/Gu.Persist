@@ -2,6 +2,7 @@
 {
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Core;
     using Gu.Persist.Core.Tests;
@@ -17,7 +18,7 @@
 
         public GitBackuperTests()
         {
-            this.directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\Gu.Persist.Git.Tests\" + this.GetType().Name);
+            this.directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
         }
 
         [SetUp]
@@ -36,17 +37,17 @@
         }
 
         [Test]
-        public void SaveCommits()
+        public async Task SaveCommits()
         {
-            var file = this.repository.GetFileInfo<DummySerializable>();
-            file.Save(this.dummy);
+            ////var file = this.repository.GetFileInfo<DummySerializable>();
+            ////file.Save(this.dummy);
             using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
                 Assert.AreEqual(0, git.Commits.Count());
             }
 
             this.repository.Save(this.dummy);
-
+            await Task.Delay(100);
             using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
                 Assert.AreEqual(1, git.Commits.Count());
