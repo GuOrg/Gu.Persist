@@ -24,12 +24,12 @@ namespace Gu.Persist.RuntimeXml.Tests
 
         protected override void Save<T>(T item, FileInfo file)
         {
-            TestHelper.Save(item, file);
+            XmlTestHelper.Save(file, item);
         }
 
         protected override T Read<T>(FileInfo file)
         {
-            return TestHelper.Read<T>(file);
+            return XmlTestHelper.Read<T>(file);
         }
     }
 }

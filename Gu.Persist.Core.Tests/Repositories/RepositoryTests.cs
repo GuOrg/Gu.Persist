@@ -3,7 +3,6 @@ namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
     using System.IO;
-    using System.Threading;
     using System.Threading.Tasks;
 
     using Gu.Persist.Core;
@@ -11,7 +10,6 @@ namespace Gu.Persist.Core.Tests.Repositories
 
     using NUnit.Framework;
 
-    [Apartment(ApartmentState.STA)]
     public abstract class RepositoryTests
     {
         public IRepository Repository;
@@ -135,6 +133,11 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (this.Directory.Exists)
             {
                 this.Directory.Delete(true);
+            }
+
+            if (this.file?.Directory?.Exists == true)
+            {
+                this.file.Directory.Delete(true);
             }
         }
 

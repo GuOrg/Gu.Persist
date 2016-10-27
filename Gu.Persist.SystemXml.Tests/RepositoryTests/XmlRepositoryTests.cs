@@ -5,7 +5,6 @@ namespace Gu.Persist.SystemXml.Tests.RepositoryTests
     using Gu.Persist.Core;
     using Gu.Persist.Core.Tests.Repositories;
     using Gu.Persist.SystemXml;
-    using Gu.Persist.SystemXml.Tests.Helpers;
 
     public class XmlRepositoryTests : RepositoryTests
     {
@@ -16,12 +15,12 @@ namespace Gu.Persist.SystemXml.Tests.RepositoryTests
 
         protected override void Save<T>(T item, FileInfo file)
         {
-            TestHelper.Save(file, item);
+            XmlTestHelper.Save(file, item);
         }
 
         protected override T Read<T>(FileInfo file)
         {
-            return TestHelper.Read<T>(file);
+            return XmlTestHelper.Read<T>(file);
         }
     }
 }

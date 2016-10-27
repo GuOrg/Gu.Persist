@@ -1,4 +1,4 @@
-﻿namespace Gu.Persist.SystemXml.Tests.Helpers
+﻿namespace Gu.Persist.SystemXml.Tests
 {
     using System;
     using System.IO;

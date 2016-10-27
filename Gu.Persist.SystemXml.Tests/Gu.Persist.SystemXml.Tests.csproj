@@ -53,7 +53,7 @@
     <Compile Include="XmlEqualsComparerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\SimpleSample.cs" />
-    <Compile Include="Helpers\TestHelper.cs" />
+    <Compile Include="Helpers\XmlTestHelper.cs" />
     <Compile Include="SettingsTests.cs" />
     <Compile Include="XmlHelperTests.cs" />
     <Compile Include="RepositoryTests\XmlRepositoryTests.cs" />

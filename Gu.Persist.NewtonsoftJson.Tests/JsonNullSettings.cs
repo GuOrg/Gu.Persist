@@ -24,12 +24,12 @@
 
         protected override void Save<T>(T item, FileInfo file)
         {
-            TestHelper.Save(item, file);
+            JsonTestHelper.Save(file, item);
         }
 
         protected override T Read<T>(FileInfo file)
         {
-            return TestHelper.Read<T>(file);
+            return JsonTestHelper.Read<T>(file);
         }
     }
 }

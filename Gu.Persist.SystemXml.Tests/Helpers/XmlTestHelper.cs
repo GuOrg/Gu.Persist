@@ -1,10 +1,10 @@
-﻿namespace Gu.Persist.SystemXml.Tests.Helpers
+﻿namespace Gu.Persist.SystemXml.Tests
 {
     using System.IO;
 
     using Gu.Persist.Core;
 
-    public static class TestHelper
+    public static class XmlTestHelper
     {
         public static T Read<T>(this FileInfo file)
         {
