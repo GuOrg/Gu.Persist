@@ -17,7 +17,7 @@
 
         public GitBackuperTests()
         {
-            this.directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
+            this.directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\Gu.Persist.Git.Tests\" + this.GetType().Name);
         }
 
         [SetUp]
@@ -38,6 +38,8 @@
         [Test]
         public void SaveCommits()
         {
+            var file = this.repository.GetFileInfo<DummySerializable>();
+            file.Save(this.dummy);
             using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
                 Assert.AreEqual(0, git.Commits.Count());
