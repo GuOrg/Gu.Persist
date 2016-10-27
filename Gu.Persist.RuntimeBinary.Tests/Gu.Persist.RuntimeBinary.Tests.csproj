@@ -49,10 +49,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BinaryFileTests.cs" />
-    <Compile Include="BinaryNoBackup.cs" />
-    <Compile Include="BinaryRepositoryBackupInSubDirrectory.cs" />
-    <Compile Include="BinaryRepositoryDefaultSettings.cs" />
-    <Compile Include="BinaryRepositoryNullSettings.cs" />
+    <Compile Include="Repository\BinaryNoBackup.cs" />
+    <Compile Include="Repository\BackupInSubDirrectory.cs" />
+    <Compile Include="Repository\WithDefaultSettings.cs" />
+    <Compile Include="Repository\NullSettings.cs" />
     <Compile Include="BinaryEqualsComparerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

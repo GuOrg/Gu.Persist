@@ -1,25 +1,22 @@
-namespace Gu.Persist.RuntimeBinary.Tests
+namespace Gu.Persist.RuntimeBinary.Tests.Repository
 {
     using System.IO;
-
     using Gu.Persist.Core;
+    using Gu.Persist.Core.Backup;
     using Gu.Persist.Core.Tests.Repositories;
-
     using NUnit.Framework;
 
-    public class BinaryRepositoryDefaultSettings : RepositoryTests
+    public class BinaryNoBackup : RepositoryTests
     {
         [Test]
-        public void DefaultSettings()
+        public void BackuperIsNone()
         {
-            var defaultSettings = BinaryRepositorySettings.DefaultFor(this.Directory);
-            var comparer = new BinaryEqualsComparer<IRepositorySettings>();
-            Assert.IsTrue(comparer.Equals(defaultSettings, this.Repository.Settings));
+            Assert.AreSame(NullBackuper.Default, this.Repository.Backuper);
         }
 
         protected override IRepository Create()
         {
-            var settings = BinaryRepositorySettings.DefaultFor(this.Directory);
+            var settings = new BinaryRepositorySettings(this.Directory, true, true, null, ".cfg", ".tmp");
             return new BinaryRepository(settings);
         }
 

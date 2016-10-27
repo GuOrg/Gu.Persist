@@ -1,21 +1,27 @@
-namespace Gu.Persist.RuntimeBinary.Tests
+namespace Gu.Persist.RuntimeBinary.Tests.Repository
 {
     using System.IO;
-
     using Gu.Persist.Core;
+    using Gu.Persist.Core.Tests;
     using Gu.Persist.Core.Tests.Repositories;
+    using NUnit.Framework;
 
-    public class BinaryRepositoryBackupInSubDirrectory : RepositoryTests
+    public class NullSettings : RepositoryTests
     {
+        [Test]
+        public void SavesSettingsFile()
+        {
+            AssertFile.Exists(true, this.RepoSettingFile);
+        }
+
         protected override IRepository Create()
         {
-            var settings = BinaryRepositorySettings.DefaultFor(this.Directory);
-            return new BinaryRepository(settings);
+            return new BinaryRepository();
         }
 
         protected override void Save<T>(T item, FileInfo file)
         {
-            BinaryFile.Save(item, file);
+            BinaryFile.Save(file, item);
         }
 
         protected override T Read<T>(FileInfo file)
