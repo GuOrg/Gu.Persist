@@ -5,7 +5,7 @@
 
     public abstract class JsonRepositoryTests : RepositoryTests
     {
-        protected override void Save<T>(T item, FileInfo file)
+        protected override void Save<T>(FileInfo file, T item)
         {
             JsonFile.Save(file, item);
         }

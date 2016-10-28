@@ -144,7 +144,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public void ReadFile()
         {
-            this.Save(this.dummy, this.file);
+            this.Save(this.file, this.dummy);
             var read = this.Repository.Read<DummySerializable>(this.file);
             Assert.AreEqual(this.dummy.Value, read.Value);
             Assert.AreNotSame(this.dummy, read);
@@ -153,7 +153,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public void ReadFileName()
         {
-            this.Save(this.dummy, this.dummyFile);
+            this.Save(this.dummyFile, this.dummy);
             var read = this.Repository.Read<DummySerializable>(typeof(DummySerializable).Name);
             Assert.AreEqual(this.dummy.Value, read.Value);
             Assert.AreNotSame(this.dummy, read);
@@ -162,7 +162,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public async Task ReadAsync()
         {
-            this.Save(this.dummy, this.file);
+            this.Save(this.file, this.dummy);
             var read = await this.Repository.ReadAsync<DummySerializable>(this.file).ConfigureAwait(false);
             Assert.AreEqual(this.dummy.Value, read.Value);
             Assert.AreNotSame(this.dummy, read);
@@ -171,7 +171,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public void ReadType()
         {
-            this.Save(this.dummy, this.dummyFile);
+            this.Save(this.dummyFile, this.dummy);
             var read = this.Repository.Read<DummySerializable>();
             Assert.AreEqual(this.dummy.Value, read.Value);
             Assert.AreNotSame(this.dummy, read);
@@ -183,7 +183,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             if (exists)
             {
-                this.Save(this.dummy, this.dummyFile);
+                this.Save(this.dummyFile, this.dummy);
             }
 
             var read = this.Repository.ReadOrCreate(() => this.dummy);
@@ -194,7 +194,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public void ReadCaches()
         {
-            this.Save(this.dummy, this.file);
+            this.Save(this.file, this.dummy);
             var read1 = this.Repository.Read<DummySerializable>(this.file);
             var read2 = this.Repository.Read<DummySerializable>(this.file);
             Assert.AreSame(read1, read2);
@@ -203,7 +203,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public async Task ReadAsyncCaches()
         {
-            this.Save(this.dummy, this.file);
+            this.Save(this.file, this.dummy);
             var read1 = await this.Repository.ReadAsync<DummySerializable>(this.file).ConfigureAwait(false);
             var read2 = await this.Repository.ReadAsync<DummySerializable>(this.file).ConfigureAwait(false);
             Assert.AreSame(read1, read2);
@@ -623,7 +623,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         protected abstract IRepository Create();
 
-        protected abstract void Save<T>(T item, FileInfo file);
+        protected abstract void Save<T>(FileInfo file, T item);
 
         protected abstract T Read<T>(FileInfo file);
     }

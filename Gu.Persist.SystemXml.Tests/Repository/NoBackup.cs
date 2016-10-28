@@ -20,7 +20,7 @@ namespace Gu.Persist.SystemXml.Tests.Repository
             return new XmlRepository(settings);
         }
 
-        protected override void Save<T>(T item, FileInfo file)
+        protected override void Save<T>(FileInfo file, T item)
         {
             XmlFile.Save(file, item);
         }

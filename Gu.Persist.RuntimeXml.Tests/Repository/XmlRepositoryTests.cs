@@ -5,7 +5,7 @@ namespace Gu.Persist.RuntimeXml.Tests.Repository
 
     public abstract class XmlRepositoryTests : RepositoryTests
     {
-        protected override void Save<T>(T item, FileInfo file)
+        protected override void Save<T>(FileInfo file, T item)
         {
             XmlFile.Save(file, item);
         }

@@ -5,7 +5,7 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
 
     public abstract class BinaryRepositoryTests : RepositoryTests
     {
-        protected override void Save<T>(T item, FileInfo file)
+        protected override void Save<T>(FileInfo file, T item)
         {
             BinaryFile.Save(file, item);
         }
