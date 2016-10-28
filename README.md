@@ -2,11 +2,22 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Build status](https://ci.appveyor.com/api/projects/status/347rs0n3van46k50/branch/master?svg=true)](https://ci.appveyor.com/project/JohanLarsson/gu-persist/branch/master)
 
-A small framework for managing settings.
+A small framework for reading and saving data.
 
 - XmlRepository is a baseclass for managing xml files.
 - BinaryRepository is a baseclass for managing binary files.
 - JsonRepository is a baseclass for managing json files.
+
+## Save transaction.
+### When not creating backups.
+1. Check if `file` exists, if no goto 2.
+2. Check if `file.tmp` exists, if yes throw.
+3. Save file to `file.saving`.
+4. Rename file to backup.
+5. Rename `file`  to `file.tmp`
+
+### When creating backups.
+
 
 Features:
 - T Clone<T>(T item); deep clone by serializing and then deserializing an instance.
