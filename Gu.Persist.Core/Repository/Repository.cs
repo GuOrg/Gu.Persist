@@ -21,6 +21,7 @@ namespace Gu.Persist.Core
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
         /// Defaults to %AppDat%/ExecutingAssembly.Name/Settings
         /// </summary>
+        // ReSharper disable once UnusedMember.Global
         protected Repository()
         {
         }

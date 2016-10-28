@@ -19,9 +19,121 @@
         public static readonly UTF8Encoding DefaultEncoding = new UTF8Encoding(false, true);
 
         /// <summary>
+        /// Serializes to memorystream, then returns the deserialized object
+        /// </summary>
+        public static T Clone<T>(T item)
+        {
+            Ensure.NotNull<object>(item, nameof(item));
+            using (var stream = ToStream(item))
+            {
+                return FromStream<T>(stream);
+            }
+        }
+
+        /// <summary>
+        /// Serializes to memorystream, then returns the deserialized object
+        /// </summary>
+        public static T Clone<T>(T item, JsonSerializerSettings settings)
+        {
+            Ensure.NotNull<object>(item, nameof(item));
+            using (var stream = ToStream(item, settings))
+            {
+                return FromStream<T>(stream, settings);
+            }
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
+        public static T Read<T>(FileInfo file)
+        {
+            Ensure.Exists(file, nameof(file));
+            return FileHelper.Read(file, FromStream<T>);
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
+        public static T Read<T>(FileInfo file, JsonSerializerSettings settings)
+        {
+            Ensure.Exists(file, nameof(file));
+            return FileHelper.Read(file, s => FromStream<T>(s, settings));
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
+        public static Task<T> ReadAsync<T>(FileInfo file)
+        {
+            Ensure.Exists(file, nameof(file));
+            return FileHelper.ReadAsync(file, FromStream<T>);
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
+        public static Task<T> ReadAsync<T>(FileInfo file, JsonSerializerSettings settings)
+        {
+            Ensure.Exists(file, nameof(file));
+            return FileHelper.ReadAsync(file, s => FromStream<T>(s, settings));
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static void Save<T>(FileInfo file, T item)
+        {
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull<object>(item, nameof(item));
+            Save(file, item, null);
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static void Save<T>(FileInfo file, T item, JsonSerializerSettings settings)
+        {
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull<object>(item, nameof(item));
+            var serializer = settings != null
+                ? JsonSerializer.Create(settings)
+                : JsonSerializer.Create();
+            using (var writer = new JsonTextWriter(new StreamWriter(file.OpenWrite(), DefaultEncoding, BlockStream.BlockSize, false)))
+            {
+                serializer.Serialize(writer, item);
+            }
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static Task SaveAsync<T>(FileInfo file, T item)
+        {
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull<object>(item, nameof(item));
+            using (var stream = ToStream(item))
+            {
+                return FileHelper.SaveAsync(file, stream);
+            }
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static Task SaveAsync<T>(FileInfo file, T item, JsonSerializerSettings settings)
+        {
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull<object>(item, nameof(item));
+            using (var stream = ToStream(item, settings))
+            {
+                return FileHelper.SaveAsync(file, stream);
+            }
+        }
+
+        /// <summary>
         /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
         /// </summary>
-        public static T FromStream<T>(Stream stream)
+        internal static T FromStream<T>(Stream stream)
         {
             return FromStream<T>(stream, null);
         }
@@ -29,7 +141,7 @@
         /// <summary>
         /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
         /// </summary>
-        public static T FromStream<T>(Stream stream, JsonSerializerSettings settings)
+        internal static T FromStream<T>(Stream stream, JsonSerializerSettings settings)
         {
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
@@ -44,7 +156,7 @@
         /// <summary>
         /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
         /// </summary>
-        public static MemoryStream ToStream<T>(T item)
+        internal static Stream ToStream<T>(T item)
         {
             return ToStream(item, null);
         }
@@ -52,118 +164,19 @@
         /// <summary>
         /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
         /// </summary>
-        public static MemoryStream ToStream<T>(T item, JsonSerializerSettings settings)
+        internal static Stream ToStream<T>(T item, JsonSerializerSettings settings)
         {
             var stream = new MemoryStream();
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(stream, DefaultEncoding, 1024, true)))
+            using (var writer = new JsonTextWriter(new StreamWriter(stream, DefaultEncoding, BlockStream.BlockSize, true)))
             {
                 serializer.Serialize(writer, item);
             }
 
-            stream.Flush();
             stream.Position = 0;
             return stream;
-        }
-
-        /// <summary>
-        /// Serializes to memorystream, then returns the deserialized object
-        /// </summary>
-        public static T Clone<T>(T item)
-        {
-            using (var stream = ToStream(item))
-            {
-                return FromStream<T>(stream);
-            }
-        }
-
-        /// <summary>
-        /// Serializes to memorystream, then returns the deserialized object
-        /// </summary>
-        public static T Clone<T>(T item, JsonSerializerSettings settings)
-        {
-            using (var stream = ToStream(item, settings))
-            {
-                return FromStream<T>(stream, settings);
-            }
-        }
-
-        /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
-        /// </summary>
-        public static T Read<T>(FileInfo file)
-        {
-            return FileHelper.Read(file, FromStream<T>);
-        }
-
-        /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
-        /// </summary>
-        public static T Read<T>(FileInfo file, JsonSerializerSettings settings)
-        {
-            return FileHelper.Read(file, s => FromStream<T>(s, settings));
-        }
-
-        /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
-        /// </summary>
-        public static Task<T> ReadAsync<T>(FileInfo file)
-        {
-            return FileHelper.ReadAsync(file, FromStream<T>);
-        }
-
-        /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
-        /// </summary>
-        public static Task<T> ReadAsync<T>(FileInfo file, JsonSerializerSettings settings)
-        {
-            return FileHelper.ReadAsync(file, s => FromStream<T>(s, settings));
-        }
-
-        /// <summary>
-        /// Saves <paramref name="item"/> as json
-        /// </summary>
-        public static void Save<T>(FileInfo file, T item)
-        {
-            using (var stream = ToStream(item))
-            {
-                FileHelper.Save(file, stream);
-            }
-        }
-
-        /// <summary>
-        /// Saves <paramref name="item"/> as json
-        /// </summary>
-        public static void Save<T>(FileInfo file, T item, JsonSerializerSettings settings)
-        {
-            using (var stream = ToStream(item, settings))
-            {
-                FileHelper.Save(file, stream);
-            }
-        }
-
-        /// <summary>
-        /// Saves <paramref name="item"/> as json
-        /// </summary>
-        public static Task SaveAsync<T>(FileInfo file, T item)
-        {
-            using (var stream = ToStream(item))
-            {
-                return FileHelper.SaveAsync(file, stream);
-            }
-        }
-
-        /// <summary>
-        /// Saves <paramref name="item"/> as json
-        /// </summary>
-        public static Task SaveAsync<T>(FileInfo file, T item, JsonSerializerSettings settings)
-        {
-            using (var stream = ToStream(item, settings))
-            {
-                return FileHelper.SaveAsync(file, stream);
-            }
         }
     }
 }
