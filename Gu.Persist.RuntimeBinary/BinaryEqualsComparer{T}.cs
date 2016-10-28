@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.RuntimeBinary
 {
+    using System.IO;
     using Gu.Persist.Core;
 
     /// <inheritdoc/>
@@ -9,12 +10,9 @@
         public new static readonly BinaryEqualsComparer<T> Default = new BinaryEqualsComparer<T>();
 
         /// <inheritdoc/>
-        protected override byte[] GetBytes(T item)
+        protected override MemoryStream GetStream(T item)
         {
-            using (var stream = BinaryFile.ToStream(item))
-            {
-                return stream.ToArray();
-            }
+            return BinaryFile.ToStream(item);
         }
     }
 }

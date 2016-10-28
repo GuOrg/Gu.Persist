@@ -12,7 +12,7 @@
         {
             var exception = new RestoreException(new Exception("Save failed"), new Exception("Restore failed"));
             var binaryFormatter = new BinaryFormatter();
-            using (var steram = new MemoryStream())
+            using (var steram = PooledMemoryStream.Borrow())
             {
                 binaryFormatter.Serialize(steram, exception);
                 steram.Position = 0;

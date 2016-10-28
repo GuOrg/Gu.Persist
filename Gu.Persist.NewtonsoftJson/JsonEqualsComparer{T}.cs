@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.NewtonsoftJson
 {
+    using System.IO;
     using Gu.Persist.Core;
 
     /// <inheritdoc/>
@@ -11,12 +12,9 @@
         public new static readonly JsonEqualsComparer<T> Default = new JsonEqualsComparer<T>();
 
         /// <inheritdoc/>
-        protected override byte[] GetBytes(T item)
+        protected override MemoryStream GetStream(T item)
         {
-            using (var stream = JsonFile.ToStream(item))
-            {
-                return stream.ToArray();
-            }
+            return JsonFile.ToStream(item);
         }
     }
 }

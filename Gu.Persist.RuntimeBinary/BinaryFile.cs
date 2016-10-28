@@ -85,7 +85,7 @@
         internal static MemoryStream ToStream<T>(T item)
         {
             var formatter = new BinaryFormatter();
-            var ms = new MemoryStream();
+            var ms = PooledMemoryStream.Borrow();
             formatter.Serialize(ms, item);
             ms.Flush();
             ms.Position = 0;

@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.SystemXml
 {
+    using System.IO;
     using Gu.Persist.Core;
 
     /// <inheritdoc/>
@@ -11,12 +12,9 @@
         public new static readonly XmlEqualsComparer<T> Default = new XmlEqualsComparer<T>();
 
         /// <inheritdoc/>
-        protected override byte[] GetBytes(T item)
+        protected override MemoryStream GetStream(T item)
         {
-            using (var stream = XmlFile.ToStream(item))
-            {
-                return stream.ToArray();
-            }
+            return XmlFile.ToStream(item);
         }
     }
 }

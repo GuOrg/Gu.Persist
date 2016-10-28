@@ -166,7 +166,7 @@
         /// </summary>
         internal static MemoryStream ToStream<T>(T item, JsonSerializerSettings settings)
         {
-            var stream = new MemoryStream();
+            var stream = PooledMemoryStream.Borrow();
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();

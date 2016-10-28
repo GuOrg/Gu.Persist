@@ -35,7 +35,7 @@ namespace Gu.Persist.Core
 
         internal static async Task<MemoryStream> ReadAsync(this FileInfo file)
         {
-            var ms = new MemoryStream();
+            var ms = PooledMemoryStream.Borrow();
             using (var fileStream = File.OpenRead(file.FullName))
             {
                 await fileStream.CopyToAsync(ms)

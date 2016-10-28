@@ -93,7 +93,7 @@
         /// </summary>
         internal static MemoryStream ToStream<T>(T item)
         {
-            var ms = new MemoryStream();
+            var ms = PooledMemoryStream.Borrow();
             var serializer = Serializers.GetOrAdd(item.GetType(), x => new XmlSerializer(item.GetType()));
             lock (serializer)
             {

@@ -46,6 +46,7 @@
     <Compile Include="Contracts\IRepositoryWithSettings.cs" />
     <Compile Include="Internals\DictionaryExt.cs" />
     <Compile Include="Internals\EnumerableEx.cs" />
+    <Compile Include="Internals\PooledMemoryStream.cs" />
     <Compile Include="IO\DirectoryInfoExt.cs" />
     <Compile Include="IO\FileInfoExt.cs" />
     <Compile Include="Backup\BackupFile.cs" />

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
 
     /// <summary>
     /// A base class for comparers using serialization
@@ -16,19 +17,32 @@
         /// </summary>
         public override bool Equals(T x, T y)
         {
-            var xBytes = this.GetBytesInner(x);
-            var yBytes = this.GetBytesInner(y);
-            if (xBytes.Length != yBytes.Length)
+            if (x == null && y == null)
+            {
+                return true;
+            }
+
+            if (x == null || y == null)
             {
                 return false;
             }
 
-            // ReSharper disable once LoopCanBeConvertedToQuery, clearer with for imo
-            for (var i = 0; i < xBytes.Length; i++)
+            using (var xStream = this.GetStream(x))
+            using (var yStream = this.GetStream(y))
             {
-                if (xBytes[i] != yBytes[i])
+                if (xStream.Length != yStream.Length)
                 {
                     return false;
+                }
+
+                var xBytes = xStream.GetBuffer();
+                var yBytes = yStream.GetBuffer();
+                for (var i = 0; i < xStream.Length; i++)
+                {
+                    if (xBytes[i] != yBytes[i])
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -46,32 +60,25 @@
                 throw new ArgumentNullException(nameof(obj));
             }
 
-            var bytes = this.GetBytesInner(obj);
-            unchecked
+            using (var stream = this.GetStream(obj))
             {
-                var hash = 17;
-                for (var i = 0; i < bytes.Length; i++)
+                var bytes = stream.GetBuffer();
+                unchecked
                 {
-                    hash = (hash * 31) + bytes[i];
-                }
+                    var hash = 17;
+                    for (var i = 0; i < stream.Length; i++)
+                    {
+                        hash = (hash * 31) + bytes[i];
+                    }
 
-                return hash;
+                    return hash;
+                }
             }
         }
 
         /// <summary>
         /// Serialize <paramref name="item"/> and return the bytes
         /// </summary>
-        protected abstract byte[] GetBytes(T item);
-
-        private byte[] GetBytesInner(T item)
-        {
-            if (item == null)
-            {
-                return EmptyBytes;
-            }
-
-            return this.GetBytes(item);
-        }
+        protected abstract MemoryStream GetStream(T item);
     }
 }
