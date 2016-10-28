@@ -42,6 +42,7 @@
     <Compile Include="BinaryFile.cs" />
     <Compile Include="BinaryRepository.cs" />
     <Compile Include="BinaryRepositorySettings.cs" />
+    <Compile Include="BinarySerialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

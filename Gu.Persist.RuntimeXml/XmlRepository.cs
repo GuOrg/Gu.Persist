@@ -35,7 +35,7 @@ namespace Gu.Persist.RuntimeXml
         /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
         public XmlRepository(DirectoryInfo directory)
-            : base(directory, () => XmlRepositorySettings.DefaultFor(directory))
+            : base(directory, () => XmlRepositorySettings.DefaultFor(directory), XmlSerialize.Default)
         {
         }
 
@@ -46,7 +46,7 @@ namespace Gu.Persist.RuntimeXml
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public XmlRepository(PathAndSpecialFolder directory, Func<XmlRepositorySettings> settingsCreator)
-            : base(directory.CreateDirectoryInfo(), settingsCreator)
+            : base(directory.CreateDirectoryInfo(), settingsCreator, XmlSerialize.Default)
         {
         }
 
@@ -57,7 +57,7 @@ namespace Gu.Persist.RuntimeXml
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public XmlRepository(DirectoryInfo directory, Func<XmlRepositorySettings> settingsCreator)
-            : base(directory, settingsCreator)
+            : base(directory, settingsCreator, XmlSerialize.Default)
         {
         }
 
@@ -73,7 +73,7 @@ namespace Gu.Persist.RuntimeXml
         /// </param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public XmlRepository(PathAndSpecialFolder directory, IBackuper backuper, Func<XmlRepositorySettings> settingsCreator)
-            : base(directory.CreateDirectoryInfo(), backuper, settingsCreator)
+            : base(directory.CreateDirectoryInfo(), backuper, settingsCreator, XmlSerialize.Default)
         {
         }
 
@@ -89,7 +89,7 @@ namespace Gu.Persist.RuntimeXml
         /// </param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public XmlRepository(DirectoryInfo directory, IBackuper backuper, Func<XmlRepositorySettings> settingsCreator)
-            : base(directory, backuper, settingsCreator)
+            : base(directory, backuper, settingsCreator, XmlSerialize.Default)
         {
         }
 
@@ -97,7 +97,7 @@ namespace Gu.Persist.RuntimeXml
         /// Initializes a new instance of the <see cref="XmlRepository"/> class.
         /// </summary>
         public XmlRepository(XmlRepositorySettings settings)
-            : base(settings)
+            : base(settings, XmlSerialize.Default)
         {
         }
 
@@ -105,20 +105,8 @@ namespace Gu.Persist.RuntimeXml
         /// Initializes a new instance of the <see cref="XmlRepository"/> class.
         /// </summary>
         public XmlRepository(XmlRepositorySettings settings, IBackuper backuper)
-            : base(settings, backuper)
+            : base(settings, backuper, XmlSerialize.Default)
         {
-        }
-
-        /// <inheritdoc/>
-        protected override T FromStream<T>(Stream stream)
-        {
-            return XmlFile.FromStream<T>(stream);
-        }
-
-        /// <inheritdoc/>
-        protected override Stream ToStream<T>(T item)
-        {
-            return XmlFile.ToStream(item);
         }
 
         /// <inheritdoc/>

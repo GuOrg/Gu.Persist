@@ -32,7 +32,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// After this the settings file will be used.
         /// </summary>
         public JsonRepository(JsonSerializerSettings jsonSettings)
-            : base(Directories.Default, () => JsonRepositorySettings.DefaultFor(Directories.Default, jsonSettings))
+            : base(Directories.Default, () => JsonRepositorySettings.DefaultFor(Directories.Default, jsonSettings), JsonSerialize.Default)
         {
         }
 
@@ -52,7 +52,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// After this the settings file will be used.
         /// </summary>
         public JsonRepository(DirectoryInfo directory)
-            : base(directory, () => JsonRepositorySettings.DefaultFor(directory))
+            : base(directory, () => JsonRepositorySettings.DefaultFor(directory), JsonSerialize.Default)
         {
         }
 
@@ -63,7 +63,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// After this the settings file will be used.
         /// </summary>
         public JsonRepository(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
-            : base(directory, () => JsonRepositorySettings.DefaultFor(directory, jsonSettings))
+            : base(directory, () => JsonRepositorySettings.DefaultFor(directory, jsonSettings), JsonSerialize.Default)
         {
         }
 
@@ -74,7 +74,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public JsonRepository(PathAndSpecialFolder directory, Func<JsonRepositorySettings> settingsCreator)
-            : base(directory.CreateDirectoryInfo(), settingsCreator)
+            : base(directory.CreateDirectoryInfo(), settingsCreator, JsonSerialize.Default)
         {
         }
 
@@ -85,7 +85,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public JsonRepository(DirectoryInfo directory, Func<JsonRepositorySettings> settingsCreator)
-            : base(directory, settingsCreator)
+            : base(directory, settingsCreator, JsonSerialize.Default)
         {
         }
 
@@ -101,7 +101,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// </param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public JsonRepository(PathAndSpecialFolder directory, IBackuper backuper, Func<JsonRepositorySettings> settingsCreator)
-            : base(directory.CreateDirectoryInfo(), backuper, settingsCreator)
+            : base(directory.CreateDirectoryInfo(), backuper, settingsCreator, JsonSerialize.Default)
         {
         }
 
@@ -117,7 +117,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// </param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public JsonRepository(DirectoryInfo directory, IBackuper backuper, Func<JsonRepositorySettings> settingsCreator)
-            : base(directory, backuper, settingsCreator)
+            : base(directory, backuper, settingsCreator, JsonSerialize.Default)
         {
         }
 
@@ -125,7 +125,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// Initializes a new instance of the <see cref="JsonRepository"/> class.
         /// </summary>
         public JsonRepository(JsonRepositorySettings settings)
-            : base(settings)
+            : base(settings, JsonSerialize.Default)
         {
         }
 
@@ -133,7 +133,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// Initializes a new instance of the <see cref="JsonRepository"/> class.
         /// </summary>
         public JsonRepository(JsonRepositorySettings settings, IBackuper backuper)
-            : base(settings, backuper)
+            : base(settings, backuper, JsonSerialize.Default)
         {
         }
 
@@ -141,18 +141,6 @@ namespace Gu.Persist.NewtonsoftJson
         /// The settings used by the repository.
         /// </summary>
         public new JsonRepositorySettings Settings => (JsonRepositorySettings)base.Settings;
-
-        /// <inheritdoc/>
-        protected override T FromStream<T>(Stream stream)
-        {
-            return JsonFile.FromStream<T>(stream, this.Settings.JsonSerializerSettings);
-        }
-
-        /// <inheritdoc/>
-        protected override Stream ToStream<T>(T item)
-        {
-            return JsonFile.ToStream(item, this.Settings.JsonSerializerSettings);
-        }
 
         /// <inheritdoc/>
         protected override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()

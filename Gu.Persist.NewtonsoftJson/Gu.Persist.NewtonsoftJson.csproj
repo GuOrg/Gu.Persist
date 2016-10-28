@@ -43,6 +43,7 @@
     <Compile Include="JsonFile.cs" />
     <Compile Include="JsonRepository.cs" />
     <Compile Include="JsonRepositorySettings.cs" />
+    <Compile Include="JsonSerialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -64,6 +64,7 @@
     <Compile Include="Repository\LockedFile.cs" />
     <Compile Include="Repository\RestoreException.cs" />
     <Compile Include="Repository\SaveTransaction.cs" />
+    <Compile Include="Repository\Serialize.cs" />
     <Compile Include="Settings\BackupSettings.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="IO\Directories.cs" />

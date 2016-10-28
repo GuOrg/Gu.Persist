@@ -6,17 +6,17 @@
 
     using Gu.Persist.Core.Backup;
 
-    public sealed class SaveTransaction : IDisposable
+    internal sealed class SaveTransaction : IDisposable
     {
         private readonly FileInfo file;
         private readonly FileInfo tempFile;
-        private readonly Stream contents;
+        private readonly object contents;
         private readonly IBackuper backuper;
         private LockedFile lockedFile;
         private LockedFile lockedSoftDelete;
         private LockedFile lockedTempFile;
 
-        public SaveTransaction(FileInfo file, FileInfo tempFile, Stream contents, IBackuper backuper)
+        public SaveTransaction(FileInfo file, FileInfo tempFile, object contents, IBackuper backuper)
         {
             this.file = file;
             this.tempFile = tempFile;
@@ -24,14 +24,14 @@
             this.backuper = backuper ?? NullBackuper.Default;
         }
 
-        public void Commit()
+        public void Commit<TSetting>(Serialize<TSetting> serialize, TSetting setting)
         {
             if (!this.BeforeCopy())
             {
                 return;
             }
 
-            this.contents.CopyTo(this.lockedTempFile.Stream);
+            serialize.ToStream(this.contents, this.lockedTempFile.Stream, setting);
             this.AfterCopy();
         }
 
@@ -42,7 +42,7 @@
                 return;
             }
 
-            await this.contents.CopyToAsync(this.lockedTempFile.Stream)
+            await ((Stream)this.contents).CopyToAsync(this.lockedTempFile.Stream)
                       .ConfigureAwait(false);
             this.AfterCopy();
         }

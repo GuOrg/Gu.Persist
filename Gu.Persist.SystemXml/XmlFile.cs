@@ -104,5 +104,10 @@
             ms.Position = 0;
             return ms;
         }
+
+        internal static XmlSerializer SerializerFor(object item)
+        {
+            return Serializers.GetOrAdd(item.GetType(), x => new XmlSerializer(item.GetType()));
+        }
     }
 }

@@ -239,35 +239,6 @@
         }
 
         [Test]
-        public void Save()
-        {
-            var fileInfo = this.Directory.CreateFileInfoInDirectory("SaveTest.cfg");
-            var stream = new MemoryStream();
-            using (var writer = new StreamWriter(stream))
-            {
-                writer.Write("1 2");
-                writer.Flush();
-                stream.Position = 0;
-                FileHelper.Save(fileInfo, stream);
-            }
-
-            var text = File.ReadAllText(fileInfo.FullName);
-            Assert.AreEqual("1 2", text);
-
-            stream = new MemoryStream();
-            using (var writer = new StreamWriter(stream))
-            {
-                writer.Write("3");
-                writer.Flush();
-                stream.Position = 0;
-                FileHelper.Save(fileInfo, stream);
-            }
-
-            text = File.ReadAllText(fileInfo.FullName);
-            Assert.AreEqual("3", text);
-        }
-
-        [Test]
         public async Task SaveAsync()
         {
             var fileInfo = this.Directory.CreateFileInfoInDirectory("SaveAsyncTest.cfg");

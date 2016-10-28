@@ -89,6 +89,11 @@ namespace Gu.Persist.RuntimeXml
             }
         }
 
+        internal static DataContractSerializer SerializerFor<T>(T item)
+        {
+            return Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
+        }
+
         /// <summary>
         /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
         /// </summary>

@@ -15,19 +15,9 @@ namespace Gu.Persist.Core
     public abstract class Repository<TSetting> : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings
         where TSetting : IRepositorySettings
     {
+        private readonly Serialize<TSetting> serialize;
         private readonly object gate = new object();
         private readonly FileCache fileCache = new FileCache();
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private IBackuper backuper;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
-        /// Defaults to %AppDat%/ExecutingAssembly.Name/Settings
-        /// </summary>
-        // ReSharper disable once UnusedMember.Global
-        protected Repository()
-        {
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
@@ -36,9 +26,12 @@ namespace Gu.Persist.Core
         /// If not a new default setting is created and saved.
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        protected Repository(DirectoryInfo directory, Func<TSetting> settingsCreator)
+        protected Repository(DirectoryInfo directory, Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
         {
             Ensure.NotNull(directory, nameof(directory));
+            Ensure.NotNull(settingsCreator, nameof(settingsCreator));
+            Ensure.NotNull(serialize, nameof(serialize));
+            this.serialize = serialize;
             directory.CreateIfNotExists();
             this.Settings = settingsCreator();
             if (this.Settings.IsTrackingDirty)
@@ -63,11 +56,13 @@ namespace Gu.Persist.Core
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        protected Repository(DirectoryInfo directory, IBackuper backuper, Func<TSetting> settingsCreator)
+        protected Repository(DirectoryInfo directory, IBackuper backuper, Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
         {
             Ensure.NotNull(directory, nameof(directory));
             Ensure.NotNull(backuper, nameof(backuper));
             Ensure.NotNull(settingsCreator, nameof(settingsCreator));
+            Ensure.NotNull(serialize, nameof(serialize));
+            this.serialize = serialize;
             directory.CreateIfNotExists();
             this.Settings = settingsCreator();
             if (this.Settings.IsTrackingDirty)
@@ -83,8 +78,8 @@ namespace Gu.Persist.Core
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
         /// Creates a new <see cref="Repository{TSetting}"/> with <paramref name="settings"/>.
         /// </summary>
-        protected Repository(TSetting settings)
-            : this(settings, Backup.Backuper.Create(settings.BackupSettings))
+        protected Repository(TSetting settings, Serialize<TSetting> serialize)
+            : this(settings, Backup.Backuper.Create(settings.BackupSettings), serialize)
         {
         }
 
@@ -96,8 +91,11 @@ namespace Gu.Persist.Core
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
-        protected Repository(TSetting settings, IBackuper backuper)
+        protected Repository(TSetting settings, IBackuper backuper, Serialize<TSetting> serialize)
         {
+            Ensure.NotNull<object>(settings, nameof(settings));
+            Ensure.NotNull(serialize, nameof(serialize));
+            this.serialize = serialize;
             settings.DirectoryPath.CreateDirectoryInfo()
                     .CreateIfNotExists();
             this.Settings = settings;
@@ -108,18 +106,20 @@ namespace Gu.Persist.Core
             }
         }
 
-        /// <inheritdoc/>
-        public IRepositorySettings Settings { get; }
+        /// <summary>
+        /// See <see cref="IRepository.Settings"/>
+        /// </summary>
+        public TSetting Settings { get; }
+
+        IRepositorySettings IRepository.Settings => this.Settings;
+
+        IRepositorySettings IRepositoryWithSettings.Settings => this.Settings;
 
         /// <inheritdoc/>
         public IDirtyTracker Tracker { get; }
 
         /// <inheritdoc/>
-        public IBackuper Backuper
-        {
-            get { return this.backuper ?? NullBackuper.Default; }
-            protected set { this.backuper = value; }
-        }
+        public IBackuper Backuper { get; }
 
         /// <inheritdoc/>
         public virtual FileInfo GetFileInfo<T>()
@@ -250,7 +250,7 @@ namespace Gu.Persist.Core
                 // can't await  inside the lock.
                 // If there are many threads reading the same only the first is used
                 // the other reads are wasted, can't think of anything better than this.
-                value = await FileHelper.ReadAsync(file, this.FromStream<T>).ConfigureAwait(false);
+                value = await FileHelper.ReadAsync(file, this.serialize.FromStream<T>).ConfigureAwait(false);
 
                 lock (this.gate)
                 {
@@ -264,7 +264,7 @@ namespace Gu.Persist.Core
             }
             else
             {
-                value = await FileHelper.ReadAsync(file, this.FromStream<T>).ConfigureAwait(false);
+                value = await FileHelper.ReadAsync(file, this.serialize.FromStream<T>).ConfigureAwait(false);
             }
 
             if (this.Settings.IsTrackingDirty)
@@ -478,7 +478,7 @@ namespace Gu.Persist.Core
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(tempFile, nameof(tempFile));
             this.CacheAndTrackCore(file, item);
-            using (var stream = this.ToStreamOrNull(item))
+            using (var stream = this.serialize.ToStream(item))
             {
                 await this.SaveStreamAsync(stream, file, tempFile).ConfigureAwait(false);
             }
@@ -513,7 +513,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual async Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile)
         {
-            using (var saveTransaction = new SaveTransaction(file, tempFile, stream, this.backuper))
+            using (var saveTransaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
             {
                 await saveTransaction.CommitAsync()
                                      .ConfigureAwait(false);
@@ -769,13 +769,13 @@ namespace Gu.Persist.Core
                         return cached;
                     }
 
-                    value = FileHelper.Read(file, this.FromStream<T>);
+                    value = FileHelper.Read(file, this.serialize.FromStream<T>);
                     this.fileCache.Add(file.FullName, value);
                 }
             }
             else
             {
-                value = FileHelper.Read(file, this.FromStream<T>);
+                value = FileHelper.Read(file, this.serialize.FromStream<T>);
             }
 
             if (this.Settings.IsTrackingDirty)
@@ -849,9 +849,9 @@ namespace Gu.Persist.Core
         protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
         {
             this.CacheAndTrackCore(file, item);
-            using (var stream = this.ToStreamOrNull(item))
+            using (var transaction = new SaveTransaction(file, tempFile, item, this.Backuper))
             {
-                this.SaveStreamCore(stream, file, tempFile);
+                transaction.Commit(this.serialize, this.Settings);
             }
         }
 
@@ -866,9 +866,9 @@ namespace Gu.Persist.Core
         /// </summary>
         protected void SaveStreamCore(Stream stream, FileInfo file, FileInfo tempFile)
         {
-            using (var transaction = new SaveTransaction(file, tempFile, stream, this.backuper))
+            using (var transaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
             {
-                transaction.Commit();
+                transaction.Commit(this.serialize, this.Settings);
             }
         }
 
@@ -882,9 +882,9 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(item));
             }
 
-            using (var stream = this.ToStream(item))
+            using (var stream = this.serialize.ToStream(item))
             {
-                return this.FromStream<T>(stream);
+                return this.serialize.FromStream<T>(stream);
             }
         }
 
@@ -905,16 +905,6 @@ namespace Gu.Persist.Core
             file.Refresh();
             return file.Exists;
         }
-
-        /// <summary>
-        /// Deserialize from <paramref name="stream"/> to an instance of <typeparamref name="T"/>
-        /// </summary>
-        protected abstract T FromStream<T>(Stream stream);
-
-        /// <summary>
-        /// Serialize from <paramref name="item"/> to a <see cref="Stream"/>
-        /// </summary>
-        protected abstract Stream ToStream<T>(T item);
 
         /// <summary>
         /// Gets the comparer to use when checking <see cref="IDirty.IsDirty{T}(T)"/>
@@ -959,13 +949,6 @@ namespace Gu.Persist.Core
             {
                 this.Tracker.Track(file.FullName, item);
             }
-        }
-
-        private Stream ToStreamOrNull<T>(T value)
-        {
-            return value != null
-                       ? this.ToStream(value)
-                       : null;
         }
     }
 }

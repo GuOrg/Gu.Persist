@@ -59,18 +59,6 @@ namespace Gu.Persist.Core
             }
         }
 
-        /// <summary>
-        /// Creates or overwrites <paramref name="file"/>
-        /// </summary>
-        [Obsolete("Don't use this")]
-        internal static void Save(this FileInfo file, Stream stream)
-        {
-            using (var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                stream.CopyTo(fileStream);
-            }
-        }
-
         internal static void HardDelete(this FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
