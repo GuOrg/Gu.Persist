@@ -2,6 +2,7 @@ Newtonsoft.Json
 
 group Analyzers
   StyleCop.Analyzers
+  AsyncUsageAnalyzers
   JetBrains.Annotations
 
 group Test

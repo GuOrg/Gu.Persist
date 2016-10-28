@@ -13,6 +13,18 @@
         bool BeforeSave(FileInfo file);
 
         /// <summary>
+        /// This method is called by the <see cref="SaveTransaction"/> after the copy to the temp file has finished and before the temp file is renamed to file.
+        /// </summary>
+        /// <param name="file">The file to create a backup for</param>
+        void Backup(LockedFile file);
+
+        /// <summary>
+        /// Creates a backup for <paramref name="file"/>
+        /// </summary>
+        /// <param name="file">The file to create a backup for</param>
+        void Backup(FileInfo file);
+
+        /// <summary>
         /// Creates a backup for <paramref name="file"/>
         /// </summary>
         /// <param name="file">The file to create a backup for</param>
@@ -38,9 +50,11 @@
         // void Restore(FileInfo file, FileInfo backup);
 
         /// <summary>
-        /// Removes old backups for <paramref name="file"/>
+        /// This is called after <see cref="SaveTransaction"/> has renamed the temporary file to file.Name
+        /// This means that the save transaction is complete and was successful.
+        /// The files are still locked by the transaction.
         /// </summary>
-        void AfterSuccessfulSave(FileInfo file);
+        void AfterSave(LockedFile file);
 
         bool CanRename(FileInfo file, string newName);
 

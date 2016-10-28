@@ -19,7 +19,9 @@
         public void Track<T>(string fullFileName, T item)
         {
             Ensure.NotNull(fullFileName, nameof(fullFileName));
-            var clone = this.cloner.Clone(item);
+            var clone = item == null
+                            ? (object)null
+                            : this.cloner.Clone(item);
             lock (this.gate)
             {
                 this.clones.AddOrUpdate(fullFileName, clone, (f, o) => clone);

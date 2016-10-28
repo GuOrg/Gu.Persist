@@ -1,3 +1,4 @@
 group Analyzers
   StyleCop.Analyzers
+  AsyncUsageAnalyzers
   JetBrains.Annotations

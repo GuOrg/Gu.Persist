@@ -1,6 +1,7 @@
 ﻿namespace Gu.Persist.Core.Tests.Backup
 {
     using System;
+    using System.IO;
 
     using Gu.Persist.Core.Backup;
 
@@ -128,7 +129,11 @@
         {
             this.Setting.NumberOfBackups = 2;
             this.Setting.MaxAgeInDays = 2;
-            this.backuper.AfterSuccessfulSave(this.File);
+            using (var lockedFile = this.LockedFile())
+            {
+                this.backuper.AfterSave(lockedFile);
+            }
+
             AssertFile.Exists(false, this.BackupOneMinuteOld);
             AssertFile.Exists(false, this.BackupOneHourOld);
             AssertFile.Exists(false, this.BackupOneDayOld);
@@ -149,7 +154,11 @@
 
             this.Setting.NumberOfBackups = 3;
             this.Setting.MaxAgeInDays = int.MaxValue;
-            this.backuper.AfterSuccessfulSave(this.File);
+            using (var lockedFile = this.LockedFile())
+            {
+                this.backuper.AfterSave(lockedFile);
+            }
+
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(true, this.BackupOneMinuteOld);
             AssertFile.Exists(true, this.BackupOneHourOld);
@@ -165,7 +174,11 @@
             this.File.VoidCreate();
             this.SoftDelete.VoidCreate();
             this.Backup.VoidCreate();
-            this.backuper.AfterSuccessfulSave(this.File);
+            using (var lockedFile = this.LockedFile())
+            {
+                this.backuper.AfterSave(lockedFile);
+            }
+
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(true, this.Backup);
             AssertFile.Exists(false, this.SoftDelete);
@@ -184,7 +197,11 @@
             this.Backup.VoidCreate();
             this.Setting.NumberOfBackups = int.MaxValue;
             this.Setting.MaxAgeInDays = int.MaxValue;
-            this.backuper.AfterSuccessfulSave(this.File);
+            using (var lockedFile = this.LockedFile())
+            {
+                this.backuper.AfterSave(lockedFile);
+            }
+
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(true, this.Backup);
             AssertFile.Exists(false, this.SoftDelete);
@@ -195,5 +212,7 @@
         {
             Assert.Inconclusive("Backups must be renamed when original file is renamed");
         }
+
+        private LockedFile LockedFile() => Core.LockedFile.CreateIfExists(this.File, x => x.Open(FileMode.Open, FileAccess.Read, FileShare.Delete));
     }
 }

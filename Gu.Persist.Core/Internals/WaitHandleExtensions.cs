@@ -1,4 +1,5 @@
 ﻿// ReSharper disable UnusedMember.Global
+#pragma warning disable UseAsyncSuffix // Use Async suffix
 namespace Gu.Persist.Core
 {
     using System;
@@ -10,9 +11,9 @@ namespace Gu.Persist.Core
     /// </summary>
     public static class WaitHandleExtensions
     {
-        /// <summary>
-        /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>
-        /// </summary>
+                                      /// <summary>
+                                      /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>
+                                      /// </summary>
         public static Task AsTask(this WaitHandle handle)
         {
             return AsTask(handle, Timeout.InfiniteTimeSpan);

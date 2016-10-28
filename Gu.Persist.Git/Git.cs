@@ -10,7 +10,8 @@ namespace Gu.Persist.Git
 
     internal static class Git
     {
-        private static readonly CommitOptions CommitOptions = new CommitOptions { AllowEmptyCommit = false };
+        private static readonly CommitOptions AllowEmptyCommit = new CommitOptions { AllowEmptyCommit = false };
+        private static readonly CommitOptions NonEmptyCommitOnly = new CommitOptions { AllowEmptyCommit = false };
         private static readonly CheckoutOptions ForceCheckoutOptions = new CheckoutOptions { CheckoutModifiers = CheckoutModifiers.Force };
         private static readonly Signature Signature = new Signature(new Identity("Gu.Persist.Git", "Gu.Persist.Git@github.com"), DateTimeOffset.UtcNow);
         private static readonly StageOptions StageOptionsIncludeIgnored = new StageOptions { IncludeIgnored = true };
@@ -41,7 +42,7 @@ namespace Gu.Persist.Git
             }
         }
 
-        internal static bool StageAndCommit(FileInfo file)
+        internal static bool StageAndCommit(FileInfo file, bool allowEmptyCommit)
         {
             if (!File.Exists(file.FullName))
             {
@@ -68,7 +69,8 @@ namespace Gu.Persist.Git
                     case FileStatus.DeletedFromWorkdir:
                     case FileStatus.TypeChangeInWorkdir:
                     case FileStatus.RenamedInWorkdir:
-                        repository.Commit($"Create backup for {file.Name}", Signature, Signature, CommitOptions);
+                        var commitOptions = allowEmptyCommit ? AllowEmptyCommit : NonEmptyCommitOnly;
+                        repository.Commit($"Create backup for {file.Name}", Signature, Signature, commitOptions);
                         return true;
                     case FileStatus.Unreadable:
                     case FileStatus.Ignored:

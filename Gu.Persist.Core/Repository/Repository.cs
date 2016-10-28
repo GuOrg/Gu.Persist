@@ -458,14 +458,8 @@ namespace Gu.Persist.Core
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(tempFile, nameof(tempFile));
-            if (item == null)
-            {
-                FileHelper.HardDelete(file);
-                return;
-            }
-
-            this.CacheAndTrackCore(item, file);
-            using (var stream = this.ToStream(item))
+            this.CacheAndTrackCore(file, item);
+            using (var stream = this.ToStreamOrNull(item))
             {
                 await this.SaveStreamAsync(stream, file, tempFile).ConfigureAwait(false);
             }
@@ -500,17 +494,10 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual async Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile)
         {
-            this.Backuper.BeforeSave(file);
-            try
+            using (var saveTransaction = new SaveTransaction(file, tempFile, stream, this.backuper))
             {
-                await tempFile.SaveAsync(stream).ConfigureAwait(false);
-                tempFile.MoveTo(file);
-                this.Backuper.AfterSuccessfulSave(file);
-            }
-            catch (Exception)
-            {
-                this.Backuper.TryRestore(file);
-                throw;
+                await saveTransaction.CommitAsync()
+                                     .ConfigureAwait(false);
             }
         }
 
@@ -799,22 +786,22 @@ namespace Gu.Persist.Core
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(creator, nameof(creator));
-            T setting;
+            T item;
             if (this.ExistsCore<T>())
             {
-                setting = this.ReadCore<T>();
+                item = this.ReadCore<T>();
             }
             else if (this.Backuper.TryRestore(file))
             {
-                setting = this.ReadCore<T>();
+                item = this.ReadCore<T>();
             }
             else
             {
-                setting = creator();
-                this.SaveCore(setting);
+                item = creator();
+                this.SaveCore(item);
             }
 
-            return setting;
+            return item;
         }
 
         /// <summary>
@@ -842,15 +829,8 @@ namespace Gu.Persist.Core
         /// </summary>
         protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
         {
-            if (item == null)
-            {
-                this.SaveStreamCore(null, file, null);
-                return;
-            }
-
-            this.CacheAndTrackCore(item, file);
-
-            using (var stream = this.ToStream(item))
+            this.CacheAndTrackCore(file, item);
+            using (var stream = this.ToStreamOrNull(item))
             {
                 this.SaveStreamCore(stream, file, tempFile);
             }
@@ -867,34 +847,9 @@ namespace Gu.Persist.Core
         /// </summary>
         protected void SaveStreamCore(Stream stream, FileInfo file, FileInfo tempFile)
         {
-            lock (this.gate)
+            using (var transaction = new SaveTransaction(file, tempFile, stream, this.backuper))
             {
-                if (stream == null)
-                {
-                    FileHelper.HardDelete(file);
-                    return;
-                }
-
-                this.Backuper.BeforeSave(file);
-                try
-                {
-                    FileHelper.Save(tempFile, stream);
-                    tempFile.MoveTo(file);
-                    this.Backuper.AfterSuccessfulSave(file);
-                }
-                catch (Exception exception)
-                {
-                    try
-                    {
-                        this.Backuper.TryRestore(file);
-                    }
-                    catch (Exception restoreException)
-                    {
-                        throw new RestoreException(exception, restoreException);
-                    }
-
-                    throw;
-                }
+                transaction.Commit();
             }
         }
 
@@ -951,14 +906,14 @@ namespace Gu.Persist.Core
         /// Adds <paramref name="item"/> to the cache.
         /// </summary>
         /// <remarks>
-        /// Calls <see cref="CacheCore{T}(T, FileInfo)"/>
+        /// Calls <see cref="CacheCore{T}(FileInfo,T)"/>
         /// </remarks>
-        protected virtual void Cache<T>(T item, FileInfo file)
+        protected virtual void Cache<T>(FileInfo file, T item)
         {
-            this.CacheCore(item, file);
+            this.CacheCore(file, item);
         }
 
-        protected void CacheCore<T>(T item, FileInfo file)
+        protected void CacheCore<T>(FileInfo file, T item)
         {
             T cached;
             if (this.fileCache.TryGetValue(file.FullName, out cached))
@@ -974,17 +929,24 @@ namespace Gu.Persist.Core
             }
         }
 
-        private void CacheAndTrackCore<T>(T item, FileInfo file)
+        private void CacheAndTrackCore<T>(FileInfo file, T item)
         {
             if (this.Settings.IsCaching)
             {
-                this.Cache(item, file);
+                this.Cache(file, item);
             }
 
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker.Track(file.FullName, item);
             }
+        }
+
+        private Stream ToStreamOrNull<T>(T value)
+        {
+            return value != null
+                       ? this.ToStream(value)
+                       : null;
         }
     }
 }

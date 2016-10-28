@@ -22,7 +22,18 @@
         }
 
         /// <inheritdoc/>
-        public void Backup(FileInfo file, FileInfo backup)
+        void IBackuper.Backup(LockedFile file)
+        {
+            // nop;
+        }
+
+        void IBackuper.Backup(FileInfo file)
+        {
+            // nop
+        }
+
+        /// <inheritdoc/>
+        void IBackuper.Backup(FileInfo file, FileInfo backup)
         {
             FileHelper.Backup(file, backup);
         }
@@ -70,11 +81,11 @@
         }
 
         /// <inheritdoc/>
-        public void AfterSuccessfulSave(FileInfo file)
+        public void AfterSave(LockedFile file)
         {
             Ensure.NotNull(file, nameof(file));
-            Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");
-            file.DeleteSoftDeleteFileFor();
+            Ensure.ExtensionIsNot(file.File, FileHelper.SoftDeleteExtension, "file");
+            file.File.DeleteSoftDeleteFileFor();
         }
 
         /// <inheritdoc/>

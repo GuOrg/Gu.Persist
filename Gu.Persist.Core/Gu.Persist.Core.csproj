@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>Gu.Persist.Core.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\Gu.Persist.Core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,12 +60,14 @@
     <Compile Include="Internals\Ensure.cs" />
     <Compile Include="Internals\WaitHandleExtensions.cs" />
     <Compile Include="Backup\Backuper.cs" />
-    <Compile Include="Repositories\FileCache.cs" />
-    <Compile Include="Repositories\RestoreException.cs" />
+    <Compile Include="Repository\FileCache.cs" />
+    <Compile Include="Repository\LockedFile.cs" />
+    <Compile Include="Repository\RestoreException.cs" />
+    <Compile Include="Repository\SaveTransaction.cs" />
     <Compile Include="Settings\BackupSettings.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="IO\Directories.cs" />
-    <Compile Include="Repositories\DirtyTracker.cs" />
+    <Compile Include="Repository\DirtyTracker.cs" />
     <Compile Include="IO\FileHelper.cs" />
     <Compile Include="Comparers\FileInfoComparer.cs" />
     <Compile Include="Contracts\IDirtyTracker.cs" />
@@ -75,7 +78,7 @@
     <Compile Include="Contracts\IDirectoryPath.cs" />
     <Compile Include="Settings\PathAndSpecialFolder.cs" />
     <Compile Include="Settings\RepositorySettings.cs" />
-    <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Repository\Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -85,8 +88,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\.paket\paket.targets" />
+  <ItemGroup>
+    <Analyzer Include="..\packages\analyzers\AsyncUsageAnalyzers\analyzers\dotnet\AsyncUsageAnalyzers.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+  </ItemGroup>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2')">
       <ItemGroup>
         <Reference Include="JetBrains.Annotations">
           <HintPath>..\packages\analyzers\JetBrains.Annotations\lib\net\JetBrains.Annotations.dll</HintPath>

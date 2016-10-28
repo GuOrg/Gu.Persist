@@ -35,9 +35,22 @@
         }
 
         /// <inheritdoc/>
+        public void Backup(LockedFile file)
+        {
+            file.Dispose();
+            Git.StageAndCommit(file.File, false);
+        }
+
+        /// <inheritdoc/>
+        public void Backup(FileInfo file)
+        {
+            Git.StageAndCommit(file, false);
+        }
+
+        /// <inheritdoc/>
         public void Backup(FileInfo file, FileInfo backup)
         {
-            Git.StageAndCommit(file);
+            Git.StageAndCommit(file, false);
         }
 
         /// <inheritdoc/>
@@ -80,9 +93,10 @@
         }
 
         /// <inheritdoc/>
-        public void AfterSuccessfulSave(FileInfo file)
+        public void AfterSave(LockedFile file)
         {
-            Git.StageAndCommit(file);
+            file.Dispose();
+            Git.StageAndCommit(file.File, false);
         }
 
         /// <inheritdoc/>

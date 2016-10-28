@@ -9,6 +9,7 @@ group Analyzers
   framework: >= net45
   nuget JetBrains.Annotations
   nuget StyleCop.Analyzers
+  nuget AsyncUsageAnalyzers
 
 group Test
   source http://www.nuget.org/api/v2/

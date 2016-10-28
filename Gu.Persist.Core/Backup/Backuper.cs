@@ -54,15 +54,27 @@
                 return softDelete != null;
             }
 
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public virtual void Backup(LockedFile file)
+        {
+            this.Backup(file.File);
+        }
+
+        /// <inheritdoc/>
+        public virtual void Backup(FileInfo file)
+        {
+            Ensure.Exists(file, nameof(file));
             var backupFile = BackupFile.CreateFor(file, this.Setting);
             this.Backup(file, backupFile);
-            return true;
         }
 
         /// <inheritdoc/>
         public virtual void Backup(FileInfo file, FileInfo backup)
         {
-            Ensure.NotNull(file, nameof(file));
+            Ensure.Exists(file, nameof(file));
             Ensure.NotNull(backup, nameof(backup));
             FileHelper.Backup(file, backup);
         }
@@ -112,12 +124,14 @@
         }
 
         /// <inheritdoc/>
-        public virtual void AfterSuccessfulSave(FileInfo file)
+        public virtual void AfterSave(LockedFile file)
         {
             Ensure.NotNull(file, nameof(file));
-            Ensure.ExtensionIsNotAnyOf(file, this.BackupExtensions, "file");
-            file.DeleteSoftDeleteFileFor();
-            var allBackups = BackupFile.GetAllBackupsFor(file, this.Setting);
+            Ensure.ExtensionIsNotAnyOf(file.File, this.BackupExtensions, "file");
+
+            file.File.DeleteSoftDeleteFileFor();
+
+            var allBackups = BackupFile.GetAllBackupsFor(file.File, this.Setting);
             if (allBackups.Count == 0)
             {
                 return;
@@ -133,9 +147,9 @@
                 // this is not efficient but the number of backups should be low
                 while (allBackups.Count > this.Setting.NumberOfBackups)
                 {
-                    var backupFile = allBackups.MinBy(x => x.TimeStamp);
-                    backupFile.File.HardDelete();
-                    allBackups.Remove(backupFile);
+                    var backupToBurge = allBackups.MinBy(x => x.TimeStamp);
+                    backupToBurge.File.HardDelete();
+                    allBackups.Remove(backupToBurge);
                 }
             }
 
@@ -144,15 +158,15 @@
                 // this is not efficient but the number of backups should be low
                 while (true)
                 {
-                    var backupFile = allBackups.MinBy(x => x.TimeStamp);
-                    var days = (DateTime.Now - backupFile.TimeStamp).Days;
+                    var backupToBurge = allBackups.MinBy(x => x.TimeStamp);
+                    var days = (DateTime.Now - backupToBurge.TimeStamp).Days;
                     if (days < this.Setting.MaxAgeInDays)
                     {
                         break;
                     }
 
-                    backupFile.File.HardDelete();
-                    allBackups.Remove(backupFile);
+                    backupToBurge.File.HardDelete();
+                    allBackups.Remove(backupToBurge);
                 }
             }
         }
