@@ -43,10 +43,34 @@
         }
 
         [Test]
-        public async Task SaveThenReadAsync()
+        public void SaveTwiceThenRead()
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
+            BinaryFile.Save(file, dummy);
+            BinaryFile.Save(file, dummy);
+            var read = BinaryFile.Read<DummySerializable>(file);
+            Assert.AreNotSame(dummy, read);
+            Assert.AreEqual(dummy.Value, read.Value);
+        }
+
+        [Test]
+        public async Task SaveAsyncThenRead()
+        {
+            var dummy = new DummySerializable { Value = 1 };
+            var file = this.directory.CreateFileInfoInDirectory("dummy.json");
+            await BinaryFile.SaveAsync(file, dummy).ConfigureAwait(false);
+            var read = await BinaryFile.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
+            Assert.AreNotSame(dummy, read);
+            Assert.AreEqual(dummy.Value, read.Value);
+        }
+
+        [Test]
+        public async Task SaveAsyncTwiceThenRead()
+        {
+            var dummy = new DummySerializable { Value = 1 };
+            var file = this.directory.CreateFileInfoInDirectory("dummy.json");
+            await BinaryFile.SaveAsync(file, dummy).ConfigureAwait(false);
             await BinaryFile.SaveAsync(file, dummy).ConfigureAwait(false);
             var read = await BinaryFile.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
             Assert.AreNotSame(dummy, read);
