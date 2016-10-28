@@ -17,6 +17,7 @@
             if (Pool.TryDequeue(out stream))
             {
                 stream.SetLength(0);
+                return stream;
             }
 
             return new PooledMemoryStream();

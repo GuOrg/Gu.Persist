@@ -2,6 +2,7 @@
 namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Threading.Tasks;
 
@@ -221,6 +222,33 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             var read = this.Read<DummySerializable>(this.file);
             Assert.AreEqual(this.dummy.Value, read.Value);
+            Assert.AreNotSame(this.dummy, read);
+        }
+
+        [Test]
+        public void SaveLongListThenShortListFile()
+        {
+            var list = new List<DummySerializable>
+            {
+                this.dummy,
+                new DummySerializable(2)
+            };
+            this.Repository.Save(list, this.file);
+            AssertFile.Exists(true, this.file);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.backup);
+            }
+
+            var read = this.Read<List<DummySerializable>>(this.file);
+            CollectionAssert.AreEqual(list, read);
+            Assert.AreNotSame(this.dummy, read);
+
+            list.RemoveAt(1);
+            this.Repository.Save(list, this.file);
+            AssertFile.Exists(true, this.file);
+            read = this.Read<List<DummySerializable>>(this.file);
+            CollectionAssert.AreEqual(list, read);
             Assert.AreNotSame(this.dummy, read);
         }
 
