@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.RuntimeBinary
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
     using Gu.Persist.Core;
@@ -33,6 +34,18 @@
         public override T FromStream<T>(Stream stream)
         {
             return BinaryFile.FromStream<T>(stream);
+        }
+
+        /// <inheritdoc/>
+        public override T Clone<T>(T item)
+        {
+            return BinaryFile.Clone(item);
+        }
+
+        /// <inheritdoc/>
+        public override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
+        {
+            return BinaryEqualsComparer<T>.Default;
         }
     }
 }

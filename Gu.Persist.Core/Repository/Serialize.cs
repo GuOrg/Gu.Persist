@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.Core
 {
+    using System.Collections.Generic;
     using System.IO;
 
     /// <summary>
@@ -27,5 +28,15 @@
         /// Deserialize <paramref name="stream"/> to an instance of <typeparamref name="T"/>
         /// </summary>
         public abstract T FromStream<T>(Stream stream);
+
+        /// <summary>
+        /// See <see cref="ICloner.Clone{T}(T)"/>
+        /// </summary>
+        public abstract T Clone<T>(T item);
+
+        /// <summary>
+        /// Gets the comparer to use when checking <see cref="IDirty.IsDirty{T}(T)"/>
+        /// </summary>
+        public abstract IEqualityComparer<T> DefaultStructuralEqualityComparer<T>();
     }
 }

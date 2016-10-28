@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.SystemXml
 {
+    using System.Collections.Generic;
     using System.IO;
     using Gu.Persist.Core;
 
@@ -35,6 +36,18 @@
         public override T FromStream<T>(Stream stream)
         {
             return XmlFile.FromStream<T>(stream);
+        }
+
+        /// <inheritdoc/>
+        public override T Clone<T>(T item)
+        {
+            return XmlFile.Clone(item);
+        }
+
+        /// <inheritdoc/>
+        public override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
+        {
+            return XmlEqualsComparer<T>.Default;
         }
     }
 }

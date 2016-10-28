@@ -100,11 +100,5 @@ namespace Gu.Persist.RuntimeBinary
             : base(settings, BinarySerialize.Default)
         {
         }
-
-        /// <inheritdoc/>
-        protected override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
-        {
-            return BinaryEqualsComparer<T>.Default;
-        }
     }
 }

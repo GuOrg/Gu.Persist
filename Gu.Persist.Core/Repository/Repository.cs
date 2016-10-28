@@ -3,11 +3,8 @@ namespace Gu.Persist.Core
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.IO;
     using System.Threading.Tasks;
-
-    using Gu.Persist.Core.Backup;
 
     /// <summary>
     /// Base class for a repository
@@ -40,7 +37,7 @@ namespace Gu.Persist.Core
             }
 
             this.Backuper = Backup.Backuper.Create(this.Settings.BackupSettings); // creating temp for TryRestore in ReadOrCreate
-            this.Settings = this.ReadOrCreateCore(() => (TSetting)this.Settings);
+            this.Settings = this.ReadOrCreateCore(() => this.Settings);
             this.Backuper = Backup.Backuper.Create(this.Settings.BackupSettings);
         }
 
@@ -71,7 +68,7 @@ namespace Gu.Persist.Core
             }
 
             this.Backuper = backuper;
-            this.Settings = this.ReadOrCreateCore(() => (TSetting)this.Settings);
+            this.Settings = this.ReadOrCreateCore(() => this.Settings);
         }
 
         /// <summary>
@@ -523,7 +520,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item)
         {
-            return this.IsDirty(item, this.DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(item, this.serialize.DefaultStructuralEqualityComparer<T>());
         }
 
         /// <inheritdoc/>
@@ -537,7 +534,7 @@ namespace Gu.Persist.Core
         public virtual bool IsDirty<T>(T item, string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            return this.IsDirty(item, fileName, this.DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(item, fileName, this.serialize.DefaultStructuralEqualityComparer<T>());
         }
 
         /// <inheritdoc/>
@@ -553,7 +550,7 @@ namespace Gu.Persist.Core
         {
             Ensure.NotNull(file, nameof(file));
 
-            return this.IsDirty(item, file, this.DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(item, file, this.serialize.DefaultStructuralEqualityComparer<T>());
         }
 
         /// <inheritdoc/>
@@ -882,10 +879,7 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(item));
             }
 
-            using (var stream = this.serialize.ToStream(item))
-            {
-                return this.serialize.FromStream<T>(stream);
-            }
+            return this.serialize.Clone(item);
         }
 
         /// <summary>
@@ -907,11 +901,6 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Gets the comparer to use when checking <see cref="IDirty.IsDirty{T}(T)"/>
-        /// </summary>
-        protected abstract IEqualityComparer<T> DefaultStructuralEqualityComparer<T>();
-
-        /// <summary>
         /// Adds <paramref name="item"/> to the cache.
         /// </summary>
         /// <remarks>
@@ -922,6 +911,12 @@ namespace Gu.Persist.Core
             this.CacheCore(file, item);
         }
 
+        /// <summary>
+        /// Adds <paramref name="item"/> to the cache.
+        /// </summary>
+        /// <remarks>
+        /// Calls <see cref="CacheCore{T}(FileInfo,T)"/>
+        /// </remarks>
         protected void CacheCore<T>(FileInfo file, T item)
         {
             T cached;

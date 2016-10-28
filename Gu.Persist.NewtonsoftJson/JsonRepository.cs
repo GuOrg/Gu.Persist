@@ -141,11 +141,5 @@ namespace Gu.Persist.NewtonsoftJson
         /// The settings used by the repository.
         /// </summary>
         public new JsonRepositorySettings Settings => (JsonRepositorySettings)base.Settings;
-
-        /// <inheritdoc/>
-        protected override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
-        {
-            return JsonEqualsComparer<T>.Default;
-        }
     }
 }

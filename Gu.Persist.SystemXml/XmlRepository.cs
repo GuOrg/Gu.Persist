@@ -104,11 +104,5 @@ namespace Gu.Persist.SystemXml
             : base(settings, backuper, XmlSerialize.Default)
         {
         }
-
-        /// <inheritdoc/>
-        protected override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
-        {
-            return XmlEqualsComparer<T>.Default;
-        }
     }
 }

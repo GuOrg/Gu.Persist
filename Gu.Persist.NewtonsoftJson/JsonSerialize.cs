@@ -1,5 +1,7 @@
-﻿namespace Gu.Persist.NewtonsoftJson
+﻿#pragma warning disable SA1600 // Elements must be documented
+namespace Gu.Persist.NewtonsoftJson
 {
+    using System.Collections.Generic;
     using System.IO;
     using Gu.Persist.Core;
     using Newtonsoft.Json;
@@ -38,6 +40,18 @@
         public override T FromStream<T>(Stream stream)
         {
             return JsonFile.FromStream<T>(stream);
+        }
+
+        /// <inheritdoc/>
+        public override T Clone<T>(T item)
+        {
+            return JsonFile.Clone(item);
+        }
+
+        /// <inheritdoc/>
+        public override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
+        {
+            return JsonEqualsComparer<T>.Default;
         }
     }
 }
