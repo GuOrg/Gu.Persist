@@ -9,6 +9,9 @@ namespace Gu.Persist.Core
 
     using Gu.Persist.Core.Backup;
 
+    /// <summary>
+    /// Base class for a repository
+    /// </summary>
     public abstract class Repository<TSetting> : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings
         where TSetting : IRepositorySettings
     {
@@ -349,12 +352,14 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void Save<T>(T item)
         {
+            Ensure.NotNull<object>(item, nameof(item));
             this.SaveCore(item);
         }
 
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item)
         {
+            Ensure.NotNull<object>(item, nameof(item));
             var file = this.GetFileInfoCore<T>();
             this.Save(item, file);
             this.RemoveFromCache(item);
@@ -364,6 +369,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void Save<T>(T item, string fileName)
         {
+            Ensure.NotNull<object>(item, nameof(item));
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             this.Save(item, file);
@@ -372,6 +378,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item, string fileName)
         {
+            Ensure.NotNull<object>(item, nameof(item));
             Ensure.IsValidFileName(fileName, nameof(fileName));
             this.Save(item, fileName);
             this.RemoveFromCache(item);
@@ -381,6 +388,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void Save<T>(T item, FileInfo file)
         {
+            Ensure.NotNull<object>(item, nameof(item));
             Ensure.NotNull(file, nameof(file));
             this.SaveCore(item, file);
         }
@@ -388,6 +396,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item, FileInfo file)
         {
+            Ensure.NotNull<object>(item, nameof(item));
             Ensure.NotNull(file, nameof(file));
             this.SaveCore(item, file);
             this.RemoveFromCache(item);
@@ -397,13 +406,16 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void Save<T>(T item, FileInfo file, FileInfo tempFile)
         {
+            Ensure.NotNull<object>(item, nameof(item));
             Ensure.NotNull(file, nameof(file));
+            Ensure.NotNull(tempFile, nameof(tempFile));
             this.SaveCore(item, file, tempFile);
         }
 
         /// <inheritdoc/>
         public virtual void SaveStream<T>(Stream stream)
         {
+            Ensure.NotNull(stream, nameof(stream));
             var file = this.GetFileInfoCore<T>();
             this.SaveStream(stream, file);
         }
@@ -411,6 +423,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void SaveStream(Stream stream, string fileName)
         {
+            Ensure.NotNull(stream, nameof(stream));
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             this.SaveStream(stream, file);
@@ -419,6 +432,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void SaveStream(Stream stream, FileInfo file)
         {
+            Ensure.NotNull(stream, nameof(stream));
             Ensure.NotNull(file, nameof(file));
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
             this.SaveStreamCore(stream, file, tempFile);
@@ -427,6 +441,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void SaveStream(Stream stream, FileInfo file, FileInfo tempFile)
         {
+            Ensure.NotNull(stream, nameof(stream));
             Ensure.NotNull(file, nameof(file));
             this.SaveStreamCore(stream, file, tempFile);
         }
@@ -434,6 +449,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item)
         {
+            Ensure.NotNull<object>(item, nameof(item));
             var file = this.GetFileInfo<T>();
             return this.SaveAsync(item, file);
         }
@@ -441,6 +457,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item, string fileName)
         {
+            Ensure.NotNull<object>(item, nameof(item));
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var fileInfo = this.GetFileInfoCore(fileName);
             return this.SaveAsync(item, fileInfo);
@@ -449,6 +466,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item, FileInfo file)
         {
+            Ensure.NotNull<object>(item, nameof(item));
             Ensure.NotNull(file, nameof(file));
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
             return this.SaveAsync(item, file, tempFile);

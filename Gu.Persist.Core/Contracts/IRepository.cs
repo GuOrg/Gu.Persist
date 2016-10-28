@@ -228,18 +228,12 @@ namespace Gu.Persist.Core
         /// Saves to a file for <typeparamref name="T"/>
         /// <seealso cref="IRepository.Save{T}(T, FileInfo, FileInfo)"/>
         /// </summary>
-        /// <remarks>
-        /// If <paramref name="item"/> is null the file is deleted.
-        /// </remarks>
         void Save<T>(T item);
 
         /// <summary>
         /// Saves to a file specified by <paramref name="fileName"/>.
         /// <seealso cref="IRepository.Save{T}(T, FileInfo, FileInfo)"/>
         /// </summary>
-        /// <remarks>
-        /// If <paramref name="item"/> is null the file is deleted.
-        /// </remarks>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
@@ -252,9 +246,6 @@ namespace Gu.Persist.Core
         /// Saves <see paramref="item"/> to <paramref name="file"/>
         /// <seealso cref="IRepository.Save{T}(T, FileInfo, FileInfo)"/>
         /// </summary>
-        /// <remarks>
-        /// If <paramref name="item"/> is null the file is deleted.
-        /// </remarks>
         void Save<T>(T item, FileInfo file);
 
         /// <summary>
@@ -272,17 +263,17 @@ namespace Gu.Persist.Core
         Task SaveAsync<T>(T item);
 
         /// <summary>
-        /// <see cref="IRepository.SaveAsync{T}(T, string)"/>
+        /// <see cref="IRepository.Save{T}(T, string)"/>
         /// </summary>
         Task SaveAsync<T>(T item, string fileName);
 
         /// <summary>
-        /// <see cref="IRepository.SaveAsync{T}(T, FileInfo)"/>
+        /// <see cref="IRepository.Save{T}(T, FileInfo)"/>
         /// </summary>
         Task SaveAsync<T>(T item, FileInfo file);
 
         /// <summary>
-        /// <see cref="IRepository.SaveAsync{T}(T, FileInfo, FileInfo)"/>
+        /// <see cref="IRepository.Save{T}(T, FileInfo, FileInfo)"/>
         /// </summary>
         Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile);
 
@@ -306,7 +297,6 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Saves the stream and creates backups.
         /// </summary>
-        /// <param name="stream">If the stream is null the file is deleted</param>
         void SaveStream(Stream stream, FileInfo file);
 
         /// <summary>
@@ -316,22 +306,22 @@ namespace Gu.Persist.Core
         void SaveStream(Stream stream, FileInfo file, FileInfo tempFile);
 
         /// <summary>
-        /// <see cref="IRepository.SaveStreamAsync{T}(Stream)"/>
+        /// <see cref="IRepository.SaveStream{T}(Stream)"/>
         /// </summary>
         Task SaveStreamAsync<T>(Stream stream);
 
         /// <summary>
-        /// <see cref="IRepository.SaveStreamAsync(Stream, string)"/>
+        /// <see cref="IRepository.SaveStream(Stream, string)"/>
         /// </summary>
         Task SaveStreamAsync(Stream stream, string fileName);
 
         /// <summary>
-        /// <see cref="IRepository.SaveStreamAsync(Stream, FileInfo)"/>
+        /// <see cref="IRepository.SaveStream(Stream, FileInfo)"/>
         /// </summary>
         Task SaveStreamAsync(Stream stream, FileInfo file);
 
         /// <summary>
-        /// <see cref="IRepository.SaveStreamAsync(Stream, FileInfo, FileInfo)"/>
+        /// <see cref="IRepository.SaveStream(Stream, FileInfo, FileInfo)"/>
         /// </summary>
         Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile);
 

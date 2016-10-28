@@ -98,7 +98,7 @@
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(file.OpenWrite(), DefaultEncoding, BlockStream.BlockSize, false)))
+            using (var writer = new JsonTextWriter(new StreamWriter(file.OpenCreate(), DefaultEncoding, 1024, false)))
             {
                 serializer.Serialize(writer, item);
             }
@@ -156,7 +156,7 @@
         /// <summary>
         /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
         /// </summary>
-        internal static Stream ToStream<T>(T item)
+        internal static MemoryStream ToStream<T>(T item)
         {
             return ToStream(item, null);
         }
@@ -164,13 +164,13 @@
         /// <summary>
         /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
         /// </summary>
-        internal static Stream ToStream<T>(T item, JsonSerializerSettings settings)
+        internal static MemoryStream ToStream<T>(T item, JsonSerializerSettings settings)
         {
             var stream = new MemoryStream();
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(stream, DefaultEncoding, BlockStream.BlockSize, true)))
+            using (var writer = new JsonTextWriter(new StreamWriter(stream, DefaultEncoding, 1024, true)))
             {
                 serializer.Serialize(writer, item);
             }

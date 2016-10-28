@@ -13,6 +13,15 @@
         public static readonly char[] InvalidPathChars = Path.GetInvalidPathChars();
         private static readonly ConcurrentDictionary<string, string> TimeStampPatternMap = new ConcurrentDictionary<string, string>();
 
+        /// <summary>
+        /// Opens a file stram that creates a file if not exists.
+        ///  Ower writes if exists.
+        /// </summary>
+        internal static Stream OpenCreate(this FileInfo file)
+        {
+            return new FileStream(file.FullName, FileMode.Create, FileAccess.Write, FileShare.None);
+        }
+
         internal static bool IsValidFileName(string filename)
         {
             var indexOfAny = filename.IndexOfAny(InvalidFileNameChars);
