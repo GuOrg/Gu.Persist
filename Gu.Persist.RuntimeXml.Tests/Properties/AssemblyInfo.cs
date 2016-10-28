@@ -13,4 +13,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("67f8668d-89cd-41db-b474-d203b6510956")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: NUnit.Framework.LevelOfParallelism(1)]
+[assembly: NUnit.Framework.Parallelizable(NUnit.Framework.ParallelScope.None)]
