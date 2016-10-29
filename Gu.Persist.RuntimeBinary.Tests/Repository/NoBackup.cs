@@ -4,7 +4,7 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
     using Gu.Persist.Core.Backup;
     using NUnit.Framework;
 
-    public class BinaryNoBackup : BinaryRepositoryTests
+    public class NoBackup : BinaryRepositoryTests
     {
         [Test]
         public void BackuperIsNone()

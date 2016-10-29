@@ -44,11 +44,11 @@ namespace Gu.Persist.Core.Tests.Repositories
             this.dummy = new DummySerializable(1);
         }
 
-        protected RepositorySettings Settings => (RepositorySettings)this.Repository.Settings;
+        protected RepositorySettings Settings => (RepositorySettings)this.Repository?.Settings;
 
-        protected BackupSettings BackupSettings => this.Settings.BackupSettings;
+        protected BackupSettings BackupSettings => this.Settings?.BackupSettings;
 
-        protected bool IsBackingUp => this.BackupSettings != null && this.BackupSettings.IsCreatingBackups;
+        protected bool IsBackingUp => this.BackupSettings?.IsCreatingBackups == true;
 
         [SetUp]
         public void SetUp()
@@ -115,16 +115,14 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TearDown]
         public void TearDown()
         {
-            this.file.Delete();
-            this.fileTemp.Delete();
-
-            this.RepoSettingFile.Delete();
-
-            this.dummyFile.Delete();
+            this.file?.Delete();
+            this.fileTemp?.Delete();
+            this.RepoSettingFile?.Delete();
+            this.dummyFile?.Delete();
             if (this.IsBackingUp)
             {
-                this.backup.Delete();
-                this.dummyBackup.Delete();
+                this.backup?.Delete();
+                this.dummyBackup?.Delete();
             }
         }
 
@@ -211,7 +209,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void SaveFile()
+        public void SaveThenRead()
         {
             this.Repository.Save(this.dummy, this.file);
             AssertFile.Exists(true, this.file);
@@ -469,7 +467,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             Assert.AreSame(this.dummy, read);
             read = this.Read<DummySerializable>(this.file);
             Assert.AreEqual(this.dummy, read);
-            for (int i = 2; i < 3; i++)
+            for (var i = 2; i < 3; i++)
             {
                 this.dummy.Value++;
                 this.Repository.Save(this.dummy, this.file);

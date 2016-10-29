@@ -15,6 +15,7 @@
         private LockedFile lockedFile;
         private LockedFile lockedSoftDelete;
         private LockedFile lockedTempFile;
+        private bool fileExistedBefore;
 
         public SaveTransaction(FileInfo file, FileInfo tempFile, object contents, IBackuper backuper)
         {
@@ -56,8 +57,11 @@
 
         private bool BeforeCopy()
         {
-            this.lockedFile = LockedFile.CreateIfExists(this.file, x => x.Open(FileMode.Open, FileAccess.Read, FileShare.Delete));
-            this.lockedSoftDelete = LockedFile.CreateIfExists(this.file.GetSoftDeleteFileFor(), x => x.Open(FileMode.Open, FileAccess.Read, FileShare.Delete));
+            this.file.Refresh();
+            this.fileExistedBefore = this.file.Exists;
+            this.file.Directory.CreateIfNotExists();
+            this.lockedFile = LockedFile.Create(this.file, x => x.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Delete));
+            this.lockedSoftDelete = LockedFile.Create(this.file.GetSoftDeleteFileFor(), x => x.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Delete));
             if (this.contents == null)
             {
                 FileHelper.HardDelete(this.file);
@@ -71,20 +75,27 @@
 
         private void AfterCopy()
         {
-            if (this.file.Exists)
+            if (this.fileExistedBefore)
             {
                 this.backuper.Backup(this.lockedFile);
             }
 
             try
             {
+                this.lockedFile.DisposeAndDeleteFile();
                 this.tempFile.MoveTo(this.file);
                 this.lockedTempFile.DisposeAndDeleteFile();
+                this.lockedSoftDelete.DisposeAndDeleteFile();
             }
             catch (Exception exception)
             {
                 try
                 {
+                    if (!this.fileExistedBefore)
+                    {
+                        this.lockedFile.DisposeAndDeleteFile();
+                    }
+
                     this.backuper.TryRestore(this.file);
                 }
                 catch (Exception restoreException)
