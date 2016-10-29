@@ -9,27 +9,34 @@ A small framework for reading and saving data.
 - JsonRepository is a baseclass for managing json files.
 
 ## Save transaction.
+Happy path
+
 1. Lock `file` if exists.
 2. Lock `file.delete` if it exists.
-3. Save file to `file.saving`.
-4. Rename file to backup.
-5. Rename `file`  to `file.tmp`
+3. Create and lock `file.tmp` if it exists.
+4. Save to `file.tmp`
+5. Rename `file` to `file.backup if `creating backups.
+6. Rename `file.tmp`-> `file`
 
-### When creating backups.
+On error everything is reset back to initial state.
 
+## Features
 
-Features:
+- Atomic save transactions. Avoids corrupted data on application crash etc.
 - T Clone<T>(T item); deep clone by serializing and then deserializing an instance.
 - bool IsDirty<T>(T item, IEqualityComparer<T> comparer); check if an instance is dirty after last save.
 - Repository manages a singleton reference for each file.
 - EqualityComparers that checks structural equality by serializing and comparing bytes. If performance is an issue overloads with IEqualityComparer<T> are exposed.
-- Saves to .tmp file, on success it is renamed to .cfg extensions are configurable via settings.
-- Creates backups on save. Backurules configurable via setting.
+- Repository bootstraps itself with settings file in directory.
+- Creates backups on save. Backuprules configurable via setting.
     - Extension
     - Directory
     - Number of backups
     - Max age backups.
 
+## Repository
+
+Helper class 
 
 Sample:
 
