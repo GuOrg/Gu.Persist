@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Gu.Persist.Git")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Use a git repository for backups.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Johan Larsson")]
 [assembly: AssemblyProduct("Gu.Persist.Git")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]

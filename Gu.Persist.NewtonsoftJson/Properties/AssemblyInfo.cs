@@ -2,7 +2,7 @@
 using System.Resources;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Gu.Persist.Json")]
+[assembly: AssemblyTitle("Gu.Persist.NewtonsoftJson")]
 [assembly: AssemblyDescription("A repository using Newtonsoft.Json")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Johan Larsson")]
