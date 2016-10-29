@@ -12,7 +12,7 @@
         public new static readonly JsonEqualsComparer<T> Default = new JsonEqualsComparer<T>();
 
         /// <inheritdoc/>
-        protected override MemoryStream GetStream(T item)
+        protected override IPooledStream GetStream(T item)
         {
             return JsonFile.ToStream(item);
         }

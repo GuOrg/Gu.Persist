@@ -209,7 +209,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<MemoryStream> ReadStreamAsync<T>()
+        public virtual Task<Stream> ReadStreamAsync<T>()
         {
             var file = this.GetFileInfo<T>();
             return this.ReadStreamAsync(file);
@@ -224,7 +224,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<MemoryStream> ReadStreamAsync(string fileName)
+        public virtual Task<Stream> ReadStreamAsync(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var fileInfo = this.GetFileInfoCore(fileName);
@@ -273,7 +273,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<MemoryStream> ReadStreamAsync(FileInfo file)
+        public virtual Task<Stream> ReadStreamAsync(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
             return file.ReadAsync();

@@ -10,7 +10,7 @@
         public new static readonly BinaryEqualsComparer<T> Default = new BinaryEqualsComparer<T>();
 
         /// <inheritdoc/>
-        protected override MemoryStream GetStream(T item)
+        protected override IPooledStream GetStream(T item)
         {
             return BinaryFile.ToStream(item);
         }

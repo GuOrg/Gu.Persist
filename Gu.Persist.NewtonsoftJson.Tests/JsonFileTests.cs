@@ -88,7 +88,7 @@
         }
 
         [Test]
-        public async Task SaveThenReadAsync()
+        public async Task SaveAsyncThenRead()
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
@@ -111,7 +111,7 @@
         }
 
         [Test]
-        public async Task SaveThenReadAsyncWithSettings()
+        public async Task SaveAsyncThenReadWithSettings()
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");

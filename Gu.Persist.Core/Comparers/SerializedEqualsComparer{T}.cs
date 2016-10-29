@@ -79,6 +79,6 @@
         /// <summary>
         /// Serialize <paramref name="item"/> and return the bytes
         /// </summary>
-        protected abstract MemoryStream GetStream(T item);
+        protected abstract IPooledStream GetStream(T item);
     }
 }

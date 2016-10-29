@@ -9,9 +9,8 @@ A small framework for reading and saving data.
 - JsonRepository is a baseclass for managing json files.
 
 ## Save transaction.
-### When not creating backups.
-1. Check if `file` exists, if no goto 2.
-2. Check if `file.tmp` exists, if yes throw.
+1. Lock `file` if exists.
+2. Lock `file.delete` if it exists.
 3. Save file to `file.saving`.
 4. Rename file to backup.
 5. Rename `file`  to `file.tmp`

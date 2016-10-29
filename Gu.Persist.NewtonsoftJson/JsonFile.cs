@@ -107,26 +107,26 @@
         /// <summary>
         /// Saves <paramref name="item"/> as json
         /// </summary>
-        public static Task SaveAsync<T>(FileInfo file, T item)
+        public static async Task SaveAsync<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull<object>(item, nameof(item));
             using (var stream = ToStream(item))
             {
-                return FileHelper.SaveAsync(file, stream);
+                await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Saves <paramref name="item"/> as json
         /// </summary>
-        public static Task SaveAsync<T>(FileInfo file, T item, JsonSerializerSettings settings)
+        public static async Task SaveAsync<T>(FileInfo file, T item, JsonSerializerSettings settings)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull<object>(item, nameof(item));
             using (var stream = ToStream(item, settings))
             {
-                return FileHelper.SaveAsync(file, stream);
+                await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
             }
         }
 
@@ -156,7 +156,7 @@
         /// <summary>
         /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
         /// </summary>
-        internal static MemoryStream ToStream<T>(T item)
+        internal static PooledMemoryStream ToStream<T>(T item)
         {
             return ToStream(item, null);
         }
@@ -164,7 +164,7 @@
         /// <summary>
         /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
         /// </summary>
-        internal static MemoryStream ToStream<T>(T item, JsonSerializerSettings settings)
+        internal static PooledMemoryStream ToStream<T>(T item, JsonSerializerSettings settings)
         {
             var stream = PooledMemoryStream.Borrow();
             var serializer = settings != null

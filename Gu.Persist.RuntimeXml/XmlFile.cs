@@ -66,13 +66,13 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Saves <paramref name="item"/> as xml
         /// </summary>
-        public static Task SaveAsync<T>(FileInfo file, T item)
+        public static async Task SaveAsync<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull<object>(item, nameof(item));
             using (var stream = ToStream(item))
             {
-                return FileHelper.SaveAsync(file, stream);
+                await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
         /// </summary>
-        internal static MemoryStream ToStream<T>(T item)
+        internal static PooledMemoryStream ToStream<T>(T item)
         {
             var ms = PooledMemoryStream.Borrow();
             var serializer = Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));

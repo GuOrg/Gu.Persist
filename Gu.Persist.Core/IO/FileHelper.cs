@@ -27,23 +27,23 @@ namespace Gu.Persist.Core
         /// <param name="fromStream">Deserializer</param>
         internal static async Task<T> ReadAsync<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
-            using (var ms = await ReadAsync(file).ConfigureAwait(false))
+            using (var stream = await ReadAsync(file).ConfigureAwait(false))
             {
-                return fromStream(ms);
+                return fromStream(stream);
             }
         }
 
-        internal static async Task<MemoryStream> ReadAsync(this FileInfo file)
+        internal static async Task<Stream> ReadAsync(this FileInfo file)
         {
-            var ms = PooledMemoryStream.Borrow();
+            var stream = PooledMemoryStream.Borrow();
             using (var fileStream = File.OpenRead(file.FullName))
             {
-                await fileStream.CopyToAsync(ms)
+                await fileStream.CopyToAsync(stream)
                                 .ConfigureAwait(false);
             }
 
-            ms.Position = 0;
-            return ms;
+            stream.Position = 0;
+            return stream;
         }
 
         /// <summary>

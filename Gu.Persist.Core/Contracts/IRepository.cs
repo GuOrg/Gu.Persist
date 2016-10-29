@@ -185,17 +185,17 @@ namespace Gu.Persist.Core
         /// <summary>
         /// <see cref="IRepository.ReadStreamAsync{T}()"/>
         /// </summary>
-        Task<MemoryStream> ReadStreamAsync<T>();
+        Task<Stream> ReadStreamAsync<T>();
 
         /// <summary>
         /// <see cref="IRepository.ReadStreamAsync(string)"/>
         /// </summary>
-        Task<MemoryStream> ReadStreamAsync(string fileName);
+        Task<Stream> ReadStreamAsync(string fileName);
 
         /// <summary>
         ///  <see cref="IRepository.ReadStreamAsync(FileInfo)"/>
         /// </summary>
-        Task<MemoryStream> ReadStreamAsync(FileInfo file);
+        Task<Stream> ReadStreamAsync(FileInfo file);
 
         /// <summary>
         /// Reads the file and returns the contents in a memorystream

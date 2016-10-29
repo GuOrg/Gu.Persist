@@ -59,13 +59,13 @@
         /// <summary>
         /// Save the binary representation of <paramref name="item"/>.
         /// </summary>
-        public static Task SaveAsync<T>(FileInfo file, T item)
+        public static async Task SaveAsync<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull<object>(item, nameof(item));
             using (var stream = ToStream(item))
             {
-                return FileHelper.SaveAsync(file, stream);
+                await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
             }
         }
 
@@ -82,7 +82,7 @@
         /// <summary>
         /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
         /// </summary>
-        internal static MemoryStream ToStream<T>(T item)
+        internal static PooledMemoryStream ToStream<T>(T item)
         {
             var formatter = new BinaryFormatter();
             var ms = PooledMemoryStream.Borrow();
