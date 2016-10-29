@@ -1,6 +1,5 @@
 ﻿namespace Gu.Persist.NewtonsoftJson
 {
-    using System.IO;
     using Gu.Persist.Core;
 
     /// <inheritdoc/>

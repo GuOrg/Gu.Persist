@@ -2,16 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
 
     /// <summary>
     /// A base class for comparers using serialization
     /// </summary>
     public abstract class SerializedEqualsComparer<T> : EqualityComparer<T>
     {
-        // ReSharper disable once StaticMemberInGenericType
-        private static readonly byte[] EmptyBytes = new byte[0];
-
         /// <summary>
         /// Serializes <paramref name="x"/> and <paramref name="y"/> and compares the bytes.
         /// </summary>

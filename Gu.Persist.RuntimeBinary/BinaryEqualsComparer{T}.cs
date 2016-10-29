@@ -1,6 +1,5 @@
 ﻿namespace Gu.Persist.RuntimeBinary
 {
-    using System.IO;
     using Gu.Persist.Core;
 
     /// <inheritdoc/>

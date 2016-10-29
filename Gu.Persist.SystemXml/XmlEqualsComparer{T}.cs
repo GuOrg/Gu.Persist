@@ -1,6 +1,5 @@
 ﻿namespace Gu.Persist.SystemXml
 {
-    using System.IO;
     using Gu.Persist.Core;
 
     /// <inheritdoc/>

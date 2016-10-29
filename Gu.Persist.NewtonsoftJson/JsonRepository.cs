@@ -2,7 +2,6 @@
 namespace Gu.Persist.NewtonsoftJson
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
 
     using Gu.Persist.Core;
@@ -140,6 +139,6 @@ namespace Gu.Persist.NewtonsoftJson
         /// <summary>
         /// The settings used by the repository.
         /// </summary>
-        public new JsonRepositorySettings Settings => (JsonRepositorySettings)base.Settings;
+        public new JsonRepositorySettings Settings => base.Settings;
     }
 }
