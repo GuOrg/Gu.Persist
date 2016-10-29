@@ -1,6 +1,6 @@
 ﻿type project
 tags json save settings
-projectUrl https://github.com/JohanLarsson/Gu.Persistance
+projectUrl https://github.com/JohanLarsson/Gu.Persist
 licenseUrl http://opensource.org/licenses/MIT
 
 excludeddependencies

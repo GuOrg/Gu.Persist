@@ -22,6 +22,12 @@
         /// <param name="item">
         /// This can be either an instance of <typeparamref name="T"/> or a <see cref="Stream"/>
         /// </param>
+        /// <param name="stream">
+        /// The stream to write serialized data to.
+        /// </param>
+        /// <param name="settings">
+        /// The settings to use when serializing.
+        /// </param>
         public abstract void ToStream<T>(T item, Stream stream, TSettings settings);
 
         /// <summary>
