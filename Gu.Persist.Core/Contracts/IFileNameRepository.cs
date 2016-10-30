@@ -60,20 +60,20 @@ namespace Gu.Persist.Core
         /// FileName.cfg
         /// FileName
         /// </param>
-        void Save<T>(T item, string fileName);
+        void Save<T>(string fileName, T item);
 
         /// <summary>
         /// Checks if the instance has any changes compared to the cached value.
         /// The comparer used serializes and compares the bytes.
         /// </summary>
         /// <returns>Null if not found in cache</returns>
-        bool IsDirty<T>(T item, string fileName);
+        bool IsDirty<T>(string fileName, T item);
 
         /// <summary>
         /// Checks if the instance has any changes compared to the cached value.
         /// </summary>
         /// <returns>Null if not found in cache</returns>
-        bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer);
+        bool IsDirty<T>(string fileName, T item, IEqualityComparer<T> comparer);
 
         /// <summary>
         /// Returns a deep copy via serialize > deserialize

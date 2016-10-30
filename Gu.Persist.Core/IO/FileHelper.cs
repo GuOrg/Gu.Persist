@@ -145,7 +145,7 @@ namespace Gu.Persist.Core
         internal static FileInfo CreateFileInfo(string fileName, IFileSettings settings)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            var file = CreateFileInfo(settings.DirectoryPath.CreateDirectoryInfo(), fileName, settings.Extension);
+            var file = CreateFileInfo(settings.Directory.CreateDirectoryInfo(), fileName, settings.Extension);
             return file;
         }
 

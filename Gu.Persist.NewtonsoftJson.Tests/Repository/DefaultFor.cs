@@ -16,7 +16,7 @@
             {
                 Value = 1
             };
-            this.Repository.Save(value, fileInfo);
+            this.Repository.Save(fileInfo, value);
             var json = File.ReadAllText(fileInfo.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
             File.Delete(fileInfo.FullName);

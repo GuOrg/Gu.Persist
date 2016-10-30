@@ -74,7 +74,7 @@ namespace Gu.Persist.SystemXml
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             reader.ReadStartElement();
-            this.SetPrivate(nameof(this.DirectoryPath), reader.ReadElementPathAndSpecialFolder(nameof(this.DirectoryPath)));
+            this.SetPrivate(nameof(this.Directory), reader.ReadElementPathAndSpecialFolder(nameof(this.Directory)));
             this.SetPrivate(nameof(this.Extension), reader.ReadElementString(nameof(this.Extension)));
             this.SetPrivate(nameof(this.TempExtension), reader.ReadElementString(nameof(this.TempExtension)));
             this.SetPrivate(nameof(this.IsTrackingDirty), reader.ReadElementBool(nameof(this.IsTrackingDirty)));
@@ -86,7 +86,7 @@ namespace Gu.Persist.SystemXml
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteElementString(nameof(this.DirectoryPath), this.DirectoryPath);
+            writer.WriteElementString(nameof(this.Directory), this.Directory);
             writer.WriteElementString(nameof(this.Extension), this.Extension);
             writer.WriteElementString(nameof(this.TempExtension), this.TempExtension);
             writer.WriteElementString(nameof(this.IsTrackingDirty), this.IsTrackingDirty);

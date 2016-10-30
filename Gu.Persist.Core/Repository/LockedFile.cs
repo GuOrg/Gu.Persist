@@ -1,9 +1,13 @@
 ﻿namespace Gu.Persist.Core
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// For locking files in a <see cref="SaveTransaction"/>
+    /// </summary>
     [System.Diagnostics.DebuggerDisplay("{File.Name}")]
     public sealed class LockedFile : IDisposable
     {
@@ -13,6 +17,9 @@
             this.Stream = stream;
         }
 
+        /// <summary>
+        /// The locked file.
+        /// </summary>
         public FileInfo File { get; }
 
         /// <summary>
@@ -21,14 +28,24 @@
         /// </summary>
         public Stream Stream { get; }
 
-        public static async Task<LockedFile> CreateAsync(FileInfo file)
+        /// <summary>
+        /// Create a locked file.
+        /// </summary>
+        /// <param name="file">The file to create.</param>
+        /// <param name="timeout">The max time to wait.</param>
+        public static async Task<LockedFile> CreateAsync(FileInfo file, TimeSpan timeout)
         {
+            var stopwatch = Stopwatch.StartNew();
             start:
             while (file.Exists)
             {
-                await Task.Delay(100)
+                await Task.Delay(10)
                           .ConfigureAwait(false);
                 file.Refresh();
+                if (stopwatch.Elapsed > timeout)
+                {
+                    throw new TimeoutException($"Could not create and lock file: {file}");
+                }
             }
 
             try
@@ -41,11 +58,17 @@
             }
         }
 
+        /// <summary>
+        /// Create a <see cref="LockedFile"/> throws if <paramref name="file"/> does not exits.
+        /// </summary>
         public static LockedFile Create(FileInfo file, Func<FileInfo, Stream> stream)
         {
             return new LockedFile(file, stream(file));
         }
 
+        /// <summary>
+        /// Create a <see cref="LockedFile"/> returns null if <paramref name="file"/> does not exits.
+        /// </summary>
         public static LockedFile CreateIfExists(FileInfo file, Func<FileInfo, Stream> stream)
         {
             if (file == null)
@@ -75,6 +98,7 @@
             this.File.Delete();
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             this.Stream?.Dispose();

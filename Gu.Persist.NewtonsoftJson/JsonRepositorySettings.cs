@@ -1,6 +1,5 @@
 namespace Gu.Persist.NewtonsoftJson
 {
-    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
 
@@ -136,7 +135,7 @@ namespace Gu.Persist.NewtonsoftJson
                 Formatting = Formatting.Indented,
                 Culture = CultureInfo.InvariantCulture,
                 FloatFormatHandling = FloatFormatHandling.DefaultValue,
-                //Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
+                ////Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
             };
         }
     }

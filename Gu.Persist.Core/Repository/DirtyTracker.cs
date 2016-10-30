@@ -59,9 +59,9 @@
         /// <summary>
         /// Only checks the cache, does not read from file.
         /// </summary>
-        public bool IsDirty<T>(T item, string fullFileName, IEqualityComparer<T> comparer)
+        public bool IsDirty<T>(string fullFileName, T item, IEqualityComparer<T> comparer)
         {
-            Ensure.NotNull(fullFileName, nameof(fullFileName));
+            Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
             Ensure.NotNull(comparer, nameof(comparer));
             object clone;
             lock (this.gate)

@@ -30,7 +30,7 @@ namespace Gu.Persist.SystemXml
             }
 
             reader.ReadStartElement(elementName);
-            var directory = reader.ReadElementPathAndSpecialFolder(nameof(BackupSettings.DirectoryPath));
+            var directory = reader.ReadElementPathAndSpecialFolder(nameof(BackupSettings.Directory));
             var extension = reader.ReadElementString(nameof(BackupSettings.Extension));
             var timeStampFormat = reader.ReadElementString(nameof(BackupSettings.TimeStampFormat));
             var numberOfBackups = reader.ReadElementInt(nameof(BackupSettings.NumberOfBackups));

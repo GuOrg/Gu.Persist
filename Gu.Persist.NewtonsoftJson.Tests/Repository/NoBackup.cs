@@ -1,10 +1,10 @@
-namespace Gu.Persist.SystemXml.Tests.Repository
+﻿namespace Gu.Persist.NewtonsoftJson.Tests.Repository
 {
     using Gu.Persist.Core;
     using Gu.Persist.Core.Backup;
     using NUnit.Framework;
 
-    public class NoBackup : XmlRepositoryTests
+    public class NoBackup : JsonRepositoryTests
     {
         [Test]
         public void BackuperIsNone()
@@ -14,8 +14,8 @@ namespace Gu.Persist.SystemXml.Tests.Repository
 
         protected override IRepository Create()
         {
-            var settings = new XmlRepositorySettings(this.Directory, null);
-            return new XmlRepository(settings);
+            var settings = new JsonRepositorySettings(this.Directory, null);
+            return new JsonRepository(settings);
         }
     }
 }

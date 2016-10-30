@@ -48,7 +48,7 @@
         {
             var jsonSerializerSettings = JsonRepositorySettings.CreateDefaultJsonSettings();
             var jsonRepositorySettings = new JsonRepositorySettings(jsonSerializerSettings, true, true, false, null);
-            var gitBackuper = new GitBackuper(jsonRepositorySettings.DirectoryPath);
+            var gitBackuper = new GitBackuper(jsonRepositorySettings.Directory);
             return new JsonRepository(jsonRepositorySettings, gitBackuper);
         }
     }

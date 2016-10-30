@@ -64,7 +64,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                            .Name;
 
             var fileName = string.Concat(name, this.Settings.Extension);
-            var settingsDirectory = this.Settings.DirectoryPath.CreateDirectoryInfo();
+            var settingsDirectory = this.Settings.Directory.CreateDirectoryInfo();
             this.file = settingsDirectory.CreateFileInfoInDirectory(fileName);
 
             var tempfileName = string.Concat(name, this.Settings.TempExtension);
@@ -74,7 +74,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (this.IsBackingUp)
             {
                 var backupFileName = string.Concat(name, this.BackupSettings.Extension);
-                this.backup = this.BackupSettings.DirectoryPath.CreateDirectoryInfo()
+                this.backup = this.BackupSettings.Directory.CreateDirectoryInfo()
                                   .CreateFileInfoInDirectory(backupFileName);
                 this.backupSoftDelete = this.backup.GetSoftDeleteFileFor();
                 this.backupNewName = this.backup.WithNewName(NewName, this.BackupSettings);
@@ -95,7 +95,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             {
                 var backupFileName = this.dummyFile.WithNewExtension(this.BackupSettings.Extension)
                                          .Name;
-                this.dummyBackup = this.BackupSettings.DirectoryPath.CreateDirectoryInfo()
+                this.dummyBackup = this.BackupSettings.Directory.CreateDirectoryInfo()
                                        .CreateFileInfoInDirectory(backupFileName);
                 this.dummyBackupNewName = this.dummyBackup.WithNewName(NewName, this.BackupSettings);
             }
@@ -137,7 +137,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
 
             // using this because AppVeyor uses two workers for running the tests.
-            this.lockFile = await LockedFile.CreateAsync(lockFileInfo)
+            this.lockFile = await LockedFile.CreateAsync(lockFileInfo, TimeSpan.FromSeconds(1))
                                 .ConfigureAwait(false);
         }
 
@@ -241,7 +241,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public void SaveThenRead()
         {
-            this.Repository.Save(this.dummy, this.file);
+            this.Repository.Save(this.file, this.dummy);
             AssertFile.Exists(true, this.file);
             if (this.IsBackingUp)
             {
@@ -254,6 +254,31 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
+        public void SaveNull()
+        {
+            this.Repository.Save(this.file, this.dummy);
+            AssertFile.Exists(true, this.file);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.backup);
+            }
+
+            if (this.Settings.SaveNullDeletesFile)
+            {
+                this.Repository.Save<DummySerializable>(this.file, null);
+                AssertFile.Exists(false, this.file);
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(true, this.backup);
+                }
+            }
+            else
+            {
+                Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(this.file, null));
+            }
+        }
+
+        [Test]
         public void SaveLongListThenShortListFile()
         {
             var list = new List<DummySerializable>
@@ -261,7 +286,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                 this.dummy,
                 new DummySerializable(2)
             };
-            this.Repository.Save(list, this.file);
+            this.Repository.Save(this.file, list);
             AssertFile.Exists(true, this.file);
             if (this.IsBackingUp)
             {
@@ -273,7 +298,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             Assert.AreNotSame(this.dummy, read);
 
             list.RemoveAt(1);
-            this.Repository.Save(list, this.file);
+            this.Repository.Save(this.file, list);
             AssertFile.Exists(true, this.file);
             read = this.Read<List<DummySerializable>>(this.file);
             CollectionAssert.AreEqual(list, read);
@@ -336,7 +361,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void SaveFileName()
         {
             var fileName = typeof(DummySerializable).Name;
-            this.Repository.Save(this.dummy, fileName);
+            this.Repository.Save(fileName, this.dummy);
             AssertFile.Exists(true, this.dummyFile);
             if (this.IsBackingUp)
             {
@@ -344,7 +369,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
 
             this.dummy.Value++;
-            this.Repository.Save(this.dummy, fileName);
+            this.Repository.Save(fileName, this.dummy);
             AssertFile.Exists(true, this.dummyFile);
             if (this.IsBackingUp)
             {
@@ -357,9 +382,36 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
+        public void SaveFileNameNull()
+        {
+            var fileName = typeof(DummySerializable).Name;
+            this.Repository.Save(fileName, this.dummy);
+            var fileInfo = this.Repository.GetFileInfo(fileName);
+            AssertFile.Exists(true, fileInfo);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.backup);
+            }
+
+            if (this.Settings.SaveNullDeletesFile)
+            {
+                this.Repository.Save<DummySerializable>(fileName, null);
+                AssertFile.Exists(false, fileInfo);
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(true, this.backup);
+                }
+            }
+            else
+            {
+                Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(fileName, null));
+            }
+        }
+
+        [Test]
         public async Task SaveAsync()
         {
-            await this.Repository.SaveAsync(this.dummy, this.file).ConfigureAwait(false);
+            await this.Repository.SaveAsync(this.file, this.dummy).ConfigureAwait(false);
             AssertFile.Exists(true, this.file);
             if (this.IsBackingUp)
             {
@@ -369,6 +421,31 @@ namespace Gu.Persist.Core.Tests.Repositories
             var read = this.Read<DummySerializable>(this.file);
             Assert.AreEqual(this.dummy.Value, read.Value);
             Assert.AreNotSame(this.dummy, read);
+        }
+
+        [Test]
+        public async Task SaveAsyncNull()
+        {
+            await this.Repository.SaveAsync(this.file, this.dummy).ConfigureAwait(false);
+            AssertFile.Exists(true, this.file);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.backup);
+            }
+
+            if (this.Settings.SaveNullDeletesFile)
+            {
+                await this.Repository.SaveAsync<DummySerializable>(this.file, null).ConfigureAwait(false);
+                AssertFile.Exists(false, this.file);
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(true, this.backup);
+                }
+            }
+            else
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => this.Repository.SaveAsync<DummySerializable>(this.file, null));
+            }
         }
 
         [Test]
@@ -391,6 +468,35 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (this.IsBackingUp)
             {
                 AssertFile.Exists(true, this.dummyBackup);
+            }
+        }
+
+        [Test]
+        public void SaveTypeNull()
+        {
+            this.Repository.Save(this.dummy);
+            AssertFile.Exists(true, this.dummyFile);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.dummyBackup);
+            }
+
+            var read = this.Read<DummySerializable>(this.dummyFile);
+            Assert.AreEqual(this.dummy.Value, read.Value);
+            Assert.AreNotSame(this.dummy, read);
+
+            if (this.Settings.SaveNullDeletesFile)
+            {
+                this.Repository.Save<DummySerializable>(null);
+                AssertFile.Exists(false, this.file);
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(true, this.backup);
+                }
+            }
+            else
+            {
+                Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(null));
             }
         }
 
@@ -418,9 +524,38 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
+        public async Task SaveAsyncTypeNull()
+        {
+            await this.Repository.SaveAsync(this.dummy).ConfigureAwait(false);
+            AssertFile.Exists(true, this.dummyFile);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.dummyBackup);
+            }
+
+            var read = this.Read<DummySerializable>(this.dummyFile);
+            Assert.AreEqual(this.dummy.Value, read.Value);
+            Assert.AreNotSame(this.dummy, read);
+
+            if (this.Settings.SaveNullDeletesFile)
+            {
+                await this.Repository.SaveAsync<DummySerializable>(null).ConfigureAwait(false);
+                AssertFile.Exists(false, this.file);
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(true, this.backup);
+                }
+            }
+            else
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => this.Repository.SaveAsync<DummySerializable>(null));
+            }
+        }
+
+        [Test]
         public void SaveCreatesBackup()
         {
-            this.Repository.Save(this.dummy, this.file);
+            this.Repository.Save(this.file, this.dummy);
             AssertFile.Exists(true, this.file);
             if (this.IsBackingUp)
             {
@@ -428,7 +563,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
 
             this.dummy.Value++;
-            this.Repository.Save(this.dummy, this.file);
+            this.Repository.Save(this.file, this.dummy);
 
             AssertFile.Exists(true, this.file);
             if (this.IsBackingUp)
@@ -444,7 +579,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public async Task SaveAsyncCreatesBackup()
         {
-            await this.Repository.SaveAsync(this.dummy, this.file).ConfigureAwait(false);
+            await this.Repository.SaveAsync(this.file, this.dummy).ConfigureAwait(false);
             AssertFile.Exists(true, this.file);
             if (this.IsBackingUp)
             {
@@ -452,7 +587,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
 
             this.dummy.Value++;
-            await this.Repository.SaveAsync(this.dummy, this.file).ConfigureAwait(false);
+            await this.Repository.SaveAsync(this.file, this.dummy).ConfigureAwait(false);
 
             AssertFile.Exists(true, this.file);
             if (this.IsBackingUp)
@@ -468,7 +603,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public void SaveCaches()
         {
-            this.Repository.Save(this.dummy, this.file);
+            this.Repository.Save(this.file, this.dummy);
             var read = this.Repository.Read<DummySerializable>(this.file);
             if (this.Settings.IsCaching)
             {
@@ -484,7 +619,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public async Task SaveAsyncCaches()
         {
-            await this.Repository.SaveAsync(this.dummy, this.file).ConfigureAwait(false);
+            await this.Repository.SaveAsync(this.file, this.dummy).ConfigureAwait(false);
             var read = await this.Repository.ReadAsync<DummySerializable>(this.file).ConfigureAwait(false);
             Assert.AreSame(this.dummy, read);
         }
@@ -492,7 +627,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public void SaveThreeTimes()
         {
-            this.Repository.Save(this.dummy, this.file);
+            this.Repository.Save(this.file, this.dummy);
             var read = this.Repository.Read<DummySerializable>(this.file);
             Assert.AreSame(this.dummy, read);
             read = this.Read<DummySerializable>(this.file);
@@ -500,7 +635,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             for (var i = 2; i < 3; i++)
             {
                 this.dummy.Value++;
-                this.Repository.Save(this.dummy, this.file);
+                this.Repository.Save(this.file, this.dummy);
                 read = this.Repository.Read<DummySerializable>(this.file);
                 Assert.AreSame(this.dummy, read);
                 read = this.Read<DummySerializable>(this.file);
@@ -516,38 +651,59 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public void IsDirtyType()
         {
-            Assert.IsTrue(this.Repository.IsDirty(this.dummy));
+            if (this.Settings.IsTrackingDirty)
+            {
+                Assert.IsTrue(this.Repository.IsDirty(this.dummy));
 
-            this.Repository.Save(this.dummy);
-            Assert.IsFalse(this.Repository.IsDirty(this.dummy));
+                this.Repository.Save(this.dummy);
+                Assert.IsFalse(this.Repository.IsDirty(this.dummy));
 
-            this.dummy.Value++;
-            Assert.IsTrue(this.Repository.IsDirty(this.dummy));
+                this.dummy.Value++;
+                Assert.IsTrue(this.Repository.IsDirty(this.dummy));
+            }
+            else
+            {
+                Assert.Throws<InvalidOperationException>(() => this.Repository.IsDirty(this.dummy));
+            }
         }
 
         [Test]
         public void IsDirtyFileName()
         {
             var fileName = this.dummy.GetType().Name;
-            Assert.IsTrue(this.Repository.IsDirty(this.dummy, fileName));
+            if (this.Settings.IsTrackingDirty)
+            {
+                Assert.IsTrue(this.Repository.IsDirty(fileName, this.dummy));
 
-            this.Repository.Save(this.dummy, fileName);
-            Assert.IsFalse(this.Repository.IsDirty(this.dummy, fileName));
+                this.Repository.Save(fileName, this.dummy);
+                Assert.IsFalse(this.Repository.IsDirty(fileName, this.dummy));
 
-            this.dummy.Value++;
-            Assert.IsTrue(this.Repository.IsDirty(this.dummy, fileName));
+                this.dummy.Value++;
+                Assert.IsTrue(this.Repository.IsDirty(fileName, this.dummy));
+            }
+            else
+            {
+                Assert.Throws<InvalidOperationException>(() => this.Repository.IsDirty(fileName, this.dummy));
+            }
         }
 
         [Test]
         public void IsDirtyFile()
         {
-            Assert.IsTrue(this.Repository.IsDirty(this.dummy, this.dummyFile));
+            if (this.Settings.IsTrackingDirty)
+            {
+                Assert.IsTrue(this.Repository.IsDirty(this.dummyFile, this.dummy));
 
-            this.Repository.Save(this.dummy, this.dummyFile);
-            Assert.IsFalse(this.Repository.IsDirty(this.dummy, this.dummyFile));
+                this.Repository.Save(this.dummyFile, this.dummy);
+                Assert.IsFalse(this.Repository.IsDirty(this.dummyFile, this.dummy));
 
-            this.dummy.Value++;
-            Assert.IsTrue(this.Repository.IsDirty(this.dummy, this.dummyFile));
+                this.dummy.Value++;
+                Assert.IsTrue(this.Repository.IsDirty(this.dummyFile, this.dummy));
+            }
+            else
+            {
+                Assert.Throws<InvalidOperationException>(() => this.Repository.IsDirty(this.dummyFile, this.dummy));
+            }
         }
 
         [Test]

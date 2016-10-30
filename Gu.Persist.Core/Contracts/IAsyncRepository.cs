@@ -44,17 +44,17 @@ namespace Gu.Persist.Core
         Task<T> ReadAsync<T>(FileInfo file);
 
         /// <summary>
-        /// <see cref="IRepository.Save{T}(T, string)"/>
+        /// <see cref="IRepository.Save{T}(string,T)"/>
         /// </summary>
         Task SaveAsync<T>(T item, string fileName);
 
         /// <summary>
-        /// <see cref="IRepository.Save{T}(T, FileInfo)"/>
+        /// <see cref="IRepository.Save{T}(FileInfo,T)"/>
         /// </summary>
         Task SaveAsync<T>(T item, FileInfo file);
 
         /// <summary>
-        /// <see cref="IRepository.Save{T}(T, FileInfo, FileInfo)"/>
+        /// <see cref="IRepository.Save{T}(FileInfo, FileInfo, T)"/>
         /// </summary>
         Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile);
     }

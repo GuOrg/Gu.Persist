@@ -71,11 +71,6 @@
             this.MaxAgeInDays = maxAgeInDays;
         }
 
-        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
-        protected BackupSettings() // needed for XmlSerializer
-        {
-        }
-
         public string TimeStampFormat { get; }
 
         /// <summary>

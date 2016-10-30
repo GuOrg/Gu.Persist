@@ -6,7 +6,7 @@
     /// <summary>
     /// Serialization logic.
     /// </summary>
-    public abstract class Serialize<TSettings>
+    public abstract class Serialize<TSettings> : ICloner
     {
         /// <summary>
         /// Serialize <paramref name="item"/> to a Stream
@@ -35,9 +35,7 @@
         /// </summary>
         public abstract T FromStream<T>(Stream stream);
 
-        /// <summary>
-        /// See <see cref="ICloner.Clone{T}(T)"/>
-        /// </summary>
+        /// <inheritdoc />
         public abstract T Clone<T>(T item);
 
         /// <summary>

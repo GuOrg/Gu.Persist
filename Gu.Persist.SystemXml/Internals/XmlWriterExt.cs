@@ -23,7 +23,7 @@ namespace Gu.Persist.SystemXml
             BackupSettings backupSettings)
         {
             writer.WriteStartElement(elementName);
-            writer.WriteElementString(nameof(backupSettings.DirectoryPath), backupSettings.DirectoryPath);
+            writer.WriteElementString(nameof(backupSettings.Directory), backupSettings.Directory);
             writer.WriteElementString(nameof(backupSettings.Extension), backupSettings.Extension);
             writer.WriteElementString(nameof(backupSettings.TimeStampFormat), backupSettings.TimeStampFormat);
             writer.WriteElementString(nameof(backupSettings.NumberOfBackups), backupSettings.NumberOfBackups);

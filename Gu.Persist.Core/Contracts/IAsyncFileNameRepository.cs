@@ -13,8 +13,8 @@
         Task<T> ReadAsync<T>(string fileName);
 
         /// <summary>
-        /// <see cref="IRepository.SaveAsync{T}(T,string)"/>
+        /// <see cref="IRepository.SaveAsync{T}(string,T)"/>
         /// </summary>
-        Task SaveAsync<T>(T item, string fileName);
+        Task SaveAsync<T>(string fileName, T item);
     }
 }

@@ -19,22 +19,22 @@
         /// <summary>
         /// Compares serialized item to the last bytes saved to or read from file.
         /// </summary>
-        bool IsDirty<T>(T item, string fileName);
+        bool IsDirty<T>(string fileName, T item);
 
         /// <summary>
         /// Compares serialized item to the last bytes saved to or read from file.
         /// </summary>
-        bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer);
+        bool IsDirty<T>(string fileName, T item, IEqualityComparer<T> comparer);
 
         /// <summary>
         /// Compares serialized item to the last bytes saved to or read from file.
         /// Uses default comparer that serializes.
         /// </summary>
-        bool IsDirty<T>(T item, FileInfo file);
+        bool IsDirty<T>(FileInfo file, T item);
 
         /// <summary>
         /// Compares serialized item to the last bytes saved to or read from file.
         /// </summary>
-        bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer);
+        bool IsDirty<T>(FileInfo file, T item, IEqualityComparer<T> comparer);
     }
 }

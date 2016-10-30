@@ -31,7 +31,7 @@
 
             this.directory.Create();
             var settings = new JsonRepositorySettings(this.directory, null);
-            var gitBackuper = new GitBackuper(settings.DirectoryPath);
+            var gitBackuper = new GitBackuper(settings.Directory);
             this.repository = new JsonRepository(settings, gitBackuper);
             this.dummy = new DummySerializable(1);
         }
@@ -84,7 +84,7 @@
         {
             var file = this.directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
             Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));
-            this.repository.Save(this.dummy, file);
+            this.repository.Save(file, this.dummy);
             var json = File.ReadAllText(file.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
             Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));

@@ -4,7 +4,7 @@ namespace Gu.Persist.Core
 
     public interface IDirtyTracker
     {
-        bool IsDirty<T>(T item, string fullFileName, IEqualityComparer<T> comparer);
+        bool IsDirty<T>(string fullFileName, T item, IEqualityComparer<T> comparer);
 
         void Track<T>(string fullFileName, T item);
 

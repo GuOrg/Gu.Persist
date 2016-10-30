@@ -70,10 +70,6 @@
             this.TempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
-        /// Needed for XmlSerializer
-        /// </summary>
         protected RepositorySettings()
         {
         }

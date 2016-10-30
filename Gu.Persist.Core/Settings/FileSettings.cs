@@ -6,15 +6,15 @@
     [Serializable]
     public class FileSettings : IFileSettings
     {
-        public FileSettings(PathAndSpecialFolder directoryPath, string extension)
+        public FileSettings(PathAndSpecialFolder directory, string extension)
         {
-            this.DirectoryPath = directoryPath;
+            this.Directory = directory;
             this.Extension = FileHelper.PrependDotIfMissing(extension);
         }
 
         public FileSettings(DirectoryInfo directory, string extension)
         {
-            this.DirectoryPath = PathAndSpecialFolder.Create(directory);
+            this.Directory = PathAndSpecialFolder.Create(directory);
             this.Extension = FileHelper.PrependDotIfMissing(extension);
         }
 
@@ -22,7 +22,7 @@
         {
         }
 
-        public PathAndSpecialFolder DirectoryPath { get; }
+        public PathAndSpecialFolder Directory { get; }
 
         public string Extension { get; }
     }

@@ -9,7 +9,8 @@ namespace Gu.Persist.Core
     /// <summary>
     /// Base class for a repository
     /// </summary>
-    public abstract class Repository<TSetting> : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings
+    public abstract class Repository<TSetting>
+        : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings
         where TSetting : IRepositorySettings
     {
         private readonly Serialize<TSetting> serialize;
@@ -93,7 +94,7 @@ namespace Gu.Persist.Core
             Ensure.NotNull<object>(settings, nameof(settings));
             Ensure.NotNull(serialize, nameof(serialize));
             this.serialize = serialize;
-            settings.DirectoryPath.CreateDirectoryInfo()
+            settings.Directory.CreateDirectoryInfo()
                     .CreateIfNotExists();
             this.Settings = settings;
             this.Backuper = backuper;
@@ -349,166 +350,239 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void Save<T>(T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
             this.SaveCore(item);
         }
 
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
             var file = this.GetFileInfoCore<T>();
-            this.Save(item, file);
+            this.Save(file, item);
             this.RemoveFromCache(item);
             this.RemoveFromDirtyTracker(item);
         }
 
         /// <inheritdoc/>
-        public virtual void Save<T>(T item, string fileName)
+        public virtual void Save<T>(string fileName, T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
             Ensure.IsValidFileName(fileName, nameof(fileName));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
             var file = this.GetFileInfoCore(fileName);
-            this.Save(item, file);
+            this.Save(file, item);
         }
 
         /// <inheritdoc/>
-        public virtual void SaveAndClose<T>(T item, string fileName)
+        public virtual void SaveAndClose<T>(string fileName, T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            this.Save(item, fileName);
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
+            this.Save(fileName, item);
             this.RemoveFromCache(item);
             this.RemoveFromDirtyTracker(item);
         }
 
         /// <inheritdoc/>
-        public virtual void Save<T>(T item, FileInfo file)
+        public virtual void Save<T>(FileInfo file, T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
             Ensure.NotNull(file, nameof(file));
-            this.SaveCore(item, file);
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
+            this.SaveCore(file, item);
         }
 
         /// <inheritdoc/>
-        public virtual void SaveAndClose<T>(T item, FileInfo file)
+        public virtual void SaveAndClose<T>(FileInfo file, T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
             Ensure.NotNull(file, nameof(file));
-            this.SaveCore(item, file);
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
+            this.SaveCore(file, item);
             this.RemoveFromCache(item);
             this.RemoveFromDirtyTracker(item);
         }
 
         /// <inheritdoc/>
-        public virtual void Save<T>(T item, FileInfo file, FileInfo tempFile)
+        public virtual void Save<T>(FileInfo file, FileInfo tempFile, T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(tempFile, nameof(tempFile));
-            this.SaveCore(item, file, tempFile);
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
+            this.SaveCore(file, tempFile, item);
         }
 
         /// <inheritdoc/>
         public virtual void SaveStream<T>(Stream stream)
         {
-            Ensure.NotNull(stream, nameof(stream));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull(stream, nameof(stream));
+            }
+
             var file = this.GetFileInfoCore<T>();
-            this.SaveStream(stream, file);
+            this.SaveStream(file, stream);
         }
 
         /// <inheritdoc/>
-        public virtual void SaveStream(Stream stream, string fileName)
+        public virtual void SaveStream(string fileName, Stream stream)
         {
-            Ensure.NotNull(stream, nameof(stream));
             Ensure.IsValidFileName(fileName, nameof(fileName));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull(stream, nameof(stream));
+            }
+
             var file = this.GetFileInfoCore(fileName);
-            this.SaveStream(stream, file);
+            this.SaveStream(file, stream);
         }
 
         /// <inheritdoc/>
-        public virtual void SaveStream(Stream stream, FileInfo file)
+        public virtual void SaveStream(FileInfo file, Stream stream)
         {
-            Ensure.NotNull(stream, nameof(stream));
             Ensure.NotNull(file, nameof(file));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull(stream, nameof(stream));
+            }
+
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
-            this.SaveStreamCore(stream, file, tempFile);
+            this.SaveStreamCore(file, tempFile, stream);
         }
 
         /// <inheritdoc/>
-        public virtual void SaveStream(Stream stream, FileInfo file, FileInfo tempFile)
+        public virtual void SaveStream(FileInfo file, FileInfo tempFile, Stream stream)
         {
-            Ensure.NotNull(stream, nameof(stream));
             Ensure.NotNull(file, nameof(file));
-            this.SaveStreamCore(stream, file, tempFile);
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull(stream, nameof(stream));
+            }
+
+            this.SaveStreamCore(file, tempFile, stream);
         }
 
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
             var file = this.GetFileInfo<T>();
-            return this.SaveAsync(item, file);
+            return this.SaveAsync(file, item);
         }
 
         /// <inheritdoc/>
-        public virtual Task SaveAsync<T>(T item, string fileName)
+        public virtual Task SaveAsync<T>(string fileName, T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
             Ensure.IsValidFileName(fileName, nameof(fileName));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
             var fileInfo = this.GetFileInfoCore(fileName);
-            return this.SaveAsync(item, fileInfo);
+            return this.SaveAsync(fileInfo, item);
         }
 
         /// <inheritdoc/>
-        public virtual Task SaveAsync<T>(T item, FileInfo file)
+        public virtual Task SaveAsync<T>(FileInfo file, T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
             Ensure.NotNull(file, nameof(file));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
-            return this.SaveAsync(item, file, tempFile);
+            return this.SaveAsync(file, tempFile, item);
         }
 
         /// <inheritdoc/>
-        public virtual async Task SaveAsync<T>(T item, FileInfo file, FileInfo tempFile)
+        public virtual async Task SaveAsync<T>(FileInfo file, FileInfo tempFile, T item)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(tempFile, nameof(tempFile));
-            this.CacheAndTrackCore(file, item);
-            using (var stream = this.serialize.ToStream(item))
+            if (!this.Settings.SaveNullDeletesFile)
             {
-                await this.SaveStreamAsync(stream, file, tempFile).ConfigureAwait(false);
+                Ensure.NotNull<object>(item, nameof(item));
+            }
+
+            this.CacheAndTrackCore(file, item);
+            using (var stream = item != null ? this.serialize.ToStream(item) : null)
+            {
+                await this.SaveStreamAsync(file, tempFile, stream).ConfigureAwait(false);
             }
         }
 
         /// <inheritdoc/>
         public virtual Task SaveStreamAsync<T>(Stream stream)
         {
-            Ensure.NotNull(stream, nameof(stream));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull(stream, nameof(stream));
+            }
+
             var file = this.GetFileInfo<T>();
-            return this.SaveStreamAsync(stream, file);
+            return this.SaveStreamAsync(file, stream);
         }
 
         /// <inheritdoc/>
-        public virtual Task SaveStreamAsync(Stream stream, string fileName)
+        public virtual Task SaveStreamAsync(string fileName, Stream stream)
         {
-            Ensure.NotNull(stream, nameof(stream));
             Ensure.IsValidFileName(fileName, nameof(fileName));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull(stream, nameof(stream));
+            }
+
             var file = this.GetFileInfoCore(fileName);
-            return this.SaveStreamAsync(stream, file);
+            return this.SaveStreamAsync(file, stream);
         }
 
         /// <inheritdoc/>
-        public virtual Task SaveStreamAsync(Stream stream, FileInfo file)
+        public virtual Task SaveStreamAsync(FileInfo file, Stream stream)
         {
-            Ensure.NotNull(stream, nameof(stream));
             Ensure.NotNull(file, nameof(file));
+            if (!this.Settings.SaveNullDeletesFile)
+            {
+                Ensure.NotNull(stream, nameof(stream));
+            }
+
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
-            return this.SaveStreamAsync(stream, file, tempFile);
+            return this.SaveStreamAsync(file, tempFile, stream);
         }
 
         /// <inheritdoc/>
-        public virtual async Task SaveStreamAsync(Stream stream, FileInfo file, FileInfo tempFile)
+        public virtual async Task SaveStreamAsync(FileInfo file, FileInfo tempFile, Stream stream)
         {
             using (var saveTransaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
             {
@@ -520,49 +594,79 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item)
         {
+            if (!this.Settings.IsTrackingDirty)
+            {
+                throw new InvalidOperationException("This repository is not tracking dirty.");
+            }
+
             return this.IsDirty(item, this.serialize.DefaultStructuralEqualityComparer<T>());
         }
 
         /// <inheritdoc/>
         public virtual bool IsDirty<T>(T item, IEqualityComparer<T> comparer)
         {
+            if (!this.Settings.IsTrackingDirty)
+            {
+                throw new InvalidOperationException("This repository is not tracking dirty.");
+            }
+
             var file = this.GetFileInfo<T>();
-            return this.IsDirty(item, file, comparer);
+            return this.IsDirty(file, item, comparer);
         }
 
         /// <inheritdoc/>
-        public virtual bool IsDirty<T>(T item, string fileName)
+        public virtual bool IsDirty<T>(string fileName, T item)
         {
+            if (!this.Settings.IsTrackingDirty)
+            {
+                throw new InvalidOperationException("This repository is not tracking dirty.");
+            }
+
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            return this.IsDirty(item, fileName, this.serialize.DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(fileName, item, this.serialize.DefaultStructuralEqualityComparer<T>());
         }
 
         /// <inheritdoc/>
-        public virtual bool IsDirty<T>(T item, string fileName, IEqualityComparer<T> comparer)
+        public virtual bool IsDirty<T>(string fileName, T item, IEqualityComparer<T> comparer)
         {
+            if (!this.Settings.IsTrackingDirty)
+            {
+                throw new InvalidOperationException("This repository is not tracking dirty.");
+            }
+
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var fileInfo = this.GetFileInfoCore(fileName);
-            return this.IsDirty(item, fileInfo, comparer);
+            return this.IsDirty(fileInfo, item, comparer);
         }
 
         /// <inheritdoc/>
-        public virtual bool IsDirty<T>(T item, FileInfo file)
+        public virtual bool IsDirty<T>(FileInfo file, T item)
         {
+            if (!this.Settings.IsTrackingDirty)
+            {
+                throw new InvalidOperationException("This repository is not tracking dirty.");
+            }
+
             Ensure.NotNull(file, nameof(file));
 
-            return this.IsDirty(item, file, this.serialize.DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(file, item, this.serialize.DefaultStructuralEqualityComparer<T>());
         }
 
         /// <inheritdoc/>
-        public virtual bool IsDirty<T>(T item, FileInfo file, IEqualityComparer<T> comparer)
+        public virtual bool IsDirty<T>(FileInfo file, T item, IEqualityComparer<T> comparer)
         {
+            if (!this.Settings.IsTrackingDirty)
+            {
+                throw new InvalidOperationException("This repository is not tracking dirty.");
+            }
+
             Ensure.NotNull(file, nameof(file));
             if (!this.Settings.IsTrackingDirty)
             {
                 throw new InvalidOperationException("Cannot check IsDirty if not Setting.IsTrackingDirty");
             }
 
-            return this.Tracker.IsDirty(item, file.FullName, comparer);
+            return this.Tracker.IsDirty(file.FullName, item, comparer);
         }
 
         /// <inheritdoc/>
@@ -826,24 +930,24 @@ namespace Gu.Persist.Core
         protected void SaveCore<T>(T item)
         {
             var file = this.GetFileInfoCore<T>();
-            this.SaveCore(item, file);
+            this.SaveCore(file, item);
         }
 
         /// <summary>
-        /// Calls <see cref="SaveCore{T}(T,FileInfo,FileInfo)"/>
+        /// Calls <see cref="SaveCore{T}(FileInfo,FileInfo,T)"/>
         /// Uses file.WithNewExtension(this.Settings.TempExtension) as temp file.
         /// </summary>
-        protected void SaveCore<T>(T item, FileInfo file)
+        protected void SaveCore<T>(FileInfo file, T item)
         {
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
-            this.SaveCore(item, file, tempFile);
+            this.SaveCore(file, tempFile, item);
         }
 
         /// <summary>
         /// Caches and tracks if needed.
         /// Then serializes and saves.
         /// </summary>
-        protected void SaveCore<T>(T item, FileInfo file, FileInfo tempFile)
+        protected void SaveCore<T>(FileInfo file, FileInfo tempFile, T item)
         {
             this.CacheAndTrackCore(file, item);
             using (var transaction = new SaveTransaction(file, tempFile, item, this.Backuper))
@@ -861,7 +965,7 @@ namespace Gu.Persist.Core
         /// 3.b 1) file.delete is renamed back to file
         ///     2) tempfile is deleted
         /// </summary>
-        protected void SaveStreamCore(Stream stream, FileInfo file, FileInfo tempFile)
+        protected void SaveStreamCore(FileInfo file, FileInfo tempFile, Stream stream)
         {
             using (var transaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
             {
