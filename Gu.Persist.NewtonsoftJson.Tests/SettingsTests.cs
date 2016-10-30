@@ -29,6 +29,7 @@
                 JsonRepositorySettings.CreateDefaultJsonSettings(),
                 true,
                 true,
+                false,
                 backupSettings,
                 ".cfg",
                 ".tmp");

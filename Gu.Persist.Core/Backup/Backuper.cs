@@ -48,7 +48,7 @@
                 return false;
             }
 
-            if (!this.Setting.IsCreatingBackups)
+            if (this.Setting == null)
             {
                 var softDelete = file.SoftDelete();
                 return softDelete != null;

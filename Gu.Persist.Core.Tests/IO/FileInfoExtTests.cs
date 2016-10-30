@@ -22,10 +22,8 @@
         {
             this.setting = new BackupSettings(
                 this.directoryInfo,
-                true,
                 BackupSettings.DefaultExtension,
                 BackupSettings.DefaultTimeStampFormat,
-                false,
                 3,
                 3);
             this.file = this.directoryInfo.CreateFileInfoInDirectory("Meh.cfg");

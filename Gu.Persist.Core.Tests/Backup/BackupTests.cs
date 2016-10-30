@@ -10,7 +10,6 @@ namespace Gu.Persist.Core.Tests.Backup
     public class BackupTests
     {
         protected readonly DirectoryInfo Directory;
-        protected BackupSettings Setting;
         protected FileInfo File;
         protected FileInfo Backup;
         protected FileInfo BackupOneMinuteOld;
@@ -27,19 +26,17 @@ namespace Gu.Persist.Core.Tests.Backup
             this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
             this.Directory.CreateIfNotExists();
 
-            this.Setting = new BackupSettings(this.Directory, true, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, false, 2, 3);
-
             this.File = this.Directory.CreateFileInfoInDirectory("Meh.cfg");
             this.SoftDelete = this.File.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             this.Backup = this.Directory.CreateFileInfoInDirectory("Meh.bak");
+            var settings = new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, 3);
+            this.BackupOneMinuteOld = this.Backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
+            this.BackupOneHourOld = this.Backup.WithTimeStamp(DateTime.Now.AddHours(-1), settings);
+            this.BackupOneDayOld = this.Backup.WithTimeStamp(DateTime.Now.AddDays(-1), settings);
+            this.BackupOneMonthOld = this.Backup.WithTimeStamp(DateTime.Now.AddMonths(-1), settings);
+            this.BackupOneYearOld = this.Backup.WithTimeStamp(DateTime.Now.AddYears(-1), settings);
 
-            this.BackupOneMinuteOld = this.Backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), this.Setting);
-            this.BackupOneHourOld = this.Backup.WithTimeStamp(DateTime.Now.AddHours(-1), this.Setting);
-            this.BackupOneDayOld = this.Backup.WithTimeStamp(DateTime.Now.AddDays(-1), this.Setting);
-            this.BackupOneMonthOld = this.Backup.WithTimeStamp(DateTime.Now.AddMonths(-1), this.Setting);
-            this.BackupOneYearOld = this.Backup.WithTimeStamp(DateTime.Now.AddYears(-1), this.Setting);
-
-            this.OtherBackup = this.Directory.CreateFileInfoInDirectory("Other.bak").WithTimeStamp(DateTime.Now.AddHours(1), this.Setting);
+            this.OtherBackup = this.Directory.CreateFileInfoInDirectory("Other.bak").WithTimeStamp(DateTime.Now.AddHours(1), settings);
 
             this.TimestampedBackups = new[]
                                       {
@@ -79,6 +76,12 @@ namespace Gu.Persist.Core.Tests.Backup
 
             this.OtherBackup.Delete();
             this.SoftDelete.Delete();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            this.Directory.Delete(true);
         }
     }
 }

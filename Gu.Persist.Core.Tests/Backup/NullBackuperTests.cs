@@ -22,8 +22,6 @@
         [Test]
         public void BackupWhenNotExtsis()
         {
-            this.Setting.NumberOfBackups = 1;
-            this.Setting.TimeStampFormat = null;
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.Backup);
 
@@ -127,8 +125,6 @@
         [Test]
         public void PurgeWhenNoFiles()
         {
-            this.Setting.NumberOfBackups = 2;
-            this.Setting.MaxAgeInDays = 2;
             using (var lockedFile = this.LockedFile())
             {
                 this.backuper.AfterSave(lockedFile);
@@ -152,8 +148,6 @@
                 backup.VoidCreate();
             }
 
-            this.Setting.NumberOfBackups = 3;
-            this.Setting.MaxAgeInDays = int.MaxValue;
             using (var lockedFile = this.LockedFile())
             {
                 this.backuper.AfterSave(lockedFile);
@@ -195,8 +189,6 @@
             this.SoftDelete.VoidCreate();
             this.File.VoidCreate();
             this.Backup.VoidCreate();
-            this.Setting.NumberOfBackups = int.MaxValue;
-            this.Setting.MaxAgeInDays = int.MaxValue;
             using (var lockedFile = this.LockedFile())
             {
                 this.backuper.AfterSave(lockedFile);

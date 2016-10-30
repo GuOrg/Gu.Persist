@@ -1,25 +1,23 @@
-﻿namespace Gu.Persist.SystemXml.Tests
+﻿namespace Gu.Persist.RuntimeBinary.Tests
 {
     using System.IO;
-    using System.Text;
-    using System.Xml.Serialization;
-
+    using System.Runtime.Serialization.Formatters.Binary;
     using Gu.Persist.Core;
-
+    using Gu.Persist.RuntimeBinary;
     using NUnit.Framework;
 
-    public class SettingsTests
+    public class BinaryRepositorySettingsTests
     {
         [Test]
-        public void RoundtripRepositorySettingsWithRepo()
+        public void RoundtripRepositorySettingsWithRepository()
         {
             var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, true, true, backupSettings, ".cfg", ".tmp");
-            var repository = new XmlRepository(settings);
+            var settings = new BinaryRepositorySettings(directory, true, true, false, backupSettings, ".abc", ".cde");
+            var repository = new BinaryRepository(settings);
             repository.Save(settings);
-            var roundtripped = repository.Read<XmlRepositorySettings>();
-            Assert.AreEqual(settings.DirectoryPath, roundtripped.DirectoryPath);
+            var roundtripped = repository.Read<BinaryRepositorySettings>();
+            AssertProperties(settings, roundtripped);
         }
 
         [Test]
@@ -27,25 +25,30 @@
         {
             var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, true, true, backupSettings, ".cfg", ".tmp");
-            var sb = new StringBuilder();
-            var serializer = new XmlSerializer(settings.GetType());
-            using (var writer = new StringWriter(sb))
+            var settings = new BinaryRepositorySettings(directory, true, true, false, backupSettings, ".abc", ".cde");
+            var serializer = new BinaryFormatter();
+            using (Stream stream = PooledMemoryStream.Borrow())
             {
-                serializer.Serialize(writer, settings);
+                serializer.Serialize(stream, settings);
+                stream.Position = 0;
+                var roundtripped = (BinaryRepositorySettings)serializer.Deserialize(stream);
+                AssertProperties(settings, roundtripped);
             }
+        }
 
-            var xml = sb.ToString();
-
-            ////Console.Write(xml);
-            XmlRepositorySettings roundtripped;
-
-            using (var reader = new StringReader(xml))
+        [Test]
+        public void RoundtripRepositorySettingsWithNullBackupSettings()
+        {
+            var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
+            var settings = new BinaryRepositorySettings(directory, true, true, true, null, ".abc", ".def");
+            var serializer = new BinaryFormatter();
+            using (Stream stream = PooledMemoryStream.Borrow())
             {
-                roundtripped = (XmlRepositorySettings)serializer.Deserialize(reader);
+                serializer.Serialize(stream, settings);
+                stream.Position = 0;
+                var roundtripped = (BinaryRepositorySettings)serializer.Deserialize(stream);
+                AssertProperties(settings, roundtripped);
             }
-
-            AssertProperties(settings, roundtripped);
         }
 
         private static void AssertProperties(object expected, object actual)

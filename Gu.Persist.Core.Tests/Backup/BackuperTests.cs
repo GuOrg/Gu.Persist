@@ -10,25 +10,22 @@
 
     public class BackuperTests : BackupTests
     {
-        private Backuper backuper;
         private DummySerializable dummy;
 
         [SetUp]
         public override void SetUp()
         {
-            this.backuper = (Backuper)Backuper.Create(this.Setting);
             this.dummy = new DummySerializable(1);
         }
 
         [Test]
         public void BackupWhenNotExtsis()
         {
-            this.Setting.NumberOfBackups = 1;
-            this.Setting.TimeStampFormat = null;
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, null, 1, 3));
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.Backup);
 
-            Assert.IsFalse(this.backuper.BeforeSave(this.File));
+            Assert.IsFalse(backuper.BeforeSave(this.File));
 
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.Backup);
@@ -37,12 +34,13 @@
         [Test]
         public void TryRestoreWhenHasSoftDelete()
         {
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
             this.SoftDelete.Save(this.dummy);
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(true, this.SoftDelete);
 
-            Assert.IsTrue(this.backuper.CanRestore(this.File));
-            Assert.IsTrue(this.backuper.TryRestore(this.File));
+            Assert.IsTrue(backuper.CanRestore(this.File));
+            Assert.IsTrue(backuper.TryRestore(this.File));
 
             Assert.AreEqual(this.dummy, this.File.Read<DummySerializable>());
             AssertFile.Exists(true, this.File);
@@ -61,8 +59,10 @@
             AssertFile.Exists(true, this.SoftDelete);
             AssertFile.Exists(true, this.Backup);
 
-            Assert.IsTrue(this.backuper.CanRestore(this.File));
-            Assert.IsTrue(this.backuper.TryRestore(this.File));
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+
+            Assert.IsTrue(backuper.CanRestore(this.File));
+            Assert.IsTrue(backuper.TryRestore(this.File));
 
             Assert.AreEqual(this.dummy, this.File.Read<DummySerializable>());
             AssertFile.Exists(true, this.File);
@@ -80,7 +80,9 @@
             AssertFile.Exists(false, this.SoftDelete);
             AssertFile.Exists(true, this.Backup);
 
-            Assert.Throws<InvalidOperationException>(() => this.backuper.TryRestore(this.File));
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+
+            Assert.Throws<InvalidOperationException>(() => backuper.TryRestore(this.File));
 
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(false, this.SoftDelete);
@@ -96,8 +98,9 @@
             AssertFile.Exists(false, this.SoftDelete);
             AssertFile.Exists(true, this.Backup);
 
-            Assert.IsTrue(this.backuper.CanRestore(this.File));
-            Assert.IsTrue(this.backuper.TryRestore(this.File));
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            Assert.IsTrue(backuper.CanRestore(this.File));
+            Assert.IsTrue(backuper.TryRestore(this.File));
 
             Assert.AreEqual(this.dummy, this.File.Read<DummySerializable>());
             AssertFile.Exists(true, this.File);
@@ -112,7 +115,8 @@
             AssertFile.Exists(false, this.SoftDelete);
             AssertFile.Exists(false, this.Backup);
 
-            Assert.IsFalse(this.backuper.TryRestore(this.File));
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            Assert.IsFalse(backuper.TryRestore(this.File));
 
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.SoftDelete);
@@ -128,11 +132,11 @@
         [Test]
         public void PurgeWhenNoFiles()
         {
-            this.Setting.NumberOfBackups = 2;
-            this.Setting.MaxAgeInDays = 2;
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 2));
+
             using (var lockedFile = this.LockedFile())
             {
-                this.backuper.AfterSave(lockedFile);
+                backuper.AfterSave(lockedFile);
             }
 
             AssertFile.Exists(false, this.BackupOneMinuteOld);
@@ -152,12 +156,10 @@
                 backup.VoidCreate();
             }
 
-            this.Setting.TimeStampFormat = BackupSettings.DefaultTimeStampFormat;
-            this.Setting.NumberOfBackups = 3;
-            this.Setting.MaxAgeInDays = int.MaxValue;
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue));
             using (var lockedFile = this.LockedFile())
             {
-                this.backuper.AfterSave(lockedFile);
+                backuper.AfterSave(lockedFile);
             }
 
             AssertFile.Exists(true, this.BackupOneMinuteOld);
@@ -177,12 +179,10 @@
                 backup.VoidCreate();
             }
 
-            this.Setting.TimeStampFormat = BackupSettings.DefaultTimeStampFormat;
-            this.Setting.NumberOfBackups = int.MaxValue;
-            this.Setting.MaxAgeInDays = 2;
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, 2));
             using (var lockedFile = this.LockedFile())
             {
-                this.backuper.AfterSave(lockedFile);
+                backuper.AfterSave(lockedFile);
             }
 
             AssertFile.Exists(true, this.BackupOneMinuteOld);
@@ -199,9 +199,10 @@
             this.File.VoidCreate();
             this.SoftDelete.VoidCreate();
             this.Backup.VoidCreate();
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue));
             using (var lockedFile = this.LockedFile())
             {
-                this.backuper.AfterSave(lockedFile);
+                backuper.AfterSave(lockedFile);
             }
 
             AssertFile.Exists(true, this.File);
@@ -220,11 +221,10 @@
             this.SoftDelete.VoidCreate();
             this.File.VoidCreate();
             this.Backup.VoidCreate();
-            this.Setting.NumberOfBackups = int.MaxValue;
-            this.Setting.MaxAgeInDays = int.MaxValue;
+            var backuper = Backuper.Create(new BackupSettings(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue));
             using (var lockedFile = this.LockedFile())
             {
-                this.backuper.AfterSave(lockedFile);
+                backuper.AfterSave(lockedFile);
             }
 
             AssertFile.Exists(true, this.File);

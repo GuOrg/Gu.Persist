@@ -32,13 +32,11 @@ namespace Gu.Persist.SystemXml
             reader.ReadStartElement(elementName);
             var directory = reader.ReadElementPathAndSpecialFolder(nameof(BackupSettings.DirectoryPath));
             var extension = reader.ReadElementString(nameof(BackupSettings.Extension));
-            var isCreatingBackups = reader.ReadElementBool(nameof(BackupSettings.IsCreatingBackups));
-            var hidden = reader.ReadElementBool(nameof(BackupSettings.Hidden));
             var timeStampFormat = reader.ReadElementString(nameof(BackupSettings.TimeStampFormat));
             var numberOfBackups = reader.ReadElementInt(nameof(BackupSettings.NumberOfBackups));
             var maxAgeInDays = reader.ReadElementInt(nameof(BackupSettings.MaxAgeInDays));
             reader.ReadEndElement();
-            return new BackupSettings(directory, isCreatingBackups, extension, timeStampFormat, hidden, numberOfBackups, maxAgeInDays);
+            return new BackupSettings(directory, extension, timeStampFormat, numberOfBackups, maxAgeInDays);
         }
 
         internal static bool ReadElementBool(this XmlReader reader, string elementName)

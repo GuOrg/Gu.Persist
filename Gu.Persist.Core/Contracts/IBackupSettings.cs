@@ -3,27 +3,26 @@
     public interface IBackupSettings : IFileSettings
     {
         /// <summary>
-        /// Gest if backups should be created.
-        /// </summary>
-        bool IsCreatingBackups { get; }
-
-        /// <summary>
-        /// Gest the format for timestamps
+        /// Gets the format for timestamps used as suffix on backup files.
+        /// This must be a valid format string for <see cref="System.DateTime"/>
+        /// Default is yyyy_MM_dd_HH_mm_ss
         /// </summary>
         string TimeStampFormat { get; }
 
-        /// <summary>
-        /// Gets if backup files shall be hidden
-        /// </summary>
-        bool Hidden { get; }
+        /////// <summary>
+        /////// Gets if backup files shall be hidden
+        /////// </summary>
+        ////bool Hidden { get; }
 
         /// <summary>
         /// Gest the number of backups to keep.
+        /// If 0 an unlimited amount of backups are kept.
         /// </summary>
         int NumberOfBackups { get; }
 
         /// <summary>
         /// Gets the max age of backups.
+        /// If 0 unlimited age is allowed.
         /// </summary>
         int MaxAgeInDays { get; }
     }

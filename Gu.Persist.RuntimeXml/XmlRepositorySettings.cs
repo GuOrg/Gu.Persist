@@ -24,17 +24,31 @@ namespace Gu.Persist.RuntimeXml
         }
 
         /// <summary> Initializes a new instance of the <see cref="XmlRepositorySettings"/> class. </summary>
-        public XmlRepositorySettings(DirectoryInfo directory, bool isTrackingDirty, bool isCaching, BackupSettings backupSettings, string extension = ".cfg", string tempExtension = ".tmp")
-            : base(directory, isTrackingDirty, isCaching, backupSettings, extension, tempExtension)
+        public XmlRepositorySettings(
+            DirectoryInfo directory,
+            bool isTrackingDirty,
+            bool isCaching,
+            bool saveNullDeletesFile,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
+            : base(
+                directory,
+                isTrackingDirty,
+                isCaching,
+                saveNullDeletesFile,
+                backupSettings,
+                extension,
+                tempExtension)
         {
         }
 
         /// <summary>
         /// A default instance for <paramref name="directory"/>
         /// </summary>
-        public new static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
+        public static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new XmlRepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new XmlRepositorySettings(directory, true, true, false, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
     }
 }
