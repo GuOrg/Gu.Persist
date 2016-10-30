@@ -20,7 +20,7 @@
         }
 
         [Test]
-        public void RoundtripRepositorySettings()
+        public void RoundtripJsonRepositorySettings()
         {
             var backupDir = this.directory.CreateSubdirectory("Backup");
             var backupSettings = new BackupSettings(backupDir);
@@ -31,12 +31,31 @@
                 true,
                 false,
                 backupSettings,
-                ".cfg",
-                ".tmp");
+                ".abc",
+                ".cde");
             var repository = new JsonRepository(settings);
             repository.Save(settings);
-            var repositorySettings = repository.Read<JsonRepositorySettings>();
-            Assert.IsTrue(JsonEqualsComparer<JsonRepositorySettings>.Default.Equals(settings, repositorySettings));
+            var roundtripped = repository.Read<JsonRepositorySettings>();
+            Assert.IsTrue(JsonEqualsComparer<JsonRepositorySettings>.Default.Equals(settings, roundtripped));
+        }
+
+        [Test]
+        public void RoundtripRepositorySettings()
+        {
+            var backupDir = this.directory.CreateSubdirectory("Backup");
+            var backupSettings = new BackupSettings(backupDir);
+            var settings = new RepositorySettings(
+                this.directory,
+                true,
+                true,
+                false,
+                backupSettings,
+                ".abc",
+                ".cde");
+            var repository = new JsonRepository(this.directory);
+            repository.Save(settings);
+            var roundtripped = repository.Read<RepositorySettings>();
+            Assert.IsTrue(JsonEqualsComparer<RepositorySettings>.Default.Equals(settings, roundtripped));
         }
     }
 }
