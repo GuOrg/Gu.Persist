@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Threading.Tasks;
 
     [System.Diagnostics.DebuggerDisplay("{File.Name}")]
     public sealed class LockedFile : IDisposable
@@ -19,6 +20,26 @@
         /// Can be null if file does not exits.
         /// </summary>
         public Stream Stream { get; }
+
+        public static async Task<LockedFile> CreateAsync(FileInfo file)
+        {
+            start:
+            while (file.Exists)
+            {
+                await Task.Delay(100)
+                          .ConfigureAwait(false);
+                file.Refresh();
+            }
+
+            try
+            {
+                return Create(file, f => f.Create());
+            }
+            catch
+            {
+                goto start;
+            }
+        }
 
         public static LockedFile Create(FileInfo file, Func<FileInfo, Stream> stream)
         {

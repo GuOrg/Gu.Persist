@@ -1,4 +1,5 @@
 // ReSharper disable HeuristicUnreachableCode
+
 namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
@@ -37,10 +38,13 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         private FileInfo dummyBackup;
         private FileInfo dummyBackupNewName;
+        private LockedFile lockFile;
 
         protected RepositoryTests()
         {
-            this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().FullName);
+            this.Directory = new DirectoryInfo(
+                                 @"C:\Temp\Gu.Persist\" + this.GetType()
+                                                              .FullName);
             this.dummy = new DummySerializable(1);
         }
 
@@ -56,7 +60,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             this.Repository = this.Create();
             this.Repository.ClearCache();
 
-            var name = this.GetType().Name;
+            var name = this.GetType()
+                           .Name;
 
             var fileName = string.Concat(name, this.Settings.Extension);
             var settingsDirectory = this.Settings.DirectoryPath.CreateDirectoryInfo();
@@ -69,12 +74,16 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (this.IsBackingUp)
             {
                 var backupFileName = string.Concat(name, this.BackupSettings.Extension);
-                this.backup = this.BackupSettings.DirectoryPath.CreateDirectoryInfo().CreateFileInfoInDirectory(backupFileName);
+                this.backup = this.BackupSettings.DirectoryPath.CreateDirectoryInfo()
+                                  .CreateFileInfoInDirectory(backupFileName);
                 this.backupSoftDelete = this.backup.GetSoftDeleteFileFor();
                 this.backupNewName = this.backup.WithNewName(NewName, this.BackupSettings);
             }
 
-            var repoSettingFileName = string.Concat(this.Settings.GetType().Name, this.Settings.Extension);
+            var repoSettingFileName = string.Concat(
+                this.Settings.GetType()
+                    .Name,
+                this.Settings.Extension);
             this.RepoSettingFile = settingsDirectory.CreateFileInfoInDirectory(repoSettingFileName);
 
             var dummyFileName = string.Concat(typeof(DummySerializable).Name, this.Settings.Extension);
@@ -84,8 +93,10 @@ namespace Gu.Persist.Core.Tests.Repositories
             this.dummyNewName = this.dummyFile.WithNewName(NewName, this.Settings);
             if (this.IsBackingUp)
             {
-                var backupFileName = this.dummyFile.WithNewExtension(this.BackupSettings.Extension).Name;
-                this.dummyBackup = this.BackupSettings.DirectoryPath.CreateDirectoryInfo().CreateFileInfoInDirectory(backupFileName);
+                var backupFileName = this.dummyFile.WithNewExtension(this.BackupSettings.Extension)
+                                         .Name;
+                this.dummyBackup = this.BackupSettings.DirectoryPath.CreateDirectoryInfo()
+                                       .CreateFileInfoInDirectory(backupFileName);
                 this.dummyBackupNewName = this.dummyBackup.WithNewName(NewName, this.BackupSettings);
             }
 
@@ -112,6 +123,24 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
         }
 
+        [OneTimeSetUp]
+        public async Task OneTimeSetup()
+        {
+            var lockFileInfo = Directories.TempDirectory.CreateFileInfoInDirectory("test.lock");
+            try
+            {
+                lockFileInfo.Delete();
+            }
+            catch
+            {
+                // this could happen if the previous run was stopped in the debugger.
+            }
+
+            // using this because AppVeyor uses two workers for running the tests.
+            this.lockFile = await LockedFile.CreateAsync(lockFileInfo)
+                                .ConfigureAwait(false);
+        }
+
         [TearDown]
         public void TearDown()
         {
@@ -129,6 +158,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
+            this.lockFile?.DisposeAndDeleteFile();
             if (this.Directory.Exists)
             {
                 this.Directory.Delete(true);
@@ -630,22 +660,22 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
         }
 
-        [Test]
-        public void Restore()
-        {
-            Assert.Inconclusive("Not sure how to solve this and caching. Don't want to do reflection and copy properties I think");
-            ////Repository.Save(_dummy, _file);
-            ////_dummy.Value++;
-            ////Repository.Save(_dummy, _file); // Save twice so there is a backup
-            ////AssertFile.Exists(true, _file);
-            ////AssertFile.Exists(true, _backup);
-            ////Repository.Backuper.Restore(_file, _backup);
+        ////[Test]
+        ////public void Restore()
+        ////{
+        ////    Assert.Inconclusive("Not sure how to solve this and caching. Don't want to do reflection and copy properties I think");
+        ////    Repository.Save(_dummy, _file);
+        ////    _dummy.Value++;
+        ////    Repository.Save(_dummy, _file); // Save twice so there is a backup
+        ////    AssertFile.Exists(true, _file);
+        ////    AssertFile.Exists(true, _backup);
+        ////    Repository.Backuper.Restore(_file, _backup);
 
-            ////AssertFile.Exists(true, _file);
-            ////AssertFile.Exists(false, _backup);
-            ////var read = Read<DummySerializable>(_file);
-            ////Assert.AreEqual(_dummy.Value - 1, read.Value);
-        }
+        ////    AssertFile.Exists(true, _file);
+        ////    AssertFile.Exists(false, _backup);
+        ////    var read = Read<DummySerializable>(_file);
+        ////    Assert.AreEqual(_dummy.Value - 1, read.Value);
+        ////}
 
         protected abstract IRepository Create();
 

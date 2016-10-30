@@ -15,7 +15,7 @@
 
         /// <summary>
         /// Opens a file stram that creates a file if not exists.
-        ///  Ower writes if exists.
+        ///  Overwrites if exists.
         /// </summary>
         internal static Stream OpenCreate(this FileInfo file)
         {
