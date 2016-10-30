@@ -1,8 +1,6 @@
 ﻿namespace Gu.Persist.Core
 {
-    using System.ComponentModel;
-
-    public interface IFileSettings : INotifyPropertyChanged
+    public interface IFileSettings
     {
         /// <summary>
         /// Gets the path to where backups are saved.

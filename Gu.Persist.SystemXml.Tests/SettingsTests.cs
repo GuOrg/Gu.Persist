@@ -8,10 +8,10 @@
 
     using NUnit.Framework;
 
-    public class SettingsTests
+    public class XmlRepositorySettingsTests
     {
         [Test]
-        public void RoundtripRepositorySettingsWithRepo()
+        public void RoundtripRepositorySettingsWithRepository()
         {
             var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
@@ -19,7 +19,7 @@
             var repository = new XmlRepository(settings);
             repository.Save(settings);
             var roundtripped = repository.Read<XmlRepositorySettings>();
-            Assert.AreEqual(settings.DirectoryPath, roundtripped.DirectoryPath);
+            AssertProperties(settings, roundtripped);
         }
 
         [Test]
