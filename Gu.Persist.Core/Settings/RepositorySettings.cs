@@ -20,7 +20,7 @@
         /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
         /// </summary>
         public RepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
-            : this(directory, true, true, backupSettings)
+            : this(directory, true, true, true, backupSettings)
         {
         }
 
@@ -31,6 +31,7 @@
             DirectoryInfo directory,
             bool isTrackingDirty,
             bool isCaching,
+            bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
@@ -38,6 +39,7 @@
                 PathAndSpecialFolder.Create(directory),
                 isTrackingDirty,
                 isCaching,
+                saveNullDeletesFile,
                 backupSettings,
                 extension,
                 tempExtension)
@@ -51,6 +53,7 @@
             PathAndSpecialFolder directory,
             bool isTrackingDirty,
             bool isCaching,
+            bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
@@ -62,6 +65,7 @@
 
             this.IsTrackingDirty = isTrackingDirty;
             this.IsCaching = isCaching;
+            this.SaveNullDeletesFile = saveNullDeletesFile;
             this.BackupSettings = backupSettings;
             this.TempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
@@ -93,12 +97,8 @@
         public bool IsCaching { get; }
 
         /// <summary>
-        /// Creates a <see cref="RepositorySettings"/> for <paramref name="directory"/>
-        /// Uses BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)) as backup settings.
+        /// If true calling save with null deletes the file.
         /// </summary>
-        public static RepositorySettings DefaultFor(DirectoryInfo directory)
-        {
-            return new RepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
-        }
+        public bool SaveNullDeletesFile { get; }
     }
 }

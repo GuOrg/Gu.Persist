@@ -29,8 +29,22 @@ namespace Gu.Persist.SystemXml
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlRepositorySettings"/> class.
         /// </summary>
-        public XmlRepositorySettings(DirectoryInfo directory, bool isTrackingDirty, bool isCaching, BackupSettings backupSettings, string extension = ".cfg", string tempExtension = ".tmp")
-            : base(directory, isTrackingDirty, isCaching, backupSettings, extension, tempExtension)
+        public XmlRepositorySettings(
+            DirectoryInfo directory,
+            bool isTrackingDirty,
+            bool isCaching,
+            bool saveNullDeletesFile,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
+            : base(
+                  directory,
+                  isTrackingDirty,
+                  isCaching,
+                  saveNullDeletesFile,
+                  backupSettings,
+                  extension,
+                  tempExtension)
         {
         }
 
@@ -46,9 +60,9 @@ namespace Gu.Persist.SystemXml
         /// <summary>
         /// A default instance for <paramref name="directory"/>
         /// </summary>
-        public new static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
+        public static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new XmlRepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new XmlRepositorySettings(directory, true, true, false, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -59,12 +73,12 @@ namespace Gu.Persist.SystemXml
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             reader.ReadStartElement();
-            this.DirectoryPath = reader.ReadElementPathAndSpecialFolder(nameof(this.DirectoryPath));
-            this.Extension = reader.ReadElementString(nameof(this.Extension));
-            this.TempExtension = reader.ReadElementString(nameof(this.TempExtension));
-            this.IsTrackingDirty = reader.ReadElementBool(nameof(this.IsTrackingDirty));
-            this.IsCaching = reader.ReadElementBool(nameof(this.IsCaching));
-            this.BackupSettings = reader.ReadElementBackupSettings(nameof(this.BackupSettings));
+            //this.DirectoryPath = reader.ReadElementPathAndSpecialFolder(nameof(this.DirectoryPath));
+            //this.Extension = reader.ReadElementString(nameof(this.Extension));
+            //this.TempExtension = reader.ReadElementString(nameof(this.TempExtension));
+            //this.IsTrackingDirty = reader.ReadElementBool(nameof(this.IsTrackingDirty));
+            //this.IsCaching = reader.ReadElementBool(nameof(this.IsCaching));
+            //this.BackupSettings = reader.ReadElementBackupSettings(nameof(this.BackupSettings));
             reader.ReadEndElement();
         }
 

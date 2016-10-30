@@ -24,15 +24,34 @@
         }
 
         /// <summary> Initializes a new instance of the <see cref="BinaryRepositorySettings"/> class. </summary>
-        public BinaryRepositorySettings(DirectoryInfo directory, bool isTrackingDirty, bool isCaching, BackupSettings backupSettings, string extension = ".cfg", string tempExtension = ".tmp")
-            : base(directory, isTrackingDirty, isCaching, backupSettings, extension, tempExtension)
+        public BinaryRepositorySettings(
+            DirectoryInfo directory,
+            bool isTrackingDirty,
+            bool isCaching,
+            bool saveNullDeletesFile,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
+            : base(
+                directory,
+                isTrackingDirty,
+                isCaching,
+                saveNullDeletesFile,
+                backupSettings,
+                extension,
+                tempExtension)
         {
         }
 
         /// <summary>Return the default settings for <paramref name="directory"/> </summary>
-        public new static BinaryRepositorySettings DefaultFor(DirectoryInfo directory)
+        public static BinaryRepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new BinaryRepositorySettings(directory, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new BinaryRepositorySettings(
+                directory,
+                true,
+                true,
+                false,
+                BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
     }
 }

@@ -38,6 +38,7 @@ namespace Gu.Persist.NewtonsoftJson
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
             bool isCaching,
+            bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
@@ -46,6 +47,7 @@ namespace Gu.Persist.NewtonsoftJson
                 jsonSerializerSettings,
                 isTrackingDirty,
                 isCaching,
+                saveNullDeletesFile,
                 backupSettings,
                 extension,
                 tempExtension)
@@ -59,6 +61,7 @@ namespace Gu.Persist.NewtonsoftJson
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
             bool isCaching,
+            bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
@@ -67,6 +70,7 @@ namespace Gu.Persist.NewtonsoftJson
                 jsonSerializerSettings,
                 isTrackingDirty,
                 isCaching,
+                saveNullDeletesFile,
                 backupSettings,
                 extension,
                 tempExtension)
@@ -82,10 +86,18 @@ namespace Gu.Persist.NewtonsoftJson
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
             bool isCaching,
+            bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
-            : base(directoryPath, isTrackingDirty, isCaching, backupSettings, extension, tempExtension)
+            : base(
+                directoryPath,
+                isTrackingDirty,
+                isCaching,
+                saveNullDeletesFile,
+                backupSettings,
+                extension,
+                tempExtension)
         {
             this.JsonSerializerSettings = jsonSerializerSettings;
         }
@@ -99,7 +111,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// Creates a <see cref="JsonRepositorySettings"/> for <paramref name="directory"/>
         /// Uses DefaultJsonSettings
         /// </summary>
-        public new static JsonRepositorySettings DefaultFor(DirectoryInfo directory)
+        public static JsonRepositorySettings DefaultFor(DirectoryInfo directory)
         {
             return DefaultFor(directory, CreateDefaultJsonSettings());
         }
@@ -109,7 +121,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// </summary>
         public static JsonRepositorySettings DefaultFor(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
         {
-            return new JsonRepositorySettings(PathAndSpecialFolder.Create(directory), jsonSettings, true, true, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new JsonRepositorySettings(PathAndSpecialFolder.Create(directory), jsonSettings, true, true, false, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
 
         /// <summary>

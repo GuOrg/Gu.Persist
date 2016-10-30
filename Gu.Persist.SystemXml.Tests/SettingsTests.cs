@@ -15,7 +15,7 @@
         {
             var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, true, true, backupSettings, ".cfg", ".tmp");
+            var settings = new XmlRepositorySettings(directory, true, true, false, backupSettings, ".cfg", ".tmp");
             var repository = new XmlRepository(settings);
             repository.Save(settings);
             var roundtripped = repository.Read<XmlRepositorySettings>();
@@ -27,7 +27,7 @@
         {
             var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, true, true, backupSettings, ".cfg", ".tmp");
+            var settings = new XmlRepositorySettings(directory, true, true, false, backupSettings, ".cfg", ".tmp");
             var sb = new StringBuilder();
             var serializer = new XmlSerializer(settings.GetType());
             using (var writer = new StringWriter(sb))

@@ -52,7 +52,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         protected BackupSettings BackupSettings => this.Settings?.BackupSettings;
 
-        protected bool IsBackingUp => this.BackupSettings?.IsCreatingBackups == true;
+        protected bool IsBackingUp => this.BackupSettings != null;
 
         [SetUp]
         public void SetUp()
