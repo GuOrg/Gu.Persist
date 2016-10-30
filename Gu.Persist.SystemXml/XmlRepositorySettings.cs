@@ -1,6 +1,7 @@
 namespace Gu.Persist.SystemXml
 {
     using System.IO;
+    using System.Reflection;
     using System.Xml;
     using System.Xml.Schema;
     using System.Xml.Serialization;
@@ -73,12 +74,13 @@ namespace Gu.Persist.SystemXml
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             reader.ReadStartElement();
-            //this.DirectoryPath = reader.ReadElementPathAndSpecialFolder(nameof(this.DirectoryPath));
-            //this.Extension = reader.ReadElementString(nameof(this.Extension));
-            //this.TempExtension = reader.ReadElementString(nameof(this.TempExtension));
-            //this.IsTrackingDirty = reader.ReadElementBool(nameof(this.IsTrackingDirty));
-            //this.IsCaching = reader.ReadElementBool(nameof(this.IsCaching));
-            //this.BackupSettings = reader.ReadElementBackupSettings(nameof(this.BackupSettings));
+            this.SetPrivate(nameof(this.DirectoryPath), reader.ReadElementPathAndSpecialFolder(nameof(this.DirectoryPath)));
+            this.SetPrivate(nameof(this.Extension), reader.ReadElementString(nameof(this.Extension)));
+            this.SetPrivate(nameof(this.TempExtension), reader.ReadElementString(nameof(this.TempExtension)));
+            this.SetPrivate(nameof(this.IsTrackingDirty), reader.ReadElementBool(nameof(this.IsTrackingDirty)));
+            this.SetPrivate(nameof(this.IsCaching), reader.ReadElementBool(nameof(this.IsCaching)));
+            this.SetPrivate(nameof(this.SaveNullDeletesFile), reader.ReadElementBool(nameof(this.SaveNullDeletesFile)));
+            this.SetPrivate(nameof(this.BackupSettings), reader.ReadElementBackupSettings(nameof(this.BackupSettings)));
             reader.ReadEndElement();
         }
 
@@ -89,7 +91,20 @@ namespace Gu.Persist.SystemXml
             writer.WriteElementString(nameof(this.TempExtension), this.TempExtension);
             writer.WriteElementString(nameof(this.IsTrackingDirty), this.IsTrackingDirty);
             writer.WriteElementString(nameof(this.IsCaching), this.IsCaching);
-            writer.WriteElementString(nameof(this.BackupSettings), this.BackupSettings);
+            writer.WriteElementString(nameof(this.SaveNullDeletesFile), this.SaveNullDeletesFile);
+            if (this.BackupSettings != null)
+            {
+                writer.WriteElementString(nameof(this.BackupSettings), this.BackupSettings);
+            }
+        }
+
+        private void SetPrivate<T>(string propertyName, T value)
+        {
+            var field = typeof(RepositorySettings)
+                            .GetField($"<{propertyName}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance) ??
+                        typeof(FileSettings)
+                            .GetField($"<{propertyName}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+            field.SetValue(this, value);
         }
     }
 }

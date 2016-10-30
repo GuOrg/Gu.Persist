@@ -1,5 +1,6 @@
 namespace Gu.Persist.NewtonsoftJson
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
 
@@ -105,7 +106,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// <summary>
         /// The settings controlling json serialization.
         /// </summary>
-        public JsonSerializerSettings JsonSerializerSettings { get; private set; }
+        public JsonSerializerSettings JsonSerializerSettings { get; }
 
         /// <summary>
         /// Creates a <see cref="JsonRepositorySettings"/> for <paramref name="directory"/>
@@ -134,7 +135,8 @@ namespace Gu.Persist.NewtonsoftJson
                 MissingMemberHandling = MissingMemberHandling.Error,
                 Formatting = Formatting.Indented,
                 Culture = CultureInfo.InvariantCulture,
-                FloatFormatHandling = FloatFormatHandling.DefaultValue
+                FloatFormatHandling = FloatFormatHandling.DefaultValue,
+                //Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
             };
         }
     }

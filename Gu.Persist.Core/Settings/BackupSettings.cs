@@ -56,7 +56,6 @@
             int maxAgeInDays)
             : base(directory, extension)
         {
-            timeStampFormat = timeStampFormat ?? DefaultTimeStampFormat;
             ValidateTimestampFormat(timeStampFormat);
             if (!string.IsNullOrWhiteSpace(timeStampFormat))
             {
