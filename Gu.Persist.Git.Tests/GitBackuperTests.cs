@@ -39,17 +39,25 @@
         [Test]
         public async Task SaveCommits()
         {
-            ////var file = this.repository.GetFileInfo<DummySerializable>();
-            ////file.Save(this.dummy);
+            // give the repository time to initialize.
+            await Task.Delay(200).ConfigureAwait(false);
             using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
                 Assert.AreEqual(0, git.Commits.Count());
             }
 
             this.repository.Save(this.dummy);
-            await Task.Delay(100).ConfigureAwait(false);
+
             using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
+                int count = 0;
+                while (!git.Commits.Any() && count < 10)
+                {
+                    // give the repository time to update.
+                    await Task.Delay(100).ConfigureAwait(false);
+                    count++;
+                }
+
                 Assert.AreEqual(1, git.Commits.Count());
             }
         }
