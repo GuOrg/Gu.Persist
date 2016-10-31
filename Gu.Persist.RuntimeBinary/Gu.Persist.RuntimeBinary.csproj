@@ -38,11 +38,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataRepository.cs" />
     <Compile Include="BinaryEqualsComparer{T}.cs" />
-    <Compile Include="BinaryFile.cs" />
-    <Compile Include="BinaryRepository.cs" />
-    <Compile Include="BinaryRepositorySettings.cs" />
-    <Compile Include="BinarySerialize.cs" />
+    <Compile Include="File.cs" />
+    <Compile Include="SingletonRepository.cs" />
+    <Compile Include="Serialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

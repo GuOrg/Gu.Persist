@@ -3,22 +3,22 @@ namespace Gu.Persist.NewtonsoftJson
 {
     using System.Collections.Generic;
     using System.IO;
-    using Gu.Persist.Core;
     using Newtonsoft.Json;
 
     /// <inheritdoc/>
-    internal sealed class JsonSerialize : Serialize<JsonRepositorySettings>
+    internal sealed class Serialize<TSetting> : Gu.Persist.Core.Serialize<TSetting>
+        where TSetting : Core.RepositorySettings, IJsonRepositorySetting
     {
-        public static readonly JsonSerialize Default = new JsonSerialize();
+        public static readonly Serialize<TSetting> Default = new Serialize<TSetting>();
 
         /// <inheritdoc/>
         public override Stream ToStream<T>(T item)
         {
-            return JsonFile.ToStream(item);
+            return File.ToStream(item);
         }
 
         /// <inheritdoc/>
-        public override void ToStream<T>(T item, Stream stream, JsonRepositorySettings settings)
+        public override void ToStream<T>(T item, Stream stream, TSetting settings)
         {
             var source = item as Stream;
             if (source != null)
@@ -30,7 +30,7 @@ namespace Gu.Persist.NewtonsoftJson
             var serializer = settings != null
                 ? JsonSerializer.Create(settings.JsonSerializerSettings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(stream, JsonFile.DefaultEncoding, 1024, true)))
+            using (var writer = new JsonTextWriter(new StreamWriter(stream, File.DefaultEncoding, 1024, true)))
             {
                 serializer.Serialize(writer, item);
             }
@@ -39,13 +39,13 @@ namespace Gu.Persist.NewtonsoftJson
         /// <inheritdoc/>
         public override T FromStream<T>(Stream stream)
         {
-            return JsonFile.FromStream<T>(stream);
+            return File.FromStream<T>(stream);
         }
 
         /// <inheritdoc/>
         public override T Clone<T>(T item)
         {
-            return JsonFile.Clone(item);
+            return File.Clone(item);
         }
 
         /// <inheritdoc/>

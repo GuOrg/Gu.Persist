@@ -10,7 +10,7 @@
         /// <inheritdoc/>
         protected override IPooledStream GetStream(T item)
         {
-            return XmlFile.ToStream(item);
+            return File.ToStream(item);
         }
     }
 }

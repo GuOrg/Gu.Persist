@@ -8,15 +8,15 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
         [Test]
         public void DefaultSettings()
         {
-            var defaultSettings = BinaryRepositorySettings.DefaultFor(this.Directory);
+            var defaultSettings = RepositorySettings.DefaultFor(this.Directory);
             var comparer = new BinaryEqualsComparer<IRepositorySettings>();
             Assert.IsTrue(comparer.Equals(defaultSettings, this.Repository.Settings));
         }
 
         protected override IRepository Create()
         {
-            var settings = BinaryRepositorySettings.DefaultFor(this.Directory);
-            return new BinaryRepository(settings);
+            var settings = RepositorySettings.DefaultFor(this.Directory);
+            return new SingletonRepository(settings);
         }
     }
 }

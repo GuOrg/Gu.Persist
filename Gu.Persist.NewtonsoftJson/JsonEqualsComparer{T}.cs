@@ -13,7 +13,7 @@
         /// <inheritdoc/>
         protected override IPooledStream GetStream(T item)
         {
-            return JsonFile.ToStream(item);
+            return File.ToStream(item);
         }
     }
 }

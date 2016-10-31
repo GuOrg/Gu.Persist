@@ -14,7 +14,7 @@ namespace Gu.Persist.RuntimeXml.Tests.Repository
 
         protected override IRepository Create()
         {
-            return new XmlRepository();
+            return new SingletonRepository();
         }
     }
 }

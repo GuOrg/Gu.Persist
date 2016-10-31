@@ -15,7 +15,7 @@
 
         protected override IRepository Create()
         {
-            return new JsonRepository();
+            return new SingletonRepository();
         }
     }
 }

@@ -7,9 +7,11 @@
     using Newtonsoft.Json;
     using NUnit.Framework;
 
+    using File = Gu.Persist.NewtonsoftJson.File;
+
     public class JsonFileTests
     {
-        private static readonly JsonSerializerSettings JsonSettings = JsonRepositorySettings.CreateDefaultJsonSettings();
+        private static readonly JsonSerializerSettings JsonSettings = RepositorySettings.CreateDefaultJsonSettings();
         private readonly DirectoryInfo directory;
 
         public JsonFileTests()
@@ -27,7 +29,7 @@
         public void Clone()
         {
             var dummy = new DummySerializable { Value = 1 };
-            var clone = JsonFile.Clone(dummy);
+            var clone = File.Clone(dummy);
             Assert.AreNotSame(dummy, clone);
             Assert.AreEqual(dummy.Value, clone.Value);
         }
@@ -36,7 +38,7 @@
         public void CloneWithSettings()
         {
             var dummy = new DummySerializable { Value = 1 };
-            var clone = JsonFile.Clone(dummy, JsonSettings);
+            var clone = File.Clone(dummy, JsonSettings);
             Assert.AreNotSame(dummy, clone);
             Assert.AreEqual(dummy.Value, clone.Value);
         }
@@ -46,9 +48,9 @@
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
-            JsonFile.Save(file, dummy);
-            JsonFile.Save(file, dummy);
-            var read = JsonFile.Read<DummySerializable>(file);
+            File.Save(file, dummy);
+            File.Save(file, dummy);
+            var read = File.Read<DummySerializable>(file);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }
@@ -58,8 +60,8 @@
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
-            JsonFile.Save(file, dummy);
-            var read = JsonFile.Read<DummySerializable>(file);
+            File.Save(file, dummy);
+            var read = File.Read<DummySerializable>(file);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }
@@ -69,8 +71,8 @@
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
-            JsonFile.Save(file, dummy, JsonSettings);
-            var read = JsonFile.Read<DummySerializable>(file, JsonSettings);
+            File.Save(file, dummy, JsonSettings);
+            var read = File.Read<DummySerializable>(file, JsonSettings);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }
@@ -80,9 +82,9 @@
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
-            JsonFile.Save(file, dummy, JsonSettings);
-            JsonFile.Save(file, dummy, JsonSettings);
-            var read = JsonFile.Read<DummySerializable>(file, JsonSettings);
+            File.Save(file, dummy, JsonSettings);
+            File.Save(file, dummy, JsonSettings);
+            var read = File.Read<DummySerializable>(file, JsonSettings);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }
@@ -92,8 +94,8 @@
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
-            await JsonFile.SaveAsync(file, dummy).ConfigureAwait(false);
-            var read = await JsonFile.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
+            await File.SaveAsync(file, dummy).ConfigureAwait(false);
+            var read = await File.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }
@@ -103,9 +105,9 @@
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
-            await JsonFile.SaveAsync(file, dummy).ConfigureAwait(false);
-            await JsonFile.SaveAsync(file, dummy).ConfigureAwait(false);
-            var read = await JsonFile.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
+            await File.SaveAsync(file, dummy).ConfigureAwait(false);
+            await File.SaveAsync(file, dummy).ConfigureAwait(false);
+            var read = await File.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }
@@ -115,8 +117,8 @@
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
-            await JsonFile.SaveAsync(file, dummy, JsonSettings).ConfigureAwait(false);
-            var read = await JsonFile.ReadAsync<DummySerializable>(file, JsonSettings).ConfigureAwait(false);
+            await File.SaveAsync(file, dummy, JsonSettings).ConfigureAwait(false);
+            var read = await File.ReadAsync<DummySerializable>(file, JsonSettings).ConfigureAwait(false);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }
@@ -126,9 +128,9 @@
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
-            await JsonFile.SaveAsync(file, dummy, JsonSettings).ConfigureAwait(false);
-            await JsonFile.SaveAsync(file, dummy, JsonSettings).ConfigureAwait(false);
-            var read = await JsonFile.ReadAsync<DummySerializable>(file, JsonSettings).ConfigureAwait(false);
+            await File.SaveAsync(file, dummy, JsonSettings).ConfigureAwait(false);
+            await File.SaveAsync(file, dummy, JsonSettings).ConfigureAwait(false);
+            var read = await File.ReadAsync<DummySerializable>(file, JsonSettings).ConfigureAwait(false);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }

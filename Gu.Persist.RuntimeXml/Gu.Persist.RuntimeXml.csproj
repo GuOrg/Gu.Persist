@@ -40,11 +40,11 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XmlSerialize.cs" />
-    <Compile Include="XmlRepositorySettings.cs" />
+    <Compile Include="DataRepository.cs" />
+    <Compile Include="Serialize.cs" />
     <Compile Include="XmlEqualsComparer.cs" />
-    <Compile Include="XmlFile.cs" />
-    <Compile Include="XmlRepository.cs" />
+    <Compile Include="File.cs" />
+    <Compile Include="SingletonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

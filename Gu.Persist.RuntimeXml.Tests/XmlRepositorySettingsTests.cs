@@ -14,7 +14,7 @@
             var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
             var settings = new XmlRepositorySettings(directory, false, false, backupSettings, ".abc", ".cde");
-            var repository = new XmlRepository(settings);
+            var repository = new SingletonRepository(settings);
             repository.Save(settings);
             var roundtripped = repository.Read<XmlRepositorySettings>();
             AssertProperties(settings, roundtripped);

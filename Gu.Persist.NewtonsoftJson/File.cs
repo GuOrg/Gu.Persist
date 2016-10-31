@@ -11,7 +11,7 @@
     /// <summary>
     /// Helper methods for serializing and deserializing json.
     /// </summary>
-    public static class JsonFile
+    public static class File
     {
         /// <summary>
         /// Returns the default encoding UTF8.

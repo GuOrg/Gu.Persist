@@ -14,7 +14,7 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
 
         protected override IRepository Create()
         {
-            return new BinaryRepository();
+            return new SingletonRepository();
         }
     }
 }

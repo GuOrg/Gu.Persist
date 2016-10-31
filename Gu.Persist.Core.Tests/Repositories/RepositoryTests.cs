@@ -275,7 +275,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                 AssertFile.Exists(false, this.backup);
             }
 
-            if (this.Settings.SaveNullDeletesFile)
+            if ((this.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
             {
                 this.Repository.Save<DummySerializable>(this.file, null);
                 AssertFile.Exists(false, this.file);
@@ -405,7 +405,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                 AssertFile.Exists(false, this.dummyBackup);
             }
 
-            if (this.Settings.SaveNullDeletesFile)
+            if ((this.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
             {
                 this.Repository.Save<DummySerializable>(fileName, null);
                 AssertFile.Exists(false, fileInfo);
@@ -445,7 +445,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                 AssertFile.Exists(false, this.backup);
             }
 
-            if (this.Settings.SaveNullDeletesFile)
+            if ((this.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
             {
                 await this.Repository.SaveAsync<DummySerializable>(this.file, null).ConfigureAwait(false);
                 AssertFile.Exists(false, this.file);
@@ -497,7 +497,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             Assert.AreEqual(this.dummy.Value, read.Value);
             Assert.AreNotSame(this.dummy, read);
 
-            if (this.Settings.SaveNullDeletesFile)
+            if ((this.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
             {
                 this.Repository.Save<DummySerializable>(null);
                 AssertFile.Exists(false, this.file);
@@ -549,7 +549,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             Assert.AreEqual(this.dummy.Value, read.Value);
             Assert.AreNotSame(this.dummy, read);
 
-            if (this.Settings.SaveNullDeletesFile)
+            if ((this.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
             {
                 await this.Repository.SaveAsync<DummySerializable>(null).ConfigureAwait(false);
                 AssertFile.Exists(false, this.file);

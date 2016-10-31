@@ -1,10 +1,12 @@
 ﻿namespace Gu.Persist.NewtonsoftJson.Tests.Repository
 {
-    using System.IO;
     using Gu.Persist.Core;
     using Gu.Persist.Core.Tests;
     using Gu.Persist.NewtonsoftJson;
     using NUnit.Framework;
+
+    using File = System.IO.File;
+    using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
 
     public class DefaultFor : JsonRepositoryTests
     {
@@ -24,8 +26,8 @@
 
         protected override IRepository Create()
         {
-            var settings = JsonRepositorySettings.DefaultFor(this.Directory);
-            return new JsonRepository(settings);
+            var settings = Core.RepositorySettings.DefaultFor(this.Directory);
+            return new SingletonRepository(settings);
         }
     }
 }

@@ -14,8 +14,8 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
 
         protected override IRepository Create()
         {
-            var settings = new BinaryRepositorySettings(this.Directory, true, false, null, ".cfg", ".tmp");
-            return new BinaryRepository(settings);
+            var settings = new RepositorySettings(this.Directory, true, null);
+            return new SingletonRepository(settings);
         }
     }
 }

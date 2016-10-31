@@ -1,23 +1,23 @@
-﻿namespace Gu.Persist.RuntimeBinary
+﻿namespace Gu.Persist.RuntimeXml
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
     using Gu.Persist.Core;
 
     /// <inheritdoc/>
-    internal sealed class BinarySerialize : Serialize<BinaryRepositorySettings>
+    internal sealed class Serialize<TSetting> : Gu.Persist.Core.Serialize<TSetting>
+        where TSetting : RepositorySettings
     {
-        public static readonly BinarySerialize Default = new BinarySerialize();
+        public static readonly Serialize<TSetting> Default = new Serialize<TSetting>();
 
         /// <inheritdoc/>
         public override Stream ToStream<T>(T item)
         {
-            return BinaryFile.ToStream(item);
+            return File.ToStream(item);
         }
 
         /// <inheritdoc/>
-        public override void ToStream<T>(T item, Stream stream, BinaryRepositorySettings settings)
+        public override void ToStream<T>(T item, Stream stream, TSetting settings)
         {
             var source = item as Stream;
             if (source != null)
@@ -26,26 +26,29 @@
                 return;
             }
 
-            var serializer = new BinaryFormatter();
-            serializer.Serialize(stream, item);
+            var serializer = File.SerializerFor(item);
+            lock (serializer)
+            {
+                serializer.WriteObject(stream, item);
+            }
         }
 
         /// <inheritdoc/>
         public override T FromStream<T>(Stream stream)
         {
-            return BinaryFile.FromStream<T>(stream);
+            return File.FromStream<T>(stream);
         }
 
         /// <inheritdoc/>
         public override T Clone<T>(T item)
         {
-            return BinaryFile.Clone(item);
+            return File.Clone(item);
         }
 
         /// <inheritdoc/>
         public override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
         {
-            return BinaryEqualsComparer<T>.Default;
+            return XmlEqualsComparer<T>.Default;
         }
     }
 }

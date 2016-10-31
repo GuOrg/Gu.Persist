@@ -8,30 +8,31 @@
 
     public class BinaryRepositorySettingsTests
     {
+        private static readonly PathAndSpecialFolder Directory = new PathAndSpecialFolder(@"C:\Temp\Gu.Persist\", null);
+        private static readonly PathAndSpecialFolder BackupDirectory = new PathAndSpecialFolder(@"C:\Temp\Gu.Persist\Backup\", null);
+
         [Test]
         public void RoundtripRepositorySettingsWithRepository()
         {
-            var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
-            var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new BinaryRepositorySettings(directory, false, false, backupSettings, ".abc", ".cde");
-            var repository = new BinaryRepository(settings);
+            var backupSettings = BackupSettings.Create(BackupDirectory);
+            var settings = new RepositorySettings(Directory, false, backupSettings, ".abc", ".cde");
+            var repository = new SingletonRepository(settings);
             repository.Save(settings);
-            var roundtripped = repository.Read<BinaryRepositorySettings>();
+            var roundtripped = repository.Read<RepositorySettings>();
             AssertProperties(settings, roundtripped);
         }
 
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
-            var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new BinaryRepositorySettings(directory, true, false, backupSettings, ".abc", ".cde");
+            var backupSettings = BackupSettings.Create(BackupDirectory);
+            var settings = new RepositorySettings(Directory, true, backupSettings, ".abc", ".cde");
             var serializer = new BinaryFormatter();
             using (Stream stream = PooledMemoryStream.Borrow())
             {
                 serializer.Serialize(stream, settings);
                 stream.Position = 0;
-                var roundtripped = (BinaryRepositorySettings)serializer.Deserialize(stream);
+                var roundtripped = (RepositorySettings)serializer.Deserialize(stream);
                 AssertProperties(settings, roundtripped);
             }
         }
@@ -39,26 +40,15 @@
         [Test]
         public void RoundtripRepositorySettingsWithNullBackupSettings()
         {
-            var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new BinaryRepositorySettings(directory, true, true, null, ".abc", ".def");
+            var settings = new RepositorySettings(Directory, true, null, ".abc", ".def");
             var serializer = new BinaryFormatter();
             using (Stream stream = PooledMemoryStream.Borrow())
             {
                 serializer.Serialize(stream, settings);
                 stream.Position = 0;
-                var roundtripped = (BinaryRepositorySettings)serializer.Deserialize(stream);
+                var roundtripped = (RepositorySettings)serializer.Deserialize(stream);
                 AssertProperties(settings, roundtripped);
             }
-        }
-
-        [Test]
-        public void CreateFromSelf()
-        {
-            var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
-            var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new BinaryRepositorySettings(directory, true, false, backupSettings, ".abc", ".cde");
-            var created = BinaryRepositorySettings.Create(settings);
-            AssertProperties(settings, created);
         }
 
         private static void AssertProperties(object expected, object actual)

@@ -4,6 +4,8 @@
     using Gu.Persist.Core.Backup;
     using NUnit.Framework;
 
+    using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
+
     public class NoBackup : JsonRepositoryTests
     {
         [Test]
@@ -14,8 +16,8 @@
 
         protected override IRepository Create()
         {
-            var settings = new JsonRepositorySettings(this.Directory, null);
-            return new JsonRepository(settings);
+            var settings = new RepositorySettings(this.Directory, null);
+            return new SingletonRepository(settings);
         }
     }
 }

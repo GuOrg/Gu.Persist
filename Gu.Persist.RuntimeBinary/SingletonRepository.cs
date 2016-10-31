@@ -8,60 +8,61 @@ namespace Gu.Persist.RuntimeBinary
 
     /// <summary>
     /// A repository reading and saving files using <see cref="System.Runtime.Serialization.Formatters.Binary.BinaryFormatter"/>
+    /// This repository keeps a cache of all saves and reads an manages singleton instances.
     /// </summary>
-    public class BinaryRepository : Repository<BinaryRepositorySettings>
+    public class SingletonRepository : SingletonRepository<RepositorySettings>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
+        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// Uses <see cref="Directories.Default"/>
         /// </summary>
-        public BinaryRepository()
+        public SingletonRepository()
             : this(Directories.Default)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
+        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
-        public BinaryRepository(PathAndSpecialFolder directory)
+        public SingletonRepository(PathAndSpecialFolder directory)
             : this(directory.CreateDirectoryInfo())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
+        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// It will use BinaryRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
-        public BinaryRepository(DirectoryInfo directory)
-            : base(directory, () => BinaryRepositorySettings.DefaultFor(directory), BinarySerialize.Default)
+        public SingletonRepository(DirectoryInfo directory)
+            : base(directory, () => CreateDefaultSettings(directory), Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
+        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// If <paramref name="directory"/> contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public BinaryRepository(PathAndSpecialFolder directory, Func<BinaryRepositorySettings> settingsCreator)
-            : base(directory.CreateDirectoryInfo(), settingsCreator, BinarySerialize.Default)
+        public SingletonRepository(PathAndSpecialFolder directory, Func<RepositorySettings> settingsCreator)
+            : base(directory.CreateDirectoryInfo(), settingsCreator, Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
+        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// If <paramref name="directory"/> contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public BinaryRepository(DirectoryInfo directory, Func<BinaryRepositorySettings> settingsCreator)
-            : base(directory, settingsCreator, BinarySerialize.Default)
+        public SingletonRepository(DirectoryInfo directory, Func<RepositorySettings> settingsCreator)
+            : base(directory, settingsCreator, Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
+        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// If <paramref name="directory"/> contains a settings file it is read and used.
         /// If not a new setting is created and saved.
         /// </summary>
@@ -71,13 +72,13 @@ namespace Gu.Persist.RuntimeBinary
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public BinaryRepository(PathAndSpecialFolder directory, IBackuper backuper, Func<BinaryRepositorySettings> settingsCreator)
-            : base(directory.CreateDirectoryInfo(), backuper, settingsCreator, BinarySerialize.Default)
+        public SingletonRepository(PathAndSpecialFolder directory, IBackuper backuper, Func<RepositorySettings> settingsCreator)
+            : base(directory.CreateDirectoryInfo(), backuper, settingsCreator, Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
+        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// If <paramref name="directory"/> contains a settings file it is read and used.
         /// If not a new setting is created and saved.
         /// </summary>
@@ -87,16 +88,16 @@ namespace Gu.Persist.RuntimeBinary
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public BinaryRepository(DirectoryInfo directory, IBackuper backuper, Func<BinaryRepositorySettings> settingsCreator)
-            : base(directory, backuper, settingsCreator, BinarySerialize.Default)
+        public SingletonRepository(DirectoryInfo directory, IBackuper backuper, Func<RepositorySettings> settingsCreator)
+            : base(directory, backuper, settingsCreator, Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
+        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
-        public BinaryRepository(RepositorySettings settings)
-            : base(BinaryRepositorySettings.Create(settings), BinarySerialize.Default)
+        public SingletonRepository(Core.RepositorySettings settings)
+            : base(settings, Serialize<RepositorySettings>.Default)
         {
         }
     }

@@ -20,7 +20,20 @@
         /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
         /// </summary>
         public RepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
-            : this(PathAndSpecialFolder.Create(directory), true, false, backupSettings)
+            : this(PathAndSpecialFolder.Create(directory), true, backupSettings)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
+        /// </summary>
+        public RepositorySettings(
+            DirectoryInfo directory,
+            bool isTrackingDirty,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
+            : this(PathAndSpecialFolder.Create(directory), isTrackingDirty, backupSettings, extension, tempExtension)
         {
         }
 
@@ -30,7 +43,6 @@
         public RepositorySettings(
             PathAndSpecialFolder directory,
             bool isTrackingDirty,
-            bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
@@ -41,7 +53,6 @@
             Ensure.NotNull(directory, nameof(directory));
 
             this.IsTrackingDirty = isTrackingDirty;
-            this.SaveNullDeletesFile = saveNullDeletesFile;
             this.BackupSettings = backupSettings;
             this.TempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
@@ -62,10 +73,5 @@
         /// Gets or sets if the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes
         /// </summary>
         public bool IsTrackingDirty { get; }
-
-        /// <summary>
-        /// If true calling save with null deletes the file.
-        /// </summary>
-        public bool SaveNullDeletesFile { get; }
     }
 }

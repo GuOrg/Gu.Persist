@@ -52,7 +52,12 @@
         /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
         public static BackupSettings Create(DirectoryInfo directory)
         {
-            return new BackupSettings(PathAndSpecialFolder.Create(directory), DefaultExtension, null, 1, int.MaxValue);
+            return Create(PathAndSpecialFolder.Create(directory));
+        }
+
+        public static BackupSettings Create(PathAndSpecialFolder directory)
+        {
+            return new BackupSettings(directory, DefaultExtension, null, 1, int.MaxValue);
         }
 
         /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>

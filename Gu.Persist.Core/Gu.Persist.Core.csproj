@@ -41,10 +41,13 @@
     <Compile Include="Comparers\DirectoryInfoComparer.cs" />
     <Compile Include="Comparers\SerializedEqualsComparer{T}.cs" />
     <Compile Include="Contracts\IAsyncFileNameRepository.cs" />
+    <Compile Include="Contracts\IDataRepositorySettings.cs" />
     <Compile Include="Contracts\IDirty.cs" />
     <Compile Include="Contracts\IFileNameRepository.cs" />
+    <Compile Include="Contracts\IRepositorySettings.cs" />
     <Compile Include="Contracts\IRepositoryWithSettings.cs" />
     <Compile Include="Contracts\ISingletonRepository.cs" />
+    <Compile Include="Contracts\IStreamRepository.cs" />
     <Compile Include="Internals\DictionaryExt.cs" />
     <Compile Include="Internals\EnumerableEx.cs" />
     <Compile Include="Internals\IPooledStream.cs" />
@@ -63,6 +66,7 @@
     <Compile Include="Internals\Ensure.cs" />
     <Compile Include="Internals\WaitHandleExtensions.cs" />
     <Compile Include="Backup\Backuper.cs" />
+    <Compile Include="Repository\DataRepository.cs" />
     <Compile Include="Repository\FileCache.cs" />
     <Compile Include="Repository\LockedFile.cs" />
     <Compile Include="Repository\RestoreException.cs" />
@@ -78,7 +82,7 @@
     <Compile Include="Contracts\IDirtyTracker.cs" />
     <Compile Include="Contracts\IBackuper.cs" />
     <Compile Include="Contracts\IBackupSettings.cs" />
-    <Compile Include="Contracts\IRepositorySettings.cs" />
+    <Compile Include="Settings\DataRepositorySettings.cs" />
     <Compile Include="Settings\FileSettings.cs" />
     <Compile Include="Contracts\IDirectoryPath.cs" />
     <Compile Include="Settings\PathAndSpecialFolder.cs" />

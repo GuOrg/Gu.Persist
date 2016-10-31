@@ -2,18 +2,20 @@
 {
     using Gu.Persist.Core;
 
+    using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
+
     public class SaveNullDeletesFileNoCaching : JsonRepositoryTests
     {
         protected override IRepository Create()
         {
-            var settings = new JsonRepositorySettings(
+            var settings = new RepositorySettings(
                 this.Directory,
-                JsonRepositorySettings.CreateDefaultJsonSettings(),
+                Core.RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 true,
                 BackupSettings.Create(this.Directory));
             return
-                new JsonRepository(settings);
+                new SingletonRepository(settings);
         }
     }
 }
