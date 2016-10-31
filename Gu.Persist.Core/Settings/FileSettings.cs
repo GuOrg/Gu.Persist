@@ -1,7 +1,6 @@
 ﻿namespace Gu.Persist.Core
 {
     using System;
-    using System.IO;
 
     /// <summary>
     /// Metadata for reading and saving files.
@@ -11,13 +10,9 @@
     {
         public FileSettings(PathAndSpecialFolder directory, string extension)
         {
+            Ensure.NotNull(directory, nameof(directory));
+            Ensure.NotNull(extension, nameof(extension));
             this.Directory = directory;
-            this.Extension = FileHelper.PrependDotIfMissing(extension);
-        }
-
-        public FileSettings(DirectoryInfo directory, string extension)
-        {
-            this.Directory = PathAndSpecialFolder.Create(directory);
             this.Extension = FileHelper.PrependDotIfMissing(extension);
         }
 

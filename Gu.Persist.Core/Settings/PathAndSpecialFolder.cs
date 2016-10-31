@@ -1,6 +1,7 @@
 ﻿namespace Gu.Persist.Core
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Diagnostics;
     using System.IO;
     using System.Reflection;
@@ -10,6 +11,7 @@
 
     public class PathAndSpecialFolder : IEquatable<PathAndSpecialFolder>
     {
+        private static readonly ConcurrentDictionary<string, PathAndSpecialFolder> Cache = new ConcurrentDictionary<string, PathAndSpecialFolder>(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         /// The default is %ApplicationData%/ApplicationName
         /// </summary>
@@ -140,13 +142,13 @@
         public static PathAndSpecialFolder Create(DirectoryInfo info)
         {
             Ensure.NotNull(info, nameof(info));
-            return new PathAndSpecialFolder(info.FullName, null);
+            return Cache.GetOrAdd(info.FullName, p => new PathAndSpecialFolder(p, null));
         }
 
         public static PathAndSpecialFolder Create(string path)
         {
             Ensure.NotNullOrEmpty(path, nameof(path));
-            return new PathAndSpecialFolder(path, null);
+            return Cache.GetOrAdd(path, p => new PathAndSpecialFolder(p, null));
         }
 
         /// <summary>
