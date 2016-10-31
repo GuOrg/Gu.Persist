@@ -138,5 +138,16 @@ namespace Gu.Persist.NewtonsoftJson
                 ////Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
             };
         }
+
+        public static JsonRepositorySettings Create(RepositorySettings settings)
+        {
+            return new JsonRepositorySettings(
+                settings.Directory,
+                CreateDefaultJsonSettings(),
+                settings.IsTrackingDirty,
+                settings.IsCaching,
+                settings.SaveNullDeletesFile,
+                settings.BackupSettings);
+        }
     }
 }

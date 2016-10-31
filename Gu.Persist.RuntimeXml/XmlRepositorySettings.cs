@@ -23,7 +23,9 @@ namespace Gu.Persist.RuntimeXml
         {
         }
 
-        /// <summary> Initializes a new instance of the <see cref="XmlRepositorySettings"/> class. </summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepositorySettings"/> class.
+        /// </summary>
         public XmlRepositorySettings(
             DirectoryInfo directory,
             bool isTrackingDirty,
@@ -32,8 +34,8 @@ namespace Gu.Persist.RuntimeXml
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
-            : base(
-                directory,
+            : this(
+                PathAndSpecialFolder.Create(directory),
                 isTrackingDirty,
                 isCaching,
                 saveNullDeletesFile,
@@ -41,6 +43,38 @@ namespace Gu.Persist.RuntimeXml
                 extension,
                 tempExtension)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepositorySettings"/> class.
+        /// </summary>
+        public XmlRepositorySettings(
+            PathAndSpecialFolder directory,
+            bool isTrackingDirty,
+            bool isCaching,
+            bool saveNullDeletesFile,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
+            : base(
+                  directory,
+                  isTrackingDirty,
+                  isCaching,
+                  saveNullDeletesFile,
+                  backupSettings,
+                  extension,
+                  tempExtension)
+        {
+        }
+
+        public static XmlRepositorySettings Create(RepositorySettings settings)
+        {
+            return new XmlRepositorySettings(
+                settings.Directory,
+                settings.IsTrackingDirty,
+                settings.IsCaching,
+                settings.SaveNullDeletesFile,
+                settings.BackupSettings);
         }
 
         /// <summary>

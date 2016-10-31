@@ -38,6 +38,28 @@ namespace Gu.Persist.SystemXml
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
+            : this(
+                PathAndSpecialFolder.Create(directory),
+                isTrackingDirty,
+                isCaching,
+                saveNullDeletesFile,
+                backupSettings,
+                extension,
+                tempExtension)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRepositorySettings"/> class.
+        /// </summary>
+        public XmlRepositorySettings(
+            PathAndSpecialFolder directory,
+            bool isTrackingDirty,
+            bool isCaching,
+            bool saveNullDeletesFile,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
             : base(
                   directory,
                   isTrackingDirty,
@@ -64,6 +86,16 @@ namespace Gu.Persist.SystemXml
         public static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
         {
             return new XmlRepositorySettings(directory, true, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+        }
+
+        public static XmlRepositorySettings Create(RepositorySettings settings)
+        {
+            return new XmlRepositorySettings(
+                settings.Directory,
+                settings.IsTrackingDirty,
+                settings.IsCaching,
+                settings.SaveNullDeletesFile,
+                settings.BackupSettings);
         }
 
         XmlSchema IXmlSerializable.GetSchema()

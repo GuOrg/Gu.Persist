@@ -137,6 +137,14 @@ namespace Gu.Persist.NewtonsoftJson
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// </summary>
+        public JsonRepository(RepositorySettings settings)
+            : base(JsonRepositorySettings.Create(settings), JsonSerialize.Default)
+        {
+        }
+
+        /// <summary>
         /// The settings used by the repository.
         /// </summary>
         public new JsonRepositorySettings Settings => base.Settings;

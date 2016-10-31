@@ -32,6 +32,26 @@
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
+            : this(
+               PathAndSpecialFolder.Create(directory),
+                isTrackingDirty,
+                isCaching,
+                saveNullDeletesFile,
+                backupSettings,
+                extension,
+                tempExtension)
+        {
+        }
+
+        /// <summary> Initializes a new instance of the <see cref="BinaryRepositorySettings"/> class. </summary>
+        public BinaryRepositorySettings(
+            PathAndSpecialFolder directory,
+            bool isTrackingDirty,
+            bool isCaching,
+            bool saveNullDeletesFile,
+            BackupSettings backupSettings,
+            string extension = ".cfg",
+            string tempExtension = ".tmp")
             : base(
                 directory,
                 isTrackingDirty,
@@ -52,6 +72,16 @@
                 true,
                 false,
                 BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+        }
+
+        public static BinaryRepositorySettings Create(RepositorySettings settings)
+        {
+            return new BinaryRepositorySettings(
+                settings.Directory,
+                settings.IsTrackingDirty,
+                settings.IsCaching,
+                settings.SaveNullDeletesFile,
+                settings.BackupSettings);
         }
     }
 }

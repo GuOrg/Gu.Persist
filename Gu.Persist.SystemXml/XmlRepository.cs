@@ -103,5 +103,17 @@ namespace Gu.Persist.SystemXml
             : base(settings, backuper, XmlSerialize.Default)
         {
         }
+
+        /// <summary>Initializes a new instance of the <see cref="XmlRepository"/> class.</summary>
+        public XmlRepository(RepositorySettings settings)
+            : base(XmlRepositorySettings.Create(settings), XmlSerialize.Default)
+        {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="XmlRepository"/> class.</summary>
+        public XmlRepository(RepositorySettings settings, IBackuper backuper)
+            : base(XmlRepositorySettings.Create(settings), backuper, XmlSerialize.Default)
+        {
+        }
     }
 }

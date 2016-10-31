@@ -95,8 +95,8 @@ namespace Gu.Persist.RuntimeBinary
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryRepository"/> class.
         /// </summary>
-        public BinaryRepository(BinaryRepositorySettings settings)
-            : base(settings, BinarySerialize.Default)
+        public BinaryRepository(RepositorySettings settings)
+            : base(BinaryRepositorySettings.Create(settings), BinarySerialize.Default)
         {
         }
     }

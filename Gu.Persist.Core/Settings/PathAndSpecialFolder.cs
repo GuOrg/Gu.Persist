@@ -11,7 +11,6 @@
 
     public class PathAndSpecialFolder : IEquatable<PathAndSpecialFolder>
     {
-        private static readonly ConcurrentDictionary<string, PathAndSpecialFolder> Cache = new ConcurrentDictionary<string, PathAndSpecialFolder>(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         /// The default is %ApplicationData%/ApplicationName
         /// </summary>
@@ -22,6 +21,7 @@
         /// </summary>
         public static readonly PathAndSpecialFolder DefaultBackup = new PathAndSpecialFolder($@"{Directories.AppDirectory().Name}\Backup", Environment.SpecialFolder.ApplicationData);
 
+        private static readonly ConcurrentDictionary<string, PathAndSpecialFolder> Cache = new ConcurrentDictionary<string, PathAndSpecialFolder>(StringComparer.OrdinalIgnoreCase);
         private static readonly char[] BackSlash = { '\\' };
         private static readonly Environment.SpecialFolder[] SpecialFolders =
             {
