@@ -145,6 +145,22 @@ namespace Gu.Persist.NewtonsoftJson
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// </summary>
+        public JsonRepository(RepositorySettings settings, IBackuper backuper)
+            : base(JsonRepositorySettings.Create(settings), backuper, JsonSerialize.Default)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRepository"/> class.
+        /// </summary>
+        public JsonRepository(RepositorySettings settings, JsonSerializerSettings jsonSettings, IBackuper backuper)
+            : base(JsonRepositorySettings.Create(settings, jsonSettings), backuper, JsonSerialize.Default)
+        {
+        }
+
+        /// <summary>
         /// The settings used by the repository.
         /// </summary>
         public new JsonRepositorySettings Settings => base.Settings;

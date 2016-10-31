@@ -141,9 +141,14 @@ namespace Gu.Persist.NewtonsoftJson
 
         public static JsonRepositorySettings Create(RepositorySettings settings)
         {
+            return Create(settings, CreateDefaultJsonSettings());
+        }
+
+        public static JsonRepositorySettings Create(RepositorySettings settings, JsonSerializerSettings jsonSettings)
+        {
             return new JsonRepositorySettings(
                 settings.Directory,
-                CreateDefaultJsonSettings(),
+                jsonSettings,
                 settings.IsTrackingDirty,
                 settings.IsCaching,
                 settings.SaveNullDeletesFile,
