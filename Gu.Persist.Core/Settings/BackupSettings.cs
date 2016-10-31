@@ -14,40 +14,6 @@
         public static readonly string DefaultExtension = ".bak";
 
         /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
-        public BackupSettings(DirectoryInfo directory)
-            : this(directory, DefaultExtension, null, 1, int.MaxValue)
-        {
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
-        public BackupSettings(DirectoryInfo directory, int numberOfBackups)
-            : this(directory, DefaultExtension, DefaultTimeStampFormat, numberOfBackups, int.MaxValue)
-        {
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
-        public BackupSettings(DirectoryInfo directory, int numberOfBackups, int maxAgeInDays)
-            : this(directory, DefaultExtension, DefaultTimeStampFormat, numberOfBackups, maxAgeInDays)
-        {
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
-        public BackupSettings(
-            DirectoryInfo directory,
-            string extension,
-            string timeStampFormat,
-            int numberOfBackups,
-            int maxAgeInDays)
-            : this(
-                directory != null ? PathAndSpecialFolder.Create(directory) : null,
-                extension,
-                timeStampFormat,
-                numberOfBackups,
-                maxAgeInDays)
-        {
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
         public BackupSettings(
             PathAndSpecialFolder directory,
             string extension,
@@ -83,21 +49,50 @@
         /// </summary>
         public int MaxAgeInDays { get; }
 
-        public static BackupSettings DefaultFor(DirectoryInfo directory)
+        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
+        public static BackupSettings Create(DirectoryInfo directory)
         {
-            return new BackupSettings(directory, DefaultExtension, null, 1, int.MaxValue);
+            return new BackupSettings(PathAndSpecialFolder.Create(directory), DefaultExtension, null, 1, int.MaxValue);
         }
 
-        public static void ValidateTimestampFormat(string value)
+        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
+        public static BackupSettings Create(DirectoryInfo directory, int numberOfBackups)
         {
-            if (!string.IsNullOrEmpty(value))
+            return new BackupSettings(PathAndSpecialFolder.Create(directory), DefaultExtension, DefaultTimeStampFormat, numberOfBackups, int.MaxValue);
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
+        public static BackupSettings Create(DirectoryInfo directory, int numberOfBackups, int maxAgeInDays)
+        {
+            return new BackupSettings(PathAndSpecialFolder.Create(directory), DefaultExtension, DefaultTimeStampFormat, numberOfBackups, maxAgeInDays);
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
+        public static BackupSettings Create(DirectoryInfo directory, string extension, string timeStampFormat, int numberOfBackups, int maxAgeInDays)
+        {
+            return new BackupSettings(PathAndSpecialFolder.Create(directory), extension, timeStampFormat, numberOfBackups, maxAgeInDays);
+        }
+
+        public static void ValidateTimestampFormat(string format)
+        {
+            if (!string.IsNullOrEmpty(format))
             {
-                var time = new DateTime(2015, 06, 14, 11, 54, 25);
-                var s = time.ToString(value, CultureInfo.InvariantCulture);
-                var roundtrip = DateTime.ParseExact(s, value, CultureInfo.InvariantCulture);
-                if (time != roundtrip)
+                try
                 {
-                    throw new ArgumentException($"The format: {value} is not valid as it cannot be roundtripped");
+                    var time = new DateTime(2015, 06, 14, 11, 54, 25);
+                    var text = time.ToString(format, CultureInfo.InvariantCulture);
+                    var roundtrip = DateTime.ParseExact(text, format, CultureInfo.InvariantCulture);
+                    text = time.ToString(format, CultureInfo.InvariantCulture);
+                    var roundtrip2 = DateTime.ParseExact(text, format, CultureInfo.InvariantCulture);
+                    if (roundtrip != roundtrip2)
+                    {
+                        throw new ArgumentException($"The format: {format} is not valid as it cannot be roundtripped");
+                    }
+                }
+                catch (Exception e)
+                {
+                    var message = $"The timestamp format {format} is not valid.";
+                    throw new ArgumentException(message, e);
                 }
             }
         }

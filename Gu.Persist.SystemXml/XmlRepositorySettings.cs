@@ -63,7 +63,7 @@ namespace Gu.Persist.SystemXml
         /// </summary>
         public static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new XmlRepositorySettings(directory, true, true, false, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new XmlRepositorySettings(directory, true, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -104,6 +104,7 @@ namespace Gu.Persist.SystemXml
                             .GetField($"<{propertyName}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance) ??
                         typeof(FileSettings)
                             .GetField($"<{propertyName}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+            Ensure.NotNull(field, nameof(field));
             field.SetValue(this, value);
         }
     }

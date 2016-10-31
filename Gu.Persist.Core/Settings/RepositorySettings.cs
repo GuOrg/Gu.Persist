@@ -12,7 +12,7 @@
         /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
         /// </summary>
         public RepositorySettings(DirectoryInfo directory)
-            : this(directory, BackupSettings.DefaultFor(directory))
+            : this(directory, BackupSettings.Create(directory))
         {
         }
 

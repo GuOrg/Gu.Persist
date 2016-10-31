@@ -12,7 +12,7 @@
                 false,
                 false,
                 true,
-                BackupSettings.DefaultFor(this.Directory));
+                BackupSettings.Create(this.Directory));
             return
                 new JsonRepository(settings);
         }

@@ -48,7 +48,7 @@ namespace Gu.Persist.RuntimeXml
         /// </summary>
         public static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new XmlRepositorySettings(directory, true, true, false, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new XmlRepositorySettings(directory, true, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
     }
 }

@@ -82,7 +82,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// </summary>
         [JsonConstructor]
         public JsonRepositorySettings(
-            PathAndSpecialFolder directoryPath,
+            PathAndSpecialFolder directory,
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
             bool isCaching,
@@ -91,7 +91,7 @@ namespace Gu.Persist.NewtonsoftJson
             string extension = ".cfg",
             string tempExtension = ".tmp")
             : base(
-                directoryPath,
+                directory,
                 isTrackingDirty,
                 isCaching,
                 saveNullDeletesFile,
@@ -121,7 +121,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// </summary>
         public static JsonRepositorySettings DefaultFor(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
         {
-            return new JsonRepositorySettings(PathAndSpecialFolder.Create(directory), jsonSettings, true, true, false, BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new JsonRepositorySettings(PathAndSpecialFolder.Create(directory), jsonSettings, true, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
 
         /// <summary>

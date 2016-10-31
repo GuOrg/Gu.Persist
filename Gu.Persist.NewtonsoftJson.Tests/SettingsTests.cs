@@ -2,6 +2,9 @@
 {
     using System.IO;
     using Core;
+
+    using Newtonsoft.Json;
+
     using NUnit.Framework;
 
     public class SettingsTests
@@ -23,16 +26,55 @@
         public void RoundtripJsonRepositorySettings()
         {
             var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(backupDir);
+            var backupSettings = BackupSettings.Create(backupDir, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new JsonRepositorySettings(
                 this.directory,
                 JsonRepositorySettings.CreateDefaultJsonSettings(),
-                true,
-                true,
+                false,
+                false,
                 false,
                 backupSettings,
-                ".abc",
-                ".cde");
+                ".cde",
+                ".fgh");
+            var json = JsonConvert.SerializeObject(settings);
+            var roundtripped = JsonConvert.DeserializeObject<JsonRepositorySettings>(json);
+            Assert.IsTrue(JsonEqualsComparer<JsonRepositorySettings>.Default.Equals(settings, roundtripped));
+        }
+
+        [Test]
+        public void RoundtripBackupSettings()
+        {
+            var backupDir = this.directory.CreateSubdirectory("Backup");
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var json = JsonConvert.SerializeObject(backupSettings);
+            var roundtripped = JsonConvert.DeserializeObject<BackupSettings>(json);
+            Assert.IsTrue(JsonEqualsComparer<BackupSettings>.Default.Equals(backupSettings, roundtripped));
+        }
+
+        [Test]
+        public void RoundtripBackupSettingsWithNullTimestampFormat()
+        {
+            var backupDir = this.directory.CreateSubdirectory("Backup");
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", null, 2, 3);
+            var json = JsonConvert.SerializeObject(backupSettings);
+            var roundtripped = JsonConvert.DeserializeObject<BackupSettings>(json);
+            Assert.IsTrue(JsonEqualsComparer<BackupSettings>.Default.Equals(backupSettings, roundtripped));
+        }
+
+        [Test]
+        public void RoundtripJsonRepositorySettingsWithRepository()
+        {
+            var backupDir = this.directory.CreateSubdirectory("Backup");
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var settings = new JsonRepositorySettings(
+                this.directory,
+                JsonRepositorySettings.CreateDefaultJsonSettings(),
+                false,
+                false,
+                false,
+                backupSettings,
+                ".cde",
+                ".fgh");
             var repository = new JsonRepository(settings);
             repository.Save(settings);
             var roundtripped = repository.Read<JsonRepositorySettings>();
@@ -40,22 +82,42 @@
         }
 
         [Test]
-        public void RoundtripRepositorySettings()
+        public void RoundtripRepositorySettingsWithRepository()
         {
             var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(backupDir);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new RepositorySettings(
                 this.directory,
-                true,
-                true,
+                false,
+                false,
                 false,
                 backupSettings,
-                ".abc",
-                ".cde");
+                ".cde",
+                ".fgh");
             var repository = new JsonRepository(this.directory);
             repository.Save(settings);
             var roundtripped = repository.Read<RepositorySettings>();
             Assert.IsTrue(JsonEqualsComparer<RepositorySettings>.Default.Equals(settings, roundtripped));
+        }
+
+        [Test]
+        public void RoundtripBackupSettingsWithRepository()
+        {
+            var backupDir = this.directory.CreateSubdirectory("Backup");
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var settings = new JsonRepositorySettings(
+                this.directory,
+                JsonRepositorySettings.CreateDefaultJsonSettings(),
+                false,
+                false,
+                false,
+                backupSettings,
+                ".cde",
+                ".fgh");
+            var repository = new JsonRepository(settings);
+            repository.Save(backupSettings);
+            var roundtripped = repository.Read<BackupSettings>();
+            Assert.IsTrue(JsonEqualsComparer<BackupSettings>.Default.Equals(backupSettings, roundtripped));
         }
     }
 }

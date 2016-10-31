@@ -13,9 +13,9 @@
         [Test]
         public void RoundtripRepositorySettingsWithRepository()
         {
-            var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
+            var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, true, true, false, backupSettings, ".abc", ".cde");
+            var settings = new XmlRepositorySettings(directory, false, false, false, backupSettings, ".abc", ".cde");
             var repository = new XmlRepository(settings);
             repository.Save(settings);
             var roundtripped = repository.Read<XmlRepositorySettings>();
@@ -25,7 +25,7 @@
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var backupSettings = new BackupSettings(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
+            var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
             var settings = new XmlRepositorySettings(directory, true, true, false, backupSettings, ".abc", ".cde");
             var sb = new StringBuilder();

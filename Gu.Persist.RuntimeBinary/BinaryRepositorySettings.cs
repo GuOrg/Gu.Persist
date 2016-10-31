@@ -51,7 +51,7 @@
                 true,
                 true,
                 false,
-                BackupSettings.DefaultFor(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+                BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
     }
 }

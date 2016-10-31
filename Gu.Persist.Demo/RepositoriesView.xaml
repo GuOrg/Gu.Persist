@@ -5,7 +5,6 @@
              xmlns:local="clr-namespace:Gu.Persist.Demo"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              DataContext="{x:Static local:RepositoryVm.Instance}"
-             d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
     <UserControl.Resources>
@@ -17,41 +16,37 @@
         <ItemsControl Grid.Column="0" Style="{StaticResource SettingsListStyle}">
             <HeaderedContentControl Header="Directory">
                 <StackPanel>
-                    <TextBox Text="{Binding Repository.Settings.Directory.Path, Mode=OneWay}" />
-                    <TextBox Text="{Binding Repository.Settings.Directory.SpecialFolder, Mode=OneWay}" />
+                    <TextBox Text="{Binding Repository.Settings.Directory.Path, Mode=OneWay}" IsReadOnly="True"/>
+                    <TextBox Text="{Binding Repository.Settings.Directory.SpecialFolder, Mode=OneWay}" IsReadOnly="True"/>
                 </StackPanel>
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="Extension">
-                <TextBox Text="{Binding Repository.Settings.Extension, Mode=OneWay}" />
+                <TextBox Text="{Binding Repository.Settings.Extension, Mode=OneWay}" IsReadOnly="True"/>
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="TempExtension">
-                <TextBox Text="{Binding Repository.Settings.TempExtension, Mode=OneWay}" />
+                <TextBox Text="{Binding Repository.Settings.TempExtension, Mode=OneWay}" IsReadOnly="True"/>
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="Tracking">
-                <CheckBox IsChecked="{Binding Repository.Settings.IsTrackingDirty, Mode=OneWay}" />
+                <CheckBox IsChecked="{Binding Repository.Settings.IsTrackingDirty, Mode=OneWay}" IsEnabled="False"/>
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="BackupExtension">
-                <TextBox Text="{Binding Repository.Settings.BackupSettings.Extension, Mode=OneWay}" />
+                <TextBox Text="{Binding Repository.Settings.BackupSettings.Extension, Mode=OneWay}" IsReadOnly="True"/>
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="TimeStampFormat">
-                <TextBox Text="{Binding Repository.Settings.BackupSettings.TimeStampFormat, Mode=OneWay}" />
-            </HeaderedContentControl>
-
-            <HeaderedContentControl Header="CreateBackups">
-                <CheckBox IsChecked="{Binding Repository.Settings.BackupSettings.IsCreatingBackups, Mode=OneWay}" />
+                <TextBox Text="{Binding Repository.Settings.BackupSettings.TimeStampFormat, Mode=OneWay}" IsReadOnly="True"/>
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="NumberOfBackups">
-                <TextBox Text="{Binding Repository.Settings.BackupSettings.NumberOfBackups, Mode=OneWay}" />
+                <TextBox Text="{Binding Repository.Settings.BackupSettings.NumberOfBackups, Mode=OneWay}" IsReadOnly="True"/>
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="MaxAgeInDays">
-                <TextBox Text="{Binding Repository.Settings.BackupSettings.MaxAgeInDays, Mode=OneWay}" />
+                <TextBox Text="{Binding Repository.Settings.BackupSettings.MaxAgeInDays, Mode=OneWay}" IsReadOnly="True"/>
             </HeaderedContentControl>
         </ItemsControl>
     </Grid>

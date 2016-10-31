@@ -12,9 +12,8 @@
                 false,
                 false,
                 true,
-                BackupSettings.DefaultFor(this.Directory));
-            return
-                new JsonRepository(settings);
+                BackupSettings.Create(this.Directory));
+            return new JsonRepository(settings);
         }
     }
 }

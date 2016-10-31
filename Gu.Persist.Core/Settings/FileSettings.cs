@@ -3,6 +3,9 @@
     using System;
     using System.IO;
 
+    /// <summary>
+    /// Metadata for reading and saving files.
+    /// </summary>
     [Serializable]
     public class FileSettings : IFileSettings
     {
