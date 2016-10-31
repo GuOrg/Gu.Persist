@@ -33,7 +33,6 @@ namespace Gu.Persist.SystemXml
         public XmlRepositorySettings(
             DirectoryInfo directory,
             bool isTrackingDirty,
-            bool isCaching,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
@@ -41,7 +40,6 @@ namespace Gu.Persist.SystemXml
             : this(
                 PathAndSpecialFolder.Create(directory),
                 isTrackingDirty,
-                isCaching,
                 saveNullDeletesFile,
                 backupSettings,
                 extension,
@@ -55,7 +53,6 @@ namespace Gu.Persist.SystemXml
         public XmlRepositorySettings(
             PathAndSpecialFolder directory,
             bool isTrackingDirty,
-            bool isCaching,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
@@ -63,7 +60,6 @@ namespace Gu.Persist.SystemXml
             : base(
                   directory,
                   isTrackingDirty,
-                  isCaching,
                   saveNullDeletesFile,
                   backupSettings,
                   extension,
@@ -77,6 +73,7 @@ namespace Gu.Persist.SystemXml
         /// </summary>
         // ReSharper disable once UnusedMember.Local
         private XmlRepositorySettings()
+            : base()
         {
         }
 
@@ -85,17 +82,18 @@ namespace Gu.Persist.SystemXml
         /// </summary>
         public static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new XmlRepositorySettings(directory, true, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new XmlRepositorySettings(directory, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
 
         public static XmlRepositorySettings Create(RepositorySettings settings)
         {
             return new XmlRepositorySettings(
-                settings.Directory,
-                settings.IsTrackingDirty,
-                settings.IsCaching,
-                settings.SaveNullDeletesFile,
-                settings.BackupSettings);
+                       settings.Directory,
+                       settings.IsTrackingDirty,
+                       settings.SaveNullDeletesFile,
+                       settings.BackupSettings,
+                       settings.Extension,
+                       settings.TempExtension);
         }
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -110,7 +108,6 @@ namespace Gu.Persist.SystemXml
             this.SetPrivate(nameof(this.Extension), reader.ReadElementString(nameof(this.Extension)));
             this.SetPrivate(nameof(this.TempExtension), reader.ReadElementString(nameof(this.TempExtension)));
             this.SetPrivate(nameof(this.IsTrackingDirty), reader.ReadElementBool(nameof(this.IsTrackingDirty)));
-            this.SetPrivate(nameof(this.IsCaching), reader.ReadElementBool(nameof(this.IsCaching)));
             this.SetPrivate(nameof(this.SaveNullDeletesFile), reader.ReadElementBool(nameof(this.SaveNullDeletesFile)));
             this.SetPrivate(nameof(this.BackupSettings), reader.ReadElementBackupSettings(nameof(this.BackupSettings)));
             reader.ReadEndElement();
@@ -122,7 +119,6 @@ namespace Gu.Persist.SystemXml
             writer.WriteElementString(nameof(this.Extension), this.Extension);
             writer.WriteElementString(nameof(this.TempExtension), this.TempExtension);
             writer.WriteElementString(nameof(this.IsTrackingDirty), this.IsTrackingDirty);
-            writer.WriteElementString(nameof(this.IsCaching), this.IsCaching);
             writer.WriteElementString(nameof(this.SaveNullDeletesFile), this.SaveNullDeletesFile);
             if (this.BackupSettings != null)
             {

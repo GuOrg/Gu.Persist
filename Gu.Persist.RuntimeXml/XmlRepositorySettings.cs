@@ -29,7 +29,6 @@ namespace Gu.Persist.RuntimeXml
         public XmlRepositorySettings(
             DirectoryInfo directory,
             bool isTrackingDirty,
-            bool isCaching,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
@@ -37,7 +36,6 @@ namespace Gu.Persist.RuntimeXml
             : this(
                 PathAndSpecialFolder.Create(directory),
                 isTrackingDirty,
-                isCaching,
                 saveNullDeletesFile,
                 backupSettings,
                 extension,
@@ -51,7 +49,6 @@ namespace Gu.Persist.RuntimeXml
         public XmlRepositorySettings(
             PathAndSpecialFolder directory,
             bool isTrackingDirty,
-            bool isCaching,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
@@ -59,7 +56,6 @@ namespace Gu.Persist.RuntimeXml
             : base(
                   directory,
                   isTrackingDirty,
-                  isCaching,
                   saveNullDeletesFile,
                   backupSettings,
                   extension,
@@ -72,9 +68,10 @@ namespace Gu.Persist.RuntimeXml
             return new XmlRepositorySettings(
                 settings.Directory,
                 settings.IsTrackingDirty,
-                settings.IsCaching,
                 settings.SaveNullDeletesFile,
-                settings.BackupSettings);
+                settings.BackupSettings,
+                settings.Extension,
+                settings.TempExtension);
         }
 
         /// <summary>
@@ -82,7 +79,7 @@ namespace Gu.Persist.RuntimeXml
         /// </summary>
         public static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new XmlRepositorySettings(directory, true, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new XmlRepositorySettings(directory, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
     }
 }

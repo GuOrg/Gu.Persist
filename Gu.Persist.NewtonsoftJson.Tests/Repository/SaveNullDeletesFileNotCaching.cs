@@ -10,7 +10,6 @@
                 this.Directory,
                 JsonRepositorySettings.CreateDefaultJsonSettings(),
                 false,
-                false,
                 true,
                 BackupSettings.Create(this.Directory));
             return

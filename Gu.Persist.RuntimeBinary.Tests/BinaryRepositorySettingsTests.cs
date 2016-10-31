@@ -13,7 +13,7 @@
         {
             var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new BinaryRepositorySettings(directory, false, false, false, backupSettings, ".abc", ".cde");
+            var settings = new BinaryRepositorySettings(directory, false, false, backupSettings, ".abc", ".cde");
             var repository = new BinaryRepository(settings);
             repository.Save(settings);
             var roundtripped = repository.Read<BinaryRepositorySettings>();
@@ -25,7 +25,7 @@
         {
             var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new BinaryRepositorySettings(directory, true, true, false, backupSettings, ".abc", ".cde");
+            var settings = new BinaryRepositorySettings(directory, true, false, backupSettings, ".abc", ".cde");
             var serializer = new BinaryFormatter();
             using (Stream stream = PooledMemoryStream.Borrow())
             {
@@ -40,7 +40,7 @@
         public void RoundtripRepositorySettingsWithNullBackupSettings()
         {
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new BinaryRepositorySettings(directory, true, true, true, null, ".abc", ".def");
+            var settings = new BinaryRepositorySettings(directory, true, true, null, ".abc", ".def");
             var serializer = new BinaryFormatter();
             using (Stream stream = PooledMemoryStream.Borrow())
             {
@@ -49,6 +49,16 @@
                 var roundtripped = (BinaryRepositorySettings)serializer.Deserialize(stream);
                 AssertProperties(settings, roundtripped);
             }
+        }
+
+        [Test]
+        public void CreateFromSelf()
+        {
+            var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
+            var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
+            var settings = new BinaryRepositorySettings(directory, true, false, backupSettings, ".abc", ".cde");
+            var created = BinaryRepositorySettings.Create(settings);
+            AssertProperties(settings, created);
         }
 
         private static void AssertProperties(object expected, object actual)

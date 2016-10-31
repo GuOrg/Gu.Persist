@@ -28,7 +28,7 @@
                 return false;
             }
 
-            if (x.FullName == y.FullName)
+            if (OrdinalIgnoreCaseComparer.Equals(x.FullName, y.FullName))
             {
                 return true;
             }

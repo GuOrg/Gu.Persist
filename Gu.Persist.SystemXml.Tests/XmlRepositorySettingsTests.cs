@@ -15,7 +15,7 @@
         {
             var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, false, false, false, backupSettings, ".abc", ".cde");
+            var settings = new XmlRepositorySettings(directory, false, false, backupSettings, ".abc", ".cde");
             var repository = new XmlRepository(settings);
             repository.Save(settings);
             var roundtripped = repository.Read<XmlRepositorySettings>();
@@ -27,7 +27,7 @@
         {
             var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, true, true, false, backupSettings, ".abc", ".cde");
+            var settings = new XmlRepositorySettings(directory, true, false, backupSettings, ".abc", ".cde");
             var sb = new StringBuilder();
             var serializer = new XmlSerializer(settings.GetType());
             using (var writer = new StringWriter(sb))
@@ -52,7 +52,7 @@
         public void RoundtripRepositorySettingsWithNullBackupSettings()
         {
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, true, true, true, null, ".abc", ".def");
+            var settings = new XmlRepositorySettings(directory, true, true, null, ".abc", ".def");
             var sb = new StringBuilder();
             var serializer = new XmlSerializer(settings.GetType());
             using (var writer = new StringWriter(sb))
@@ -71,6 +71,16 @@
             }
 
             AssertProperties(settings, roundtripped);
+        }
+
+        [Test]
+        public void CreateFromSelf()
+        {
+            var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
+            var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
+            var settings = new XmlRepositorySettings(directory, true, false, backupSettings, ".abc", ".cde");
+            var created = XmlRepositorySettings.Create(settings);
+            AssertProperties(settings, created);
         }
 
         private static void AssertProperties(object expected, object actual)

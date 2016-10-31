@@ -27,24 +27,24 @@
 
         public void Commit<TSetting>(Serialize<TSetting> serialize, TSetting setting)
         {
-            if (!this.BeforeCopy())
+            this.BeforeCopy();
+            if (this.contents != null)
             {
-                return;
+                serialize.ToStream(this.contents, this.lockedTempFile.Stream, setting);
             }
 
-            serialize.ToStream(this.contents, this.lockedTempFile.Stream, setting);
             this.AfterCopy();
         }
 
         public async Task CommitAsync()
         {
-            if (!this.BeforeCopy())
+            this.BeforeCopy();
+            if (this.contents != null)
             {
-                return;
+                await ((Stream)this.contents).CopyToAsync(this.lockedTempFile.Stream)
+                                             .ConfigureAwait(false);
             }
 
-            await ((Stream)this.contents).CopyToAsync(this.lockedTempFile.Stream)
-                      .ConfigureAwait(false);
             this.AfterCopy();
         }
 
@@ -55,22 +55,20 @@
             this.lockedTempFile?.DisposeAndDeleteFile();
         }
 
-        private bool BeforeCopy()
+        private void BeforeCopy()
         {
             this.file.Refresh();
             this.fileExistedBefore = this.file.Exists;
             this.file.Directory.CreateIfNotExists();
             this.lockedFile = LockedFile.Create(this.file, x => x.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Delete));
             this.lockedSoftDelete = LockedFile.Create(this.file.GetSoftDeleteFileFor(), x => x.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Delete));
+            this.backuper.BeforeSave(this.file);
             if (this.contents == null)
             {
-                FileHelper.HardDelete(this.file);
-                return false;
+                return;
             }
 
             this.lockedTempFile = LockedFile.Create(this.tempFile, x => x.Open(FileMode.Create, FileAccess.Write, FileShare.Write | FileShare.Delete));
-            this.backuper.BeforeSave(this.file);
-            return true;
         }
 
         private void AfterCopy()
@@ -83,8 +81,12 @@
             try
             {
                 this.lockedFile.DisposeAndDeleteFile();
-                this.tempFile.MoveTo(this.file);
-                this.lockedTempFile.DisposeAndDeleteFile();
+                if (this.contents != null)
+                {
+                    this.tempFile.MoveTo(this.file);
+                    this.lockedTempFile.DisposeAndDeleteFile();
+                }
+
                 this.lockedSoftDelete.DisposeAndDeleteFile();
             }
             catch (Exception exception)
@@ -93,7 +95,7 @@
                 {
                     if (!this.fileExistedBefore)
                     {
-                        this.lockedFile.DisposeAndDeleteFile();
+                        this.lockedFile?.DisposeAndDeleteFile();
                     }
 
                     this.backuper.TryRestore(this.file);

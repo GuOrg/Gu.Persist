@@ -20,29 +20,7 @@
         /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
         /// </summary>
         public RepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
-            : this(directory, true, true, true, backupSettings)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
-        /// </summary>
-        public RepositorySettings(
-            DirectoryInfo directory,
-            bool isTrackingDirty,
-            bool isCaching,
-            bool saveNullDeletesFile,
-            BackupSettings backupSettings,
-            string extension = ".cfg",
-            string tempExtension = ".tmp")
-            : this(
-                PathAndSpecialFolder.Create(directory),
-                isTrackingDirty,
-                isCaching,
-                saveNullDeletesFile,
-                backupSettings,
-                extension,
-                tempExtension)
+            : this(PathAndSpecialFolder.Create(directory), true, false, backupSettings)
         {
         }
 
@@ -52,7 +30,6 @@
         public RepositorySettings(
             PathAndSpecialFolder directory,
             bool isTrackingDirty,
-            bool isCaching,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
@@ -64,7 +41,6 @@
             Ensure.NotNull(directory, nameof(directory));
 
             this.IsTrackingDirty = isTrackingDirty;
-            this.IsCaching = isCaching;
             this.SaveNullDeletesFile = saveNullDeletesFile;
             this.BackupSettings = backupSettings;
             this.TempExtension = FileHelper.PrependDotIfMissing(tempExtension);
@@ -86,11 +62,6 @@
         /// Gets or sets if the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes
         /// </summary>
         public bool IsTrackingDirty { get; }
-
-        /// <summary>
-        /// Gets or sets if the repository keeps a cache of instances saved/read. Default is true, setting to false gives new instance for each read.
-        /// </summary>
-        public bool IsCaching { get; }
 
         /// <summary>
         /// If true calling save with null deletes the file.

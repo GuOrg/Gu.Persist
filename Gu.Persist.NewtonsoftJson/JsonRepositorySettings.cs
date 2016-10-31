@@ -37,7 +37,6 @@ namespace Gu.Persist.NewtonsoftJson
             DirectoryInfo directory,
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
-            bool isCaching,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
@@ -46,7 +45,6 @@ namespace Gu.Persist.NewtonsoftJson
                 PathAndSpecialFolder.Create(directory),
                 jsonSerializerSettings,
                 isTrackingDirty,
-                isCaching,
                 saveNullDeletesFile,
                 backupSettings,
                 extension,
@@ -60,7 +58,6 @@ namespace Gu.Persist.NewtonsoftJson
         public JsonRepositorySettings(
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
-            bool isCaching,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
@@ -69,7 +66,6 @@ namespace Gu.Persist.NewtonsoftJson
                 PathAndSpecialFolder.Default,
                 jsonSerializerSettings,
                 isTrackingDirty,
-                isCaching,
                 saveNullDeletesFile,
                 backupSettings,
                 extension,
@@ -85,7 +81,6 @@ namespace Gu.Persist.NewtonsoftJson
             PathAndSpecialFolder directory,
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
-            bool isCaching,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
@@ -93,7 +88,6 @@ namespace Gu.Persist.NewtonsoftJson
             : base(
                 directory,
                 isTrackingDirty,
-                isCaching,
                 saveNullDeletesFile,
                 backupSettings,
                 extension,
@@ -121,7 +115,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// </summary>
         public static JsonRepositorySettings DefaultFor(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
         {
-            return new JsonRepositorySettings(PathAndSpecialFolder.Create(directory), jsonSettings, true, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new JsonRepositorySettings(PathAndSpecialFolder.Create(directory), jsonSettings, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
 
         /// <summary>
@@ -147,12 +141,13 @@ namespace Gu.Persist.NewtonsoftJson
         public static JsonRepositorySettings Create(RepositorySettings settings, JsonSerializerSettings jsonSettings)
         {
             return new JsonRepositorySettings(
-                settings.Directory,
-                jsonSettings,
-                settings.IsTrackingDirty,
-                settings.IsCaching,
-                settings.SaveNullDeletesFile,
-                settings.BackupSettings);
+                       settings.Directory,
+                       jsonSettings,
+                       settings.IsTrackingDirty,
+                       settings.SaveNullDeletesFile,
+                       settings.BackupSettings,
+                       settings.Extension,
+                       settings.TempExtension);
         }
     }
 }

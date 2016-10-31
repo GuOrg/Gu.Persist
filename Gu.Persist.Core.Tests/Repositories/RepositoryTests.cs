@@ -224,7 +224,14 @@ namespace Gu.Persist.Core.Tests.Repositories
             this.Save(this.file, this.dummy);
             var read1 = this.Repository.Read<DummySerializable>(this.file);
             var read2 = this.Repository.Read<DummySerializable>(this.file);
-            Assert.AreSame(read1, read2);
+            if (this.Repository is ISingletonRepository)
+            {
+                Assert.AreSame(read1, read2);
+            }
+            else
+            {
+                Assert.AreNotSame(read1, read2);
+            }
         }
 
         [Test]
@@ -233,7 +240,14 @@ namespace Gu.Persist.Core.Tests.Repositories
             this.Save(this.file, this.dummy);
             var read1 = await this.Repository.ReadAsync<DummySerializable>(this.file).ConfigureAwait(false);
             var read2 = await this.Repository.ReadAsync<DummySerializable>(this.file).ConfigureAwait(false);
-            Assert.AreSame(read1, read2);
+            if (this.Repository is ISingletonRepository)
+            {
+                Assert.AreSame(read1, read2);
+            }
+            else
+            {
+                Assert.AreNotSame(read1, read2);
+            }
         }
 
         [Test]
@@ -388,7 +402,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(true, fileInfo);
             if (this.IsBackingUp)
             {
-                AssertFile.Exists(false, this.backup);
+                AssertFile.Exists(false, this.dummyBackup);
             }
 
             if (this.Settings.SaveNullDeletesFile)
@@ -397,7 +411,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                 AssertFile.Exists(false, fileInfo);
                 if (this.IsBackingUp)
                 {
-                    AssertFile.Exists(true, this.backup);
+                    AssertFile.Exists(true, this.dummyBackup);
                 }
             }
             else
@@ -489,7 +503,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                 AssertFile.Exists(false, this.file);
                 if (this.IsBackingUp)
                 {
-                    AssertFile.Exists(true, this.backup);
+                    AssertFile.Exists(true, this.dummyBackup);
                 }
             }
             else
@@ -541,7 +555,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                 AssertFile.Exists(false, this.file);
                 if (this.IsBackingUp)
                 {
-                    AssertFile.Exists(true, this.backup);
+                    AssertFile.Exists(true, this.dummyBackup);
                 }
             }
             else
@@ -603,7 +617,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             this.Repository.Save(this.file, this.dummy);
             var read = this.Repository.Read<DummySerializable>(this.file);
-            if (this.Settings.IsCaching)
+            if (this.Repository is ISingletonRepository)
             {
                 Assert.AreSame(this.dummy, read);
             }
@@ -619,7 +633,15 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             await this.Repository.SaveAsync(this.file, this.dummy).ConfigureAwait(false);
             var read = await this.Repository.ReadAsync<DummySerializable>(this.file).ConfigureAwait(false);
-            Assert.AreSame(this.dummy, read);
+            if (this.Repository is ISingletonRepository)
+            {
+                Assert.AreSame(this.dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(this.dummy, read);
+                Assert.AreNotSame(this.dummy, read);
+            }
         }
 
         [Test]
@@ -627,7 +649,16 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             this.Repository.Save(this.file, this.dummy);
             var read = this.Repository.Read<DummySerializable>(this.file);
-            Assert.AreSame(this.dummy, read);
+            if (this.Repository is ISingletonRepository)
+            {
+                Assert.AreSame(this.dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(this.dummy, read);
+                Assert.AreNotSame(this.dummy, read);
+            }
+
             read = this.Read<DummySerializable>(this.file);
             Assert.AreEqual(this.dummy, read);
             for (var i = 2; i < 3; i++)
@@ -635,7 +666,16 @@ namespace Gu.Persist.Core.Tests.Repositories
                 this.dummy.Value++;
                 this.Repository.Save(this.file, this.dummy);
                 read = this.Repository.Read<DummySerializable>(this.file);
-                Assert.AreSame(this.dummy, read);
+                if (this.Repository is ISingletonRepository)
+                {
+                    Assert.AreSame(this.dummy, read);
+                }
+                else
+                {
+                    Assert.AreEqual(this.dummy, read);
+                    Assert.AreNotSame(this.dummy, read);
+                }
+
                 read = this.Read<DummySerializable>(this.file);
                 Assert.AreEqual(this.dummy, read);
                 if (this.IsBackingUp)

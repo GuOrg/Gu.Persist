@@ -10,12 +10,10 @@ namespace Gu.Persist.Core
     /// Base class for a repository
     /// </summary>
     public abstract class Repository<TSetting>
-        : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings
-        where TSetting : IRepositorySettings
+    : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings
+    where TSetting : IRepositorySettings
     {
         private readonly Serialize<TSetting> serialize;
-        private readonly object gate = new object();
-        private readonly FileCache fileCache = new FileCache();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
@@ -236,35 +234,7 @@ namespace Gu.Persist.Core
         public virtual async Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
-            T value;
-            if (this.Settings.IsCaching)
-            {
-                T cached;
-                if (this.fileCache.TryGetValue(file.FullName, out cached))
-                {
-                    return cached;
-                }
-
-                // can't await  inside the lock.
-                // If there are many threads reading the same only the first is used
-                // the other reads are wasted, can't think of anything better than this.
-                value = await FileHelper.ReadAsync(file, this.serialize.FromStream<T>).ConfigureAwait(false);
-
-                lock (this.gate)
-                {
-                    if (this.fileCache.TryGetValue(file.FullName, out cached))
-                    {
-                        return cached;
-                    }
-
-                    this.fileCache.Add(file.FullName, value);
-                }
-            }
-            else
-            {
-                value = await FileHelper.ReadAsync(file, this.serialize.FromStream<T>).ConfigureAwait(false);
-            }
-
+            var value = await FileHelper.ReadAsync(file, this.serialize.FromStream<T>).ConfigureAwait(false);
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker.Track(file.FullName, value);
@@ -359,20 +329,6 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual void SaveAndClose<T>(T item)
-        {
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
-            var file = this.GetFileInfoCore<T>();
-            this.Save(file, item);
-            this.RemoveFromCache(item);
-            this.RemoveFromDirtyTracker(item);
-        }
-
-        /// <inheritdoc/>
         public virtual void Save<T>(string fileName, T item)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
@@ -382,21 +338,7 @@ namespace Gu.Persist.Core
             }
 
             var file = this.GetFileInfoCore(fileName);
-            this.Save(file, item);
-        }
-
-        /// <inheritdoc/>
-        public virtual void SaveAndClose<T>(string fileName, T item)
-        {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
-            this.Save(fileName, item);
-            this.RemoveFromCache(item);
-            this.RemoveFromDirtyTracker(item);
+            this.SaveCore(file, item);
         }
 
         /// <inheritdoc/>
@@ -409,20 +351,6 @@ namespace Gu.Persist.Core
             }
 
             this.SaveCore(file, item);
-        }
-
-        /// <inheritdoc/>
-        public virtual void SaveAndClose<T>(FileInfo file, T item)
-        {
-            Ensure.NotNull(file, nameof(file));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
-            this.SaveCore(file, item);
-            this.RemoveFromCache(item);
-            this.RemoveFromDirtyTracker(item);
         }
 
         /// <inheritdoc/>
@@ -697,13 +625,13 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public void Rename(string oldName, string newName, bool owerWrite)
+        public void Rename(string oldName, string newName, bool overWrite)
         {
             Ensure.IsValidFileName(oldName, nameof(oldName));
             Ensure.IsValidFileName(newName, nameof(newName));
             var oldFile = this.GetFileInfoCore(oldName);
             var newFile = this.GetFileInfoCore(newName);
-            this.Rename(oldFile, newFile, owerWrite);
+            this.Rename(oldFile, newFile, overWrite);
         }
 
         /// <inheritdoc/>
@@ -716,12 +644,12 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public void Rename(FileInfo oldName, string newName, bool owerWrite)
+        public void Rename(FileInfo oldName, string newName, bool overWrite)
         {
             Ensure.Exists(oldName, nameof(oldName));
             Ensure.IsValidFileName(newName, nameof(newName));
             var newFile = this.GetFileInfoCore(newName);
-            this.Rename(oldName, newFile, owerWrite);
+            this.Rename(oldName, newFile, overWrite);
         }
 
         /// <inheritdoc/>
@@ -741,11 +669,6 @@ namespace Gu.Persist.Core
                 return false;
             }
 
-            if (this.fileCache.ContainsKey(newName.FullName))
-            {
-                return false;
-            }
-
             if (this.Backuper != null)
             {
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(newName.FullName);
@@ -756,21 +679,15 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public void Rename(FileInfo oldName, FileInfo newName, bool owerWrite)
+        public virtual void Rename(FileInfo oldName, FileInfo newName, bool overWrite)
         {
             Ensure.NotNull(oldName, nameof(oldName));
             Ensure.NotNull(newName, nameof(newName));
-            oldName.Rename(newName, owerWrite);
+            oldName.Rename(newName, overWrite);
             if (this.Backuper != null)
             {
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(newName.Name);
-                this.Backuper.Rename(oldName, fileNameWithoutExtension, owerWrite);
-            }
-
-            this.fileCache.ChangeKey(oldName.FullName, newName.FullName, owerWrite);
-            if (this.Settings.IsTrackingDirty)
-            {
-                this.Tracker?.Rename(oldName.FullName, newName.FullName, owerWrite);
+                this.Backuper.Rename(oldName, fileNameWithoutExtension, overWrite);
             }
         }
 
@@ -782,19 +699,7 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(item));
             }
 
-            return this.CloneCore(item);
-        }
-
-        /// <inheritdoc/>
-        public void ClearCache()
-        {
-            this.fileCache.Clear();
-        }
-
-        /// <inheritdoc/>
-        public void RemoveFromCache<T>(T item)
-        {
-            this.fileCache.TryRemove(item);
+            return this.serialize.Clone(item);
         }
 
         /// <inheritdoc/>
@@ -851,34 +756,10 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/>
         /// </summary>
-        protected T ReadCore<T>(FileInfo file)
+        protected virtual T ReadCore<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            T value;
-            if (this.Settings.IsCaching)
-            {
-                T cached;
-                if (this.fileCache.TryGetValue(file.FullName, out cached))
-                {
-                    return cached;
-                }
-
-                lock (this.gate)
-                {
-                    if (this.fileCache.TryGetValue(file.FullName, out cached))
-                    {
-                        return cached;
-                    }
-
-                    value = FileHelper.Read(file, this.serialize.FromStream<T>);
-                    this.fileCache.Add(file.FullName, value);
-                }
-            }
-            else
-            {
-                value = FileHelper.Read(file, this.serialize.FromStream<T>);
-            }
-
+            var value = FileHelper.Read(file, this.serialize.FromStream<T>);
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker.Track(file.FullName, value);
@@ -974,19 +855,6 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Clone <paramref name="item"/> by serializing then deserializing
-        /// </summary>
-        protected virtual T CloneCore<T>(T item)
-        {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
-
-            return this.serialize.Clone(item);
-        }
-
-        /// <summary>
         /// Check if the file corresponding to <typeparamref name="T"/> exists
         /// </summary>
         protected bool ExistsCore<T>()
@@ -1004,46 +872,8 @@ namespace Gu.Persist.Core
             return file.Exists;
         }
 
-        /// <summary>
-        /// Adds <paramref name="item"/> to the cache.
-        /// </summary>
-        /// <remarks>
-        /// Calls <see cref="CacheCore{T}(FileInfo,T)"/>
-        /// </remarks>
-        protected virtual void Cache<T>(FileInfo file, T item)
+        protected virtual void CacheAndTrackCore<T>(FileInfo file, T item)
         {
-            this.CacheCore(file, item);
-        }
-
-        /// <summary>
-        /// Adds <paramref name="item"/> to the cache.
-        /// </summary>
-        /// <remarks>
-        /// Calls <see cref="CacheCore{T}(FileInfo,T)"/>
-        /// </remarks>
-        protected void CacheCore<T>(FileInfo file, T item)
-        {
-            T cached;
-            if (this.fileCache.TryGetValue(file.FullName, out cached))
-            {
-                if (!ReferenceEquals(item, cached))
-                {
-                    throw new InvalidOperationException("Trying to save a different instance than the cached");
-                }
-            }
-            else
-            {
-                this.fileCache.Add(file.FullName, item);
-            }
-        }
-
-        private void CacheAndTrackCore<T>(FileInfo file, T item)
-        {
-            if (this.Settings.IsCaching)
-            {
-                this.Cache(file, item);
-            }
-
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker.Track(file.FullName, item);

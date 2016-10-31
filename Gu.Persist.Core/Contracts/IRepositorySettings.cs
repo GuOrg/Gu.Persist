@@ -20,11 +20,8 @@ namespace Gu.Persist.Core
         bool IsTrackingDirty { get; }
 
         /// <summary>
-        /// Gets if the repository keeps a cache of instances saved/read.
-        /// Default is true which means that , setting to false gives new instance for each read.
+        /// When true saving null deletes the file. When false an exception is thrown.
         /// </summary>
-        bool IsCaching { get; }
-
         bool SaveNullDeletesFile { get; }
     }
 }

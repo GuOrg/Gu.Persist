@@ -44,6 +44,7 @@
     <Compile Include="Contracts\IDirty.cs" />
     <Compile Include="Contracts\IFileNameRepository.cs" />
     <Compile Include="Contracts\IRepositoryWithSettings.cs" />
+    <Compile Include="Contracts\ISingletonRepository.cs" />
     <Compile Include="Internals\DictionaryExt.cs" />
     <Compile Include="Internals\EnumerableEx.cs" />
     <Compile Include="Internals\IPooledStream.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Repository\RestoreException.cs" />
     <Compile Include="Repository\SaveTransaction.cs" />
     <Compile Include="Repository\Serialize.cs" />
+    <Compile Include="Repository\SingletonRepository.cs" />
     <Compile Include="Settings\BackupSettings.cs" />
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="IO\Directories.cs" />

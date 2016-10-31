@@ -27,7 +27,6 @@
         public BinaryRepositorySettings(
             DirectoryInfo directory,
             bool isTrackingDirty,
-            bool isCaching,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
@@ -35,7 +34,6 @@
             : this(
                PathAndSpecialFolder.Create(directory),
                 isTrackingDirty,
-                isCaching,
                 saveNullDeletesFile,
                 backupSettings,
                 extension,
@@ -47,7 +45,6 @@
         public BinaryRepositorySettings(
             PathAndSpecialFolder directory,
             bool isTrackingDirty,
-            bool isCaching,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
@@ -55,7 +52,6 @@
             : base(
                 directory,
                 isTrackingDirty,
-                isCaching,
                 saveNullDeletesFile,
                 backupSettings,
                 extension,
@@ -69,7 +65,6 @@
             return new BinaryRepositorySettings(
                 directory,
                 true,
-                true,
                 false,
                 BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
@@ -77,11 +72,12 @@
         public static BinaryRepositorySettings Create(RepositorySettings settings)
         {
             return new BinaryRepositorySettings(
-                settings.Directory,
-                settings.IsTrackingDirty,
-                settings.IsCaching,
-                settings.SaveNullDeletesFile,
-                settings.BackupSettings);
+                       settings.Directory,
+                       settings.IsTrackingDirty,
+                       settings.SaveNullDeletesFile,
+                       settings.BackupSettings,
+                       settings.Extension,
+                       settings.TempExtension);
         }
     }
 }

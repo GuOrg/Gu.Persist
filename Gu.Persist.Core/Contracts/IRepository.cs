@@ -326,33 +326,6 @@ namespace Gu.Persist.Core
         Task SaveStreamAsync(FileInfo file, FileInfo tempFile, Stream stream);
 
         /// <summary>
-        /// Saves <paramref name="item"/> the file specified by <typeparamref name="T"/>. Then removes it from cache.
-        /// <seealso cref="IRepository.Save{T}(T)"/>
-        /// <seealso cref="IRepository.RemoveFromCache{T}(T)"/>
-        /// </summary>
-        void SaveAndClose<T>(T item);
-
-        /// <summary>
-        /// Saves <paramref name="item"/> the file specified by <paramref name="fileName"/>. Then removes it from cache.
-        /// <seealso cref="IRepository.Save{T}(string,T)"/>
-        /// <seealso cref="IRepository.RemoveFromCache{T}(T)"/>
-        /// </summary>
-        /// <param name="fileName">
-        /// Filename can be either of:
-        /// C:\Temp\FileName.cfg
-        /// FileName.cfg
-        /// FileName
-        /// </param>
-        void SaveAndClose<T>(string fileName, T item);
-
-        /// <summary>
-        /// Saves the file. Then removes it from cache.
-        /// <seealso cref="IRepository.Save{T}(FileInfo, T)"/>
-        /// <seealso cref="IRepository.RemoveFromCache{T}(T)"/>
-        /// </summary>
-        void SaveAndClose<T>(FileInfo file, T item);
-
-        /// <summary>
         /// Checks if the file for <typeparamref name="T"/> can be renamed to <paramref name="newName"/>
         /// </summary>
         bool CanRename<T>(string newName);
@@ -360,8 +333,8 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Renames the file for <typeparamref name="T"/> to <paramref name="newName"/>
         /// </summary>
-        /// <param name="owerWrite">If true the destination file is overwritten if it exists.</param>
-        void Rename<T>(string newName, bool owerWrite);
+        /// <param name="overWrite">If true the destination file is overwritten if it exists.</param>
+        void Rename<T>(string newName, bool overWrite);
 
         /// <summary>
         /// Checks if <paramref name="oldName"/> can be renamed to <paramref name="newName"/>
@@ -371,8 +344,8 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Renames the file <paramref name="oldName"/> to <paramref name="newName"/>
         /// </summary>
-        /// <param name="owerWrite">If true the destination file is overwritten if it exists.</param>
-        void Rename(string oldName, string newName, bool owerWrite);
+        /// <param name="overWrite">If true the destination file is overwritten if it exists.</param>
+        void Rename(string oldName, string newName, bool overWrite);
 
         /// <summary>
         /// Checks if <paramref name="oldName"/> can be renamed to <paramref name="newName"/>
@@ -382,8 +355,8 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Checks if <paramref name="oldName"/> can be renamed to <paramref name="newName"/>
         /// </summary>
-        /// <param name="owerWrite">If true the destination file is overwritten if it exists.</param>
-        void Rename(FileInfo oldName, string newName, bool owerWrite);
+        /// <param name="overWrite">If true the destination file is overwritten if it exists.</param>
+        void Rename(FileInfo oldName, string newName, bool overWrite);
 
         /// <summary>
         /// Checks if <paramref name="oldName"/> can be renamed to <paramref name="newName"/>
@@ -393,27 +366,13 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Checks if <paramref name="oldName"/> can be renamed to <paramref name="newName"/>
         /// </summary>
-        /// <param name="owerWrite">If true the destination file is overwritten if it exists.</param>
-        void Rename(FileInfo oldName, FileInfo newName, bool owerWrite);
-
-        /// <summary>
-        /// Clears the cache.
-        ///  </summary>
-        /// <remarks>
-        /// Calling this means that singletons will no longer be resturned by the repository
-        /// </remarks>
-        void ClearCache();
+        /// <param name="overWrite">If true the destination file is overwritten if it exists.</param>
+        void Rename(FileInfo oldName, FileInfo newName, bool overWrite);
 
         /// <summary>
         /// Clears the cache of the <see cref="IDirtyTracker"/>
         /// </summary>
         void ClearTrackerCache();
-
-        /// <summary>
-        /// Removes <paramref name="item"/> from cache.
-        /// Next read will read a new instance from disk.
-        /// </summary>
-        void RemoveFromCache<T>(T item);
 
         /// <summary>
         /// Removes <paramref name="item"/> from the <see cref="IDirtyTracker"/> cache
