@@ -19,17 +19,13 @@ namespace Gu.Persist.SystemXml
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlRepositorySettings"/> class.
-        /// </summary>
+        /// <summary> Initializes a new instance of the <see cref="XmlRepositorySettings"/> class. </summary>
         public XmlRepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
             : base(directory, backupSettings)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlRepositorySettings"/> class.
-        /// </summary>
+        /// <summary> Initializes a new instance of the <see cref="XmlRepositorySettings"/> class. </summary>
         public XmlRepositorySettings(
             DirectoryInfo directory,
             bool isTrackingDirty,
@@ -47,9 +43,7 @@ namespace Gu.Persist.SystemXml
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlRepositorySettings"/> class.
-        /// </summary>
+        /// <summary> Initializes a new instance of the <see cref="XmlRepositorySettings"/> class. </summary>
         public XmlRepositorySettings(
             PathAndSpecialFolder directory,
             bool isTrackingDirty,
@@ -73,7 +67,6 @@ namespace Gu.Persist.SystemXml
         /// </summary>
         // ReSharper disable once UnusedMember.Local
         private XmlRepositorySettings()
-            : base()
         {
         }
 

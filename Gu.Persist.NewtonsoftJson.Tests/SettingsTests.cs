@@ -230,6 +230,7 @@
                 Assert.AreEqual(expected, actual);
             }
 
+            // ReSharper disable once PossibleNullReferenceException
             foreach (var propertyInfo in expected.GetType().GetProperties())
             {
                 var expectedValue = propertyInfo.GetValue(expected);

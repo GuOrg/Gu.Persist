@@ -36,6 +36,7 @@
         /// FileName.cfg
         /// FileName
         /// </param>
+        /// <param name="item">The item to save.</param>
         void SaveAndClose<T>(string fileName, T item);
 
         /// <summary>
