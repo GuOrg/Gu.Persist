@@ -40,14 +40,20 @@
   <ItemGroup>
     <Compile Include="Comparers\DirectoryInfoComparer.cs" />
     <Compile Include="Comparers\SerializedEqualsComparer{T}.cs" />
+    <Compile Include="Contracts\IAsyncFileInfoRepository.cs" />
     <Compile Include="Contracts\IAsyncFileNameRepository.cs" />
+    <Compile Include="Contracts\IDataRepository.cs" />
     <Compile Include="Contracts\IDataRepositorySettings.cs" />
     <Compile Include="Contracts\IDirty.cs" />
+    <Compile Include="Contracts\IFileNameAsyncStreamRepository.cs" />
     <Compile Include="Contracts\IFileNameRepository.cs" />
+    <Compile Include="Contracts\IFileNameStreamRepository.cs" />
+    <Compile Include="Contracts\IGenericAsyncStreamRepository.cs" />
+    <Compile Include="Contracts\IGenericStreamRepository.cs" />
     <Compile Include="Contracts\IRepositorySettings.cs" />
     <Compile Include="Contracts\IRepositoryWithSettings.cs" />
     <Compile Include="Contracts\ISingletonRepository.cs" />
-    <Compile Include="Contracts\IStreamRepository.cs" />
+    <Compile Include="Contracts\IFileInfoStreamRepository.cs" />
     <Compile Include="Internals\DictionaryExt.cs" />
     <Compile Include="Internals\EnumerableEx.cs" />
     <Compile Include="Internals\IPooledStream.cs" />

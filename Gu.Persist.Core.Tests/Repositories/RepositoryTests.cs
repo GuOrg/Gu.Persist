@@ -330,6 +330,12 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TestCase(false)]
         public void DeleteType(bool deleteBakups)
         {
+            var dataRepository = this.Repository as IDataRepository;
+            if (dataRepository == null)
+            {
+                return;
+            }
+
             this.TypeFiles.File.CreatePlaceHolder();
             this.TypeFiles.SoftDelete.CreatePlaceHolder();
             if (this.IsBackingUp)
@@ -341,7 +347,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(true, this.TypeFiles.File);
             AssertFile.Exists(true, this.TypeFiles.SoftDelete);
 
-            this.Repository.Delete<DummySerializable>(deleteBakups);
+            dataRepository.Delete<DummySerializable>(deleteBakups);
             AssertFile.Exists(false, this.TypeFiles.File);
             AssertFile.Exists(false, this.TypeFiles.SoftDelete);
             if (this.IsBackingUp)
@@ -354,6 +360,12 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TestCase(false)]
         public void DeleteName(bool deleteBakups)
         {
+            var dataRepository = this.Repository as IDataRepository;
+            if (dataRepository == null)
+            {
+                return;
+            }
+
             this.NamedFiles.File.CreatePlaceHolder();
             this.NamedFiles.SoftDelete.CreatePlaceHolder();
             if (this.IsBackingUp)
@@ -365,7 +377,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(true, this.NamedFiles.File);
             AssertFile.Exists(true, this.NamedFiles.SoftDelete);
 
-            this.Repository.Delete(this.NamedFiles.File, deleteBakups);
+            dataRepository.Delete(this.NamedFiles.File, deleteBakups);
             AssertFile.Exists(false, this.NamedFiles.File);
             AssertFile.Exists(false, this.NamedFiles.SoftDelete);
             if (this.IsBackingUp)

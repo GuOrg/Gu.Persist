@@ -9,8 +9,18 @@ namespace Gu.Persist.Core
     /// <summary>
     /// Base class for a repository
     /// </summary>
-    public abstract class Repository<TSetting>
-    : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings, IStreamRepository
+    public abstract class Repository<TSetting> :
+        IRepository,
+        IGenericAsyncRepository,
+        IAsyncFileNameRepository,
+        IAsyncFileInfoRepository,
+        ICloner,
+        IRepositoryWithSettings,
+        IFileInfoStreamRepository,
+        IGenericStreamRepository,
+        IGenericAsyncStreamRepository,
+        IFileNameStreamRepository,
+        IFileNameAsyncStreamRepository
     where TSetting : IRepositorySettings
     {
         private readonly Serialize<TSetting> serialize;
@@ -130,25 +140,10 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual void Delete<T>(bool deleteBackups)
-        {
-            var file = this.GetFileInfo<T>();
-            this.Delete(file, deleteBackups);
-        }
-
-        /// <inheritdoc/>
         public virtual void DeleteBackups<T>()
         {
             var file = this.GetFileInfo<T>();
             this.DeleteBackups(file);
-        }
-
-        /// <inheritdoc/>
-        public virtual void Delete(string fileName, bool deleteBackups)
-        {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
-            var file = this.GetFileInfoCore(fileName);
-            this.Delete(file, deleteBackups);
         }
 
         /// <inheritdoc/>
@@ -157,18 +152,6 @@ namespace Gu.Persist.Core
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             this.DeleteBackups(file);
-        }
-
-        /// <inheritdoc/>
-        public virtual void Delete(FileInfo file, bool deleteBackups)
-        {
-            Ensure.NotNull(file, nameof(file));
-            file.Delete();
-            file.DeleteSoftDeleteFileFor();
-            if (deleteBackups)
-            {
-                this.DeleteBackups(file);
-            }
         }
 
         /// <inheritdoc/>
@@ -234,14 +217,14 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        Task<Stream> IStreamRepository.ReadAsync<T>()
+        Task<Stream> IGenericAsyncStreamRepository.ReadAsync<T>()
         {
             var file = this.GetFileInfo<T>();
             return file.ReadAsync();
         }
 
         /// <inheritdoc/>
-        Task<Stream> IStreamRepository.ReadAsync(string fileName)
+        Task<Stream> IFileNameAsyncStreamRepository.ReadAsync(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
@@ -249,7 +232,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        Task<Stream> IStreamRepository.ReadAsync(FileInfo file)
+        Task<Stream> IFileInfoStreamRepository.ReadAsync(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             return file.ReadAsync();
@@ -271,21 +254,21 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        Stream IStreamRepository.Read<T>()
+        Stream IGenericStreamRepository.Read<T>()
         {
             var file = this.GetFileInfoCore<T>();
             return file.OpenRead();
         }
 
         /// <inheritdoc/>
-        Stream IStreamRepository.Read(FileInfo file)
+        Stream IFileInfoStreamRepository.Read(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             return file.OpenRead();
         }
 
         /// <inheritdoc/>
-        Stream IStreamRepository.Read(string fileName)
+        Stream IFileNameStreamRepository.Read(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
@@ -390,7 +373,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        void IStreamRepository.Save<T>(Stream stream)
+        void IGenericStreamRepository.Save<T>(Stream stream)
         {
             var file = this.GetFileInfoCore<T>();
             this.EnsureCanSave(file, stream);
@@ -399,7 +382,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        void IStreamRepository.Save(string fileName, Stream stream)
+        void IFileNameStreamRepository.Save(string fileName, Stream stream)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
@@ -409,7 +392,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        void IStreamRepository.Save(FileInfo file, Stream stream)
+        void IFileInfoStreamRepository.Save(FileInfo file, Stream stream)
         {
             Ensure.NotNull(file, nameof(file));
             this.EnsureCanSave(file, stream);
@@ -418,7 +401,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        void IStreamRepository.Save(FileInfo file, FileInfo tempFile, Stream stream)
+        void IFileInfoStreamRepository.Save(FileInfo file, FileInfo tempFile, Stream stream)
         {
             Ensure.NotNull(file, nameof(file));
             this.EnsureCanSave(file, stream);
@@ -426,7 +409,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        Task IStreamRepository.SaveAsync<T>(Stream stream)
+        Task IGenericAsyncStreamRepository.SaveAsync<T>(Stream stream)
         {
             var file = this.GetFileInfo<T>();
             this.EnsureCanSave(file, stream);
@@ -435,7 +418,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        Task IStreamRepository.SaveAsync(string fileName, Stream stream)
+        Task IFileNameAsyncStreamRepository.SaveAsync(string fileName, Stream stream)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
@@ -445,7 +428,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        Task IStreamRepository.SaveAsync(FileInfo file, Stream stream)
+        Task IFileInfoStreamRepository.SaveAsync(FileInfo file, Stream stream)
         {
             Ensure.NotNull(file, nameof(file));
             this.EnsureCanSave(file, stream);
@@ -454,7 +437,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        Task IStreamRepository.SaveAsync(FileInfo file, FileInfo tempFile, Stream stream)
+        Task IFileInfoStreamRepository.SaveAsync(FileInfo file, FileInfo tempFile, Stream stream)
         {
             Ensure.NotNull(file, nameof(file));
             this.EnsureCanSave(file, stream);

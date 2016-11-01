@@ -3,7 +3,7 @@
     using System;
     using System.IO;
 
-    public abstract class DataRepository<TSetting> : Repository<TSetting>
+    public abstract class DataRepository<TSetting> : Repository<TSetting>, IDataRepository
         where TSetting : IDataRepositorySettings
     {
         /// <summary>
@@ -62,6 +62,33 @@
         protected DataRepository(TSetting settings, IBackuper backuper, Serialize<TSetting> serialize)
             : base(settings, backuper, serialize)
         {
+        }
+
+        /// <inheritdoc/>
+        public virtual void Delete<T>(bool deleteBackups)
+        {
+            var file = this.GetFileInfo<T>();
+            this.Delete(file, deleteBackups);
+        }
+
+        /// <inheritdoc/>
+        public virtual void Delete(string fileName, bool deleteBackups)
+        {
+            Ensure.IsValidFileName(fileName, nameof(fileName));
+            var file = this.GetFileInfoCore(fileName);
+            this.Delete(file, deleteBackups);
+        }
+
+        /// <inheritdoc/>
+        public virtual void Delete(FileInfo file, bool deleteBackups)
+        {
+            Ensure.NotNull(file, nameof(file));
+            file.Delete();
+            file.DeleteSoftDeleteFileFor();
+            if (deleteBackups)
+            {
+                this.DeleteBackups(file);
+            }
         }
 
         protected override void EnsureCanSave<T>(FileInfo file, T item)
