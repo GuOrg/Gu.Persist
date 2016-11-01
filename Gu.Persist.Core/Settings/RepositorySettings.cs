@@ -57,10 +57,6 @@
             this.TempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
 
-        protected RepositorySettings()
-        {
-        }
-
         public BackupSettings BackupSettings { get; }
 
         /// <summary>

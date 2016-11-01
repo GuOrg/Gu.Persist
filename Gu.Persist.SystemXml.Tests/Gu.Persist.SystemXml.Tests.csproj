@@ -43,10 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BenchmarkTests.cs" />
+    <Compile Include="DataRepositorySettingsTests.cs" />
     <Compile Include="Repository\XmlRepositoryTests.cs" />
     <Compile Include="XmlEqualsComparerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlRepositorySettingsTests.cs" />
+    <Compile Include="RepositorySettingsTests.cs" />
     <Compile Include="XmlFileTests.cs" />
     <Compile Include="Repository\Default.cs" />
     <Compile Include="Repository\NoBackup.cs" />

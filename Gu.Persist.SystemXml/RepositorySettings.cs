@@ -63,6 +63,7 @@ namespace Gu.Persist.SystemXml
         /// </summary>
         // ReSharper disable once UnusedMember.Local
         private RepositorySettings()
+            : base(Directories.AppDirectory(), false, Core.BackupSettings.Create(Directories.AppDirectory()))
         {
         }
 

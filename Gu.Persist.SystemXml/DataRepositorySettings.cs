@@ -26,6 +26,16 @@ namespace Gu.Persist.SystemXml
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataRepositorySettings"/> class.
+        /// Needed for serialization
+        /// </summary>
+        // ReSharper disable once UnusedMember.Local
+        private DataRepositorySettings()
+            : base(PathAndSpecialFolder.Create(Directories.AppDirectory()), false, false, Core.BackupSettings.Create(Directories.AppDirectory()))
+        {
+        }
+
         public static DataRepositorySettings Create(Core.RepositorySettings settings)
         {
             return new DataRepositorySettings(

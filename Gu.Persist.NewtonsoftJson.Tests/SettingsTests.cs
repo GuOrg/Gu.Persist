@@ -7,30 +7,32 @@
 
     using NUnit.Framework;
 
+    using DataRepositorySettings = Gu.Persist.NewtonsoftJson.DataRepositorySettings;
     using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
 
     public class SettingsTests
     {
-        private readonly DirectoryInfo directory;
-
-        public SettingsTests()
-        {
-            this.directory = new DirectoryInfo($@"C:\Temp\Gu.Persist\{this.GetType().Name}");
-        }
+        private static readonly DirectoryInfo Directory = new DirectoryInfo($@"C:\Temp\Gu.Persist\");
+        private static readonly DirectoryInfo BackupDir = new DirectoryInfo($@"C:\Temp\Gu.Persist\Backup");
+        private static readonly DataRepositorySettings DataRepositorySettings =new DataRepositorySettings(
+                PathAndSpecialFolder.Create(Directory),
+                RepositorySettings.CreateDefaultJsonSettings(),
+                false,
+                false,
+                null);
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            this.directory.Delete(true);
+            Directory.Delete(true);
         }
 
         [Test]
         public void RoundtripJsonRepositorySettings()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = BackupSettings.Create(backupDir, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var backupSettings = BackupSettings.Create(BackupDir, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new RepositorySettings(
-                PathAndSpecialFolder.Create(this.directory),
+                PathAndSpecialFolder.Create(Directory),
                 RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 backupSettings,
@@ -45,8 +47,7 @@
         [Test]
         public void RoundtripBackupSettings()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(BackupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var json = JsonConvert.SerializeObject(backupSettings);
             var roundtripped = JsonConvert.DeserializeObject<BackupSettings>(json);
             AssertProperties(backupSettings, roundtripped);
@@ -56,10 +57,9 @@
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(BackupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new Core.RepositorySettings(
-                               PathAndSpecialFolder.Create(this.directory),
+                               PathAndSpecialFolder.Create(Directory),
                                false,
                                backupSettings,
                                ".cde",
@@ -73,8 +73,7 @@
         [Test]
         public void RoundtripBackupSettingsWithNullTimestampFormat()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", null, 2, 3);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(BackupDir), ".abc", null, 2, 3);
             var json = JsonConvert.SerializeObject(backupSettings);
             var roundtripped = JsonConvert.DeserializeObject<BackupSettings>(json);
             AssertProperties(backupSettings, roundtripped);
@@ -84,16 +83,15 @@
         [Test]
         public void RoundtripJsonRepositorySettingsWithRepository()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(BackupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new RepositorySettings(
-                PathAndSpecialFolder.Create(this.directory),
+                PathAndSpecialFolder.Create(Directory),
                 RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 backupSettings,
                 ".cde",
                 ".fgh");
-            var repository = new SingletonRepository(settings);
+            var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<RepositorySettings>();
             AssertProperties(settings, roundtripped);
@@ -103,17 +101,16 @@
         [Test]
         public void RoundtripJsonDataRepositorySettingsWithRepository()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(BackupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new NewtonsoftJson.DataRepositorySettings(
-                PathAndSpecialFolder.Create(this.directory),
+                PathAndSpecialFolder.Create(Directory),
                 RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 false,
                 backupSettings,
                 ".cde",
                 ".fgh");
-            var repository = new SingletonRepository(settings);
+            var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<NewtonsoftJson.DataRepositorySettings>();
             AssertProperties(settings, roundtripped);
@@ -123,22 +120,14 @@
         [Test]
         public void RoundtripRepositorySettingsWithRepository()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(BackupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new Core.RepositorySettings(
-              PathAndSpecialFolder.Create(this.directory),
+              PathAndSpecialFolder.Create(Directory),
                 false,
                 backupSettings,
                 ".cde",
                 ".fgh");
-            var repository = new SingletonRepository(
-                    new RepositorySettings(
-                       PathAndSpecialFolder.Create(this.directory),
-                        RepositorySettings.CreateDefaultJsonSettings(),
-                        false,
-                        null,
-                        ".cde",
-                        ".fgh"));
+            var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<Core.RepositorySettings>();
             AssertProperties(settings, roundtripped);
@@ -148,16 +137,8 @@
         [Test]
         public void RoundtripBackupSettingsWithRepository()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
-            var settings = new RepositorySettings(
-              PathAndSpecialFolder.Create(this.directory),
-                RepositorySettings.CreateDefaultJsonSettings(),
-                false,
-                backupSettings,
-                ".cde",
-                ".fgh");
-            var repository = new SingletonRepository(settings);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(BackupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var repository = new DataRepository(DataRepositorySettings);
             repository.Save(backupSettings);
             var roundtripped = repository.Read<BackupSettings>();
             AssertProperties(backupSettings, roundtripped);
@@ -167,10 +148,9 @@
         [Test]
         public void CreateFromSelf()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(BackupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new RepositorySettings(
-               PathAndSpecialFolder.Create(this.directory),
+               PathAndSpecialFolder.Create(Directory),
                 RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 backupSettings,
@@ -184,10 +164,9 @@
         [Test]
         public void CreateFromRepositorySettings()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(BackupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var repositorySettings = new Core.RepositorySettings(
-                                        PathAndSpecialFolder.Create(this.directory),
+                                        PathAndSpecialFolder.Create(Directory),
                                          false,
                                          backupSettings,
                                          ".cde",
@@ -195,7 +174,7 @@
             var created = RepositorySettings.Create(repositorySettings);
 
             var jsonRepositorySettings = new RepositorySettings(
-                PathAndSpecialFolder.Create(this.directory),
+                PathAndSpecialFolder.Create(Directory),
                 RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 backupSettings,
@@ -208,10 +187,9 @@
         [Test]
         public void CreateFromRepositorySettingsAndJsonSettings()
         {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(BackupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var repositorySettings = new Core.RepositorySettings(
-                                         PathAndSpecialFolder.Create(this.directory),
+                                         PathAndSpecialFolder.Create(Directory),
                                          false,
                                          backupSettings,
                                          ".cde",
@@ -219,7 +197,7 @@
             var created = RepositorySettings.Create(repositorySettings, RepositorySettings.CreateDefaultJsonSettings());
 
             var jsonRepositorySettings = new RepositorySettings(
-                PathAndSpecialFolder.Create(this.directory),
+                PathAndSpecialFolder.Create(Directory),
                 RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 backupSettings,
