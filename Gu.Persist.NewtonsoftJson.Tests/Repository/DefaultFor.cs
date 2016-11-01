@@ -23,7 +23,7 @@
 
         protected override IRepository Create()
         {
-            return new SingletonRepository(this.Directory);
+            return new SingletonRepository(this.TargetDirectory);
         }
     }
 }

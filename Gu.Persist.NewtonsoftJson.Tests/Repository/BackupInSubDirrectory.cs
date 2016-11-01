@@ -10,8 +10,8 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
     {
         protected override IRepository Create()
         {
-            var backupSettings = new BackupSettings(new PathAndSpecialFolder(this.Directory.FullName + "\\Backup", null), ".bak", BackupSettings.DefaultTimeStampFormat, 1, int.MaxValue);
-            var settings = new RepositorySettings(PathAndSpecialFolder.Create(this.Directory), false, backupSettings);
+            var backupSettings = new BackupSettings(new PathAndSpecialFolder(this.TargetDirectory.FullName + "\\Backup", null), ".bak", BackupSettings.DefaultTimeStampFormat, 1, int.MaxValue);
+            var settings = new RepositorySettings(PathAndSpecialFolder.Create(this.TargetDirectory), false, backupSettings);
             return new SingletonRepository(settings);
         }
     }

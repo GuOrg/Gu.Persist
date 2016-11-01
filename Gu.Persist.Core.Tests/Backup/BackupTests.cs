@@ -59,7 +59,7 @@ namespace Gu.Persist.Core.Tests.Backup
             }
 
             this.OtherBackup.Delete();
-            this.OtherBackup.VoidCreate();
+            this.OtherBackup.CreatePlaceHolder();
             this.SoftDelete.Delete();
         }
 

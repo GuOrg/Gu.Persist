@@ -45,6 +45,7 @@
     <Compile Include="Comparers\DirectoryInfoComparerTests.cs" />
     <Compile Include="Helpers\AssertFile.cs" />
     <Compile Include="Backup\BackupTests.cs" />
+    <Compile Include="Helpers\DirectoryInfoExt.cs" />
     <Compile Include="Helpers\DummySerializable.cs" />
     <Compile Include="Helpers\FileInfoExt.cs" />
     <Compile Include="Helpers\RepositoryExt.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="IO\DirectoriesTests.cs" />
     <Compile Include="IO\DirectoryInfoExtTests.cs" />
     <Compile Include="IO\FileInfoExtTests.cs" />
+    <Compile Include="Repositories\Files.cs" />
     <Compile Include="Repositories\RestoreExceptionTest.cs" />
     <Compile Include="Settings\PathAndSpecialFolderTests.cs" />
     <Compile Include="Repositories\FileCacheTests.cs" />

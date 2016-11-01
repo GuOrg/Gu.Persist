@@ -544,7 +544,6 @@ namespace Gu.Persist.Core
         public bool CanRename<T>(string newName)
         {
             Ensure.IsValidFileName(newName, nameof(newName));
-
             var fileInfo = this.GetFileInfo<T>();
             return this.CanRename(fileInfo, newName);
         }
@@ -627,6 +626,12 @@ namespace Gu.Persist.Core
             Ensure.NotNull(oldName, nameof(oldName));
             Ensure.NotNull(newName, nameof(newName));
             oldName.Rename(newName, overWrite);
+            var oldSoftDelete = oldName.GetSoftDeleteFileFor();
+            if (oldSoftDelete?.Exists == true)
+            {
+                oldSoftDelete.Rename(newName.GetSoftDeleteFileFor(), overWrite);
+            }
+
             if (this.Backuper != null)
             {
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(newName.Name);

@@ -2,11 +2,24 @@
 {
     using System.IO;
 
+    using NUnit.Framework;
+
     public static class TestFileInfoExt
     {
-        public static void VoidCreate(this FileInfo file)
+        public static void CreatePlaceHolder(this FileInfo file)
         {
-            File.WriteAllText(file.FullName, file.FullName);
+            CreatePlaceHolder(file, file.FullName);
+        }
+
+        public static void CreatePlaceHolder(this FileInfo file, string text)
+        {
+            Assert.NotNull(file.Directory);
+            if (!file.Directory.Exists)
+            {
+                file.Directory.Create();
+            }
+
+            File.WriteAllText(file.FullName, text);
         }
 
         public static void WriteAllText(this FileInfo file, string text)

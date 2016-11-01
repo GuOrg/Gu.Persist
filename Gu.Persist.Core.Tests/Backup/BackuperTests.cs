@@ -150,10 +150,10 @@
         [Test]
         public void PurgeNumberOfFiles()
         {
-            this.SoftDelete.VoidCreate();
+            this.SoftDelete.CreatePlaceHolder();
             foreach (var backup in this.TimestampedBackups)
             {
-                backup.VoidCreate();
+                backup.CreatePlaceHolder();
             }
 
             var backuper = Backuper.Create(BackupSettings.Create(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue));
@@ -173,10 +173,10 @@
         [Test]
         public void PurgeOld()
         {
-            this.SoftDelete.VoidCreate();
+            this.SoftDelete.CreatePlaceHolder();
             foreach (var backup in this.TimestampedBackups)
             {
-                backup.VoidCreate();
+                backup.CreatePlaceHolder();
             }
 
             var backuper = Backuper.Create(BackupSettings.Create(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, 2));
@@ -196,9 +196,9 @@
         [Test]
         public void PurgeDeletesSoftDeletesNoTimestamp()
         {
-            this.File.VoidCreate();
-            this.SoftDelete.VoidCreate();
-            this.Backup.VoidCreate();
+            this.File.CreatePlaceHolder();
+            this.SoftDelete.CreatePlaceHolder();
+            this.Backup.CreatePlaceHolder();
             var backuper = Backuper.Create(BackupSettings.Create(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue));
             using (var lockedFile = this.LockedFile())
             {
@@ -215,12 +215,12 @@
         {
             foreach (var backup in this.TimestampedBackups)
             {
-                backup.VoidCreate();
+                backup.CreatePlaceHolder();
             }
 
-            this.SoftDelete.VoidCreate();
-            this.File.VoidCreate();
-            this.Backup.VoidCreate();
+            this.SoftDelete.CreatePlaceHolder();
+            this.File.CreatePlaceHolder();
+            this.Backup.CreatePlaceHolder();
             var backuper = Backuper.Create(BackupSettings.Create(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue));
             using (var lockedFile = this.LockedFile())
             {

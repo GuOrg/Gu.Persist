@@ -71,8 +71,8 @@
         public void TryRestoreWhenHasBackupAndOriginal()
         {
             this.File.WriteAllText("File");
-            this.SoftDelete.VoidCreate();
-            this.Backup.VoidCreate();
+            this.SoftDelete.CreatePlaceHolder();
+            this.Backup.CreatePlaceHolder();
 
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(true, this.SoftDelete);
@@ -141,11 +141,11 @@
         [Test]
         public void PurgeWhenHasSoftDelete()
         {
-            this.File.VoidCreate();
-            this.SoftDelete.VoidCreate();
+            this.File.CreatePlaceHolder();
+            this.SoftDelete.CreatePlaceHolder();
             foreach (var backup in this.TimestampedBackups)
             {
-                backup.VoidCreate();
+                backup.CreatePlaceHolder();
             }
 
             using (var lockedFile = this.LockedFile())
@@ -165,9 +165,9 @@
         [Test]
         public void PurgeDeletesSoftDeletesNoTimestamp()
         {
-            this.File.VoidCreate();
-            this.SoftDelete.VoidCreate();
-            this.Backup.VoidCreate();
+            this.File.CreatePlaceHolder();
+            this.SoftDelete.CreatePlaceHolder();
+            this.Backup.CreatePlaceHolder();
             using (var lockedFile = this.LockedFile())
             {
                 this.backuper.AfterSave(lockedFile);
@@ -183,12 +183,12 @@
         {
             foreach (var backup in this.TimestampedBackups)
             {
-                backup.VoidCreate();
+                backup.CreatePlaceHolder();
             }
 
-            this.SoftDelete.VoidCreate();
-            this.File.VoidCreate();
-            this.Backup.VoidCreate();
+            this.SoftDelete.CreatePlaceHolder();
+            this.File.CreatePlaceHolder();
+            this.Backup.CreatePlaceHolder();
             using (var lockedFile = this.LockedFile())
             {
                 this.backuper.AfterSave(lockedFile);

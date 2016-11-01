@@ -70,7 +70,7 @@
     <Compile Include="Repository\FileCache.cs" />
     <Compile Include="Repository\LockedFile.cs" />
     <Compile Include="Repository\RestoreException.cs" />
-    <Compile Include="Repository\SaveTransaction.cs" />
+    <Compile Include="Transactions\SaveTransaction.cs" />
     <Compile Include="Repository\Serialize.cs" />
     <Compile Include="Repository\SingletonRepository.cs" />
     <Compile Include="Settings\BackupSettings.cs" />

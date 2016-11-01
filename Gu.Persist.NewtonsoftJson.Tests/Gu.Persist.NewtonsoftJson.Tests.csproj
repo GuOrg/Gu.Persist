@@ -41,6 +41,7 @@
     <Compile Include="JsonFileTests.cs" />
     <Compile Include="Repository\BackupInSubDirrectory.cs" />
     <Compile Include="Repository\DataRepositoryNoBackup.cs" />
+    <Compile Include="Repository\DataRepositoryWithDefaultSettings.cs" />
     <Compile Include="Repository\DefaultDataRepository.cs" />
     <Compile Include="Repository\DefaultSingletonRepository.cs" />
     <Compile Include="Repository\DefaultFor.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="Repository\NoBackup.cs" />
     <Compile Include="Repository\SaveNullDeletesFile.cs" />
     <Compile Include="Repository\SaveNullDeletesFileNotCaching.cs" />
+    <Compile Include="Repository\WithDefaultSettings.cs" />
     <Compile Include="SettingsTests.cs" />
   </ItemGroup>
   <ItemGroup>

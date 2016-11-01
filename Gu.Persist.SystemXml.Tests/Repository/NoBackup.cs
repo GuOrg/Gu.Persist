@@ -16,7 +16,7 @@ namespace Gu.Persist.SystemXml.Tests.Repository
 
         protected override IRepository Create()
         {
-            var settings = new RepositorySettings(this.Directory, null);
+            var settings = new RepositorySettings(this.TargetDirectory, null);
             return new SingletonRepository(settings);
         }
     }

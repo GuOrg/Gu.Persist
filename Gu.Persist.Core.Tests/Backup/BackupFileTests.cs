@@ -15,8 +15,8 @@
         [Test]
         public void GetAllBackupsForNoTimeStamp()
         {
-            this.File.VoidCreate();
-            this.Backup.VoidCreate();
+            this.File.CreatePlaceHolder();
+            this.Backup.CreatePlaceHolder();
             var restores = BackupFile.GetAllBackupsFor(this.File, BackupSettings.Create(this.Directory));
             Assert.AreEqual(1, restores.Count);
             Assert.AreEqual(this.Backup.FullName, restores[0].File.FullName);
@@ -25,10 +25,10 @@
         [Test]
         public void GetAllBackupsFor()
         {
-            this.File.VoidCreate();
+            this.File.CreatePlaceHolder();
             foreach (var backup in this.TimestampedBackups)
             {
-                backup.VoidCreate();
+                backup.CreatePlaceHolder();
             }
 
             var restores = BackupFile.GetAllBackupsFor(this.File, BackupSettings.Create(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, 1));
@@ -40,8 +40,8 @@
         [Test]
         public void GetRestoreFileForNoTimeStamp()
         {
-            this.File.VoidCreate();
-            this.Backup.VoidCreate();
+            this.File.CreatePlaceHolder();
+            this.Backup.CreatePlaceHolder();
             var restore = BackupFile.GetRestoreFileFor(this.File, BackupSettings.Create(this.Directory));
             Assert.AreEqual(this.Backup.FullName, restore.FullName);
         }
@@ -49,10 +49,10 @@
         [Test]
         public void GetRestoreFileFor()
         {
-            this.File.VoidCreate();
+            this.File.CreatePlaceHolder();
             foreach (var backup in this.TimestampedBackups)
             {
-                backup.VoidCreate();
+                backup.CreatePlaceHolder();
             }
 
             var backupSettings = BackupSettings.Create(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, 1);
@@ -63,7 +63,7 @@
         [TestCase(@"C:\Temp\Gu.Persist\BackupFileTests\Meh.bak")]
         public void CreateForNoTimestamp(string expected)
         {
-            this.File.VoidCreate();
+            this.File.CreatePlaceHolder();
             var setting = BackupSettings.Create(this.File.Directory, BackupSettings.DefaultExtension, null, 1, int.MaxValue);
             var backup = BackupFile.CreateFor(this.File, setting);
             Assert.AreEqual(expected, backup.FullName);
@@ -72,7 +72,7 @@
         [TestCase(@"C:\\Temp\\Gu.Persist\\BackupFileTests\\Meh\.\d\d\d\d_\d\d_\d\d_\d\d_\d\d_\d\d\.bak")]
         public void CreateFor(string expected)
         {
-            this.File.VoidCreate();
+            this.File.CreatePlaceHolder();
             var backupSettings = BackupSettings.Create(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, 1);
             var backup = BackupFile.CreateFor(this.File, backupSettings);
             StringAssert.IsMatch(expected, backup.FullName);

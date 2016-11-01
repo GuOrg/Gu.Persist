@@ -15,7 +15,7 @@
         protected override IRepository Create()
         {
             var settings = new NewtonsoftJson.RepositorySettings(
-                PathAndSpecialFolder.Create(this.Directory),
+                PathAndSpecialFolder.Create(this.TargetDirectory),
                 NewtonsoftJson.RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 null);
