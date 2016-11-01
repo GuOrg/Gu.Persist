@@ -14,7 +14,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// </summary>
         [JsonConstructor]
         public DataRepositorySettings(
-            PathAndSpecialFolder directory,
+            string directory,
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
             bool saveNullDeletesFile,
@@ -30,22 +30,5 @@ namespace Gu.Persist.NewtonsoftJson
         /// The settings controlling json serialization.
         /// </summary>
         public JsonSerializerSettings JsonSerializerSettings { get; }
-
-        public static DataRepositorySettings Create(Core.RepositorySettings settings)
-        {
-            return Create(settings, RepositorySettings.CreateDefaultJsonSettings());
-        }
-
-        public static DataRepositorySettings Create(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
-        {
-            return new DataRepositorySettings(
-                       settings.Directory,
-                       jsonSettings,
-                       settings.IsTrackingDirty,
-                       (settings as IDataRepositorySettings)?.SaveNullDeletesFile == true,
-                       settings.BackupSettings,
-                       settings.Extension,
-                       settings.TempExtension);
-        }
     }
 }

@@ -32,7 +32,7 @@
             }
 
             this.directory.Create();
-            var settings = new RepositorySettings(PathAndSpecialFolder.Create(this.directory), RepositorySettings.CreateDefaultJsonSettings(), false, null);
+            var settings = new RepositorySettings(this.directory.FullName, RepositorySettings.CreateDefaultJsonSettings(), false, null);
             var gitBackuper = new GitBackuper(settings.Directory);
             this.repository = new SingletonRepository(settings, gitBackuper);
             this.dummy = new DummySerializable(1);
@@ -42,7 +42,7 @@
         public async Task SaveCommits()
         {
             // give the repository time to initialize.
-            await Task.Delay(200).ConfigureAwait(false);
+            await Task.Delay(500).ConfigureAwait(false);
             using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
                 Assert.AreEqual(0, git.Commits.Count());
@@ -105,7 +105,7 @@
         public void TouchDirectoryProp()
         {
             // just so it is not flagged as unused member
-            Assert.AreEqual(this.directory.Name, ((GitBackuper)this.repository.Backuper).Directory.CreateDirectoryInfo().Name);
+            Assert.AreEqual(this.directory.FullName, ((GitBackuper)this.repository.Backuper).Directory);
         }
 
         /// <summary>

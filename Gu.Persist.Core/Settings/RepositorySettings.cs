@@ -1,7 +1,6 @@
 ﻿namespace Gu.Persist.Core
 {
     using System;
-    using System.IO;
 
     [Serializable]
     public class RepositorySettings : FileSettings, IRepositorySettings
@@ -11,37 +10,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
         /// </summary>
-        public RepositorySettings(DirectoryInfo directory)
-            : this(directory, BackupSettings.Create(directory))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
-        /// </summary>
-        public RepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
-            : this(PathAndSpecialFolder.Create(directory), true, backupSettings)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
-        /// </summary>
         public RepositorySettings(
-            DirectoryInfo directory,
-            bool isTrackingDirty,
-            BackupSettings backupSettings,
-            string extension = ".cfg",
-            string tempExtension = ".tmp")
-            : this(PathAndSpecialFolder.Create(directory), isTrackingDirty, backupSettings, extension, tempExtension)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
-        /// </summary>
-        public RepositorySettings(
-            PathAndSpecialFolder directory,
+            string directory,
             bool isTrackingDirty,
             BackupSettings backupSettings,
             string extension = ".cfg",

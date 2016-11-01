@@ -99,13 +99,24 @@ namespace Gu.Persist.SystemXml
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
         public DataRepository(Core.DataRepositorySettings settings)
-            : base(DataRepositorySettings.Create(settings), Serialize<DataRepositorySettings>.Default)
+            : base(Create(settings), Serialize<DataRepositorySettings>.Default)
         {
         }
 
-        protected new static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
+        protected static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
         {
-            return DataRepositorySettings.Create(Core.DataRepository<Core.DataRepositorySettings>.CreateDefaultSettings(directory));
+            return Create(Default.DataRepositorySettings(directory));
+        }
+
+        protected static DataRepositorySettings Create(IRepositorySettings settings)
+        {
+            return new DataRepositorySettings(
+                       settings.Directory,
+                       settings.IsTrackingDirty,
+                       (settings as IDataRepositorySettings)?.SaveNullDeletesFile == true,
+                       settings.BackupSettings,
+                       settings.Extension,
+                       settings.TempExtension);
         }
     }
 }

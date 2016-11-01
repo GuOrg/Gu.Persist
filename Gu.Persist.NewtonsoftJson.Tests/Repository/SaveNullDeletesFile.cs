@@ -9,11 +9,11 @@
         protected override IRepository Create()
         {
             var settings = new NewtonsoftJson.DataRepositorySettings(
-                PathAndSpecialFolder.Create(this.TargetDirectory),
+                this.TargetDirectory.FullName,
                 RepositorySettings.CreateDefaultJsonSettings(),
                 true,
                 true,
-                BackupSettings.Create(this.TargetDirectory));
+                Default.BackupSettings(this.TargetDirectory));
             return new DataRepository(settings);
         }
     }

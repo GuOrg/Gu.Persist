@@ -151,11 +151,6 @@
             this.fileCache.TryRemove(item);
         }
 
-        protected static RepositorySettings CreateDefaultSettings(DirectoryInfo directory)
-        {
-            return new RepositorySettings(PathAndSpecialFolder.Create(directory), false, BackupSettings.Create(directory));
-        }
-
         /// <summary>
         /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/>
         /// </summary>

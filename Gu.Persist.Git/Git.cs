@@ -4,8 +4,6 @@ namespace Gu.Persist.Git
     using System;
     using System.IO;
 
-    using Gu.Persist.Core;
-
     using LibGit2Sharp;
 
     internal static class Git
@@ -16,18 +14,18 @@ namespace Gu.Persist.Git
         private static readonly Signature Signature = new Signature(new Identity("Gu.Persist.Git", "Gu.Persist.Git@github.com"), DateTimeOffset.UtcNow);
         private static readonly StageOptions StageOptionsIncludeIgnored = new StageOptions { IncludeIgnored = true };
 
-        internal static void InitRepository(DirectoryInfo directory)
+        internal static void InitRepository(string directory)
         {
-            if (!directory.Exists)
+            if (!Directory.Exists(directory))
             {
-                directory.CreateIfNotExists();
-                Repository.Init(directory.FullName);
+                Directory.CreateDirectory(directory);
+                Repository.Init(directory);
                 return;
             }
 
-            if (!Repository.IsValid(directory.FullName))
+            if (!Repository.IsValid(directory))
             {
-                Repository.Init(directory.FullName);
+                Repository.Init(directory);
             }
         }
 

@@ -126,10 +126,10 @@ namespace Gu.Persist.Core
             return CreateFileInfo(typeof(T).Name, setting);
         }
 
-        internal static FileInfo CreateFileInfo(string fileName, IFileSettings settings)
+        internal static FileInfo CreateFileInfo<TFileSettings>(string fileName, TFileSettings settings)
+            where TFileSettings : IFileSettings
         {
-            Ensure.NotNull(fileName, nameof(fileName));
-            var file = CreateFileInfo(settings.Directory.CreateDirectoryInfo(), fileName, settings.Extension);
+            var file = new FileInfo(Path.Combine(settings.Directory, fileName + settings.Extension));
             return file;
         }
 

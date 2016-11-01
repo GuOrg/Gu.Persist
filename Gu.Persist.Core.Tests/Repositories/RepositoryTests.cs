@@ -27,7 +27,9 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         public IRepository Repository { get; private set; }
 
-        public DirectoryInfo Directory => this.Repository?.Settings.Directory.CreateDirectoryInfo();
+        public DirectoryInfo Directory => this.Repository?.Settings.Directory != null
+                                              ? new DirectoryInfo(this.Repository.Settings.Directory)
+                                              : null;
 
         public DirectoryInfo TargetDirectory => new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().FullName);
 

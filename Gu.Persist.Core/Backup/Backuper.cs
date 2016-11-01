@@ -11,7 +11,7 @@
         {
             Ensure.NotNull(setting, nameof(setting));
             this.Setting = setting;
-            setting.Directory.CreateDirectoryInfo().CreateIfNotExists();
+            new DirectoryInfo(setting.Directory).CreateIfNotExists();
         }
 
         /// <summary>
@@ -226,7 +226,7 @@
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
             {
-                var withNewName = soft.WithNewName(newName, new FileSettings(PathAndSpecialFolder.Create(file.Directory), file.Extension));
+                var withNewName = soft.WithNewName(newName, new TempFileSettings(file.DirectoryName, file.Extension));
                 pairs.Add(new RenamePair(soft, withNewName));
             }
 

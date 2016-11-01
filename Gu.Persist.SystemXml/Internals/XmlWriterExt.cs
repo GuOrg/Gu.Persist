@@ -9,17 +9,6 @@ namespace Gu.Persist.SystemXml
         internal static void WriteElementString(
             this XmlWriter writer,
             string elementName,
-            PathAndSpecialFolder directory)
-        {
-            writer.WriteStartElement(elementName);
-            writer.WriteElementString(nameof(directory.Path), directory.Path);
-            writer.WriteElementString(nameof(directory.SpecialFolder), directory.SpecialFolder?.ToString());
-            writer.WriteEndElement();
-        }
-
-        internal static void WriteElementString(
-            this XmlWriter writer,
-            string elementName,
             BackupSettings backupSettings)
         {
             writer.WriteStartElement(elementName);

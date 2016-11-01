@@ -2,7 +2,6 @@
 {
     using System;
     using System.Globalization;
-    using System.IO;
 
     /// <summary>
     /// Specifies the behavior of an <see cref="IBackuper"/>
@@ -15,7 +14,7 @@
 
         /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
         public BackupSettings(
-            PathAndSpecialFolder directory,
+            string directory,
             string extension,
             string timeStampFormat,
             int numberOfBackups,
@@ -48,35 +47,6 @@
         /// Gets the max age of backups.
         /// </summary>
         public int MaxAgeInDays { get; }
-
-        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
-        public static BackupSettings Create(DirectoryInfo directory)
-        {
-            return Create(PathAndSpecialFolder.Create(directory));
-        }
-
-        public static BackupSettings Create(PathAndSpecialFolder directory)
-        {
-            return new BackupSettings(directory, DefaultExtension, null, 1, int.MaxValue);
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
-        public static BackupSettings Create(DirectoryInfo directory, int numberOfBackups)
-        {
-            return new BackupSettings(PathAndSpecialFolder.Create(directory), DefaultExtension, DefaultTimeStampFormat, numberOfBackups, int.MaxValue);
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
-        public static BackupSettings Create(DirectoryInfo directory, int numberOfBackups, int maxAgeInDays)
-        {
-            return new BackupSettings(PathAndSpecialFolder.Create(directory), DefaultExtension, DefaultTimeStampFormat, numberOfBackups, maxAgeInDays);
-        }
-
-        /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
-        public static BackupSettings Create(DirectoryInfo directory, string extension, string timeStampFormat, int numberOfBackups, int maxAgeInDays)
-        {
-            return new BackupSettings(PathAndSpecialFolder.Create(directory), extension, timeStampFormat, numberOfBackups, maxAgeInDays);
-        }
 
         public static void ValidateTimestampFormat(string format)
         {

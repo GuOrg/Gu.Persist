@@ -104,9 +104,26 @@ namespace Gu.Persist.NewtonsoftJson
         {
         }
 
-        protected new static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
+        protected static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
         {
-            return DataRepositorySettings.Create(Core.DataRepository<Core.DataRepositorySettings>.CreateDefaultSettings(directory));
+            return Create(Default.DataRepositorySettings(directory));
+        }
+
+        protected static DataRepositorySettings Create(Core.RepositorySettings settings)
+        {
+            return Create(settings, RepositorySettings.CreateDefaultJsonSettings());
+        }
+
+        protected static DataRepositorySettings Create(IRepositorySettings settings, JsonSerializerSettings jsonSettings)
+        {
+            return new DataRepositorySettings(
+                       settings.Directory,
+                       jsonSettings,
+                       settings.IsTrackingDirty,
+                       (settings as IDataRepositorySettings)?.SaveNullDeletesFile == true,
+                       settings.BackupSettings,
+                       settings.Extension,
+                       settings.TempExtension);
         }
     }
 }

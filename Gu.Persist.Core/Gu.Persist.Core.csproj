@@ -70,6 +70,8 @@
     <Compile Include="Repository\FileCache.cs" />
     <Compile Include="Repository\LockedFile.cs" />
     <Compile Include="Repository\RestoreException.cs" />
+    <Compile Include="Settings\Default.cs" />
+    <Compile Include="Settings\TempFileSettings.cs" />
     <Compile Include="Transactions\RenamePair.cs" />
     <Compile Include="Transactions\RenamePair`1.cs" />
     <Compile Include="Transactions\RenameTransaction.cs" />

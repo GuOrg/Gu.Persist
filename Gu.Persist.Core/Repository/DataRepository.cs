@@ -64,15 +64,6 @@
         {
         }
 
-        protected static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
-        {
-            return new DataRepositorySettings(
-                       PathAndSpecialFolder.Create(directory),
-                       false,
-                       false,
-                       BackupSettings.Create(directory));
-        }
-
         protected override void EnsureCanSave<T>(FileInfo file, T item)
         {
             if (!this.Settings.SaveNullDeletesFile && item == null)

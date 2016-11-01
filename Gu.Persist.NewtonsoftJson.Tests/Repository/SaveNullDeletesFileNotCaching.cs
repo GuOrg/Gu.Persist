@@ -10,11 +10,11 @@
         protected override IRepository Create()
         {
             var settings = new DataRepositorySettings(
-                               PathAndSpecialFolder.Create(this.TargetDirectory),
+                               this.TargetDirectory.FullName,
                                RepositorySettings.CreateDefaultJsonSettings(),
                                false,
                                true,
-                               BackupSettings.Create(this.TargetDirectory));
+                               Default.BackupSettings(this.TargetDirectory));
             return new DataRepository(settings);
         }
     }

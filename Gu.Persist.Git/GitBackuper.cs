@@ -17,17 +17,17 @@
         /// Initializes a new instance of the <see cref="GitBackuper"/> class.
         /// Creates a git repository in <paramref name="directory"/>
         /// </summary>
-        public GitBackuper(PathAndSpecialFolder directory)
+        public GitBackuper(string directory)
         {
             this.Directory = directory;
-            var directoryInfo = directory.CreateDirectoryInfo();
-            Git.InitRepository(directoryInfo);
+            var directoryInfo = new DirectoryInfo(directory);
+            Git.InitRepository(directoryInfo.FullName);
         }
 
         /// <summary>
         /// The director wwhere the repostory is.
         /// </summary>
-        public PathAndSpecialFolder Directory { get; }
+        public string Directory { get; }
 
         /// <inheritdoc/>
         public bool BeforeSave(FileInfo file)

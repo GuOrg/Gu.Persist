@@ -1,14 +1,8 @@
 ﻿namespace Gu.Persist.Core
 {
-    using System;
-
-    /// <summary>
-    /// Metadata for reading and saving files.
-    /// </summary>
-    [Serializable]
-    public class FileSettings : IFileSettings
+    public struct TempFileSettings : IFileSettings
     {
-        public FileSettings(string directory, string extension)
+        public TempFileSettings(string directory, string extension)
         {
             Ensure.NotNull(directory, nameof(directory));
             Ensure.NotNull(extension, nameof(extension));

@@ -7,8 +7,8 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
     {
         protected override IRepository Create()
         {
-            var backupSettings = new BackupSettings(new PathAndSpecialFolder(this.TargetDirectory.FullName + "\\Backup", null), ".bak", BackupSettings.DefaultTimeStampFormat, 1, int.MaxValue);
-            var settings = new RepositorySettings(PathAndSpecialFolder.Create(this.TargetDirectory), false, backupSettings);
+            var backupSettings = new BackupSettings(this.TargetDirectory.FullName + "\\Backup", ".bak", BackupSettings.DefaultTimeStampFormat, 1, int.MaxValue);
+            var settings = new RepositorySettings(this.TargetDirectory.FullName, false, backupSettings);
             return new SingletonRepository(settings);
         }
     }

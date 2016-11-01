@@ -23,30 +23,10 @@ namespace Gu.Persist.RuntimeBinary
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
-        /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
-        /// </summary>
-        public SingletonRepository(PathAndSpecialFolder directory)
-            : this(directory.CreateDirectoryInfo())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// It will use BinaryRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
         public SingletonRepository(DirectoryInfo directory)
-            : base(directory, () => CreateDefaultSettings(directory), Serialize<RepositorySettings>.Default)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
-        /// If <paramref name="directory"/> contains a settings file it is read and used.
-        /// If not a new default setting is created and saved.
-        /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public SingletonRepository(PathAndSpecialFolder directory, Func<RepositorySettings> settingsCreator)
-            : base(directory.CreateDirectoryInfo(), settingsCreator, Serialize<RepositorySettings>.Default)
+            : base(directory, () => Default.RepositorySettings(directory), Serialize<RepositorySettings>.Default)
         {
         }
 
@@ -58,22 +38,6 @@ namespace Gu.Persist.RuntimeBinary
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public SingletonRepository(DirectoryInfo directory, Func<RepositorySettings> settingsCreator)
             : base(directory, settingsCreator, Serialize<RepositorySettings>.Default)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
-        /// If <paramref name="directory"/> contains a settings file it is read and used.
-        /// If not a new setting is created and saved.
-        /// </summary>
-        /// <param name="directory">The directory where files will be saved.</param>
-        /// <param name="backuper">
-        /// The backuper.
-        /// Note that a custom backuper may not use the backupsettings.
-        /// </param>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public SingletonRepository(PathAndSpecialFolder directory, IBackuper backuper, Func<RepositorySettings> settingsCreator)
-            : base(directory.CreateDirectoryInfo(), backuper, settingsCreator, Serialize<RepositorySettings>.Default)
         {
         }
 

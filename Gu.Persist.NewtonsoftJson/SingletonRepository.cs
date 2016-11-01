@@ -141,7 +141,15 @@ namespace Gu.Persist.NewtonsoftJson
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
         public SingletonRepository(Core.RepositorySettings settings)
-            : base(RepositorySettings.Create(settings), Serialize<RepositorySettings>.Default)
+            : base(Create(settings), Serialize<RepositorySettings>.Default)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
+        /// </summary>
+        public SingletonRepository(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
+            : base(Create(settings, jsonSettings), Serialize<RepositorySettings>.Default)
         {
         }
 
@@ -149,7 +157,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
         public SingletonRepository(Core.RepositorySettings settings, IBackuper backuper)
-            : base(RepositorySettings.Create(settings), backuper, Serialize<RepositorySettings>.Default)
+            : base(Create(settings), backuper, Serialize<RepositorySettings>.Default)
         {
         }
 
@@ -157,18 +165,34 @@ namespace Gu.Persist.NewtonsoftJson
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
         public SingletonRepository(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings, IBackuper backuper)
-            : base(RepositorySettings.Create(settings, jsonSettings), backuper, Serialize<RepositorySettings>.Default)
+            : base(Create(settings, jsonSettings), backuper, Serialize<RepositorySettings>.Default)
         {
         }
 
-        protected new static RepositorySettings CreateDefaultSettings(DirectoryInfo directory)
+        protected static RepositorySettings CreateDefaultSettings(DirectoryInfo directory)
         {
-            return RepositorySettings.Create(Core.SingletonRepository<Core.RepositorySettings>.CreateDefaultSettings(directory));
+            return Create(Default.RepositorySettings(directory));
         }
 
         protected static RepositorySettings CreateDefaultSettings(DirectoryInfo directory, JsonSerializerSettings jsonSerializerSettings)
         {
-            return RepositorySettings.Create(Core.SingletonRepository<Core.RepositorySettings>.CreateDefaultSettings(directory), jsonSerializerSettings);
+            return Create(Create(Default.RepositorySettings(directory), jsonSerializerSettings));
+        }
+
+        protected static RepositorySettings Create(Core.RepositorySettings settings)
+        {
+            return Create(settings, RepositorySettings.CreateDefaultJsonSettings());
+        }
+
+        protected static RepositorySettings Create(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
+        {
+            return new RepositorySettings(
+                       settings.Directory,
+                       jsonSettings,
+                       settings.IsTrackingDirty,
+                       settings.BackupSettings,
+                       settings.Extension,
+                       settings.TempExtension);
         }
     }
 }

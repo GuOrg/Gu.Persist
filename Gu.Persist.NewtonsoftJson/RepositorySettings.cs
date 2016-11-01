@@ -14,7 +14,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// </summary>
         [JsonConstructor]
         public RepositorySettings(
-            PathAndSpecialFolder directory,
+            string directory,
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
             BackupSettings backupSettings,
@@ -46,24 +46,7 @@ namespace Gu.Persist.NewtonsoftJson
                            Formatting = Formatting.Indented,
                            Culture = CultureInfo.InvariantCulture,
                            FloatFormatHandling = FloatFormatHandling.DefaultValue,
-                           ////Converters = new[] { new Newtonsoft.Json.Converters.StringEnumConverter() }
                        };
-        }
-
-        public static RepositorySettings Create(Core.RepositorySettings settings)
-        {
-            return Create(settings, CreateDefaultJsonSettings());
-        }
-
-        public static RepositorySettings Create(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
-        {
-            return new RepositorySettings(
-                       settings.Directory,
-                       jsonSettings,
-                       settings.IsTrackingDirty,
-                       settings.BackupSettings,
-                       settings.Extension,
-                       settings.TempExtension);
         }
     }
 }

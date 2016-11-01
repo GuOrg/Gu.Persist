@@ -20,8 +20,8 @@
         [SetUp]
         public void SetUp()
         {
-            this.setting = BackupSettings.Create(
-                this.directoryInfo,
+            this.setting = new BackupSettings(
+                this.directoryInfo.FullName,
                 BackupSettings.DefaultExtension,
                 BackupSettings.DefaultTimeStampFormat,
                 3,

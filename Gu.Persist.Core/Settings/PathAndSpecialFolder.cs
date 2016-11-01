@@ -6,6 +6,7 @@
     using System.IO;
     using System.Reflection;
 
+    [Obsolete("Not sure we want to keep this.")]
     [Serializable]
     [DebuggerDisplay("Path: {Path} SpecialFolder: {SpecialFolder}")]
 

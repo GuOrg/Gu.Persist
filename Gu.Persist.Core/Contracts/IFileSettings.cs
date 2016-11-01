@@ -5,7 +5,7 @@
         /// <summary>
         /// Gets the path to where backups are saved.
         /// </summary>
-        PathAndSpecialFolder Directory { get; }
+        string Directory { get; }
 
         /// <summary>
         /// Gets the extension

@@ -29,7 +29,7 @@ namespace Gu.Persist.Core.Tests.Backup
             this.File = this.Directory.CreateFileInfoInDirectory("Meh.cfg");
             this.SoftDelete = this.File.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             this.Backup = this.Directory.CreateFileInfoInDirectory("Meh.bak");
-            var settings = BackupSettings.Create(this.Directory, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, 3);
+            var settings = new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, 3);
             this.BackupOneMinuteOld = this.Backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
             this.BackupOneHourOld = this.Backup.WithTimeStamp(DateTime.Now.AddHours(-1), settings);
             this.BackupOneDayOld = this.Backup.WithTimeStamp(DateTime.Now.AddDays(-1), settings);

@@ -92,8 +92,7 @@ namespace Gu.Persist.Core
             Ensure.NotNull<object>(settings, nameof(settings));
             Ensure.NotNull(serialize, nameof(serialize));
             this.serialize = serialize;
-            settings.Directory.CreateDirectoryInfo()
-                    .CreateIfNotExists();
+            new DirectoryInfo(settings.Directory).CreateIfNotExists();
             this.Settings = settings;
             this.Backuper = backuper;
             if (this.Settings.IsTrackingDirty)

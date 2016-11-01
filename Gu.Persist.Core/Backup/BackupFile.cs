@@ -49,18 +49,17 @@
         internal static IList<BackupFile> GetAllBackupsFor(FileInfo file, IBackupSettings setting)
         {
             var pattern = GetBackupFilePattern(file, setting);
-            var backups = setting.Directory.CreateDirectoryInfo()
-                                 .EnumerateFiles(pattern)
-                                 .Select(x => new BackupFile(x, setting))
-                                 .OrderBy(x => x.TimeStamp)
-                                 .ToList();
+            var backups = Directory.EnumerateFiles(setting.Directory, pattern)
+                                   .Select(x => new BackupFile(new FileInfo(x), setting))
+                                   .OrderBy(x => x.TimeStamp)
+                                   .ToList();
             return backups;
         }
 
         internal static FileInfo CreateFor(FileInfo file, IBackupSettings setting)
         {
             var backup = file.WithNewExtension(setting.Extension)
-                             .InDirectory(setting.Directory.CreateDirectoryInfo());
+                             .InDirectory(new DirectoryInfo(setting.Directory));
 
             if (string.IsNullOrEmpty(setting.TimeStampFormat))
             {

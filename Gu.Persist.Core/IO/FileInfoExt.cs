@@ -28,7 +28,8 @@
             return indexOfAny == -1;
         }
 
-        internal static bool CanRename(this FileInfo file, string newName, IFileSettings settings)
+        internal static bool CanRename<TFileSetting>(this FileInfo file, string newName, TFileSetting settings)
+            where TFileSetting : IFileSettings
         {
             if (!file.Exists)
             {
@@ -94,11 +95,9 @@
             return new FileInfo(fileName);
         }
 
-        internal static FileInfo WithNewName(this FileInfo file, string newName, IFileSettings setting)
+        internal static FileInfo WithNewName<TFileSetting>(this FileInfo file, string newName, TFileSetting setting)
+            where TFileSetting : IFileSettings
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.IsValidFileName(newName, nameof(newName));
-            Ensure.NotNull(setting, nameof(setting));
             FileInfo newFile;
             var isSoftDeleteFile = file.GetIsSoftDeleteFile();
             if (isSoftDeleteFile)

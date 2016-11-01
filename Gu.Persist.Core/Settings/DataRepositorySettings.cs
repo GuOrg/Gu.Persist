@@ -6,7 +6,7 @@
     public class DataRepositorySettings : RepositorySettings, IDataRepositorySettings
     {
         public DataRepositorySettings(
-            PathAndSpecialFolder directory,
+            string directory,
             bool isTrackingDirty,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,

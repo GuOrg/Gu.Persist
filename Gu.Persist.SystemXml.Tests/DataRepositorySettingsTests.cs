@@ -14,20 +14,22 @@
     public class DataRepositorySettingsTests
     {
         private static readonly BackupSettings BackupSettings =
-            BackupSettings.Create(
-                new DirectoryInfo(@"C:\Temp\Gu.Persist\Backup"),
+            new BackupSettings(
+                @"C:\Temp\Gu.Persist\Backup",
                 ".abc",
                 BackupSettings.DefaultTimeStampFormat,
                 1,
                 2);
 
-        private static readonly PathAndSpecialFolder Directory = new PathAndSpecialFolder(@"C:\Temp\Gu.Persist\", null);
+        private static readonly DirectoryInfo Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\");
+
+        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(Directory.FullName, false, false, BackupSettings, ".cde", ".fgh");
 
         [Test]
         public void RoundtripRepositorySettingsWithRepository()
         {
-            var settings = new DataRepositorySettings(Directory, true, true, BackupSettings, ".cde", ".fgh");
-            var repository = new DataRepository(settings);
+            var settings = new DataRepositorySettings(Directory.FullName, true, true, BackupSettings, ".cde", ".fgh");
+            var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<DataRepositorySettings>();
             AssertProperties(settings, roundtripped);
@@ -36,7 +38,7 @@
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var settings = new DataRepositorySettings(Directory, true, true, BackupSettings, ".cde", ".fgh");
+            var settings = new DataRepositorySettings(Directory.FullName, true, true, BackupSettings, ".cde", ".fgh");
             var sb = new StringBuilder();
             var serializer = new XmlSerializer(settings.GetType());
             using (var writer = new StringWriter(sb))
@@ -57,7 +59,7 @@
         [Test]
         public void RoundtripRepositorySettingsWithNullBackupSettings()
         {
-            var settings = new DataRepositorySettings(Directory, true, true, null, ".cde", ".fgh");
+            var settings = new DataRepositorySettings(Directory.FullName, true, true, null, ".cde", ".fgh");
             var sb = new StringBuilder();
             var serializer = new XmlSerializer(settings.GetType());
             using (var writer = new StringWriter(sb))

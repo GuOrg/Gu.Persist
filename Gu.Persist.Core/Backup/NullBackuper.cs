@@ -97,7 +97,7 @@
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
             {
-                var fileSettings = new FileSettings(PathAndSpecialFolder.Create(file.Directory), file.Extension);
+                var fileSettings = new FileSettings(file.DirectoryName, file.Extension);
                 if (!soft.CanRename(newName, fileSettings))
                 {
                     return false;
@@ -125,7 +125,7 @@
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
             {
-                var withNewName = soft.WithNewName(newName, new FileSettings(PathAndSpecialFolder.Create(file.Directory), file.Extension));
+                var withNewName = soft.WithNewName(newName, new TempFileSettings(file.DirectoryName, file.Extension));
                 return new[] { new RenamePair(soft, withNewName) };
             }
 

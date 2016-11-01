@@ -16,7 +16,7 @@ namespace Gu.Persist.SystemXml
         /// Initializes a new instance of the <see cref="DataRepositorySettings"/> class.
         /// </summary>
         public DataRepositorySettings(
-            PathAndSpecialFolder directory,
+            string directory,
             bool isTrackingDirty,
             bool saveNullDeletesFile,
             BackupSettings backupSettings,
@@ -32,19 +32,8 @@ namespace Gu.Persist.SystemXml
         /// </summary>
         // ReSharper disable once UnusedMember.Local
         private DataRepositorySettings()
-            : base(PathAndSpecialFolder.Create(Directories.AppDirectory()), false, false, Core.BackupSettings.Create(Directories.AppDirectory()))
+            : base(Directories.AppDirectory().FullName, false, false, Default.BackupSettings(Directories.AppDirectory()))
         {
-        }
-
-        public static DataRepositorySettings Create(Core.RepositorySettings settings)
-        {
-            return new DataRepositorySettings(
-                       settings.Directory,
-                       settings.IsTrackingDirty,
-                       (settings as IDataRepositorySettings)?.SaveNullDeletesFile == true,
-                       settings.BackupSettings,
-                       settings.Extension,
-                       settings.TempExtension);
         }
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -55,7 +44,7 @@ namespace Gu.Persist.SystemXml
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             reader.ReadStartElement();
-            this.SetPrivate(nameof(this.Directory), reader.ReadElementPathAndSpecialFolder(nameof(this.Directory)));
+            this.SetPrivate(nameof(this.Directory), reader.ReadElementString(nameof(this.Directory)));
             this.SetPrivate(nameof(this.Extension), reader.ReadElementString(nameof(this.Extension)));
             this.SetPrivate(nameof(this.TempExtension), reader.ReadElementString(nameof(this.TempExtension)));
             this.SetPrivate(nameof(this.IsTrackingDirty), reader.ReadElementBool(nameof(this.IsTrackingDirty)));
@@ -77,6 +66,13 @@ namespace Gu.Persist.SystemXml
             }
         }
 
+        private static FieldInfo GetBackingField<T>(string propertyName)
+        {
+            return typeof(T).GetField(
+                $"<{propertyName}>k__BackingField",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+
         private void SetPrivate<T>(string propertyName, T value)
         {
             var field = GetBackingField<Core.DataRepositorySettings>(propertyName) ??
@@ -84,13 +80,6 @@ namespace Gu.Persist.SystemXml
                         GetBackingField<Core.FileSettings>(propertyName);
             Ensure.NotNull(field, nameof(field));
             field.SetValue(this, value);
-        }
-
-        private static FieldInfo GetBackingField<T>(string propertyName)
-        {
-            return typeof(T).GetField(
-                $"<{propertyName}>k__BackingField",
-                BindingFlags.NonPublic | BindingFlags.Instance);
         }
     }
 }

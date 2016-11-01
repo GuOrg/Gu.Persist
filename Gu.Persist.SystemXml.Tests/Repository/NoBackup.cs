@@ -6,7 +6,7 @@ namespace Gu.Persist.SystemXml.Tests.Repository
 
     using RepositorySettings = Gu.Persist.SystemXml.RepositorySettings;
 
-    public class NoBackup : XmlRepositoryTests
+    public class SingletonRepositoryNoBackup : XmlRepositoryTests
     {
         [Test]
         public void BackuperIsNone()
@@ -16,7 +16,7 @@ namespace Gu.Persist.SystemXml.Tests.Repository
 
         protected override IRepository Create()
         {
-            var settings = new RepositorySettings(this.TargetDirectory, null);
+            var settings = new RepositorySettings(this.TargetDirectory.FullName, false, null);
             return new SingletonRepository(settings);
         }
     }

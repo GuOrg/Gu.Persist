@@ -1,6 +1,5 @@
 namespace Gu.Persist.SystemXml
 {
-    using System.IO;
     using System.Reflection;
     using System.Xml;
     using System.Xml.Schema;
@@ -14,46 +13,13 @@ namespace Gu.Persist.SystemXml
     public class RepositorySettings : Core.RepositorySettings, IXmlSerializable
     {
         /// <summary> Initializes a new instance of the <see cref="RepositorySettings"/> class. </summary>
-        public RepositorySettings(DirectoryInfo directory)
-            : base(directory)
-        {
-        }
-
-        /// <summary> Initializes a new instance of the <see cref="RepositorySettings"/> class. </summary>
-        public RepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
-            : base(directory, backupSettings)
-        {
-        }
-
-        /// <summary> Initializes a new instance of the <see cref="RepositorySettings"/> class. </summary>
         public RepositorySettings(
-            DirectoryInfo directory,
+            string directory,
             bool isTrackingDirty,
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
-            : this(
-                PathAndSpecialFolder.Create(directory),
-                isTrackingDirty,
-                backupSettings,
-                extension,
-                tempExtension)
-        {
-        }
-
-        /// <summary> Initializes a new instance of the <see cref="RepositorySettings"/> class. </summary>
-        public RepositorySettings(
-            PathAndSpecialFolder directory,
-            bool isTrackingDirty,
-            BackupSettings backupSettings,
-            string extension = ".cfg",
-            string tempExtension = ".tmp")
-            : base(
-                  directory,
-                  isTrackingDirty,
-                  backupSettings,
-                  extension,
-                  tempExtension)
+            : base(directory, isTrackingDirty, backupSettings, extension, tempExtension)
         {
         }
 
@@ -63,26 +29,8 @@ namespace Gu.Persist.SystemXml
         /// </summary>
         // ReSharper disable once UnusedMember.Local
         private RepositorySettings()
-            : base(Directories.AppDirectory(), false, Core.BackupSettings.Create(Directories.AppDirectory()))
+            : base(Directories.AppDirectory().FullName, false, Default.BackupSettings(Directories.AppDirectory()))
         {
-        }
-
-        /// <summary>
-        /// A default instance for <paramref name="directory"/>
-        /// </summary>
-        public static RepositorySettings DefaultFor(DirectoryInfo directory)
-        {
-            return new RepositorySettings(directory, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
-        }
-
-        public static RepositorySettings Create(Core.RepositorySettings settings)
-        {
-            return new RepositorySettings(
-                       settings.Directory,
-                       settings.IsTrackingDirty,
-                       settings.BackupSettings,
-                       settings.Extension,
-                       settings.TempExtension);
         }
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -93,7 +41,7 @@ namespace Gu.Persist.SystemXml
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             reader.ReadStartElement();
-            this.SetPrivate(nameof(this.Directory), reader.ReadElementPathAndSpecialFolder(nameof(this.Directory)));
+            this.SetPrivate(nameof(this.Directory), reader.ReadElementString(nameof(this.Directory)));
             this.SetPrivate(nameof(this.Extension), reader.ReadElementString(nameof(this.Extension)));
             this.SetPrivate(nameof(this.TempExtension), reader.ReadElementString(nameof(this.TempExtension)));
             this.SetPrivate(nameof(this.IsTrackingDirty), reader.ReadElementBool(nameof(this.IsTrackingDirty)));

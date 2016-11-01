@@ -8,13 +8,22 @@
 
     public class XmlRepositorySettingsTests
     {
+        private static readonly BackupSettings BackupSettings = new BackupSettings(
+                                                                    @"C:\Temp\Gu.Persist\Backup",
+                                                                    ".abc",
+                                                                    BackupSettings.DefaultTimeStampFormat,
+                                                                    1,
+                                                                    2);
+
+        private static readonly DirectoryInfo Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\");
+
+        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(Directory.FullName, false, false, BackupSettings);
+
         [Test]
         public void RoundtripRepositorySettingsWithRepository()
         {
-            var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
-            var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new RepositorySettings(directory, false, backupSettings, ".abc", ".cde");
-            var repository = new SingletonRepository(settings);
+            var settings = new RepositorySettings(Directory.FullName, false, BackupSettings, ".cde", ".fgh");
+            var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<RepositorySettings>();
             AssertProperties(settings, roundtripped);
@@ -23,9 +32,7 @@
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
-            var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new RepositorySettings(directory, true, backupSettings, ".abc", ".cde");
+            var settings = new RepositorySettings(Directory.FullName, true, BackupSettings, ".cde", ".fgh");
             var serializer = new DataContractSerializer(settings.GetType());
             using (Stream stream = PooledMemoryStream.Borrow())
             {
@@ -39,8 +46,7 @@
         [Test]
         public void RoundtripRepositorySettingsWithNullBackupSettings()
         {
-            var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new RepositorySettings(directory, true, null, ".abc", ".def");
+            var settings = new RepositorySettings(Directory.FullName, true, null, ".cde", ".fgh");
             var serializer = new DataContractSerializer(settings.GetType());
             using (Stream stream = PooledMemoryStream.Borrow())
             {
@@ -67,8 +73,7 @@
             {
                 var expectedValue = propertyInfo.GetValue(expected);
                 var actualValue = propertyInfo.GetValue(actual);
-                if (propertyInfo.PropertyType == typeof(BackupSettings) ||
-                    propertyInfo.PropertyType == typeof(PathAndSpecialFolder))
+                if (propertyInfo.PropertyType == typeof(BackupSettings))
                 {
                     AssertProperties(expectedValue, actualValue);
                     continue;

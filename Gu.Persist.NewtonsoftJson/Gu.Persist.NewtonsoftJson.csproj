@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="DataRepository.cs" />
     <Compile Include="DataRepositorySettings.cs" />
-    <Compile Include="IJsonRepositorySertting.cs" />
+    <Compile Include="IJsonRepositorySetting.cs" />
     <Compile Include="JsonEqualsComparer{T}.cs" />
     <Compile Include="JsonFile.cs" />
     <Compile Include="RepositorySettings.cs" />
