@@ -7,6 +7,8 @@
 
     using NUnit.Framework;
 
+    using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
+
     public class SettingsTests
     {
         private readonly DirectoryInfo directory;
@@ -27,18 +29,17 @@
         {
             var backupDir = this.directory.CreateSubdirectory("Backup");
             var backupSettings = BackupSettings.Create(backupDir, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
-            var settings = new JsonRepositorySettings(
-                this.directory,
-                JsonRepositorySettings.CreateDefaultJsonSettings(),
-                false,
+            var settings = new RepositorySettings(
+                PathAndSpecialFolder.Create(this.directory),
+                RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 backupSettings,
                 ".cde",
                 ".fgh");
             var json = JsonConvert.SerializeObject(settings);
-            var roundtripped = JsonConvert.DeserializeObject<JsonRepositorySettings>(json);
+            var roundtripped = JsonConvert.DeserializeObject<RepositorySettings>(json);
             AssertProperties(settings, roundtripped);
-            Assert.IsTrue(JsonEqualsComparer<JsonRepositorySettings>.Default.Equals(settings, roundtripped));
+            Assert.IsTrue(JsonEqualsComparer<RepositorySettings>.Default.Equals(settings, roundtripped));
         }
 
         [Test]
@@ -57,17 +58,16 @@
         {
             var backupDir = this.directory.CreateSubdirectory("Backup");
             var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
-            var settings = new RepositorySettings(
+            var settings = new Core.RepositorySettings(
                                PathAndSpecialFolder.Create(this.directory),
-                               false,
                                false,
                                backupSettings,
                                ".cde",
                                ".fgh");
             var json = JsonConvert.SerializeObject(settings);
-            var roundtripped = JsonConvert.DeserializeObject<RepositorySettings>(json);
+            var roundtripped = JsonConvert.DeserializeObject<Core.RepositorySettings>(json);
             AssertProperties(settings, roundtripped);
-            Assert.IsTrue(JsonEqualsComparer<RepositorySettings>.Default.Equals(settings, roundtripped));
+            Assert.IsTrue(JsonEqualsComparer<Core.RepositorySettings>.Default.Equals(settings, roundtripped));
         }
 
         [Test]
@@ -86,42 +86,14 @@
         {
             var backupDir = this.directory.CreateSubdirectory("Backup");
             var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
-            var settings = new JsonRepositorySettings(
-                this.directory,
-                JsonRepositorySettings.CreateDefaultJsonSettings(),
-                false,
-                false,
-                backupSettings,
-                ".cde",
-                ".fgh");
-            var repository = new JsonRepository(settings);
-            repository.Save(settings);
-            var roundtripped = repository.Read<JsonRepositorySettings>();
-            AssertProperties(settings, roundtripped);
-            Assert.IsTrue(JsonEqualsComparer<JsonRepositorySettings>.Default.Equals(settings, roundtripped));
-        }
-
-        [Test]
-        public void RoundtripRepositorySettingsWithRepository()
-        {
-            var backupDir = this.directory.CreateSubdirectory("Backup");
-            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new RepositorySettings(
-              PathAndSpecialFolder.Create(this.directory),
-                false,
+                PathAndSpecialFolder.Create(this.directory),
+                RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 backupSettings,
                 ".cde",
                 ".fgh");
-            var repository = new JsonRepository(
-                    new JsonRepositorySettings(
-                        this.directory,
-                        JsonRepositorySettings.CreateDefaultJsonSettings(),
-                        false,
-                        false,
-                        null,
-                        ".cde",
-                        ".fgh"));
+            var repository = new SingletonRepository(settings);
             repository.Save(settings);
             var roundtripped = repository.Read<RepositorySettings>();
             AssertProperties(settings, roundtripped);
@@ -129,19 +101,63 @@
         }
 
         [Test]
-        public void RoundtripBackupSettingsWithRepository()
+        public void RoundtripJsonDataRepositorySettingsWithRepository()
         {
             var backupDir = this.directory.CreateSubdirectory("Backup");
             var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
-            var settings = new JsonRepositorySettings(
-                this.directory,
-                JsonRepositorySettings.CreateDefaultJsonSettings(),
+            var settings = new NewtonsoftJson.DataRepositorySettings(
+                PathAndSpecialFolder.Create(this.directory),
+                RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 false,
                 backupSettings,
                 ".cde",
                 ".fgh");
-            var repository = new JsonRepository(settings);
+            var repository = new SingletonRepository(settings);
+            repository.Save(settings);
+            var roundtripped = repository.Read<NewtonsoftJson.DataRepositorySettings>();
+            AssertProperties(settings, roundtripped);
+            Assert.IsTrue(JsonEqualsComparer<NewtonsoftJson.DataRepositorySettings>.Default.Equals(settings, roundtripped));
+        }
+
+        [Test]
+        public void RoundtripRepositorySettingsWithRepository()
+        {
+            var backupDir = this.directory.CreateSubdirectory("Backup");
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var settings = new Core.RepositorySettings(
+              PathAndSpecialFolder.Create(this.directory),
+                false,
+                backupSettings,
+                ".cde",
+                ".fgh");
+            var repository = new SingletonRepository(
+                    new RepositorySettings(
+                       PathAndSpecialFolder.Create(this.directory),
+                        RepositorySettings.CreateDefaultJsonSettings(),
+                        false,
+                        null,
+                        ".cde",
+                        ".fgh"));
+            repository.Save(settings);
+            var roundtripped = repository.Read<Core.RepositorySettings>();
+            AssertProperties(settings, roundtripped);
+            Assert.IsTrue(JsonEqualsComparer<Core.RepositorySettings>.Default.Equals(settings, roundtripped));
+        }
+
+        [Test]
+        public void RoundtripBackupSettingsWithRepository()
+        {
+            var backupDir = this.directory.CreateSubdirectory("Backup");
+            var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
+            var settings = new RepositorySettings(
+              PathAndSpecialFolder.Create(this.directory),
+                RepositorySettings.CreateDefaultJsonSettings(),
+                false,
+                backupSettings,
+                ".cde",
+                ".fgh");
+            var repository = new SingletonRepository(settings);
             repository.Save(backupSettings);
             var roundtripped = repository.Read<BackupSettings>();
             AssertProperties(backupSettings, roundtripped);
@@ -153,17 +169,16 @@
         {
             var backupDir = this.directory.CreateSubdirectory("Backup");
             var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
-            var settings = new JsonRepositorySettings(
-                this.directory,
-                JsonRepositorySettings.CreateDefaultJsonSettings(),
-                false,
+            var settings = new RepositorySettings(
+               PathAndSpecialFolder.Create(this.directory),
+                RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 backupSettings,
                 ".cde",
                 ".fgh");
-            var created = JsonRepositorySettings.Create(settings);
+            var created = RepositorySettings.Create(settings);
             AssertProperties(settings, created);
-            Assert.IsTrue(JsonEqualsComparer<JsonRepositorySettings>.Default.Equals(settings, created));
+            Assert.IsTrue(JsonEqualsComparer<RepositorySettings>.Default.Equals(settings, created));
         }
 
         [Test]
@@ -171,25 +186,23 @@
         {
             var backupDir = this.directory.CreateSubdirectory("Backup");
             var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
-            var repositorySettings = new RepositorySettings(
+            var repositorySettings = new Core.RepositorySettings(
                                         PathAndSpecialFolder.Create(this.directory),
-                                         false,
                                          false,
                                          backupSettings,
                                          ".cde",
                                          ".fgh");
-            var created = JsonRepositorySettings.Create(repositorySettings);
+            var created = RepositorySettings.Create(repositorySettings);
 
-            var jsonRepositorySettings = new JsonRepositorySettings(
-                               this.directory,
-                               JsonRepositorySettings.CreateDefaultJsonSettings(),
-                               false,
-                               false,
-                               backupSettings,
-                               ".cde",
-                               ".fgh");
+            var jsonRepositorySettings = new RepositorySettings(
+                PathAndSpecialFolder.Create(this.directory),
+                RepositorySettings.CreateDefaultJsonSettings(),
+                false,
+                backupSettings,
+                ".cde",
+                ".fgh");
             AssertProperties(jsonRepositorySettings, created);
-            Assert.IsTrue(JsonEqualsComparer<JsonRepositorySettings>.Default.Equals(jsonRepositorySettings, created));
+            Assert.IsTrue(JsonEqualsComparer<RepositorySettings>.Default.Equals(jsonRepositorySettings, created));
         }
 
         [Test]
@@ -197,25 +210,23 @@
         {
             var backupDir = this.directory.CreateSubdirectory("Backup");
             var backupSettings = new BackupSettings(PathAndSpecialFolder.Create(backupDir), ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
-            var repositorySettings = new RepositorySettings(
+            var repositorySettings = new Core.RepositorySettings(
                                          PathAndSpecialFolder.Create(this.directory),
-                                         false,
                                          false,
                                          backupSettings,
                                          ".cde",
                                          ".fgh");
-            var created = JsonRepositorySettings.Create(repositorySettings, JsonRepositorySettings.CreateDefaultJsonSettings());
+            var created = RepositorySettings.Create(repositorySettings, RepositorySettings.CreateDefaultJsonSettings());
 
-            var jsonRepositorySettings = new JsonRepositorySettings(
-                               this.directory,
-                               JsonRepositorySettings.CreateDefaultJsonSettings(),
-                               false,
-                               false,
-                               backupSettings,
-                               ".cde",
-                               ".fgh");
+            var jsonRepositorySettings = new RepositorySettings(
+                PathAndSpecialFolder.Create(this.directory),
+                RepositorySettings.CreateDefaultJsonSettings(),
+                false,
+                backupSettings,
+                ".cde",
+                ".fgh");
             AssertProperties(jsonRepositorySettings, created);
-            Assert.IsTrue(JsonEqualsComparer<JsonRepositorySettings>.Default.Equals(jsonRepositorySettings, created));
+            Assert.IsTrue(JsonEqualsComparer<RepositorySettings>.Default.Equals(jsonRepositorySettings, created));
         }
 
         private static void AssertProperties<T>(T expected, T actual)

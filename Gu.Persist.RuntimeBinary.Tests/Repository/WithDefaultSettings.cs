@@ -8,15 +8,20 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
         [Test]
         public void DefaultSettings()
         {
-            var defaultSettings = BinaryRepositorySettings.DefaultFor(this.Directory);
-            var comparer = new BinaryEqualsComparer<IRepositorySettings>();
-            Assert.IsTrue(comparer.Equals(defaultSettings, this.Repository.Settings));
+            Assert.AreEqual(".cfg", this.Settings.Extension);
+            Assert.AreEqual(this.TargetDirectory.FullName, this.Settings.Directory.Path);
+            Assert.AreEqual(false, this.Settings.IsTrackingDirty);
+
+            Assert.AreEqual(".bak", this.Settings.BackupSettings.Extension);
+            Assert.AreEqual(this.TargetDirectory.FullName, this.Settings.BackupSettings.Directory.Path);
+            Assert.AreEqual(int.MaxValue, this.Settings.BackupSettings.MaxAgeInDays);
+            Assert.AreEqual(1, this.Settings.BackupSettings.NumberOfBackups);
+            Assert.AreEqual(null, this.Settings.BackupSettings.TimeStampFormat);
         }
 
         protected override IRepository Create()
         {
-            var settings = BinaryRepositorySettings.DefaultFor(this.Directory);
-            return new BinaryRepository(settings);
+            return new SingletonRepository(this.TargetDirectory);
         }
     }
 }

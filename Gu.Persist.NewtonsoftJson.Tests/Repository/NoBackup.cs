@@ -4,7 +4,7 @@
     using Gu.Persist.Core.Backup;
     using NUnit.Framework;
 
-    public class NoBackup : JsonRepositoryTests
+    public class SingletonRepositoryNoBackup : JsonRepositoryTests
     {
         [Test]
         public void BackuperIsNone()
@@ -14,8 +14,12 @@
 
         protected override IRepository Create()
         {
-            var settings = new JsonRepositorySettings(this.Directory, null);
-            return new JsonRepository(settings);
+            var settings = new NewtonsoftJson.RepositorySettings(
+                PathAndSpecialFolder.Create(this.TargetDirectory),
+                NewtonsoftJson.RepositorySettings.CreateDefaultJsonSettings(),
+                false,
+                null);
+            return new SingletonRepository(settings);
         }
     }
 }

@@ -49,7 +49,8 @@
         internal static IList<BackupFile> GetAllBackupsFor(FileInfo file, IBackupSettings setting)
         {
             var pattern = GetBackupFilePattern(file, setting);
-            var backups = setting.Directory.CreateDirectoryInfo().EnumerateFiles(pattern)
+            var backups = setting.Directory.CreateDirectoryInfo()
+                                 .EnumerateFiles(pattern)
                                  .Select(x => new BackupFile(x, setting))
                                  .OrderBy(x => x.TimeStamp)
                                  .ToList();

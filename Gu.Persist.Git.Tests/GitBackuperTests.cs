@@ -10,11 +10,13 @@
 
     using NUnit.Framework;
 
+    using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
+
     public class GitBackuperTests
     {
         private readonly DirectoryInfo directory;
         private DummySerializable dummy;
-        private JsonRepository repository;
+        private SingletonRepository repository;
 
         public GitBackuperTests()
         {
@@ -30,9 +32,9 @@
             }
 
             this.directory.Create();
-            var settings = new JsonRepositorySettings(this.directory, null);
+            var settings = new RepositorySettings(PathAndSpecialFolder.Create(this.directory), RepositorySettings.CreateDefaultJsonSettings(), false, null);
             var gitBackuper = new GitBackuper(settings.Directory);
-            this.repository = new JsonRepository(settings, gitBackuper);
+            this.repository = new SingletonRepository(settings, gitBackuper);
             this.dummy = new DummySerializable(1);
         }
 
@@ -85,12 +87,12 @@
             var file = this.directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
             Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));
             this.repository.Save(file, this.dummy);
-            var json = File.ReadAllText(file.FullName);
+            var json = System.IO.File.ReadAllText(file.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
             Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));
             this.dummy.Value++;
             JsonFile.Save(file, this.dummy);
-            json = File.ReadAllText(file.FullName);
+            json = System.IO.File.ReadAllText(file.FullName);
             Assert.AreEqual("{\"Value\":2}", json);
             Assert.AreEqual(true, this.repository.Backuper.CanRestore(file), "CanRestore after save");
             Assert.AreEqual(true, this.repository.Backuper.TryRestore(file), "TryRestore");

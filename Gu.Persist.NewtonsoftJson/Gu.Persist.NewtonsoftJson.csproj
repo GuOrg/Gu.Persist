@@ -39,11 +39,14 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataRepository.cs" />
+    <Compile Include="DataRepositorySettings.cs" />
+    <Compile Include="IJsonRepositorySertting.cs" />
     <Compile Include="JsonEqualsComparer{T}.cs" />
     <Compile Include="JsonFile.cs" />
-    <Compile Include="JsonRepository.cs" />
-    <Compile Include="JsonRepositorySettings.cs" />
-    <Compile Include="JsonSerialize.cs" />
+    <Compile Include="RepositorySettings.cs" />
+    <Compile Include="SingletonRepository.cs" />
+    <Compile Include="Serialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

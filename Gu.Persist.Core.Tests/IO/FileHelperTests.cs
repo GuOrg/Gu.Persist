@@ -27,7 +27,7 @@
             this.softDeleteFile = this.file.GetSoftDeleteFileFor();
             this.backup = this.file.WithNewExtension(BackupSettings.DefaultExtension);
             this.backupSoftDelete = this.backup.GetSoftDeleteFileFor();
-            this.backup.VoidCreate();
+            this.backup.CreatePlaceHolder();
         }
 
         [TearDown]
@@ -50,7 +50,7 @@
         [Test]
         public void HardDeleteWhenNoSoftFile()
         {
-            this.file.VoidCreate();
+            this.file.CreatePlaceHolder();
             this.file.HardDelete();
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(false, this.softDeleteFile);
@@ -60,8 +60,8 @@
         [Test]
         public void HardDeleteWhenHasSoftFile()
         {
-            this.file.VoidCreate();
-            this.softDeleteFile.VoidCreate();
+            this.file.CreatePlaceHolder();
+            this.softDeleteFile.CreatePlaceHolder();
             this.file.HardDelete();
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(false, this.softDeleteFile);
@@ -71,7 +71,7 @@
         [Test]
         public void HardDeleteWhenOnlySoftFile()
         {
-            this.softDeleteFile.VoidCreate();
+            this.softDeleteFile.CreatePlaceHolder();
             this.file.HardDelete();
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(false, this.softDeleteFile);
@@ -90,7 +90,7 @@
         [Test]
         public void SoftDeleteWhenNoSoftFile()
         {
-            this.file.VoidCreate();
+            this.file.CreatePlaceHolder();
             this.file.SoftDelete();
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(true, this.softDeleteFile);
@@ -213,7 +213,7 @@
         [Test]
         public void SoftDeleteWhenOnlySoftFile()
         {
-            this.softDeleteFile.VoidCreate();
+            this.softDeleteFile.CreatePlaceHolder();
             this.file.SoftDelete();
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(true, this.softDeleteFile);

@@ -1,6 +1,5 @@
 ﻿namespace Gu.Persist.NewtonsoftJson.Tests.Repository
 {
-    using System.IO;
     using Gu.Persist.Core;
     using Gu.Persist.Core.Tests;
     using Gu.Persist.NewtonsoftJson;
@@ -17,15 +16,14 @@
                 Value = 1
             };
             this.Repository.Save(fileInfo, value);
-            var json = File.ReadAllText(fileInfo.FullName);
+            var json = System.IO.File.ReadAllText(fileInfo.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
-            File.Delete(fileInfo.FullName);
+            System.IO.File.Delete(fileInfo.FullName);
         }
 
         protected override IRepository Create()
         {
-            var settings = JsonRepositorySettings.DefaultFor(this.Directory);
-            return new JsonRepository(settings);
+            return new SingletonRepository(this.TargetDirectory);
         }
     }
 }

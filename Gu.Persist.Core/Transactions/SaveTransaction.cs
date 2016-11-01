@@ -6,7 +6,7 @@
 
     using Gu.Persist.Core.Backup;
 
-    internal sealed class SaveTransaction : IDisposable
+    public sealed class SaveTransaction : IDisposable
     {
         private readonly FileInfo file;
         private readonly FileInfo tempFile;
@@ -83,7 +83,7 @@
                 this.lockedFile.DisposeAndDeleteFile();
                 if (this.contents != null)
                 {
-                    this.tempFile.MoveTo(this.file);
+                    File.Move(this.tempFile.FullName, this.file.FullName);
                     this.lockedTempFile.DisposeAndDeleteFile();
                 }
 

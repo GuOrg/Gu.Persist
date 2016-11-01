@@ -10,7 +10,7 @@ namespace Gu.Persist.Core
     /// Base class for a repository
     /// </summary>
     public abstract class Repository<TSetting>
-    : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings
+    : IRepository, IGenericAsyncRepository, IAsyncFileNameRepository, ICloner, IRepositoryWithSettings, IStreamRepository
     where TSetting : IRepositorySettings
     {
         private readonly Serialize<TSetting> serialize;
@@ -208,26 +208,11 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<Stream> ReadStreamAsync<T>()
-        {
-            var file = this.GetFileInfo<T>();
-            return this.ReadStreamAsync(file);
-        }
-
-        /// <inheritdoc/>
         public virtual Task<T> ReadAsync<T>(string fileName)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
             var fileInfo = this.GetFileInfoCore(fileName);
             return this.ReadAsync<T>(fileInfo);
-        }
-
-        /// <inheritdoc/>
-        public virtual Task<Stream> ReadStreamAsync(string fileName)
-        {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
-            var fileInfo = this.GetFileInfoCore(fileName);
-            return this.ReadStreamAsync(fileInfo);
         }
 
         /// <inheritdoc/>
@@ -244,23 +229,31 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<Stream> ReadStreamAsync(FileInfo file)
-        {
-            Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
-            return file.ReadAsync();
-        }
-
-        /// <inheritdoc/>
         public virtual T Read<T>()
         {
             return this.ReadCore<T>();
         }
 
         /// <inheritdoc/>
-        public virtual Stream ReadStream<T>()
+        Task<Stream> IStreamRepository.ReadAsync<T>()
         {
-            var file = this.GetFileInfoCore<T>();
-            return this.ReadStream(file);
+            var file = this.GetFileInfo<T>();
+            return file.ReadAsync();
+        }
+
+        /// <inheritdoc/>
+        Task<Stream> IStreamRepository.ReadAsync(string fileName)
+        {
+            Ensure.IsValidFileName(fileName, nameof(fileName));
+            var file = this.GetFileInfoCore(fileName);
+            return file.ReadAsync();
+        }
+
+        /// <inheritdoc/>
+        Task<Stream> IStreamRepository.ReadAsync(FileInfo file)
+        {
+            Ensure.NotNull(file, nameof(file));
+            return file.ReadAsync();
         }
 
         /// <inheritdoc/>
@@ -272,14 +265,6 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Stream ReadStream(string fileName)
-        {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
-            var file = this.GetFileInfoCore(fileName);
-            return this.ReadStream(file);
-        }
-
-        /// <inheritdoc/>
         public virtual T Read<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -287,9 +272,24 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Stream ReadStream(FileInfo file)
+        Stream IStreamRepository.Read<T>()
+        {
+            var file = this.GetFileInfoCore<T>();
+            return file.OpenRead();
+        }
+
+        /// <inheritdoc/>
+        Stream IStreamRepository.Read(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
+            return file.OpenRead();
+        }
+
+        /// <inheritdoc/>
+        Stream IStreamRepository.Read(string fileName)
+        {
+            Ensure.IsValidFileName(fileName, nameof(fileName));
+            var file = this.GetFileInfoCore(fileName);
             return file.OpenRead();
         }
 
@@ -320,11 +320,8 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void Save<T>(T item)
         {
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
+            var file = this.GetFileInfo<T>();
+            this.EnsureCanSave(file, item);
             this.SaveCore(item);
         }
 
@@ -332,12 +329,8 @@ namespace Gu.Persist.Core
         public virtual void Save<T>(string fileName, T item)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
             var file = this.GetFileInfoCore(fileName);
+            this.EnsureCanSave(file, item);
             this.SaveCore(file, item);
         }
 
@@ -345,11 +338,7 @@ namespace Gu.Persist.Core
         public virtual void Save<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
+            this.EnsureCanSave(file, item);
             this.SaveCore(file, item);
         }
 
@@ -358,73 +347,15 @@ namespace Gu.Persist.Core
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(tempFile, nameof(tempFile));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
+            this.EnsureCanSave(file, item);
             this.SaveCore(file, tempFile, item);
-        }
-
-        /// <inheritdoc/>
-        public virtual void SaveStream<T>(Stream stream)
-        {
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull(stream, nameof(stream));
-            }
-
-            var file = this.GetFileInfoCore<T>();
-            this.SaveStream(file, stream);
-        }
-
-        /// <inheritdoc/>
-        public virtual void SaveStream(string fileName, Stream stream)
-        {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull(stream, nameof(stream));
-            }
-
-            var file = this.GetFileInfoCore(fileName);
-            this.SaveStream(file, stream);
-        }
-
-        /// <inheritdoc/>
-        public virtual void SaveStream(FileInfo file, Stream stream)
-        {
-            Ensure.NotNull(file, nameof(file));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull(stream, nameof(stream));
-            }
-
-            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
-            this.SaveStreamCore(file, tempFile, stream);
-        }
-
-        /// <inheritdoc/>
-        public virtual void SaveStream(FileInfo file, FileInfo tempFile, Stream stream)
-        {
-            Ensure.NotNull(file, nameof(file));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull(stream, nameof(stream));
-            }
-
-            this.SaveStreamCore(file, tempFile, stream);
         }
 
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(T item)
         {
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
             var file = this.GetFileInfo<T>();
+            this.EnsureCanSave(file, item);
             return this.SaveAsync(file, item);
         }
 
@@ -432,24 +363,16 @@ namespace Gu.Persist.Core
         public virtual Task SaveAsync<T>(string fileName, T item)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
-            var fileInfo = this.GetFileInfoCore(fileName);
-            return this.SaveAsync(fileInfo, item);
+            var file = this.GetFileInfoCore(fileName);
+            this.EnsureCanSave(file, item);
+            return this.SaveAsync(file, item);
         }
 
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
+            this.EnsureCanSave(file, item);
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
             return this.SaveAsync(file, tempFile, item);
         }
@@ -459,64 +382,84 @@ namespace Gu.Persist.Core
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(tempFile, nameof(tempFile));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
+            this.EnsureCanSave(file, item);
             this.CacheAndTrackCore(file, item);
             using (var stream = item != null ? this.serialize.ToStream(item) : null)
             {
-                await this.SaveStreamAsync(file, tempFile, stream).ConfigureAwait(false);
+                await this.SaveStreamCoreAsync(file, tempFile, stream).ConfigureAwait(false);
             }
         }
 
         /// <inheritdoc/>
-        public virtual Task SaveStreamAsync<T>(Stream stream)
+        void IStreamRepository.Save<T>(Stream stream)
         {
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull(stream, nameof(stream));
-            }
-
-            var file = this.GetFileInfo<T>();
-            return this.SaveStreamAsync(file, stream);
+            var file = this.GetFileInfoCore<T>();
+            this.EnsureCanSave(file, stream);
+            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
+            this.SaveStreamCore(file, tempFile, stream);
         }
 
         /// <inheritdoc/>
-        public virtual Task SaveStreamAsync(string fileName, Stream stream)
+        void IStreamRepository.Save(string fileName, Stream stream)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull(stream, nameof(stream));
-            }
-
             var file = this.GetFileInfoCore(fileName);
-            return this.SaveStreamAsync(file, stream);
+            this.EnsureCanSave(file, stream);
+            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
+            this.SaveStreamCore(file, tempFile, stream);
         }
 
         /// <inheritdoc/>
-        public virtual Task SaveStreamAsync(FileInfo file, Stream stream)
+        void IStreamRepository.Save(FileInfo file, Stream stream)
         {
             Ensure.NotNull(file, nameof(file));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull(stream, nameof(stream));
-            }
-
+            this.EnsureCanSave(file, stream);
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
-            return this.SaveStreamAsync(file, tempFile, stream);
+            this.SaveStreamCore(file, tempFile, stream);
         }
 
         /// <inheritdoc/>
-        public virtual async Task SaveStreamAsync(FileInfo file, FileInfo tempFile, Stream stream)
+        void IStreamRepository.Save(FileInfo file, FileInfo tempFile, Stream stream)
         {
-            using (var saveTransaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
-            {
-                await saveTransaction.CommitAsync()
-                                     .ConfigureAwait(false);
-            }
+            Ensure.NotNull(file, nameof(file));
+            this.EnsureCanSave(file, stream);
+            this.SaveStreamCore(file, tempFile, stream);
+        }
+
+        /// <inheritdoc/>
+        Task IStreamRepository.SaveAsync<T>(Stream stream)
+        {
+            var file = this.GetFileInfo<T>();
+            this.EnsureCanSave(file, stream);
+            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
+            return this.SaveStreamCoreAsync(file, tempFile, stream);
+        }
+
+        /// <inheritdoc/>
+        Task IStreamRepository.SaveAsync(string fileName, Stream stream)
+        {
+            Ensure.IsValidFileName(fileName, nameof(fileName));
+            var file = this.GetFileInfoCore(fileName);
+            this.EnsureCanSave(file, stream);
+            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
+            return this.SaveStreamCoreAsync(file, tempFile, stream);
+        }
+
+        /// <inheritdoc/>
+        Task IStreamRepository.SaveAsync(FileInfo file, Stream stream)
+        {
+            Ensure.NotNull(file, nameof(file));
+            this.EnsureCanSave(file, stream);
+            var tempFile = file.WithNewExtension(this.Settings.TempExtension);
+            return this.SaveStreamCoreAsync(file, tempFile, stream);
+        }
+
+        /// <inheritdoc/>
+        Task IStreamRepository.SaveAsync(FileInfo file, FileInfo tempFile, Stream stream)
+        {
+            Ensure.NotNull(file, nameof(file));
+            this.EnsureCanSave(file, stream);
+            return this.SaveStreamCoreAsync(file, tempFile, stream);
         }
 
         /// <inheritdoc/>
@@ -601,7 +544,6 @@ namespace Gu.Persist.Core
         public bool CanRename<T>(string newName)
         {
             Ensure.IsValidFileName(newName, nameof(newName));
-
             var fileInfo = this.GetFileInfo<T>();
             return this.CanRename(fileInfo, newName);
         }
@@ -683,11 +625,22 @@ namespace Gu.Persist.Core
         {
             Ensure.NotNull(oldName, nameof(oldName));
             Ensure.NotNull(newName, nameof(newName));
-            oldName.Rename(newName, overWrite);
+            var pairs = new List<RenamePair> { new RenamePair(oldName, newName) };
+            var oldSoftDelete = oldName.GetSoftDeleteFileFor();
+            if (oldSoftDelete?.Exists == true)
+            {
+                pairs.Add(new RenamePair(oldSoftDelete, newName.GetSoftDeleteFileFor()));
+            }
+
             if (this.Backuper != null)
             {
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(newName.Name);
-                this.Backuper.Rename(oldName, fileNameWithoutExtension, overWrite);
+                pairs.AddRange(this.Backuper.GetRenamePairs(oldName, fileNameWithoutExtension));
+            }
+
+            using (var transaction = new RenameTransaction(pairs))
+            {
+                transaction.Commit(overWrite);
             }
         }
 
@@ -717,8 +670,8 @@ namespace Gu.Persist.Core
                 return;
             }
 
-            var fileInfo = this.GetFileInfo<T>();
-            tracker.RemoveFromCache(fileInfo.FullName);
+            var file = this.GetFileInfo<T>();
+            tracker.RemoveFromCache(file.FullName);
         }
 
         /// <summary>
@@ -854,6 +807,15 @@ namespace Gu.Persist.Core
             }
         }
 
+        protected async Task SaveStreamCoreAsync(FileInfo file, FileInfo tempFile, Stream stream)
+        {
+            using (var saveTransaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
+            {
+                await saveTransaction.CommitAsync()
+                                     .ConfigureAwait(false);
+            }
+        }
+
         /// <summary>
         /// Check if the file corresponding to <typeparamref name="T"/> exists
         /// </summary>
@@ -879,5 +841,7 @@ namespace Gu.Persist.Core
                 this.Tracker.Track(file.FullName, item);
             }
         }
+
+        protected abstract void EnsureCanSave<T>(FileInfo file, T item);
     }
 }

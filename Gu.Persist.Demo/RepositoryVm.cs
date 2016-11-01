@@ -10,6 +10,8 @@
     using JetBrains.Annotations;
     using NewtonsoftJson;
 
+    using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
+
     public class RepositoryVm : INotifyPropertyChanged
     {
         private RepositoryVm()
@@ -44,12 +46,12 @@
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private static JsonRepository CreateJsonRepositoryWithGitBackuper()
+        private static SingletonRepository CreateJsonRepositoryWithGitBackuper()
         {
-            var jsonSerializerSettings = JsonRepositorySettings.CreateDefaultJsonSettings();
-            var jsonRepositorySettings = new JsonRepositorySettings(jsonSerializerSettings, true, false, null);
-            var gitBackuper = new GitBackuper(jsonRepositorySettings.Directory);
-            return new JsonRepository(jsonRepositorySettings, gitBackuper);
+            var jsonSerializerSettings = RepositorySettings.CreateDefaultJsonSettings();
+            var settings = new RepositorySettings(PathAndSpecialFolder.Create(Directories.AppDirectory()), jsonSerializerSettings, false, null);
+            var gitBackuper = new GitBackuper(settings.Directory);
+            return new SingletonRepository(settings, gitBackuper);
         }
     }
 }

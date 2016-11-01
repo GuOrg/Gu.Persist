@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.Core
 {
+    using System.Collections.Generic;
     using System.IO;
 
     /// <summary>
@@ -58,11 +59,24 @@
 
         bool CanRename(FileInfo file, string newName);
 
-        void Rename(FileInfo file, string newName, bool owerWrite);
+        /// <summary>
+        /// Rename the backup files for <paramref name="file"/> to.
+        /// </summary>
+        /// <param name="file">The file to rename backups for.</param>
+        /// <param name="newName">The new name.</param>
+        /// <param name="overWrite">Overwrite newname if exists.</param>
+        void Rename(FileInfo file, string newName, bool overWrite);
 
         /// <summary>
         /// Deletes all backups for <paramref name="file"/>
         /// </summary>
         void DeleteBackups(FileInfo file);
+
+        /// <summary>
+        /// Rename the backup files for <paramref name="file"/> to.
+        /// </summary>
+        /// <param name="file">The file to rename backups for.</param>
+        /// <param name="newName">The new name.</param>
+        IReadOnlyList<RenamePair> GetRenamePairs(FileInfo file, string newName);
     }
 }

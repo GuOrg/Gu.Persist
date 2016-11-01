@@ -1,20 +1,27 @@
 ﻿namespace Gu.Persist.Core.Tests
 {
-    using System;
     using System.Collections.Concurrent;
     using System.Reflection;
 
     using Gu.Persist.Core;
 
+    using NUnit.Framework;
+
     public static class RepositoryExt
     {
-        private static readonly FieldInfo RepositoryCacheField = typeof(SingletonRepository<>).GetField("cache", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
         private static readonly FieldInfo TrackerCacheField = typeof(DirtyTracker).GetField("cache", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
 
-        public static ConcurrentDictionary<string, WeakReference> GetCache(this ISingletonRepository repo)
+        public static FileCache GetCache(this ISingletonRepository repo)
         {
-            var cache = (ConcurrentDictionary<string, WeakReference>)RepositoryCacheField.GetValue(repo);
-            return cache;
+            if (repo == null)
+            {
+                return null;
+            }
+
+            // ReSharper disable once PossibleNullReferenceException
+            var cacheField = repo.GetType().BaseType.GetField("fileCache", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
+            Assert.NotNull(cacheField);
+            return (FileCache)cacheField.GetValue(repo);
         }
 
         public static ConcurrentDictionary<string, object> GetCache(this IDirtyTracker tracker)

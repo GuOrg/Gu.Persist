@@ -18,10 +18,5 @@ namespace Gu.Persist.Core
         /// Gets if the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes.
         /// </summary>
         bool IsTrackingDirty { get; }
-
-        /// <summary>
-        /// When true saving null deletes the file. When false an exception is thrown.
-        /// </summary>
-        bool SaveNullDeletesFile { get; }
     }
 }

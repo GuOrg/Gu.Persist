@@ -8,6 +8,8 @@
 
     using NUnit.Framework;
 
+    using RepositorySettings = Gu.Persist.SystemXml.RepositorySettings;
+
     public class XmlRepositorySettingsTests
     {
         [Test]
@@ -15,10 +17,10 @@
         {
             var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, false, false, backupSettings, ".abc", ".cde");
-            var repository = new XmlRepository(settings);
+            var settings = new RepositorySettings(directory, false, backupSettings, ".abc", ".cde");
+            var repository = new SingletonRepository(settings);
             repository.Save(settings);
-            var roundtripped = repository.Read<XmlRepositorySettings>();
+            var roundtripped = repository.Read<RepositorySettings>();
             AssertProperties(settings, roundtripped);
         }
 
@@ -27,7 +29,7 @@
         {
             var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, true, false, backupSettings, ".abc", ".cde");
+            var settings = new RepositorySettings(directory, false, backupSettings, ".abc", ".cde");
             var sb = new StringBuilder();
             var serializer = new XmlSerializer(settings.GetType());
             using (var writer = new StringWriter(sb))
@@ -38,11 +40,11 @@
             var xml = sb.ToString();
 
             ////Console.Write(xml);
-            XmlRepositorySettings roundtripped;
+            RepositorySettings roundtripped;
 
             using (var reader = new StringReader(xml))
             {
-                roundtripped = (XmlRepositorySettings)serializer.Deserialize(reader);
+                roundtripped = (RepositorySettings)serializer.Deserialize(reader);
             }
 
             AssertProperties(settings, roundtripped);
@@ -52,7 +54,7 @@
         public void RoundtripRepositorySettingsWithNullBackupSettings()
         {
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, true, true, null, ".abc", ".def");
+            var settings = new RepositorySettings(directory, true, null, ".abc", ".def");
             var sb = new StringBuilder();
             var serializer = new XmlSerializer(settings.GetType());
             using (var writer = new StringWriter(sb))
@@ -63,11 +65,11 @@
             var xml = sb.ToString();
 
             ////Console.Write(xml);
-            XmlRepositorySettings roundtripped;
+            RepositorySettings roundtripped;
 
             using (var reader = new StringReader(xml))
             {
-                roundtripped = (XmlRepositorySettings)serializer.Deserialize(reader);
+                roundtripped = (RepositorySettings)serializer.Deserialize(reader);
             }
 
             AssertProperties(settings, roundtripped);
@@ -78,8 +80,8 @@
         {
             var backupSettings = BackupSettings.Create(new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name + @"\Backup"));
             var directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            var settings = new XmlRepositorySettings(directory, true, false, backupSettings, ".abc", ".cde");
-            var created = XmlRepositorySettings.Create(settings);
+            var settings = new RepositorySettings(directory, false, backupSettings, ".abc", ".cde");
+            var created = RepositorySettings.Create(settings);
             AssertProperties(settings, created);
         }
 

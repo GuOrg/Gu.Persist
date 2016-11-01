@@ -183,48 +183,6 @@ namespace Gu.Persist.Core
         T ReadOrCreate<T>(FileInfo file, Func<T> creator);
 
         /// <summary>
-        /// <see cref="IRepository.ReadStream{T}()"/>
-        /// </summary>
-        Task<Stream> ReadStreamAsync<T>();
-
-        /// <summary>
-        /// <see cref="IRepository.ReadStream(string)"/>
-        /// </summary>
-        Task<Stream> ReadStreamAsync(string fileName);
-
-        /// <summary>
-        ///  <see cref="IRepository.ReadStream(FileInfo)"/>
-        /// </summary>
-        Task<Stream> ReadStreamAsync(FileInfo file);
-
-        /// <summary>
-        /// Reads the file and returns the contents in a memorystream
-        /// </summary>
-        /// <remarks>
-        /// This overload is a poor fit for large files.
-        /// </remarks>
-        Stream ReadStream<T>();
-
-        /// <summary>
-        /// Reads the file and returns the contents in a memorystream
-        /// </summary>
-        /// <remarks>
-        /// This overload is a poor fit for large files.
-        /// </remarks>
-        /// <param name="fileName">
-        /// Filename can be either of:
-        /// C:\Temp\FileName.cfg
-        /// FileName.cfg
-        /// FileName
-        /// </param>
-        Stream ReadStream(string fileName);
-
-        /// <summary>
-        /// Reads the file <paramref name="file"/> and returns the contents in a memorystream
-        /// </summary>
-        Stream ReadStream(FileInfo file);
-
-        /// <summary>
         /// Saves to a file for <typeparamref name="T"/>
         /// <seealso cref="IRepository.Save{T}(FileInfo, FileInfo, T)"/>
         /// </summary>
@@ -276,54 +234,6 @@ namespace Gu.Persist.Core
         /// <see cref="IRepository.Save{T}(FileInfo, FileInfo, T)"/>
         /// </summary>
         Task SaveAsync<T>(FileInfo file, FileInfo tempFile, T item);
-
-        /// <summary>
-        /// Saves <paramref name="stream"/> to a file specified by <typeparamref name="T"/>
-        /// <seealso cref="IRepository.Save{T}(T)"/>
-        /// </summary>
-        void SaveStream<T>(Stream stream);
-
-        /// <summary>
-        /// Saves <paramref name="stream"/> to a file specified by  <paramref name="fileName"/>
-        /// </summary>
-        /// <param name="fileName">
-        /// Filename can be either of:
-        /// C:\Temp\FileName.cfg
-        /// FileName.cfg
-        /// FileName
-        /// </param>
-        void SaveStream(string fileName, Stream stream);
-
-        /// <summary>
-        /// Saves the stream and creates backups.
-        /// </summary>
-        void SaveStream(FileInfo file, Stream stream);
-
-        /// <summary>
-        /// Saves <paramref name="stream"/> to <paramref name="file"/>
-        /// <seealso cref="IRepository.Save{T}(FileInfo, FileInfo, T)"/>
-        /// </summary>
-        void SaveStream(FileInfo file, FileInfo tempFile, Stream stream);
-
-        /// <summary>
-        /// <see cref="IRepository.SaveStream{T}(Stream)"/>
-        /// </summary>
-        Task SaveStreamAsync<T>(Stream stream);
-
-        /// <summary>
-        /// <see cref="IRepository.SaveStream(string, Stream)"/>
-        /// </summary>
-        Task SaveStreamAsync(string fileName, Stream stream);
-
-        /// <summary>
-        /// <see cref="IRepository.SaveStream(FileInfo,Stream)"/>
-        /// </summary>
-        Task SaveStreamAsync(FileInfo file, Stream stream);
-
-        /// <summary>
-        /// <see cref="IRepository.SaveStream(FileInfo, FileInfo, Stream)"/>
-        /// </summary>
-        Task SaveStreamAsync(FileInfo file, FileInfo tempFile, Stream stream);
 
         /// <summary>
         /// Checks if the file for <typeparamref name="T"/> can be renamed to <paramref name="newName"/>

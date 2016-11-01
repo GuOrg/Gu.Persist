@@ -45,6 +45,15 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
+        public static T Read<T>(string fileName)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            return FileHelper.Read(new FileInfo(fileName), FromStream<T>);
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
         public static T Read<T>(FileInfo file)
         {
             Ensure.Exists(file, nameof(file));
@@ -54,10 +63,28 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
+        public static T Read<T>(string fileName, JsonSerializerSettings settings)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            return FileHelper.Read(new FileInfo(fileName), stream => FromStream<T>(stream, settings));
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
         public static T Read<T>(FileInfo file, JsonSerializerSettings settings)
         {
             Ensure.Exists(file, nameof(file));
-            return FileHelper.Read(file, s => FromStream<T>(s, settings));
+            return FileHelper.Read(file, stream => FromStream<T>(stream, settings));
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
+        public static Task<T> ReadAsync<T>(string fileName)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            return FileHelper.ReadAsync(new FileInfo(fileName), FromStream<T>);
         }
 
         /// <summary>
@@ -72,10 +99,29 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
+        public static Task<T> ReadAsync<T>(string fileName, JsonSerializerSettings settings)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            return FileHelper.ReadAsync(new FileInfo(fileName), stream => FromStream<T>(stream, settings));
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
         public static Task<T> ReadAsync<T>(FileInfo file, JsonSerializerSettings settings)
         {
             Ensure.Exists(file, nameof(file));
-            return FileHelper.ReadAsync(file, s => FromStream<T>(s, settings));
+            return FileHelper.ReadAsync(file, stream => FromStream<T>(stream, settings));
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static void Save<T>(string fileName, T item)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            Ensure.NotNull<object>(item, nameof(item));
+            Save(new FileInfo(fileName), item);
         }
 
         /// <summary>
@@ -86,6 +132,16 @@
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull<object>(item, nameof(item));
             Save(file, item, null);
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static void Save<T>(string fileName, T item, JsonSerializerSettings settings)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            Ensure.NotNull<object>(item, nameof(item));
+            Save(new FileInfo(fileName), item, settings);
         }
 
         /// <summary>
@@ -107,6 +163,16 @@
         /// <summary>
         /// Saves <paramref name="item"/> as json
         /// </summary>
+        public static Task SaveAsync<T>(string fileName, T item)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            Ensure.NotNull<object>(item, nameof(item));
+            return SaveAsync(new FileInfo(fileName), item);
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
         public static async Task SaveAsync<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
@@ -115,6 +181,16 @@
             {
                 await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
             }
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static Task SaveAsync<T>(string fileName, T item, JsonSerializerSettings settings)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            Ensure.NotNull<object>(item, nameof(item));
+            return SaveAsync(new FileInfo(fileName), item, settings);
         }
 
         /// <summary>

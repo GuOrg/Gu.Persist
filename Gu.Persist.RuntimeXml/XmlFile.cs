@@ -28,6 +28,15 @@ namespace Gu.Persist.RuntimeXml
         }
 
         /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
+        public static T Read<T>(string fileName)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            return FileHelper.Read(new FileInfo(fileName), FromStream<T>);
+        }
+
+        /// <summary>
         /// Read the contents of <paramref name="file"/> and serialize it to <typeparamref name="T"/>
         /// </summary>
         public static T Read<T>(FileInfo file)
@@ -39,10 +48,29 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
+        public static Task<T> ReadAsync<T>(string fileName)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            return FileHelper.ReadAsync(new FileInfo(fileName), FromStream<T>);
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             return FileHelper.ReadAsync(file, FromStream<T>);
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static void Save<T>(string fileName, T item)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            Ensure.NotNull<object>(item, nameof(item));
+            Save(new FileInfo(fileName), item);
         }
 
         /// <summary>
@@ -61,6 +89,16 @@ namespace Gu.Persist.RuntimeXml
                     serializer.WriteObject(stream, item);
                 }
             }
+        }
+
+        /// <summary>
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static Task SaveAsync<T>(string fileName, T item)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            Ensure.NotNull<object>(item, nameof(item));
+            return SaveAsync(new FileInfo(fileName), item);
         }
 
         /// <summary>

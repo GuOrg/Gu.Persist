@@ -1,6 +1,7 @@
 ﻿namespace Gu.Persist.Core.Backup
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
@@ -207,29 +208,42 @@
         }
 
         /// <inheritdoc/>
-        public void Rename(FileInfo file, string newName, bool owerWrite)
+        public void Rename(FileInfo file, string newName, bool overWrite)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNullOrEmpty(newName, nameof(newName));
+            using (var transaction = new RenameTransaction(this.GetRenamePairs(file, newName)))
+            {
+                transaction.Commit(overWrite);
+            }
+        }
+
+        public IReadOnlyList<RenamePair> GetRenamePairs(FileInfo file, string newName)
+        {
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNullOrEmpty(newName, nameof(newName));
+            var pairs = new List<RenamePair>();
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
             {
-                var withNewName = soft.WithNewName(newName, this.Setting);
-                soft.Rename(withNewName, true);
+                var withNewName = soft.WithNewName(newName, new FileSettings(PathAndSpecialFolder.Create(file.Directory), file.Extension));
+                pairs.Add(new RenamePair(soft, withNewName));
             }
 
             var allBackups = BackupFile.GetAllBackupsFor(file, this.Setting);
             foreach (var backup in allBackups)
             {
                 var withNewName = backup.File.WithNewName(newName, this.Setting);
-                backup.File.Rename(withNewName, owerWrite);
+                pairs.Add(new RenamePair(backup.File, withNewName));
                 soft = backup.File.GetSoftDeleteFileFor();
                 if (soft.Exists)
                 {
                     withNewName = soft.WithNewName(newName, this.Setting);
-                    soft.Rename(withNewName, owerWrite);
+                    pairs.Add(new RenamePair(soft, withNewName));
                 }
             }
+
+            return pairs;
         }
 
         /// <inheritdoc/>

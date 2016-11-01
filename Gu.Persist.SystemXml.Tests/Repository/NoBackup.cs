@@ -4,6 +4,8 @@ namespace Gu.Persist.SystemXml.Tests.Repository
     using Gu.Persist.Core.Backup;
     using NUnit.Framework;
 
+    using RepositorySettings = Gu.Persist.SystemXml.RepositorySettings;
+
     public class NoBackup : XmlRepositoryTests
     {
         [Test]
@@ -14,8 +16,8 @@ namespace Gu.Persist.SystemXml.Tests.Repository
 
         protected override IRepository Create()
         {
-            var settings = new XmlRepositorySettings(this.Directory, null);
-            return new XmlRepository(settings);
+            var settings = new RepositorySettings(this.TargetDirectory, null);
+            return new SingletonRepository(settings);
         }
     }
 }

@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
     using Core;
     using Gu.Persist.Core.Tests;
-    using Gu.Persist.RuntimeBinary;
+
     using NUnit.Framework;
 
     public class BinaryFileTests
@@ -14,6 +14,13 @@
         public BinaryFileTests()
         {
             this.directory = new DirectoryInfo($@"C:\Temp\Gu.Persist\{this.GetType().Name}").CreateIfNotExists();
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            this.directory.Delete(true);
+            this.directory.Create();
         }
 
         [OneTimeTearDown]
@@ -43,6 +50,17 @@
         }
 
         [Test]
+        public void SaveThenReadName()
+        {
+            var dummy = new DummySerializable { Value = 1 };
+            var file = this.directory.CreateFileInfoInDirectory("dummy.json");
+            BinaryFile.Save(file.Name, dummy);
+            var read = BinaryFile.Read<DummySerializable>(file.Name);
+            Assert.AreNotSame(dummy, read);
+            Assert.AreEqual(dummy.Value, read.Value);
+        }
+
+        [Test]
         public void SaveTwiceThenRead()
         {
             var dummy = new DummySerializable { Value = 1 };
@@ -61,6 +79,17 @@
             var file = this.directory.CreateFileInfoInDirectory("dummy.json");
             await BinaryFile.SaveAsync(file, dummy).ConfigureAwait(false);
             var read = await BinaryFile.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
+            Assert.AreNotSame(dummy, read);
+            Assert.AreEqual(dummy.Value, read.Value);
+        }
+
+        [Test]
+        public async Task SaveAsyncThenReadName()
+        {
+            var dummy = new DummySerializable { Value = 1 };
+            var file = this.directory.CreateFileInfoInDirectory("dummy.json");
+            await BinaryFile.SaveAsync(file.Name, dummy).ConfigureAwait(false);
+            var read = await BinaryFile.ReadAsync<DummySerializable>(file.Name).ConfigureAwait(false);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }

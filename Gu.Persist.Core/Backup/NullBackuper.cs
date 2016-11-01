@@ -1,6 +1,7 @@
 ﻿namespace Gu.Persist.Core.Backup
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
 
     /// <summary>
@@ -107,17 +108,28 @@
         }
 
         /// <inheritdoc/>
-        public void Rename(FileInfo file, string newName, bool owerWrite)
+        public void Rename(FileInfo file, string newName, bool overWrite)
+        {
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNullOrEmpty(newName, nameof(newName));
+            using (var transaction = new RenameTransaction(this.GetRenamePairs(file, newName)))
+            {
+                transaction.Commit(overWrite);
+            }
+        }
+
+        public IReadOnlyList<RenamePair> GetRenamePairs(FileInfo file, string newName)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNullOrEmpty(newName, nameof(newName));
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
             {
-                var fileSettings = new FileSettings(PathAndSpecialFolder.Create(file.Directory), file.Extension);
-                var withNewName = soft.WithNewName(newName, fileSettings);
-                soft.Rename(withNewName, owerWrite);
+                var withNewName = soft.WithNewName(newName, new FileSettings(PathAndSpecialFolder.Create(file.Directory), file.Extension));
+                return new[] { new RenamePair(soft, withNewName) };
             }
+
+            return RenamePair.EmptyArray;
         }
 
         /// <inheritdoc/>

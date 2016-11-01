@@ -117,43 +117,26 @@
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(T item)
         {
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
             var file = this.GetFileInfoCore<T>();
-            this.Save(file, item);
-            this.RemoveFromCache(item);
-            this.RemoveFromDirtyTracker(item);
+            this.EnsureCanSave(file, item);
+            this.SaveAndCloseCore(file, item);
         }
 
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(string fileName, T item)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
-            this.Save(fileName, item);
-            this.RemoveFromCache(item);
-            this.RemoveFromDirtyTracker(item);
+            var file = this.GetFileInfoCore(fileName);
+            this.EnsureCanSave(file, item);
+            this.SaveAndCloseCore(file, item);
         }
 
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
-            if (!this.Settings.SaveNullDeletesFile)
-            {
-                Ensure.NotNull<object>(item, nameof(item));
-            }
-
-            this.SaveCore(file, item);
-            this.RemoveFromCache(item);
-            this.RemoveFromDirtyTracker(item);
+            this.EnsureCanSave(file, item);
+            this.SaveAndCloseCore(file, item);
         }
 
         /// <inheritdoc/>
@@ -166,6 +149,11 @@
         public void RemoveFromCache<T>(T item)
         {
             this.fileCache.TryRemove(item);
+        }
+
+        protected static RepositorySettings CreateDefaultSettings(DirectoryInfo directory)
+        {
+            return new RepositorySettings(PathAndSpecialFolder.Create(directory), false, BackupSettings.Create(directory));
         }
 
         /// <summary>
@@ -230,6 +218,30 @@
         {
             this.Cache(file, item);
             base.CacheAndTrackCore(file, item);
+        }
+
+        protected override void EnsureCanSave<T>(FileInfo file, T item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException($"{this.GetType().Name} cannot save null.");
+            }
+
+            object cached;
+            if (this.fileCache.TryGetValue(file.FullName, out cached))
+            {
+                if (!ReferenceEquals(item, cached))
+                {
+                    throw new InvalidOperationException("Trying to save a different instance than the cached");
+                }
+            }
+        }
+
+        private void SaveAndCloseCore<T>(FileInfo file, T item)
+        {
+            this.SaveCore(file, item);
+            this.RemoveFromCache(item);
+            this.RemoveFromDirtyTracker(item);
         }
     }
 }
