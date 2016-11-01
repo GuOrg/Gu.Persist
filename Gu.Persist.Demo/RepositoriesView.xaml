@@ -15,10 +15,7 @@
     <Grid>
         <ItemsControl Grid.Column="0" Style="{StaticResource SettingsListStyle}">
             <HeaderedContentControl Header="Directory">
-                <StackPanel>
-                    <TextBox Text="{Binding Repository.Settings.Directory.Path, Mode=OneWay}" IsReadOnly="True"/>
-                    <TextBox Text="{Binding Repository.Settings.Directory.SpecialFolder, Mode=OneWay}" IsReadOnly="True"/>
-                </StackPanel>
+                <TextBox Text="{Binding Repository.Settings.Directory, Mode=OneWay}" IsReadOnly="True"/>
             </HeaderedContentControl>
 
             <HeaderedContentControl Header="Extension">

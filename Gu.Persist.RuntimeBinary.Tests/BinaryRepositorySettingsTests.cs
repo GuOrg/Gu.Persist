@@ -16,6 +16,7 @@
                                                             BackupSettings.DefaultTimeStampFormat,
                                                             1,
                                                             2);
+
         private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(Directory.FullName, false, false, BackupSettings, ".cde", ".fgh");
 
         [Test]
@@ -72,8 +73,7 @@
             {
                 var expectedValue = propertyInfo.GetValue(expected);
                 var actualValue = propertyInfo.GetValue(actual);
-                if (propertyInfo.PropertyType == typeof(BackupSettings) ||
-                    propertyInfo.PropertyType == typeof(PathAndSpecialFolder))
+                if (propertyInfo.PropertyType == typeof(BackupSettings))
                 {
                     AssertProperties(expectedValue, actualValue);
                     continue;

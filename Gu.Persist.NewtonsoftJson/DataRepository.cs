@@ -26,8 +26,8 @@ namespace Gu.Persist.NewtonsoftJson
         /// It will use DataRepository.DefaultFor(directory) as settings.
         /// </summary>
         /// <param name="directory">The directory where the repository reads and saves files.</param>
-        public DataRepository(PathAndSpecialFolder directory)
-            : this(directory.CreateDirectoryInfo())
+        public DataRepository(string directory)
+            : this(new DirectoryInfo(directory))
         {
         }
 
@@ -47,8 +47,8 @@ namespace Gu.Persist.NewtonsoftJson
         /// </summary>
         /// <param name="directory">The directory where the repository reads and saves files.</param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public DataRepository(PathAndSpecialFolder directory, Func<DataRepositorySettings> settingsCreator)
-            : base(directory.CreateDirectoryInfo(), settingsCreator, Serialize<DataRepositorySettings>.Default)
+        public DataRepository(string directory, Func<DataRepositorySettings> settingsCreator)
+            : base(new DirectoryInfo(directory), settingsCreator, Serialize<DataRepositorySettings>.Default)
         {
         }
 
@@ -75,8 +75,8 @@ namespace Gu.Persist.NewtonsoftJson
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public DataRepository(PathAndSpecialFolder directory, IBackuper backuper, Func<DataRepositorySettings> settingsCreator)
-            : base(directory.CreateDirectoryInfo(), backuper, settingsCreator, Serialize<DataRepositorySettings>.Default)
+        public DataRepository(string directory, IBackuper backuper, Func<DataRepositorySettings> settingsCreator)
+            : base(new DirectoryInfo(directory), backuper, settingsCreator, Serialize<DataRepositorySettings>.Default)
         {
         }
 

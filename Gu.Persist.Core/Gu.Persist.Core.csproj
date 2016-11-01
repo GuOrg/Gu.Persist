@@ -90,7 +90,6 @@
     <Compile Include="Settings\DataRepositorySettings.cs" />
     <Compile Include="Settings\FileSettings.cs" />
     <Compile Include="Contracts\IDirectoryPath.cs" />
-    <Compile Include="Settings\PathAndSpecialFolder.cs" />
     <Compile Include="Settings\RepositorySettings.cs" />
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

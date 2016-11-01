@@ -59,7 +59,6 @@
     <Compile Include="IO\FileInfoExtTests.cs" />
     <Compile Include="Repositories\Files.cs" />
     <Compile Include="Repositories\RestoreExceptionTest.cs" />
-    <Compile Include="Settings\PathAndSpecialFolderTests.cs" />
     <Compile Include="Repositories\FileCacheTests.cs" />
     <Compile Include="Repositories\RepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +79,7 @@
   <Import Project="..\.paket\paket.targets" />
   <ItemGroup>
     <Folder Include="Sandbox\" />
+    <Folder Include="Settings\" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\analyzers\AsyncUsageAnalyzers\analyzers\dotnet\AsyncUsageAnalyzers.dll">

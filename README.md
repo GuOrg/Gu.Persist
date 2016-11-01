@@ -36,7 +36,8 @@ On error everything is reset back to initial state.
 
 ## Repository
 
-Helper class 
+Helper class for reading and saving files. It is meant tyo be cached as it is expensive to instantiate.
+
 
 Sample:
 

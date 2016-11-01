@@ -93,8 +93,7 @@
             {
                 var expectedValue = propertyInfo.GetValue(expected);
                 var actualValue = propertyInfo.GetValue(actual);
-                if (propertyInfo.PropertyType == typeof(BackupSettings) ||
-                    propertyInfo.PropertyType == typeof(PathAndSpecialFolder))
+                if (propertyInfo.PropertyType == typeof(BackupSettings))
                 {
                     AssertProperties(expectedValue, actualValue);
                     continue;
