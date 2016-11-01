@@ -110,26 +110,10 @@ namespace Gu.Persist.Core
             }
         }
 
-        internal static void Rename(this FileInfo oldName, FileInfo newName, bool owerWrite)
-        {
-            Ensure.Exists(oldName);
-            if (!owerWrite)
-            {
-                Ensure.DoesNotExist(newName);
-            }
-
-            if (owerWrite)
-            {
-                newName.Delete();
-            }
-
-            oldName.MoveTo(newName);
-        }
-
-        internal static void MoveTo(this FileInfo source, FileInfo destination)
+        internal static void MoveTo(this FileInfo source, FileInfo destination, bool overWrite)
         {
             destination.Refresh();
-            if (destination.Exists)
+            if (destination.Exists && overWrite)
             {
                 File.Delete(destination.FullName);
             }
@@ -164,7 +148,7 @@ namespace Gu.Persist.Core
 
             backup.DeleteSoftDeleteFileFor();
             backup.SoftDelete();
-            file.MoveTo(backup);
+            File.Move(file.FullName, backup.FullName);
             file.Refresh();
         }
 
@@ -182,7 +166,7 @@ namespace Gu.Persist.Core
             }
 
             file.Delete();
-            backup.MoveTo(file);
+            File.Move(backup.FullName, file.FullName);
         }
 
         internal static FileInfo CreateFileInfo(DirectoryInfo directory, string fileName, string extension)

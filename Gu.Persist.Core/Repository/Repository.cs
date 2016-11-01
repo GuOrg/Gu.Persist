@@ -625,17 +625,22 @@ namespace Gu.Persist.Core
         {
             Ensure.NotNull(oldName, nameof(oldName));
             Ensure.NotNull(newName, nameof(newName));
-            oldName.Rename(newName, overWrite);
+            var pairs = new List<RenamePair> { new RenamePair(oldName, newName) };
             var oldSoftDelete = oldName.GetSoftDeleteFileFor();
             if (oldSoftDelete?.Exists == true)
             {
-                oldSoftDelete.Rename(newName.GetSoftDeleteFileFor(), overWrite);
+                pairs.Add(new RenamePair(oldSoftDelete, newName.GetSoftDeleteFileFor()));
             }
 
             if (this.Backuper != null)
             {
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(newName.Name);
-                this.Backuper.Rename(oldName, fileNameWithoutExtension, overWrite);
+                pairs.AddRange(this.Backuper.GetRenamePairs(oldName, fileNameWithoutExtension));
+            }
+
+            using (var transaction = new RenameTransaction(pairs))
+            {
+                transaction.Commit(overWrite);
             }
         }
 

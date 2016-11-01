@@ -517,7 +517,11 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             await this.Repository.SaveAsync(this.dummy).ConfigureAwait(false);
             AssertFile.Exists(true, this.TypeFiles.File);
-            AssertFile.Exists(false, this.TypeFiles.Backup);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.TypeFiles.Backup);
+            }
+
             AssertFile.Exists(false, this.TypeFiles.SoftDelete);
 
             await this.Repository.SaveAsync(this.dummy).ConfigureAwait(false);
@@ -538,7 +542,11 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             await this.Repository.SaveAsync(this.NamedFiles.File, this.dummy).ConfigureAwait(false);
             AssertFile.Exists(true, this.NamedFiles.File);
-            AssertFile.Exists(false, this.NamedFiles.Backup);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.NamedFiles.Backup);
+            }
+
             AssertFile.Exists(false, this.NamedFiles.SoftDelete);
 
             await this.Repository.SaveAsync(this.NamedFiles.File, this.dummy).ConfigureAwait(false);
@@ -831,8 +839,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                 this.NamedFiles.Backup.CreatePlaceHolder();
             }
 
-            var oldName = nameof(DummySerializable);
-            Assert.IsTrue(this.Repository.CanRename(oldName, "NewName"));
+            Assert.IsTrue(this.Repository.CanRename(this.NamedFiles.File, "NewName"));
         }
 
         [TestCase(true, true)]
@@ -894,7 +901,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void RenameType(bool hasBackup, bool hasSoft)
         {
             this.TypeFiles.File.CreatePlaceHolder();
-            if (hasBackup)
+            if (hasBackup && this.IsBackingUp)
             {
                 this.TypeFiles.Backup.CreatePlaceHolder();
             }
@@ -906,7 +913,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             this.Repository.Rename<DummySerializable>("NewName", false);
             AssertFile.Exists(true, this.TypeFiles.WithNewName);
-            if (hasBackup)
+            if (hasBackup && this.IsBackingUp)
             {
                 AssertFile.Exists(false, this.TypeFiles.Backup);
                 AssertFile.Exists(true, this.TypeFiles.BackupNewName);
@@ -926,7 +933,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void RenameFileName(bool hasBackup, bool hasSoft)
         {
             this.NamedFiles.File.CreatePlaceHolder();
-            if (hasBackup)
+            if (hasBackup && this.IsBackingUp)
             {
                 this.NamedFiles.Backup.CreatePlaceHolder();
             }
@@ -938,7 +945,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             this.Repository.Rename(this.NamedFiles.File, "NewName", false);
             AssertFile.Exists(true, this.NamedFiles.WithNewName);
-            if (hasBackup)
+            if (hasBackup && this.IsBackingUp)
             {
                 AssertFile.Exists(false, this.NamedFiles.Backup);
                 AssertFile.Exists(true, this.NamedFiles.BackupNewName);
@@ -956,26 +963,43 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void RenameTypeOverwrite(bool owerWrite)
         {
             this.TypeFiles.File.CreatePlaceHolder("a");
-            this.TypeFiles.Backup.CreatePlaceHolder("b");
             this.TypeFiles.SoftDelete.CreatePlaceHolder("c");
+
+            this.TypeFiles.WithNewName.CreatePlaceHolder("aa");
+            this.TypeFiles.SoftDeleteNewName.CreatePlaceHolder("cc");
+            if (this.IsBackingUp)
+            {
+                this.TypeFiles.Backup.CreatePlaceHolder("b");
+                this.TypeFiles.BackupNewName.CreatePlaceHolder("bb");
+            }
 
             if (owerWrite)
             {
-                this.TypeFiles.WithNewName.CreatePlaceHolder("aa");
-                this.TypeFiles.BackupNewName.CreatePlaceHolder("bb");
-                this.TypeFiles.SoftDeleteNewName.CreatePlaceHolder("cc");
-
                 this.Repository.Rename<DummySerializable>("NewName", true);
                 AssertFile.Exists(false, this.TypeFiles.File);
-                AssertFile.Exists(false, this.TypeFiles.Backup);
                 AssertFile.Exists(false, this.TypeFiles.SoftDelete);
+
                 Assert.AreEqual("a", this.TypeFiles.WithNewName.ReadAllText());
-                Assert.AreEqual("b", this.TypeFiles.BackupNewName.ReadAllText());
                 Assert.AreEqual("c", this.TypeFiles.SoftDeleteNewName.ReadAllText());
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(false, this.TypeFiles.Backup);
+                    Assert.AreEqual("b", this.TypeFiles.BackupNewName.ReadAllText());
+                }
             }
             else
             {
                 Assert.Throws<InvalidOperationException>(() => this.Repository.Rename<DummySerializable>("NewName", false));
+                Assert.AreEqual("a", this.TypeFiles.File.ReadAllText());
+                Assert.AreEqual("c", this.TypeFiles.SoftDelete.ReadAllText());
+
+                Assert.AreEqual("aa", this.TypeFiles.WithNewName.ReadAllText());
+                Assert.AreEqual("cc", this.TypeFiles.SoftDeleteNewName.ReadAllText());
+                if (this.IsBackingUp)
+                {
+                    Assert.AreEqual("b", this.TypeFiles.Backup.ReadAllText());
+                    Assert.AreEqual("bb", this.TypeFiles.BackupNewName.ReadAllText());
+                }
             }
         }
 
@@ -984,26 +1008,43 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void RenameFileNameOverwrite(bool owerWrite)
         {
             this.NamedFiles.File.CreatePlaceHolder("a");
-            this.NamedFiles.Backup.CreatePlaceHolder("b");
             this.NamedFiles.SoftDelete.CreatePlaceHolder("c");
+
+            this.NamedFiles.WithNewName.CreatePlaceHolder("aa");
+            this.NamedFiles.SoftDeleteNewName.CreatePlaceHolder("cc");
+            if (this.IsBackingUp)
+            {
+                this.NamedFiles.Backup.CreatePlaceHolder("b");
+                this.NamedFiles.BackupNewName.CreatePlaceHolder("bb");
+            }
 
             if (owerWrite)
             {
-                this.NamedFiles.WithNewName.CreatePlaceHolder("aa");
-                this.NamedFiles.BackupNewName.CreatePlaceHolder("bb");
-                this.NamedFiles.SoftDeleteNewName.CreatePlaceHolder("cc");
-
                 this.Repository.Rename(this.NamedFiles.File, "NewName", true);
                 AssertFile.Exists(false, this.NamedFiles.File);
-                AssertFile.Exists(false, this.NamedFiles.Backup);
                 AssertFile.Exists(false, this.NamedFiles.SoftDelete);
+
                 Assert.AreEqual("a", this.NamedFiles.WithNewName.ReadAllText());
-                Assert.AreEqual("b", this.NamedFiles.BackupNewName.ReadAllText());
                 Assert.AreEqual("c", this.NamedFiles.SoftDeleteNewName.ReadAllText());
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(false, this.NamedFiles.Backup);
+                    Assert.AreEqual("b", this.NamedFiles.BackupNewName.ReadAllText());
+                }
             }
             else
             {
                 Assert.Throws<InvalidOperationException>(() => this.Repository.Rename(this.NamedFiles.File, "NewName", false));
+                Assert.AreEqual("a", this.NamedFiles.File.ReadAllText());
+                Assert.AreEqual("c", this.NamedFiles.SoftDelete.ReadAllText());
+
+                Assert.AreEqual("aa", this.NamedFiles.WithNewName.ReadAllText());
+                Assert.AreEqual("cc", this.NamedFiles.SoftDeleteNewName.ReadAllText());
+                if (this.IsBackingUp)
+                {
+                    Assert.AreEqual("b", this.NamedFiles.Backup.ReadAllText());
+                    Assert.AreEqual("bb", this.NamedFiles.BackupNewName.ReadAllText());
+                }
             }
         }
 

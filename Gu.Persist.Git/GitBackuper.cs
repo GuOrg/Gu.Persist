@@ -1,6 +1,7 @@
 ﻿namespace Gu.Persist.Git
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
 
     using Gu.Persist.Core;
@@ -109,6 +110,13 @@
         void IBackuper.Rename(FileInfo file, string newName, bool owerWrite)
         {
             // nop
+        }
+
+        public IReadOnlyList<RenamePair> GetRenamePairs(FileInfo file, string newName)
+        {
+            Ensure.NotNull(file, nameof(file));
+            Ensure.NotNullOrEmpty(newName, nameof(newName));
+            return RenamePair.EmptyArray;
         }
 
         /// <inheritdoc/>
