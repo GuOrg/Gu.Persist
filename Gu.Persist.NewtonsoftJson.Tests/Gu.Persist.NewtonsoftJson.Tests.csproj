@@ -39,7 +39,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JsonFileTests.cs" />
-    <Compile Include="Repository\Default.cs" />
+    <Compile Include="Repository\BackupInSubDirrectory.cs" />
+    <Compile Include="Repository\DataRepositoryNoBackup.cs" />
+    <Compile Include="Repository\DefaultDataRepository.cs" />
+    <Compile Include="Repository\DefaultSingletonRepository.cs" />
     <Compile Include="Repository\DefaultFor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\JsonRepositoryTests.cs" />

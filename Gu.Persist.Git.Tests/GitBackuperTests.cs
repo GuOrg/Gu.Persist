@@ -10,7 +10,6 @@
 
     using NUnit.Framework;
 
-    using File = Gu.Persist.NewtonsoftJson.File;
     using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
 
     public class GitBackuperTests
@@ -92,13 +91,13 @@
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
             Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));
             this.dummy.Value++;
-            File.Save(file, this.dummy);
+            JsonFile.Save(file, this.dummy);
             json = System.IO.File.ReadAllText(file.FullName);
             Assert.AreEqual("{\"Value\":2}", json);
             Assert.AreEqual(true, this.repository.Backuper.CanRestore(file), "CanRestore after save");
             Assert.AreEqual(true, this.repository.Backuper.TryRestore(file), "TryRestore");
             Assert.AreEqual(false, this.repository.Backuper.CanRestore(file), "CanRestore after restore");
-            var restored = File.Read<DummySerializable>(file);
+            var restored = JsonFile.Read<DummySerializable>(file);
             Assert.AreEqual(this.dummy.Value - 1, restored.Value);
         }
 

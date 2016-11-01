@@ -2,10 +2,10 @@
 {
     using Gu.Persist.Core;
     using Gu.Persist.Core.Tests;
-    using Gu.Persist.NewtonsoftJson;
+
     using NUnit.Framework;
 
-    public class Default : JsonRepositoryTests
+    public class DefaultDataRepository : JsonRepositoryTests
     {
         [Test]
         public void SavesSettingsFile()
@@ -15,7 +15,7 @@
 
         protected override IRepository Create()
         {
-            return new SingletonRepository();
+            return new DataRepository();
         }
     }
 }

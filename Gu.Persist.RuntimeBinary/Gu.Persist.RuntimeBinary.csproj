@@ -40,7 +40,7 @@
   <ItemGroup>
     <Compile Include="DataRepository.cs" />
     <Compile Include="BinaryEqualsComparer{T}.cs" />
-    <Compile Include="File.cs" />
+    <Compile Include="BinaryFile.cs" />
     <Compile Include="SingletonRepository.cs" />
     <Compile Include="Serialize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

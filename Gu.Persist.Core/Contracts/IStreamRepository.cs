@@ -62,6 +62,7 @@
         /// FileName.cfg
         /// FileName
         /// </param>
+        /// <param name="stream">The stream to save.</param>
         void Save(string fileName, Stream stream);
 
         /// <summary>
@@ -76,24 +77,23 @@
         void Save(FileInfo file, FileInfo tempFile, Stream stream);
 
         /// <summary>
-        /// <see cref="IRepository.SaveStream{T}(Stream)"/>
+        /// <see cref="IStreamRepository.Save{T}(Stream)"/>
         /// </summary>
         Task SaveAsync<T>(Stream stream);
 
         /// <summary>
-        /// <see cref="IRepository.SaveStream(string, Stream)"/>
+        /// <see cref="IStreamRepository.Save(string, Stream)"/>
         /// </summary>
         Task SaveAsync(string fileName, Stream stream);
 
         /// <summary>
-        /// <see cref="IRepository.SaveStream(FileInfo,Stream)"/>
+        /// <see cref="IStreamRepository.Save(FileInfo,Stream)"/>
         /// </summary>
         Task SaveAsync(FileInfo file, Stream stream);
 
         /// <summary>
-        /// <see cref="IRepository.SaveStream(FileInfo, FileInfo, Stream)"/>
+        /// <see cref="IStreamRepository.Save(FileInfo, FileInfo, Stream)"/>
         /// </summary>
         Task SaveAsync(FileInfo file, FileInfo tempFile, Stream stream);
-
     }
 }

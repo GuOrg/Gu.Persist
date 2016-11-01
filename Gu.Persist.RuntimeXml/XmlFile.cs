@@ -1,19 +1,19 @@
-﻿namespace Gu.Persist.SystemXml
+namespace Gu.Persist.RuntimeXml
 {
     using System;
     using System.Collections.Concurrent;
     using System.IO;
+    using System.Runtime.Serialization;
     using System.Threading.Tasks;
-    using System.Xml.Serialization;
 
     using Gu.Persist.Core;
 
     /// <summary>
-    /// Helper methods for serializing and deserializing xml.
+    /// Helper class for serializing and deserializing using <see cref="DataContractSerializer"/>
     /// </summary>
     public static class XmlFile
     {
-        private static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();
+        private static readonly ConcurrentDictionary<Type, DataContractSerializer> Serializers = new ConcurrentDictionary<Type, DataContractSerializer>();
 
         /// <summary>
         /// Serializes to memorystream, then returns the deserialized object
@@ -37,7 +37,7 @@
         }
 
         /// <summary>
-        /// Reads an xml file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the contents of <paramref name="file"/> and serialize it to <typeparamref name="T"/>
         /// </summary>
         public static T Read<T>(FileInfo file)
         {
@@ -55,7 +55,7 @@
         }
 
         /// <summary>
-        /// Reads an xml file and deserialize the contents
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
@@ -80,12 +80,13 @@
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull<object>(item, nameof(item));
-            var serializer = Serializers.GetOrAdd(item.GetType(), x => new XmlSerializer(item.GetType()));
+            var serializer = Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
+
             using (var stream = file.OpenCreate())
             {
                 lock (serializer)
                 {
-                    serializer.Serialize(stream, item);
+                    serializer.WriteObject(stream, item);
                 }
             }
         }
@@ -118,12 +119,17 @@
         /// </summary>
         internal static T FromStream<T>(Stream stream)
         {
-            var serializer = Serializers.GetOrAdd(typeof(T), x => new XmlSerializer(typeof(T)));
+            var serializer = Serializers.GetOrAdd(typeof(T), x => new DataContractSerializer(typeof(T)));
             lock (serializer)
             {
-                var setting = (T)serializer.Deserialize(stream);
+                var setting = (T)serializer.ReadObject(stream);
                 return setting;
             }
+        }
+
+        internal static DataContractSerializer SerializerFor<T>(T item)
+        {
+            return Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
         }
 
         /// <summary>
@@ -132,20 +138,15 @@
         internal static PooledMemoryStream ToStream<T>(T item)
         {
             var ms = PooledMemoryStream.Borrow();
-            var serializer = Serializers.GetOrAdd(item.GetType(), x => new XmlSerializer(item.GetType()));
+            var serializer = Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
             lock (serializer)
             {
-                serializer.Serialize(ms, item);
+                serializer.WriteObject(ms, item);
             }
 
             ms.Flush();
             ms.Position = 0;
             return ms;
-        }
-
-        internal static XmlSerializer SerializerFor(object item)
-        {
-            return Serializers.GetOrAdd(item.GetType(), x => new XmlSerializer(item.GetType()));
         }
     }
 }

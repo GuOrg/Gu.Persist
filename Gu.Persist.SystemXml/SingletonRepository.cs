@@ -1,5 +1,5 @@
-﻿#pragma warning disable 1573
-namespace Gu.Persist.RuntimeXml
+#pragma warning disable 1573
+namespace Gu.Persist.SystemXml
 {
     using System;
     using System.IO;
@@ -7,7 +7,7 @@ namespace Gu.Persist.RuntimeXml
     using Gu.Persist.Core;
 
     /// <summary>
-    /// A repository reading and saving files using <see cref="System.Runtime.Serialization.DataContractSerializer"/>
+    /// A repository reading and saving files using <see cref="System.Xml.Serialization.XmlSerializer"/>
     /// This repository keeps a cache of all saves and reads an manages singleton instances.
     /// </summary>
     public class SingletonRepository : SingletonRepository<RepositorySettings>
@@ -35,7 +35,7 @@ namespace Gu.Persist.RuntimeXml
         /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
         public SingletonRepository(DirectoryInfo directory)
-            : base(directory, () => CreateDefaultSettings(directory), Serialize<RepositorySettings>.Default)
+            : base(directory, () => RepositorySettings.DefaultFor(directory), Serialize<RepositorySettings>.Default)
         {
         }
 
@@ -93,19 +93,27 @@ namespace Gu.Persist.RuntimeXml
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
-        /// </summary>
+        /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
         public SingletonRepository(RepositorySettings settings)
             : base(settings, Serialize<RepositorySettings>.Default)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
-        /// </summary>
+        /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
         public SingletonRepository(RepositorySettings settings, IBackuper backuper)
             : base(settings, backuper, Serialize<RepositorySettings>.Default)
+        {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
+        public SingletonRepository(Core.RepositorySettings settings)
+            : base(RepositorySettings.Create(settings), Serialize<RepositorySettings>.Default)
+        {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
+        public SingletonRepository(Core.RepositorySettings settings, IBackuper backuper)
+            : base(RepositorySettings.Create(settings), backuper, Serialize<RepositorySettings>.Default)
         {
         }
     }

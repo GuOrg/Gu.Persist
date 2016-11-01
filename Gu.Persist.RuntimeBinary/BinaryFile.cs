@@ -1,20 +1,16 @@
-namespace Gu.Persist.RuntimeXml
+﻿namespace Gu.Persist.RuntimeBinary
 {
-    using System;
-    using System.Collections.Concurrent;
     using System.IO;
-    using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Formatters.Binary;
     using System.Threading.Tasks;
 
     using Gu.Persist.Core;
 
     /// <summary>
-    /// Helper class for serializing and deserializing using <see cref="DataContractSerializer"/>
+    /// Helper methods for reading  json.
     /// </summary>
-    public static class File
+    public static class BinaryFile
     {
-        private static readonly ConcurrentDictionary<Type, DataContractSerializer> Serializers = new ConcurrentDictionary<Type, DataContractSerializer>();
-
         /// <summary>
         /// Serializes to memorystream, then returns the deserialized object
         /// </summary>
@@ -25,6 +21,15 @@ namespace Gu.Persist.RuntimeXml
             {
                 return FromStream<T>(stream);
             }
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
+        public static T Read<T>(string fileName)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            return FileHelper.Read(new FileInfo(fileName), FromStream<T>);
         }
 
         /// <summary>
@@ -39,6 +44,15 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
+        public static Task<T> ReadAsync<T>(string fileName)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            return FileHelper.ReadAsync(new FileInfo(fileName), FromStream<T>);
+        }
+
+        /// <summary>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// </summary>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -46,25 +60,42 @@ namespace Gu.Persist.RuntimeXml
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as xml
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static void Save<T>(string fileName, T item)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            Ensure.NotNull<object>(item, nameof(item));
+            Save(new FileInfo(fileName), item);
+        }
+
+        /// <summary>
+        /// Save the binary representation of <paramref name="item"/>.
         /// </summary>
         public static void Save<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull<object>(item, nameof(item));
-            var serializer = Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
+            var formatter = new BinaryFormatter();
 
             using (var stream = file.OpenCreate())
             {
-                lock (serializer)
-                {
-                    serializer.WriteObject(stream, item);
-                }
+                formatter.Serialize(stream, item);
             }
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as xml
+        /// Saves <paramref name="item"/> as json
+        /// </summary>
+        public static Task SaveAsync<T>(string fileName, T item)
+        {
+            Ensure.NotNull(fileName, nameof(fileName));
+            Ensure.NotNull<object>(item, nameof(item));
+            return SaveAsync(new FileInfo(fileName), item);
+        }
+
+        /// <summary>
+        /// Save the binary representation of <paramref name="item"/>.
         /// </summary>
         public static async Task SaveAsync<T>(FileInfo file, T item)
         {
@@ -81,17 +112,9 @@ namespace Gu.Persist.RuntimeXml
         /// </summary>
         internal static T FromStream<T>(Stream stream)
         {
-            var serializer = Serializers.GetOrAdd(typeof(T), x => new DataContractSerializer(typeof(T)));
-            lock (serializer)
-            {
-                var setting = (T)serializer.ReadObject(stream);
-                return setting;
-            }
-        }
-
-        internal static DataContractSerializer SerializerFor<T>(T item)
-        {
-            return Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
+            var formatter = new BinaryFormatter();
+            var setting = (T)formatter.Deserialize(stream);
+            return setting;
         }
 
         /// <summary>
@@ -99,13 +122,9 @@ namespace Gu.Persist.RuntimeXml
         /// </summary>
         internal static PooledMemoryStream ToStream<T>(T item)
         {
+            var formatter = new BinaryFormatter();
             var ms = PooledMemoryStream.Borrow();
-            var serializer = Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
-            lock (serializer)
-            {
-                serializer.WriteObject(ms, item);
-            }
-
+            formatter.Serialize(ms, item);
             ms.Flush();
             ms.Position = 0;
             return ms;

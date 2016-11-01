@@ -14,7 +14,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// <inheritdoc/>
         public override Stream ToStream<T>(T item)
         {
-            return File.ToStream(item);
+            return JsonFile.ToStream(item);
         }
 
         /// <inheritdoc/>
@@ -30,7 +30,7 @@ namespace Gu.Persist.NewtonsoftJson
             var serializer = settings != null
                 ? JsonSerializer.Create(settings.JsonSerializerSettings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(stream, File.DefaultEncoding, 1024, true)))
+            using (var writer = new JsonTextWriter(new StreamWriter(stream, JsonFile.DefaultEncoding, 1024, true)))
             {
                 serializer.Serialize(writer, item);
             }
@@ -39,13 +39,13 @@ namespace Gu.Persist.NewtonsoftJson
         /// <inheritdoc/>
         public override T FromStream<T>(Stream stream)
         {
-            return File.FromStream<T>(stream);
+            return JsonFile.FromStream<T>(stream);
         }
 
         /// <inheritdoc/>
         public override T Clone<T>(T item)
         {
-            return File.Clone(item);
+            return JsonFile.Clone(item);
         }
 
         /// <inheritdoc/>

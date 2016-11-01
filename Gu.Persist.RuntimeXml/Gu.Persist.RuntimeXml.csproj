@@ -43,7 +43,7 @@
     <Compile Include="DataRepository.cs" />
     <Compile Include="Serialize.cs" />
     <Compile Include="XmlEqualsComparer.cs" />
-    <Compile Include="File.cs" />
+    <Compile Include="XmlFile.cs" />
     <Compile Include="SingletonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

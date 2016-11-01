@@ -14,7 +14,7 @@
         /// <inheritdoc/>
         public override Stream ToStream<T>(T item)
         {
-            return File.ToStream(item);
+            return BinaryFile.ToStream(item);
         }
 
         /// <inheritdoc/>
@@ -34,13 +34,13 @@
         /// <inheritdoc/>
         public override T FromStream<T>(Stream stream)
         {
-            return File.FromStream<T>(stream);
+            return BinaryFile.FromStream<T>(stream);
         }
 
         /// <inheritdoc/>
         public override T Clone<T>(T item)
         {
-            return File.Clone(item);
+            return BinaryFile.Clone(item);
         }
 
         /// <inheritdoc/>

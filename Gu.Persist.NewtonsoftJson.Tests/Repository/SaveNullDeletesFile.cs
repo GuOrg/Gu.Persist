@@ -4,14 +4,14 @@
 
     using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
 
-    public class SaveNullDeletesFile : JsonRepositoryTests
+    public class SaveNullDeletesFileCaching : JsonRepositoryTests
     {
         protected override IRepository Create()
         {
             var settings = new NewtonsoftJson.DataRepositorySettings(
                 PathAndSpecialFolder.Create(this.Directory),
                 RepositorySettings.CreateDefaultJsonSettings(),
-                false,
+                true,
                 true,
                 BackupSettings.Create(this.Directory));
             return new DataRepository(settings);

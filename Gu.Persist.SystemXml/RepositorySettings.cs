@@ -9,24 +9,24 @@ namespace Gu.Persist.SystemXml
     using Gu.Persist.Core;
 
     /// <summary>
-    /// Specifies the behavior of a <see cref="XmlRepository"/>
+    /// Specifies the behavior of a <see cref="SingletonRepository"/>
     /// </summary>
-    public class XmlRepositorySettings : RepositorySettings, IXmlSerializable
+    public class RepositorySettings : Core.RepositorySettings, IXmlSerializable
     {
-        /// <summary> Initializes a new instance of the <see cref="XmlRepositorySettings"/> class. </summary>
-        public XmlRepositorySettings(DirectoryInfo directory)
+        /// <summary> Initializes a new instance of the <see cref="RepositorySettings"/> class. </summary>
+        public RepositorySettings(DirectoryInfo directory)
             : base(directory)
         {
         }
 
-        /// <summary> Initializes a new instance of the <see cref="XmlRepositorySettings"/> class. </summary>
-        public XmlRepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
+        /// <summary> Initializes a new instance of the <see cref="RepositorySettings"/> class. </summary>
+        public RepositorySettings(DirectoryInfo directory, BackupSettings backupSettings)
             : base(directory, backupSettings)
         {
         }
 
-        /// <summary> Initializes a new instance of the <see cref="XmlRepositorySettings"/> class. </summary>
-        public XmlRepositorySettings(
+        /// <summary> Initializes a new instance of the <see cref="RepositorySettings"/> class. </summary>
+        public RepositorySettings(
             DirectoryInfo directory,
             bool isTrackingDirty,
             BackupSettings backupSettings,
@@ -41,8 +41,8 @@ namespace Gu.Persist.SystemXml
         {
         }
 
-        /// <summary> Initializes a new instance of the <see cref="XmlRepositorySettings"/> class. </summary>
-        public XmlRepositorySettings(
+        /// <summary> Initializes a new instance of the <see cref="RepositorySettings"/> class. </summary>
+        public RepositorySettings(
             PathAndSpecialFolder directory,
             bool isTrackingDirty,
             BackupSettings backupSettings,
@@ -58,25 +58,25 @@ namespace Gu.Persist.SystemXml
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmlRepositorySettings"/> class.
+        /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
         /// Needed for serialization
         /// </summary>
         // ReSharper disable once UnusedMember.Local
-        private XmlRepositorySettings()
+        private RepositorySettings()
         {
         }
 
         /// <summary>
         /// A default instance for <paramref name="directory"/>
         /// </summary>
-        public static XmlRepositorySettings DefaultFor(DirectoryInfo directory)
+        public static RepositorySettings DefaultFor(DirectoryInfo directory)
         {
-            return new XmlRepositorySettings(directory, true, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
+            return new RepositorySettings(directory, false, BackupSettings.Create(directory.CreateSubdirectory(DefaultBackupDirectoryName)));
         }
 
-        public static XmlRepositorySettings Create(RepositorySettings settings)
+        public static RepositorySettings Create(Core.RepositorySettings settings)
         {
-            return new XmlRepositorySettings(
+            return new RepositorySettings(
                        settings.Directory,
                        settings.IsTrackingDirty,
                        settings.BackupSettings,
@@ -114,7 +114,7 @@ namespace Gu.Persist.SystemXml
 
         private void SetPrivate<T>(string propertyName, T value)
         {
-            var field = typeof(RepositorySettings)
+            var field = typeof(Core.RepositorySettings)
                             .GetField($"<{propertyName}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance) ??
                         typeof(FileSettings)
                             .GetField($"<{propertyName}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);

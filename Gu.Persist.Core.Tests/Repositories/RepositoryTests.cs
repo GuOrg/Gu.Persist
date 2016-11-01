@@ -775,6 +775,10 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void CanRenameTypeWouldOverwrite(bool fileNewNameExists, bool backupNewNameExists)
         {
             this.dummyFile.VoidCreate();
+            var backupFile = this.IsBackingUp
+                                 ? BackupFile.CreateFor(this.dummyFile, this.Settings.BackupSettings)
+                                 : null;
+
             if (fileNewNameExists)
             {
                 this.dummyNewName.VoidCreate();
@@ -782,21 +786,22 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             if (this.IsBackingUp)
             {
-                this.dummyBackup.VoidCreate();
+                backupFile.VoidCreate();
             }
 
             if (backupNewNameExists)
             {
                 if (this.IsBackingUp)
                 {
-                    this.dummyBackupNewName.VoidCreate();
+                    var backupNewName = backupFile.WithNewName(NewName, this.BackupSettings);
+                    backupNewName.VoidCreate();
                 }
 
                 this.dummySoftDelete.VoidCreate();
                 this.dummySoftDeleteNewName.VoidCreate();
             }
 
-            Assert.IsFalse(this.Repository.CanRename<DummySerializable>(NewName));
+            Assert.AreEqual(false, this.Repository.CanRename<DummySerializable>(NewName));
         }
 
         [TestCase(true, false)]

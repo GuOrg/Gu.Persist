@@ -13,7 +13,7 @@
         /// <inheritdoc/>
         public override Stream ToStream<T>(T item)
         {
-            return File.ToStream(item);
+            return XmlFile.ToStream(item);
         }
 
         /// <inheritdoc/>
@@ -26,7 +26,7 @@
                 return;
             }
 
-            var serializer = File.SerializerFor(item);
+            var serializer = XmlFile.SerializerFor(item);
             lock (serializer)
             {
                 serializer.WriteObject(stream, item);
@@ -36,13 +36,13 @@
         /// <inheritdoc/>
         public override T FromStream<T>(Stream stream)
         {
-            return File.FromStream<T>(stream);
+            return XmlFile.FromStream<T>(stream);
         }
 
         /// <inheritdoc/>
         public override T Clone<T>(T item)
         {
-            return File.Clone(item);
+            return XmlFile.Clone(item);
         }
 
         /// <inheritdoc/>

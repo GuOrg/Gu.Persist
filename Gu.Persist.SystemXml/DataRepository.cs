@@ -1,12 +1,13 @@
-namespace Gu.Persist.RuntimeXml
+namespace Gu.Persist.SystemXml
 {
     using System;
     using System.IO;
+    using System.Xml.Serialization;
 
     using Gu.Persist.Core;
 
     /// <summary>
-    /// A repository reading and saving files using <see cref="System.Runtime.Serialization.DataContractSerializer"/>
+    /// A repository reading and saving files using <see cref="XmlSerializer"/>
     /// </summary>
     public class DataRepository : DataRepository<DataRepositorySettings>
     {
@@ -98,8 +99,13 @@ namespace Gu.Persist.RuntimeXml
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
         public DataRepository(Core.DataRepositorySettings settings)
-            : base(settings, Serialize<DataRepositorySettings>.Default)
+            : base(DataRepositorySettings.Create(settings), Serialize<DataRepositorySettings>.Default)
         {
+        }
+
+        protected new static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
+        {
+            return DataRepositorySettings.Create(Core.DataRepository<Core.DataRepositorySettings>.CreateDefaultSettings(directory));
         }
     }
 }
