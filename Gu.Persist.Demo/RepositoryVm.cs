@@ -49,9 +49,9 @@
         private static SingletonRepository CreateJsonRepositoryWithGitBackuper()
         {
             var jsonSerializerSettings = RepositorySettings.CreateDefaultJsonSettings();
-            var jsonRepositorySettings = new RepositorySettings(jsonSerializerSettings, true, false, null);
-            var gitBackuper = new GitBackuper(jsonRepositorySettings.Directory);
-            return new SingletonRepository(jsonRepositorySettings, gitBackuper);
+            var settings = new RepositorySettings(PathAndSpecialFolder.Create(Directories.AppDirectory()), jsonSerializerSettings, false, null);
+            var gitBackuper = new GitBackuper(settings.Directory);
+            return new SingletonRepository(settings, gitBackuper);
         }
     }
 }

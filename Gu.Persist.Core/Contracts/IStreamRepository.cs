@@ -5,7 +5,6 @@
 
     public interface IStreamRepository
     {
-
         /// <summary>
         /// Reads the file and returns the contents in a memorystream
         /// </summary>

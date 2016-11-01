@@ -9,7 +9,7 @@ namespace Gu.Persist.SystemXml
     /// <summary>
     /// A repository reading and saving files using <see cref="System.Xml.Serialization.XmlSerializer"/>
     /// </summary>
-    public class XmlRepository : Repository<XmlRepositorySettings>
+    public class XmlRepository : SingletonRepository<XmlRepositorySettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlRepository"/> class.

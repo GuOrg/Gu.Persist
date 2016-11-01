@@ -11,7 +11,7 @@
 
     public class JsonFileTests
     {
-        private static readonly JsonSerializerSettings JsonSettings = RepositorySettings.CreateDefaultJsonSettings();
+        private static readonly JsonSerializerSettings JsonSettings = NewtonsoftJson.RepositorySettings.CreateDefaultJsonSettings();
         private readonly DirectoryInfo directory;
 
         public JsonFileTests()

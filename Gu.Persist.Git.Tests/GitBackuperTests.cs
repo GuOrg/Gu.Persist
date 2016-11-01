@@ -33,7 +33,7 @@
             }
 
             this.directory.Create();
-            var settings = new RepositorySettings(this.directory, null);
+            var settings = new RepositorySettings(PathAndSpecialFolder.Create(this.directory), RepositorySettings.CreateDefaultJsonSettings(), false, null);
             var gitBackuper = new GitBackuper(settings.Directory);
             this.repository = new SingletonRepository(settings, gitBackuper);
             this.dummy = new DummySerializable(1);

@@ -26,8 +26,7 @@
 
         protected override IRepository Create()
         {
-            var settings = Core.RepositorySettings.DefaultFor(this.Directory);
-            return new SingletonRepository(settings);
+            return new SingletonRepository(this.Directory);
         }
     }
 }

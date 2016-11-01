@@ -29,14 +29,12 @@ namespace Gu.Persist.SystemXml
         public XmlRepositorySettings(
             DirectoryInfo directory,
             bool isTrackingDirty,
-            bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
             : this(
                 PathAndSpecialFolder.Create(directory),
                 isTrackingDirty,
-                saveNullDeletesFile,
                 backupSettings,
                 extension,
                 tempExtension)
@@ -47,14 +45,12 @@ namespace Gu.Persist.SystemXml
         public XmlRepositorySettings(
             PathAndSpecialFolder directory,
             bool isTrackingDirty,
-            bool saveNullDeletesFile,
             BackupSettings backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
             : base(
                   directory,
                   isTrackingDirty,
-                  saveNullDeletesFile,
                   backupSettings,
                   extension,
                   tempExtension)
@@ -83,7 +79,6 @@ namespace Gu.Persist.SystemXml
             return new XmlRepositorySettings(
                        settings.Directory,
                        settings.IsTrackingDirty,
-                       settings.SaveNullDeletesFile,
                        settings.BackupSettings,
                        settings.Extension,
                        settings.TempExtension);
@@ -101,7 +96,6 @@ namespace Gu.Persist.SystemXml
             this.SetPrivate(nameof(this.Extension), reader.ReadElementString(nameof(this.Extension)));
             this.SetPrivate(nameof(this.TempExtension), reader.ReadElementString(nameof(this.TempExtension)));
             this.SetPrivate(nameof(this.IsTrackingDirty), reader.ReadElementBool(nameof(this.IsTrackingDirty)));
-            this.SetPrivate(nameof(this.SaveNullDeletesFile), reader.ReadElementBool(nameof(this.SaveNullDeletesFile)));
             this.SetPrivate(nameof(this.BackupSettings), reader.ReadElementBackupSettings(nameof(this.BackupSettings)));
             reader.ReadEndElement();
         }
@@ -112,7 +106,6 @@ namespace Gu.Persist.SystemXml
             writer.WriteElementString(nameof(this.Extension), this.Extension);
             writer.WriteElementString(nameof(this.TempExtension), this.TempExtension);
             writer.WriteElementString(nameof(this.IsTrackingDirty), this.IsTrackingDirty);
-            writer.WriteElementString(nameof(this.SaveNullDeletesFile), this.SaveNullDeletesFile);
             if (this.BackupSettings != null)
             {
                 writer.WriteElementString(nameof(this.BackupSettings), this.BackupSettings);

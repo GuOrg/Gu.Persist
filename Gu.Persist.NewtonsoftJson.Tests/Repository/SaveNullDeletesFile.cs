@@ -8,13 +8,13 @@
     {
         protected override IRepository Create()
         {
-            var settings = new RepositorySettings(
-                this.Directory,
-                Core.RepositorySettings.CreateDefaultJsonSettings(),
+            var settings = new NewtonsoftJson.DataRepositorySettings(
+                PathAndSpecialFolder.Create(this.Directory),
+                RepositorySettings.CreateDefaultJsonSettings(),
                 false,
                 true,
                 BackupSettings.Create(this.Directory));
-            return new SingletonRepository(settings);
+            return new DataRepository(settings);
         }
     }
 }
