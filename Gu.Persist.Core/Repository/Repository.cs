@@ -21,54 +21,54 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
         /// Creates a new <see cref="Repository{TSetting}"/> with default settings.
-        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        protected Repository(DirectoryInfo directory, Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
+        protected Repository(Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
         {
-            Ensure.NotNull(directory, nameof(directory));
             Ensure.NotNull(settingsCreator, nameof(settingsCreator));
             Ensure.NotNull(serialize, nameof(serialize));
             this.serialize = serialize;
-            directory.CreateIfNotExists();
             this.Settings = settingsCreator();
+            Directory.CreateDirectory(this.Settings.Directory);
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker = new DirtyTracker(this);
             }
 
+            // creating temporary backuper for TryRestore in ReadOrCreate
             this.Backuper = Backup.Backuper.Create(this.Settings.BackupSettings);
-                // creating temp for TryRestore in ReadOrCreate
-            this.Settings = this.ReadOrCreateCore(() => this.Settings);
-            this.Backuper = Backup.Backuper.Create(this.Settings.BackupSettings);
+            var readSettings = this.ReadOrCreateCore(() => this.Settings);
+            if (!ReferenceEquals(readSettings, this.Settings))
+            {
+                this.Settings = readSettings;
+                this.Backuper = Backup.Backuper.Create(readSettings.BackupSettings);
+            }
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
         /// Creates a new <see cref="Repository{TSetting}"/> with default settings.
-        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If the directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="directory">The directory where files will be saved.</param>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
         /// <param name="backuper">
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
         protected Repository(
-            DirectoryInfo directory,
-            IBackuper backuper,
             Func<TSetting> settingsCreator,
+            IBackuper backuper,
             Serialize<TSetting> serialize)
         {
-            Ensure.NotNull(directory, nameof(directory));
-            Ensure.NotNull(backuper, nameof(backuper));
             Ensure.NotNull(settingsCreator, nameof(settingsCreator));
+            Ensure.NotNull(backuper, nameof(backuper));
             Ensure.NotNull(serialize, nameof(serialize));
             this.serialize = serialize;
-            directory.CreateIfNotExists();
             this.Settings = settingsCreator();
+            Directory.CreateDirectory(this.Settings.Directory);
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker = new DirtyTracker(this);

@@ -12,7 +12,8 @@
         /// Reads the file and returns the contents in a memorystream
         /// </summary>
         /// <remarks>
-        /// This overload is a poor fit for large files.
+        /// This method reads the entire file into memory so it will be memory consuming for large files.
+        /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>
         /// <param name="fileName">
         /// Filename can be either of:
@@ -20,6 +21,7 @@
         /// FileName.cfg
         /// FileName
         /// </param>
+        /// <returns>A stream with the contents of the file.</returns>
         Stream Read(string fileName);
 
         /// <summary>

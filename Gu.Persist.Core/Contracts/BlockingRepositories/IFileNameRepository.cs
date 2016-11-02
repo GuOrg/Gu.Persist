@@ -5,11 +5,12 @@ namespace Gu.Persist.Core
     public interface IFileNameRepository
     {
         /// <summary>
-        /// Reads from file or cache if caching.
-        /// If caching every read will get the same singleton instance.
-        /// Adds the instance to cache if caching.
-        /// Starts tracking the if tracking
+        /// Reads from <paramref name="fileName"/> and deserializes the contents to an instance of <typeparamref name="T"/>
         /// </summary>
+        /// <remarks>
+        /// If the repository is a <see cref="ISingletonRepository"/> the repository manages a singleton instance that is returned in future reads.
+        /// Also for <see cref="ISingletonRepository"/> a check is made to ensure that the same instance is saved.
+        /// </remarks>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
@@ -19,11 +20,13 @@ namespace Gu.Persist.Core
         T Read<T>(string fileName);
 
         /// <summary>
-        /// Saves the item to file.
-        /// Adds it to cache if caching and first time it is read/saved
-        /// Starts tracking if tracking changes.
+        /// Serializes <paramref name="item"/> and saves to <paramref name="fileName"/>
         /// </summary>
-        /// <typeparam name="T">Not used for anything, maybe useful for constraining?</typeparam>
+        /// <remarks>
+        /// If the repository is a <see cref="ISingletonRepository"/> the repository manages a singleton instance that is returned in future reads.
+        /// Also for <see cref="ISingletonRepository"/> a check is made to ensure that the same instance is saved.
+        /// </remarks>
+        /// <typeparam name="T">The type of the instance to save.</typeparam>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg

@@ -8,18 +8,6 @@ A small framework for reading and saving data.
 - BinaryRepository is a baseclass for managing binary files.
 - JsonRepository is a baseclass for managing json files.
 
-## Save transaction.
-Happy path
-
-1. Lock `file` if exists.
-2. Lock `file.delete` if it exists.
-3. Create and lock `file.tmp` if it exists.
-4. Save to `file.tmp`
-5. Rename `file` to `file.backup if `creating backups.
-6. Rename `file.tmp`-> `file`
-
-On error everything is reset back to initial state.
-
 ## Features
 
 - Transactional atomic saves. Avoids corrupted data on application crash etc.
@@ -34,6 +22,18 @@ On error everything is reset back to initial state.
 - T Clone<T>(T item); deep clone by serializing and then deserializing an instance.
 - bool IsDirty<T>(T item, IEqualityComparer<T> comparer); check if an instance is dirty after last save.
 - EqualityComparers that checks structural equality by serializing and comparing bytes. If performance is an issue overloads with IEqualityComparer<T> are exposed.
+
+## Save transaction.
+Happy path
+
+1. Lock `file` if exists.
+2. Lock `file.delete` if it exists.
+3. Create and lock `file.tmp` if it exists.
+4. Save to `file.tmp`
+5. Rename `file` to `file.backup if `creating backups.
+6. Rename `file.tmp`-> `file`
+
+On error everything is reset back to initial state.
 
 ## Repository
 
@@ -59,6 +59,8 @@ Manages singleton instances of things read or written to disk. This is useful fo
 Simple repository for reading & saving data.
 
 ### Interfaces
+A number of interfaces exposing subsets of the functionality are provided.
+
 - `IAsyncFileNameRepository` 
 - `IAsyncFileInfoRepository`
 - `ICloner`
@@ -74,24 +76,79 @@ Simple repository for reading & saving data.
 - Delete for deleting files & backups.
 - Exists for checking if files exists.
 - Read for reading and deserializing the contents of files.
+- ReadAsync for reading and deserializing the contents of files.
 - ReadOrCreate, read the file if it exists, create and instance and save it to disk before returning it if not.
 - Save for saving files.
+- SaveAsync for saving files.
 - CanRename, check for collisions before renaming.
 - Rename, rename files and backups.
 - ClearTrackerCache, clear the `IDirtyTracker`
 - RemoveFromDirtyTracker, remove an item from `IDirtyTracker`
 - DeleteBackups, delete backups for a file.
 
-Sample:
+### Sample wrapper
 
 ```C#
-public void MyRepository()
+public class MyRepository
 {
-    var repository = new XmlRepository(); // Uses %AppData%/ApplicationName. 
-    var setting = repository.ReadOrCreate(() => new DummySerializable()); // Uses typeof(T).Name as filename
-    setting.Value ++;
-    Assert.IsTrue(repository.IsDirty(setting));
-    repository.Save(setting);
-    Assert.IsFalse(repository.IsDirty(setting));
+    private readonly SingletonRepository repository;
+
+    public MyRepository()
+    {
+        // Uses %AppData%/ApplicationName.
+        // Initializes with  %AppData%/ApplicationName/RepositorySettings.cfg
+        this.repository = new SingletonRepository();
+    }
+
+    public MySetting ReadMySetting()
+    {
+        // Reads the contents of %AppData%/ApplicationName/MySetting.cfg
+        return this.repository.Read<MySetting>();
+    }
+
+    public void Save(MySetting setting)
+    {
+        // Saves to of %AppData%/ApplicationName/MySetting.cfg
+		// Creates a backup %AppData%/ApplicationName/MySetting.bak
+		// As we created a SingletonRepository in the ctor setting must be the same instance always.
+        this.repository.Save(setting);
+    }
+}
+```
+
+### Sample using git for backups.
+
+```C#
+public class MyRepository
+{
+    private static readonly DirectoryInfo Directory = new DirectoryInfo("./Settings");
+    private readonly SingletonRepository repository;
+
+    public MyRepository()
+    {
+        // Initializes with  ./Settings/RepositorySettings.cfg is present
+        // Creates a git repository for history.
+        this.repository = new SingletonRepository(
+                                CreateDefaultSettings,
+                                new GitBackuper(Directory.FullName));
+    }
+
+    public MySetting ReadMySetting()
+    {
+        // Reads the contents of ./Settings/MySetting.cfg
+        return this.repository.Read<MySetting>();
+    }
+
+    public void Save(MySetting setting)
+    {
+        // Saves to of ./Settings/MySetting.cfg
+        // Commits changes to git repository.
+        this.repository.Save(setting);
+    }
+
+    private static RepositorySettings CreateDefaultSettings()
+    {
+        return new RepositorySettings(Directory.FullName, true, null, ".json", ".saving");
+    }
 }
 ```

@@ -1,5 +1,4 @@
-﻿#pragma warning disable 1573
-namespace Gu.Persist.NewtonsoftJson
+﻿namespace Gu.Persist.NewtonsoftJson
 {
     using System;
     using System.IO;
@@ -43,7 +42,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// After this the settings file will be used.
         /// </summary>
         public SingletonRepository(DirectoryInfo directory)
-            : base(directory, () => CreateDefaultSettings(directory), Serialize<RepositorySettings>.Default)
+            : base(() => CreateDefaultSettings(directory), Serialize<RepositorySettings>.Default)
         {
         }
 
@@ -54,34 +53,33 @@ namespace Gu.Persist.NewtonsoftJson
         /// After this the settings file will be used.
         /// </summary>
         public SingletonRepository(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
-            : base(directory, () => CreateDefaultSettings(directory, jsonSettings), Serialize<RepositorySettings>.Default)
+            : base(() => CreateDefaultSettings(directory, jsonSettings), Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
-        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If the directory contains a settings file it is read and used.
         /// If not a new setting is created and saved.
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public SingletonRepository(DirectoryInfo directory, Func<RepositorySettings> settingsCreator)
-            : base(directory, settingsCreator, Serialize<RepositorySettings>.Default)
+        public SingletonRepository(Func<RepositorySettings> settingsCreator)
+            : base(settingsCreator, Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
-        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If the directory contains a settings file it is read and used.
         /// If not a new setting is created and saved.
         /// </summary>
-        /// <param name="directory">The directory where files will be saved.</param>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
         /// <param name="backuper">
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public SingletonRepository(DirectoryInfo directory, IBackuper backuper, Func<RepositorySettings> settingsCreator)
-            : base(directory, backuper, settingsCreator, Serialize<RepositorySettings>.Default)
+        public SingletonRepository(Func<RepositorySettings> settingsCreator, IBackuper backuper)
+            : base(settingsCreator, backuper, Serialize<RepositorySettings>.Default)
         {
         }
 

@@ -85,6 +85,8 @@
     <Compile Include="ManualSaveSettingsViewModel.cs">
       <DependentUpon>ManualSaveSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MyRepository.cs" />
+    <Compile Include="MySetting.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="RepositoryVm.cs">
       <DependentUpon>RepositoriesView.xaml</DependentUpon>

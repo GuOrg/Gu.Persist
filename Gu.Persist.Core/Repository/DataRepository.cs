@@ -9,32 +9,30 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository{TSetting}"/> class.
         /// Creates a new <see cref="Repository{TSetting}"/> with default settings.
-        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If the directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="directory">The directory where the repository reads and saves files.</param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         /// <param name="serialize">Serialization logic.</param>
-        protected DataRepository(DirectoryInfo directory, Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
-            : base(directory, settingsCreator, serialize)
+        protected DataRepository(Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
+            : base(settingsCreator, serialize)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository{TSetting}"/> class.
         /// Creates a new <see cref="Repository{TSetting}"/> with default settings.
-        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If the directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="directory">The directory where the repository reads and saves files.</param>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
         /// <param name="backuper">
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
         /// <param name="serialize">Serialization logic.</param>
-        protected DataRepository(DirectoryInfo directory, IBackuper backuper, Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
-            : base(directory, backuper, settingsCreator, serialize)
+        protected DataRepository(Func<TSetting> settingsCreator, IBackuper backuper, Serialize<TSetting> serialize)
+            : base(settingsCreator, backuper, serialize)
         {
         }
 

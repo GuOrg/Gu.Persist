@@ -25,43 +25,49 @@ namespace Gu.Persist.SystemXml
         /// It will use BinaryRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
         public DataRepository(DirectoryInfo directory)
-            : base(directory, () => CreateDefaultSettings(directory), Serialize<DataRepositorySettings>.Default)
+            : base(() => CreateDefaultSettings(directory), Serialize<DataRepositorySettings>.Default)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
-        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If the directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="directory">The directory where the repository reads and saves files.</param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public DataRepository(DirectoryInfo directory, Func<DataRepositorySettings> settingsCreator)
-            : base(directory, settingsCreator, Serialize<DataRepositorySettings>.Default)
+        public DataRepository(Func<DataRepositorySettings> settingsCreator)
+            : base( settingsCreator, Serialize<DataRepositorySettings>.Default)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
-        /// If <paramref name="directory"/> contains a settings file it is read and used.
+        /// If the directory contains a settings file it is read and used.
         /// If not a new setting is created and saved.
         /// </summary>
-        /// <param name="directory">The directory where files will be saved.</param>
+        /// <param name="settingsCreator">Creates settings if file is missing</param>
         /// <param name="backuper">
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
-        public DataRepository(DirectoryInfo directory, IBackuper backuper, Func<DataRepositorySettings> settingsCreator)
-            : base(directory, backuper, settingsCreator, Serialize<DataRepositorySettings>.Default)
+        public DataRepository(Func<DataRepositorySettings> settingsCreator, IBackuper backuper)
+            : base(settingsCreator, backuper, Serialize<DataRepositorySettings>.Default)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
-        public DataRepository(Core.DataRepositorySettings settings)
+        public DataRepository(Core.IRepositorySettings settings)
             : base(Create(settings), Serialize<DataRepositorySettings>.Default)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataRepository"/> class.
+        /// </summary>
+        public DataRepository(Core.IRepositorySettings settings, IBackuper backuper)
+            : base(Create(settings), backuper, Serialize<DataRepositorySettings>.Default)
         {
         }
 

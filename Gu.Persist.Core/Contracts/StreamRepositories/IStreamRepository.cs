@@ -2,6 +2,10 @@
 {
     using System.IO;
 
+    /// <summary>
+    /// Use this for reading the raw streams.
+    /// When using streams no caching nor dirtytracking is performed.
+    /// </summary>
     public interface IStreamRepository :
         IGenericStreamRepository,
         IGenericAsyncStreamRepository,

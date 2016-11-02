@@ -9,17 +9,22 @@
     public interface IGenericStreamRepository
     {
         /// <summary>
-        /// Reads the file and returns the contents.
+        /// Reads from file for <typeparamref name="T"/> and returns the contents.
+        /// The filename is typeof(T).Name and the extension specified in settings.
         /// </summary>
         /// <remarks>
-        /// This overload is a poor fit for large files.
+        /// This method reads the entire file into memory so it will be memory consuming for large files.
+        /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>
         Stream Read<T>();
 
         /// <summary>
-        /// Saves <paramref name="stream"/> to a file specified by <typeparamref name="T"/>
-        /// <seealso cref="IRepository.Save{T}(T)"/>
+        /// Saves to a file for <typeparamref name="T"/>.
+        /// The filename is typeof(T).Name and the extension specified in settings.
         /// </summary>
+        /// <remarks>
+        /// When using streams no caching nor dirtytracking is performed.
+        /// </remarks>
         void Save<T>(Stream stream);
     }
 }

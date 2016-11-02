@@ -86,7 +86,7 @@ namespace Gu.Persist.Core
         Task<T> ReadAsync<T>(string fileName);
 
         /// <summary>
-        /// <see cref="IRepository.Read{T}(FileInfo)"/>
+        /// <see cref="IFileInfoAsyncRepository.ReadAsync{T}(FileInfo)"/>
         /// </summary>
         Task<T> ReadAsync<T>(FileInfo file);
 

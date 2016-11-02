@@ -5,23 +5,36 @@
 
     /// <summary>
     /// Use this for reading the raw streams.
-    /// Not that caching and dirty tracking does not work for streams.
+    /// When using streams no caching nor dirtytracking is performed.
     /// </summary>
     public interface IFileInfoAsyncStreamRepository
     {
         /// <summary>
-        ///  <see cref="IFileInfoStreamRepository.Read(FileInfo)"/>
+        /// Reads the file <paramref name="file"/> and returns the contents in a memorystream
         /// </summary>
+        /// <remarks>
+        /// This method reads the entire file into memory so it will be memory consuming for large files.
+        /// When using streams no caching nor dirtytracking is performed.
+        /// </remarks>
         Task<Stream> ReadAsync(FileInfo file);
 
         /// <summary>
-        /// <see cref="IFileInfoStreamRepository.Save(FileInfo,Stream)"/>
+        /// Save to <paramref name="stream"/> <paramref name="file"/>.
         /// </summary>
+        /// <remarks>
+        /// When using streams no caching nor dirtytracking is performed.
+        /// </remarks>
         Task SaveAsync(FileInfo file, Stream stream);
 
         /// <summary>
-        /// <see cref="IFileInfoStreamRepository.Save(FileInfo, FileInfo, Stream)"/>
+        /// Save to <paramref name="stream"/> <paramref name="file"/>.
         /// </summary>
+        /// <param name="file">The file to save to.</param>
+        /// <param name="tempFile">The temporary file to use when saving.</param>
+        /// <param name="stream">The contents</param>
+        /// <remarks>
+        /// When using streams no caching nor dirtytracking is performed.
+        /// </remarks>
         Task SaveAsync(FileInfo file, FileInfo tempFile, Stream stream);
     }
 }

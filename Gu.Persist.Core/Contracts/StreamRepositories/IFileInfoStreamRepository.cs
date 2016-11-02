@@ -4,24 +4,39 @@
 
     /// <summary>
     /// Use this for reading the raw streams.
-    /// Not that caching and dirty tracking does not work for streams.
+    /// When using streams no caching nor dirtytracking is performed.
     /// </summary>
     public interface IFileInfoStreamRepository
     {
         /// <summary>
-        /// Reads the file <paramref name="file"/> and returns the contents in a memorystream
+        /// Read from <paramref name="file"/>.
         /// </summary>
+        /// <remarks>
+        /// This method reads the entire file into memory so it will be memory consuming for large files.
+        /// When using streams no caching nor dirtytracking is performed.
+        /// </remarks>
+        /// <returns>A stream with the contents of the file.</returns>
         Stream Read(FileInfo file);
 
         /// <summary>
-        /// Saves the stream and creates backups.
+        /// Save to <paramref name="stream"/> <paramref name="file"/>.
         /// </summary>
+        /// <param name="file">The file to save to.</param>
+        /// <param name="stream">The contents</param>
+        /// <remarks>
+        /// When using streams no caching nor dirtytracking is performed.
+        /// </remarks>
         void Save(FileInfo file, Stream stream);
 
         /// <summary>
-        /// Saves <paramref name="stream"/> to <paramref name="file"/>
-        /// <seealso cref="IRepository.Save{T}(FileInfo, FileInfo, T)"/>
+        /// Save to <paramref name="stream"/> <paramref name="file"/>.
         /// </summary>
+        /// <param name="file">The file to save to.</param>
+        /// <param name="tempFile">The temporary file to use when saving.</param>
+        /// <param name="stream">The contents</param>
+        /// <remarks>
+        /// When using streams no caching nor dirtytracking is performed.
+        /// </remarks>
         void Save(FileInfo file, FileInfo tempFile, Stream stream);
     }
 }

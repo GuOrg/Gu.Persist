@@ -5,17 +5,22 @@
     public interface IFileInfoRepository
     {
         /// <summary>
-        /// Reads the contents of <paramref name="file"/> and deserializes it to an instance of <typeparamref name="T"/>
+        /// Reads from <paramref name="file"/> and deserializes the contents.
         /// </summary>
         /// <remarks>
-        /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
+        /// If the repository is a <see cref="ISingletonRepository"/> the repository manages a singleton instance that is returned in future reads.
+        /// Also for <see cref="ISingletonRepository"/> a check is made to ensure that the same instance is saved.
         /// </remarks>
         T Read<T>(FileInfo file);
 
         /// <summary>
-        /// Saves <see paramref="item"/> to <paramref name="file"/>
-        /// <seealso cref="IRepository.Save{T}(FileInfo, FileInfo, T)"/>
+        /// Serialize <paramref name="item"/> and save to <paramref name="file"/>.
         /// </summary>
+        /// <remarks>
+        /// This is not truly generic as it requires <typeparamref name="T"/> to be serializable. <typeparamref name="T"/> is only used to determine filename.
+        /// If the repository is a <see cref="ISingletonRepository"/> the repository manages a singleton instance that is returned in future reads.
+        /// Also for <see cref="ISingletonRepository"/> a check is made to ensure that the same instance is saved.
+        /// </remarks>
         void Save<T>(FileInfo file, T item);
     }
 }
