@@ -65,8 +65,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
 
             // using this because AppVeyor uses two workers for running the tests.
-            this.lockFile = await LockedFile.CreateAsync(lockFileInfo, TimeSpan.FromSeconds(1))
-                                .ConfigureAwait(false);
+            this.lockFile = await LockedFile.CreateAsync(lockFileInfo, TimeSpan.FromSeconds(60))
+                                            .ConfigureAwait(false);
         }
 
         [TearDown]

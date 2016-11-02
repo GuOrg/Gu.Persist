@@ -54,13 +54,14 @@
             }
 
             // using this because AppVeyor uses two workers for running the tests.
-            this.lockFile = await LockedFile.CreateAsync(lockFileInfo, TimeSpan.FromSeconds(1))
+            this.lockFile = await LockedFile.CreateAsync(lockFileInfo, TimeSpan.FromSeconds(60))
                                 .ConfigureAwait(false);
         }
 
         [TearDown]
-        public void TearDown()
+        public async Task TearDown()
         {
+            await Task.Delay(1000).ConfigureAwait(false);
             this.directory.DeleteIfExists(true);
         }
 
