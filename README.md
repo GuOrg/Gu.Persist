@@ -1,5 +1,10 @@
 # Gu.Persist
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/Gu.Persist.NewtonsoftJson.svg)](https://www.nuget.org/packages/Gu.Persist.NewtonsoftJson/)
+[![NuGet](https://img.shields.io/nuget/v/Gu.Persist.SystemXml.svg)](https://www.nuget.org/packages/Gu.Persist.SystemXml/)
+[![NuGet](https://img.shields.io/nuget/v/Gu.Persist.RuntimeBinary.svg)](https://www.nuget.org/packages/Gu.Persist.RuntimeBinary/)
+[![NuGet](https://img.shields.io/nuget/v/Gu.Persist.RuntimeXml.svg)](https://www.nuget.org/packages/Gu.Persist.RuntimeXml/)
+[![NuGet](https://img.shields.io/nuget/v/Gu.Persist.Git.svg)](https://www.nuget.org/packages/Gu.Persist.Git/)
 [![Build status](https://ci.appveyor.com/api/projects/status/347rs0n3van46k50/branch/master?svg=true)](https://ci.appveyor.com/project/JohanLarsson/gu-persist/branch/master)
 
 A small framework for reading and saving data.
