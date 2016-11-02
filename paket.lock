@@ -1,17 +1,16 @@
 FRAMEWORK: >= NET45
 NUGET
   remote: http://www.nuget.org/api/v2
-  specs:
     LibGit2Sharp (0.22)
       LibGit2Sharp.NativeBinaries (1.0.129)
     LibGit2Sharp.NativeBinaries (1.0.129)
     Newtonsoft.Json (8.0.3)
+    YamlDotNet (4.0)
 
 GROUP Analyzers
 FRAMEWORK: >= NET45
 NUGET
   remote: http://www.nuget.org/api/v2
-  specs:
     AsyncUsageAnalyzers (1.0.0-alpha003)
     JetBrains.Annotations (10.2.1)
     StyleCop.Analyzers (1.0)
@@ -20,7 +19,6 @@ GROUP Test
 FRAMEWORK: >= NET45
 NUGET
   remote: http://www.nuget.org/api/v2
-  specs:
     Castle.Core (3.3.3)
     Moq (4.5.23)
       Castle.Core (>= 3.3.3)

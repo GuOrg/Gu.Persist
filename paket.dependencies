@@ -3,6 +3,7 @@ framework: >= net45
 
 nuget Newtonsoft.Json 8.0.3
 nuget LibGit2Sharp
+nuget YamlDotNet
 
 group Analyzers
   source http://www.nuget.org/api/v2/

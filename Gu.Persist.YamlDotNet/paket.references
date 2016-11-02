@@ -1,0 +1,6 @@
+YamlDotNet
+
+group Analyzers
+  StyleCop.Analyzers
+  AsyncUsageAnalyzers
+  JetBrains.Annotations

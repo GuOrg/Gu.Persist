@@ -26,6 +26,8 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Gu.Persist.RuntimeBinary.Tests", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Persist.SystemXml", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Persist.SystemXml.Tests", AllInternalsVisible = true)]
+[assembly: InternalsVisibleTo("Gu.Persist.Yaml", AllInternalsVisible = true)]
+[assembly: InternalsVisibleTo("Gu.Persist.Yaml.Tests", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Persist.Git", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Persist.Git.Tests", AllInternalsVisible = true)]
 

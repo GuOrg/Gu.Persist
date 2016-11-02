@@ -1,0 +1,11 @@
+﻿type project
+tags save settings yaml
+projectUrl https://github.com/JohanLarsson/Gu.Persist
+licenseUrl http://opensource.org/licenses/MIT
+
+releasenotes
+
+excludeddependencies
+  StyleCop.Analyzers
+  AsyncUsageAnalyzers
+  JetBrains.Annotations
