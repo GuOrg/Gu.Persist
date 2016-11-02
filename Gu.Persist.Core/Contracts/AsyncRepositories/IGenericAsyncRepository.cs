@@ -2,6 +2,9 @@
 {
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Uses typeof(T).Name.Extension as filename.
+    /// </summary>
     public interface IGenericAsyncRepository : IGenericRepository
     {
         /// <summary>

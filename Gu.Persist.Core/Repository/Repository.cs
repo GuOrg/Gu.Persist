@@ -9,19 +9,12 @@ namespace Gu.Persist.Core
     /// <summary>
     /// Base class for a repository
     /// </summary>
-    public abstract class Repository<TSetting> :
-        IRepository,
-        IGenericAsyncRepository,
-        IAsyncFileNameRepository,
-        IAsyncFileInfoRepository,
-        ICloner,
-        IRepositoryWithSettings,
-        IFileInfoStreamRepository,
-        IGenericStreamRepository,
-        IGenericAsyncStreamRepository,
-        IFileNameStreamRepository,
-        IFileNameAsyncStreamRepository
-    where TSetting : IRepositorySettings
+    public abstract class Repository<TSetting> : IRepository,
+                                                 IBlockingRepository,
+                                                 IAsyncRepository,
+                                                 IStreamRepository,
+                                                 IRepositoryWithSettings
+        where TSetting : IRepositorySettings
     {
         private readonly Serialize<TSetting> serialize;
 
@@ -45,7 +38,8 @@ namespace Gu.Persist.Core
                 this.Tracker = new DirtyTracker(this);
             }
 
-            this.Backuper = Backup.Backuper.Create(this.Settings.BackupSettings); // creating temp for TryRestore in ReadOrCreate
+            this.Backuper = Backup.Backuper.Create(this.Settings.BackupSettings);
+                // creating temp for TryRestore in ReadOrCreate
             this.Settings = this.ReadOrCreateCore(() => this.Settings);
             this.Backuper = Backup.Backuper.Create(this.Settings.BackupSettings);
         }
@@ -62,7 +56,11 @@ namespace Gu.Persist.Core
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
-        protected Repository(DirectoryInfo directory, IBackuper backuper, Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
+        protected Repository(
+            DirectoryInfo directory,
+            IBackuper backuper,
+            Func<TSetting> settingsCreator,
+            Serialize<TSetting> serialize)
         {
             Ensure.NotNull(directory, nameof(directory));
             Ensure.NotNull(backuper, nameof(backuper));
@@ -117,6 +115,12 @@ namespace Gu.Persist.Core
         public TSetting Settings { get; }
 
         IRepositorySettings IRepository.Settings => this.Settings;
+
+        IRepositorySettings IBlockingRepository.Settings => this.Settings;
+
+        IRepositorySettings IAsyncRepository.Settings => this.Settings;
+
+        IRepositorySettings IStreamRepository.Settings => this.Settings;
 
         IRepositorySettings IRepositoryWithSettings.Settings => this.Settings;
 
@@ -201,7 +205,8 @@ namespace Gu.Persist.Core
         public virtual async Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
-            var value = await FileHelper.ReadAsync(file, this.serialize.FromStream<T>).ConfigureAwait(false);
+            var value = await FileHelper.ReadAsync(file, this.serialize.FromStream<T>)
+                                        .ConfigureAwait(false);
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker.Track(file.FullName, value);
@@ -232,7 +237,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        Task<Stream> IFileInfoStreamRepository.ReadAsync(FileInfo file)
+        Task<Stream> IFileInfoAsyncStreamRepository.ReadAsync(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
             return file.ReadAsync();
@@ -366,9 +371,12 @@ namespace Gu.Persist.Core
             Ensure.NotNull(tempFile, nameof(tempFile));
             this.EnsureCanSave(file, item);
             this.CacheAndTrackCore(file, item);
-            using (var stream = item != null ? this.serialize.ToStream(item) : null)
+            using (var stream = item != null
+                                    ? this.serialize.ToStream(item)
+                                    : null)
             {
-                await this.SaveStreamCoreAsync(file, tempFile, stream).ConfigureAwait(false);
+                await this.SaveStreamCoreAsync(file, tempFile, stream)
+                          .ConfigureAwait(false);
             }
         }
 
@@ -428,7 +436,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        Task IFileInfoStreamRepository.SaveAsync(FileInfo file, Stream stream)
+        Task IFileInfoAsyncStreamRepository.SaveAsync(FileInfo file, Stream stream)
         {
             Ensure.NotNull(file, nameof(file));
             this.EnsureCanSave(file, stream);
@@ -437,7 +445,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        Task IFileInfoStreamRepository.SaveAsync(FileInfo file, FileInfo tempFile, Stream stream)
+        Task IFileInfoAsyncStreamRepository.SaveAsync(FileInfo file, FileInfo tempFile, Stream stream)
         {
             Ensure.NotNull(file, nameof(file));
             this.EnsureCanSave(file, stream);

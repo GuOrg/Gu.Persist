@@ -6,7 +6,7 @@
     /// <summary>
     /// A repository that reads and saves async.
     /// </summary>
-    public interface IAsyncFileInfoRepository
+    public interface IFileInfoAsyncRepository
     {
         /// <summary>
         /// <see cref="IRepository.ReadAsync{T}(FileInfo)"/>

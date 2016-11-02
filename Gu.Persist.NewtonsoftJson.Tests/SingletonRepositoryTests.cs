@@ -25,7 +25,7 @@
                                          backupSettings,
                                          ".cde",
                                          ".fgh");
-            var repository = new SingletonRepository(repositorySettings);
+            var repository = new SingletonRepository(repositorySettings, RepositorySettings.CreateDefaultJsonSettings());
 
             var jsonRepositorySettings = new RepositorySettings(
                                              Directory.FullName,

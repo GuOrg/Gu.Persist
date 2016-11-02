@@ -104,6 +104,14 @@ namespace Gu.Persist.NewtonsoftJson
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataRepository"/> class.
+        /// </summary>
+        public DataRepository(Core.DataRepositorySettings settings, JsonSerializerSettings jsonSerializerSettings)
+            : base(Create(settings, jsonSerializerSettings), Serialize<DataRepositorySettings>.Default)
+        {
+        }
+
         protected static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
         {
             return Create(Default.DataRepositorySettings(directory));

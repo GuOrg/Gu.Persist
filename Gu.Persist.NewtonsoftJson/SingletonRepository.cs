@@ -104,24 +104,8 @@ namespace Gu.Persist.NewtonsoftJson
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
-        public SingletonRepository(Core.RepositorySettings settings)
-            : base(Create(settings), Serialize<RepositorySettings>.Default)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
-        /// </summary>
         public SingletonRepository(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
             : base(Create(settings, jsonSettings), Serialize<RepositorySettings>.Default)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
-        /// </summary>
-        public SingletonRepository(Core.RepositorySettings settings, IBackuper backuper)
-            : base(Create(settings), backuper, Serialize<RepositorySettings>.Default)
         {
         }
 
