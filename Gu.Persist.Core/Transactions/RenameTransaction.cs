@@ -1,3 +1,4 @@
+#pragma warning disable SA1600 // Elements must be documented
 namespace Gu.Persist.Core
 {
     using System;
@@ -5,7 +6,7 @@ namespace Gu.Persist.Core
     using System.IO;
     using System.Linq;
 
-    public sealed class RenameTransaction : IDisposable
+    internal sealed class RenameTransaction : IDisposable
     {
         private readonly IReadOnlyList<RenamePair> pairs;
         private readonly List<RenamePair<LockedFile>> lockedPairs = new List<RenamePair<LockedFile>>();
@@ -58,9 +59,9 @@ namespace Gu.Persist.Core
 
         private class RenamePairComparer : IEqualityComparer<RenamePair>
         {
-            private static readonly StringComparer StringComparer = StringComparer.OrdinalIgnoreCase;
-
             public static readonly RenamePairComparer Default = new RenamePairComparer();
+
+            private static readonly StringComparer StringComparer = StringComparer.OrdinalIgnoreCase;
 
             private RenamePairComparer()
             {

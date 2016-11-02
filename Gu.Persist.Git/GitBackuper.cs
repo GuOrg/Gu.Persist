@@ -112,6 +112,7 @@
             // nop
         }
 
+        /// <inheritdoc/>
         public IReadOnlyList<RenamePair> GetRenamePairs(FileInfo file, string newName)
         {
             Ensure.NotNull(file, nameof(file));

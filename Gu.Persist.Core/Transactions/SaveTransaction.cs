@@ -1,4 +1,5 @@
-﻿namespace Gu.Persist.Core
+﻿#pragma warning disable SA1600 // Elements must be documented
+namespace Gu.Persist.Core
 {
     using System;
     using System.IO;
@@ -6,7 +7,7 @@
 
     using Gu.Persist.Core.Backup;
 
-    public sealed class SaveTransaction : IDisposable
+    internal sealed class SaveTransaction : IDisposable
     {
         private readonly FileInfo file;
         private readonly FileInfo tempFile;
@@ -48,6 +49,7 @@
             this.AfterCopy();
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             this.lockedFile?.Dispose();

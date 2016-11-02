@@ -1,7 +1,13 @@
 ﻿namespace Gu.Persist.Core
 {
+    /// <summary>
+    /// The items before and after a rename operation.
+    /// </summary>
     public class RenamePair<T>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenamePair{T}"/> class.
+        /// </summary>
         public RenamePair(T current, T renamed)
         {
             this.Current = current;

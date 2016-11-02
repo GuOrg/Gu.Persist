@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.Git.Tests
 {
+    using System;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -17,6 +18,7 @@
         private readonly DirectoryInfo directory;
         private DummySerializable dummy;
         private SingletonRepository repository;
+        private LockedFile lockFile;
 
         public GitBackuperTests()
         {
@@ -38,8 +40,38 @@
             this.dummy = new DummySerializable(1);
         }
 
+        [OneTimeSetUp]
+        public async Task OneTimeSetup()
+        {
+            var lockFileInfo = Directories.TempDirectory.CreateFileInfoInDirectory("test.lock");
+            try
+            {
+                lockFileInfo.Delete();
+            }
+            catch
+            {
+                // this could happen if the previous run was stopped in the debugger.
+            }
+
+            // using this because AppVeyor uses two workers for running the tests.
+            this.lockFile = await LockedFile.CreateAsync(lockFileInfo, TimeSpan.FromSeconds(1))
+                                .ConfigureAwait(false);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            this.directory.DeleteIfExists(true);
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            this.lockFile?.DisposeAndDeleteFile();
+        }
+
         [Test]
-        [Explicit("Can't get this to work on APpVeyor")]
+        [Explicit("Can't get this to work on AppVeyor")]
         public async Task SaveCommits()
         {
             // give the repository time to initialize.

@@ -19,11 +19,11 @@ namespace Gu.Persist.Core.Tests.Repositories
             this.dummy = new DummySerializable(1);
         }
 
-        protected RepositorySettings Settings => (RepositorySettings)this.Repository?.Settings;
+        public RepositorySettings Settings => (RepositorySettings)this.Repository?.Settings;
 
-        protected BackupSettings BackupSettings => this.Settings?.BackupSettings;
+        public BackupSettings BackupSettings => this.Settings?.BackupSettings;
 
-        protected bool IsBackingUp => this.BackupSettings != null;
+        public bool IsBackingUp => this.BackupSettings != null;
 
         public IRepository Repository { get; private set; }
 

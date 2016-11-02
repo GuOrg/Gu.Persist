@@ -20,7 +20,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public Files(string name, RepositorySettings settings)
         {
             var fileName = string.Concat(name, settings.Extension);
-            var settingsDirectory =new DirectoryInfo( settings.Directory);
+            var settingsDirectory = new DirectoryInfo(settings.Directory);
             this.File = settingsDirectory.CreateFileInfoInDirectory(fileName);
 
             var tempfileName = string.Concat(name, settings.TempExtension);

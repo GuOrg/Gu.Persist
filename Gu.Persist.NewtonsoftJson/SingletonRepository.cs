@@ -115,22 +115,22 @@
         {
         }
 
-        protected static RepositorySettings CreateDefaultSettings(DirectoryInfo directory)
+        private static RepositorySettings CreateDefaultSettings(DirectoryInfo directory)
         {
             return Create(Default.RepositorySettings(directory));
         }
 
-        protected static RepositorySettings CreateDefaultSettings(DirectoryInfo directory, JsonSerializerSettings jsonSerializerSettings)
+        private static RepositorySettings CreateDefaultSettings(DirectoryInfo directory, JsonSerializerSettings jsonSerializerSettings)
         {
             return Create(Create(Default.RepositorySettings(directory), jsonSerializerSettings));
         }
 
-        protected static RepositorySettings Create(Core.RepositorySettings settings)
+        private static RepositorySettings Create(Core.RepositorySettings settings)
         {
             return Create(settings, RepositorySettings.CreateDefaultJsonSettings());
         }
 
-        protected static RepositorySettings Create(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
+        private static RepositorySettings Create(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
         {
             return new RepositorySettings(
                        settings.Directory,

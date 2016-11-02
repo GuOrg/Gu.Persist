@@ -14,7 +14,7 @@
     {
         private static readonly DirectoryInfo Directory = new DirectoryInfo($@"C:\Temp\Gu.Persist\");
         private static readonly DirectoryInfo BackupDir = new DirectoryInfo($@"C:\Temp\Gu.Persist\Backup");
-        private static readonly DataRepositorySettings DataRepositorySettings = 
+        private static readonly DataRepositorySettings DataRepositorySettings =
             new DataRepositorySettings(
                 Directory.FullName,
                 RepositorySettings.CreateDefaultJsonSettings(),

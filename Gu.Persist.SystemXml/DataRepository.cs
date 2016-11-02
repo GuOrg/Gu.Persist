@@ -36,7 +36,7 @@ namespace Gu.Persist.SystemXml
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public DataRepository(Func<DataRepositorySettings> settingsCreator)
-            : base( settingsCreator, Serialize<DataRepositorySettings>.Default)
+            : base(settingsCreator, Serialize<DataRepositorySettings>.Default)
         {
         }
 
@@ -71,12 +71,12 @@ namespace Gu.Persist.SystemXml
         {
         }
 
-        protected static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
+        private static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
         {
             return Create(Default.DataRepositorySettings(directory));
         }
 
-        protected static DataRepositorySettings Create(IRepositorySettings settings)
+        private static DataRepositorySettings Create(IRepositorySettings settings)
         {
             return new DataRepositorySettings(
                        settings.Directory,

@@ -70,22 +70,22 @@ namespace Gu.Persist.SystemXml
 
         /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
         public SingletonRepository(IRepositorySettings settings)
-            : base(Create(settings), Serialize<RepositorySettings>.Default)
+            : base(CreateSettings(settings), Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
         public SingletonRepository(IRepositorySettings settings, IBackuper backuper)
-            : base(Create(settings), backuper, Serialize<RepositorySettings>.Default)
+            : base(CreateSettings(settings), backuper, Serialize<RepositorySettings>.Default)
         {
         }
 
-        protected static RepositorySettings CreateDefaultSettings(DirectoryInfo directory)
+        private static RepositorySettings CreateDefaultSettings(DirectoryInfo directory)
         {
-            return Create(Default.RepositorySettings(directory));
+            return CreateSettings(Default.RepositorySettings(directory));
         }
 
-        protected static RepositorySettings Create(IRepositorySettings settings)
+        private static RepositorySettings CreateSettings(IRepositorySettings settings)
         {
             return new RepositorySettings(
                        settings.Directory,

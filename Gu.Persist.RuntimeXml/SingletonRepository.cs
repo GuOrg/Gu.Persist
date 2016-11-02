@@ -37,7 +37,7 @@ namespace Gu.Persist.RuntimeXml
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         public SingletonRepository(Func<RepositorySettings> settingsCreator)
-            : base( settingsCreator, Serialize<RepositorySettings>.Default)
+            : base(settingsCreator, Serialize<RepositorySettings>.Default)
         {
         }
 

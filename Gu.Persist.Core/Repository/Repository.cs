@@ -114,14 +114,19 @@ namespace Gu.Persist.Core
         /// </summary>
         public TSetting Settings { get; }
 
+        /// <inheritdoc/>
         IRepositorySettings IRepository.Settings => this.Settings;
 
+        /// <inheritdoc/>
         IRepositorySettings IBlockingRepository.Settings => this.Settings;
 
+        /// <inheritdoc/>
         IRepositorySettings IAsyncRepository.Settings => this.Settings;
 
+        /// <inheritdoc/>
         IRepositorySettings IStreamRepository.Settings => this.Settings;
 
+        /// <inheritdoc/>
         IRepositorySettings IRepositoryWithSettings.Settings => this.Settings;
 
         /// <inheritdoc/>
@@ -797,6 +802,10 @@ namespace Gu.Persist.Core
             }
         }
 
+        /// <summary>
+        /// Save <paramref name="stream"/> to <paramref name="tempFile"/> then rename it to <paramref name="file"/>.
+        /// Uses a <see cref="SaveTransaction"/>
+        /// </summary>
         protected async Task SaveStreamCoreAsync(FileInfo file, FileInfo tempFile, Stream stream)
         {
             using (var saveTransaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
@@ -824,6 +833,9 @@ namespace Gu.Persist.Core
             return file.Exists;
         }
 
+        /// <summary>
+        /// Handle caching and tracking for <paramref name="item"/>
+        /// </summary>
         protected virtual void CacheAndTrackCore<T>(FileInfo file, T item)
         {
             if (this.Settings.IsTrackingDirty)
@@ -832,6 +844,9 @@ namespace Gu.Persist.Core
             }
         }
 
+        /// <summary>
+        /// Throw exception if <paramref name="item"/> cannot be saved to <paramref name="file"/>
+        /// </summary>
         protected abstract void EnsureCanSave<T>(FileInfo file, T item);
     }
 }

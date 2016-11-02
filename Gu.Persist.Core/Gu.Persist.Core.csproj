@@ -83,7 +83,7 @@
     <Compile Include="Settings\Default.cs" />
     <Compile Include="Settings\TempFileSettings.cs" />
     <Compile Include="Transactions\RenamePair.cs" />
-    <Compile Include="Transactions\RenamePair`1.cs" />
+    <Compile Include="Transactions\RenamePair{T}.cs" />
     <Compile Include="Transactions\RenameTransaction.cs" />
     <Compile Include="Transactions\SaveTransaction.cs" />
     <Compile Include="Repository\Serialize.cs" />

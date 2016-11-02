@@ -17,6 +17,7 @@
                                                                     BackupSettings.DefaultTimeStampFormat,
                                                                     1,
                                                                     2);
+
         private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(Directory.FullName, false, false, BackupSettings, ".cde", ".fgh");
 
         [Test]

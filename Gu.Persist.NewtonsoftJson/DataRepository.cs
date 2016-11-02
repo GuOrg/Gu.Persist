@@ -98,17 +98,17 @@ namespace Gu.Persist.NewtonsoftJson
         {
         }
 
-        protected static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
+        private static DataRepositorySettings CreateDefaultSettings(DirectoryInfo directory)
         {
             return Create(Default.DataRepositorySettings(directory));
         }
 
-        protected static DataRepositorySettings Create(Core.RepositorySettings settings)
+        private static DataRepositorySettings Create(Core.RepositorySettings settings)
         {
             return Create(settings, RepositorySettings.CreateDefaultJsonSettings());
         }
 
-        protected static DataRepositorySettings Create(IRepositorySettings settings, JsonSerializerSettings jsonSettings)
+        private static DataRepositorySettings Create(IRepositorySettings settings, JsonSerializerSettings jsonSettings)
         {
             return new DataRepositorySettings(
                        settings.Directory,
