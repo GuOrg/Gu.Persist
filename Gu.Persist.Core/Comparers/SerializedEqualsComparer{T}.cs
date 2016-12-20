@@ -23,8 +23,10 @@
                 return false;
             }
 
+#pragma warning disable GU0036 // Don't dispose injected.
             using (var xStream = this.GetStream(x))
             using (var yStream = this.GetStream(y))
+#pragma warning restore GU0036 // Don't dispose injected.
             {
                 if (xStream.Length != yStream.Length)
                 {
@@ -56,7 +58,9 @@
                 throw new ArgumentNullException(nameof(obj));
             }
 
+#pragma warning disable GU0036 // Don't dispose injected.
             using (var stream = this.GetStream(obj))
+#pragma warning restore GU0036 // Don't dispose injected.
             {
                 var bytes = stream.GetBuffer();
                 unchecked

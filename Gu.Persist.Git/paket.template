@@ -13,3 +13,4 @@ excludeddependencies
   StyleCop.Analyzers
   AsyncUsageAnalyzers
   JetBrains.Annotations
+  Gu.Analyzers

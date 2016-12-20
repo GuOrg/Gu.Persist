@@ -1,4 +1,5 @@
 #pragma warning disable 1573
+#pragma warning disable SA1600
 namespace Gu.Persist.Core
 {
     using System;
@@ -27,7 +28,9 @@ namespace Gu.Persist.Core
         /// <param name="fromStream">Deserializer</param>
         internal static async Task<T> ReadAsync<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
+#pragma warning disable GU0036 // Don't dispose injected.
             using (var stream = await ReadAsync(file).ConfigureAwait(false))
+#pragma warning restore GU0036 // Don't dispose injected.
             {
                 return fromStream(stream);
             }

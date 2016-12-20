@@ -10,6 +10,7 @@ group Analyzers
   nuget JetBrains.Annotations
   nuget StyleCop.Analyzers
   nuget AsyncUsageAnalyzers
+  nuget Gu.Analyzers
 
 group Test
   source http://www.nuget.org/api/v2/

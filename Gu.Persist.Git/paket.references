@@ -3,3 +3,4 @@ LibGit2Sharp
 group Analyzers
   StyleCop.Analyzers
   AsyncUsageAnalyzers
+  Gu.Analyzers

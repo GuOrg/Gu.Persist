@@ -7,7 +7,9 @@
     internal class PooledMemoryStream : Stream, IPooledStream
     {
         private static readonly ConcurrentQueue<MemoryStream> Pool = new ConcurrentQueue<MemoryStream>();
+#pragma warning disable GU0037 // Don't assign member with injected and created disposables.
         private readonly MemoryStream inner;
+#pragma warning restore GU0037 // Don't assign member with injected and created disposables.
 
         private bool disposed;
 
