@@ -193,7 +193,7 @@
 
         internal static string TimeStampPattern(this IBackupSettings setting)
         {
-            if (setting == null || string.IsNullOrEmpty(setting.TimeStampFormat))
+            if (string.IsNullOrEmpty(setting?.TimeStampFormat))
             {
                 return string.Empty;
             }
