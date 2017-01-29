@@ -69,7 +69,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="..\.paket\paket.targets" />
   <ItemGroup>
     <Analyzer Include="..\packages\analyzers\AsyncUsageAnalyzers\analyzers\dotnet\AsyncUsageAnalyzers.dll">
       <Paket>True</Paket>
@@ -113,4 +112,5 @@
       <Paket>True</Paket>
     </Analyzer>
   </ItemGroup>
+  <Import Project="..\.paket\paket.targets" />
 </Project>
