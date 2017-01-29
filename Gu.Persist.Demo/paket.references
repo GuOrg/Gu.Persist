@@ -5,3 +5,5 @@ group Analyzers
   StyleCop.Analyzers
   AsyncUsageAnalyzers
   JetBrains.Annotations
+  Gu.Analyzers
+  WpfAnalyzers

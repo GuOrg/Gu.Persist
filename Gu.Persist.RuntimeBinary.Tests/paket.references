@@ -2,6 +2,7 @@ group Analyzers
   StyleCop.Analyzers
   AsyncUsageAnalyzers
   JetBrains.Annotations
+  Gu.Analyzers
 
 group Test
   Moq

@@ -11,6 +11,7 @@ group Analyzers
   nuget StyleCop.Analyzers
   nuget AsyncUsageAnalyzers
   nuget Gu.Analyzers
+  nuget WpfAnalyzers
 
 group Test
   source http://www.nuget.org/api/v2/
