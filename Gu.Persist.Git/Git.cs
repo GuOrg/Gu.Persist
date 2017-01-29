@@ -33,9 +33,9 @@ namespace Gu.Persist.Git
         {
             using (var repository = new Repository(file.DirectoryName))
             {
-                repository.Stage(file.FullName);
+                Commands.Stage(repository, file.FullName);
                 var status = repository.RetrieveStatus(file.FullName);
-                repository.Unstage(file.FullName);
+                Commands.Unstage(repository, file.FullName);
                 return status;
             }
         }
@@ -49,7 +49,7 @@ namespace Gu.Persist.Git
 
             using (var repository = new Repository(file.DirectoryName))
             {
-                repository.Stage(file.FullName, StageOptionsIncludeIgnored);
+                Commands.Stage(repository, file.FullName, StageOptionsIncludeIgnored);
                 var status = repository.RetrieveStatus(file.FullName);
 
                 switch (status)

@@ -12,8 +12,8 @@ namespace Gu.Persist.Core
             this.File = file;
         }
 
-        public object Item { get; private set; }
+        public object Item { get; }
 
-        public FileInfo File { get; private set; }
+        public FileInfo File { get; }
     }
 }

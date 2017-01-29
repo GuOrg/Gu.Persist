@@ -12,6 +12,6 @@ namespace Gu.Persist.Core
             this.Exception = e;
         }
 
-        public Exception Exception { get; private set; }
+        public Exception Exception { get; }
     }
 }

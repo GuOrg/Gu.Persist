@@ -20,6 +20,7 @@
             this.Value = value;
         }
 
+        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
         public int Value
