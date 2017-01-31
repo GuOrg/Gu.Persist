@@ -154,6 +154,7 @@
     </When>
   </Choose>
   <Import Project="..\packages\LibGit2Sharp.NativeBinaries\build\$(__paket__LibGit2Sharp_NativeBinaries_props).props" Condition="Exists('..\packages\LibGit2Sharp.NativeBinaries\build\$(__paket__LibGit2Sharp_NativeBinaries_props).props')" Label="Paket" />
+  <Import Project="..\.paket\paket.targets" />
   <ItemGroup>
     <Analyzer Include="..\packages\analyzers\AsyncUsageAnalyzers\analyzers\dotnet\AsyncUsageAnalyzers.dll">
       <Paket>True</Paket>
@@ -219,5 +220,4 @@
       </ItemGroup>
     </When>
   </Choose>
-  <Import Project="..\.paket\paket.targets" />
 </Project>
