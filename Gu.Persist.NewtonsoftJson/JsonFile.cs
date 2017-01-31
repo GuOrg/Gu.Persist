@@ -84,16 +84,19 @@
         public static T Read<T>(FileInfo file, JsonSerializerSettings settings)
         {
             Ensure.Exists(file, nameof(file));
-            return FileHelper.Read(file, stream => FromStream<T>(stream, settings));
+            return Read<T>(file.FullName, settings);
         }
 
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
-        public static Task<T> ReadAsync<T>(string fileName)
+        public static async Task<T> ReadAsync<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            return FileHelper.ReadAsync(new FileInfo(fileName), FromStream<T>);
+            using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
+            {
+                return FromStream<T>(stream);
+            }
         }
 
         /// <summary>
@@ -102,16 +105,19 @@
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.Exists(file, nameof(file));
-            return FileHelper.ReadAsync(file, FromStream<T>);
+            return ReadAsync<T>(file.FullName);
         }
 
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
-        public static Task<T> ReadAsync<T>(string fileName, JsonSerializerSettings settings)
+        public static async Task<T> ReadAsync<T>(string fileName, JsonSerializerSettings settings)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            return FileHelper.ReadAsync(new FileInfo(fileName), stream => FromStream<T>(stream, settings));
+            using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
+            {
+                return FromStream<T>(stream, settings);
+            }
         }
 
         /// <summary>
@@ -120,7 +126,7 @@
         public static Task<T> ReadAsync<T>(FileInfo file, JsonSerializerSettings settings)
         {
             Ensure.Exists(file, nameof(file));
-            return FileHelper.ReadAsync(file, stream => FromStream<T>(stream, settings));
+            return ReadAsync<T>(file.FullName, settings);
         }
 
         /// <summary>

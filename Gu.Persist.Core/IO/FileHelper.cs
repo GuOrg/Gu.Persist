@@ -13,38 +13,12 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
         /// </summary>
-        /// <param name="fromStream">Deserializer</param>
-        [Obsolete("Don't use this.")]
-        internal static T Read<T>(this FileInfo file, Func<Stream, T> fromStream)
-        {
-            using (var stream = File.OpenRead(file.FullName))
-            {
-                return fromStream(stream);
-            }
-        }
-
-        /// <summary>
-        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
-        /// </summary>
         /// <param name="serialize">Deserializer</param>
         internal static T Read<T, TSettings>(this FileInfo file, TSettings setting, Serialize<TSettings> serialize)
         {
             using (var stream = File.OpenRead(file.FullName))
             {
                 return serialize.FromStream<T>(stream, setting);
-            }
-        }
-
-        /// <summary>
-        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
-        /// </summary>
-        /// <param name="fromStream">Deserializer</param>
-        [Obsolete("Don't use this.")]
-        internal static async Task<T> ReadAsync<T>(this FileInfo file, Func<Stream, T> fromStream)
-        {
-            using (var stream = await ReadAsync(file).ConfigureAwait(false))
-            {
-                return fromStream(stream);
             }
         }
 
@@ -59,10 +33,15 @@ namespace Gu.Persist.Core
             }
         }
 
-        internal static async Task<Stream> ReadAsync(this FileInfo file)
+        internal static Task<Stream> ReadAsync(this FileInfo file)
+        {
+            return ReadAsync(file.FullName);
+        }
+
+        internal static async Task<Stream> ReadAsync(this string fileName)
         {
             var stream = PooledMemoryStream.Borrow();
-            using (var fileStream = File.OpenRead(file.FullName))
+            using (var fileStream = File.OpenRead(fileName))
             {
                 await fileStream.CopyToAsync(stream)
                                 .ConfigureAwait(false);

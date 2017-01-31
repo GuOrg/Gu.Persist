@@ -33,7 +33,10 @@
         public static T Read<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            return FileHelper.Read(new FileInfo(fileName), FromStream<T>);
+            using (var stream = File.OpenRead(fileName))
+            {
+                return FromStream<T>(stream);
+            }
         }
 
         /// <summary>
@@ -42,16 +45,19 @@
         public static T Read<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            return FileHelper.Read(file, FromStream<T>);
+            return Read<T>(file.FullName);
         }
 
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
         /// </summary>
-        public static Task<T> ReadAsync<T>(string fileName)
+        public static async Task<T> ReadAsync<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            return FileHelper.ReadAsync(new FileInfo(fileName), FromStream<T>);
+            using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
+            {
+                return FromStream<T>(stream);
+            }
         }
 
         /// <summary>
@@ -60,7 +66,7 @@
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            return FileHelper.ReadAsync(file, FromStream<T>);
+            return ReadAsync<T>(file.FullName);
         }
 
         /// <summary>
