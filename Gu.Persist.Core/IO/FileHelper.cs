@@ -14,6 +14,7 @@ namespace Gu.Persist.Core
         /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
         /// </summary>
         /// <param name="fromStream">Deserializer</param>
+        [Obsolete("Don't use this.")]
         internal static T Read<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
             using (var stream = File.OpenRead(file.FullName))
@@ -25,14 +26,36 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
         /// </summary>
+        /// <param name="serialize">Deserializer</param>
+        internal static T Read<T, TSettings>(this FileInfo file, TSettings setting, Serialize<TSettings> serialize)
+        {
+            using (var stream = File.OpenRead(file.FullName))
+            {
+                return serialize.FromStream<T>(stream, setting);
+            }
+        }
+
+        /// <summary>
+        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
+        /// </summary>
         /// <param name="fromStream">Deserializer</param>
+        [Obsolete("Don't use this.")]
         internal static async Task<T> ReadAsync<T>(this FileInfo file, Func<Stream, T> fromStream)
         {
-#pragma warning disable GU0036 // Don't dispose injected.
             using (var stream = await ReadAsync(file).ConfigureAwait(false))
-#pragma warning restore GU0036 // Don't dispose injected.
             {
                 return fromStream(stream);
+            }
+        }
+
+        /// <summary>
+        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
+        /// </summary>
+        internal static async Task<T> ReadAsync<T, TSettings>(this FileInfo file, TSettings setting, Serialize<TSettings> serialize)
+        {
+            using (var stream = await ReadAsync(file).ConfigureAwait(false))
+            {
+                return serialize.FromStream<T>(stream, setting);
             }
         }
 

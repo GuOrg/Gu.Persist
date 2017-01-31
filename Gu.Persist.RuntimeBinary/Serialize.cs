@@ -12,7 +12,7 @@
         public static readonly Serialize<TSetting> Default = new Serialize<TSetting>();
 
         /// <inheritdoc/>
-        public override Stream ToStream<T>(T item)
+        public override Stream ToStream<T>(T item, TSetting setting)
         {
             return BinaryFile.ToStream(item);
         }
@@ -32,19 +32,19 @@
         }
 
         /// <inheritdoc/>
-        public override T FromStream<T>(Stream stream)
+        public override T FromStream<T>(Stream stream, TSetting setting)
         {
             return BinaryFile.FromStream<T>(stream);
         }
 
         /// <inheritdoc/>
-        public override T Clone<T>(T item)
+        public override T Clone<T>(T item, TSetting setting)
         {
             return BinaryFile.Clone(item);
         }
 
         /// <inheritdoc/>
-        public override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
+        public override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>(TSetting setting)
         {
             return BinaryEqualsComparer<T>.Default;
         }

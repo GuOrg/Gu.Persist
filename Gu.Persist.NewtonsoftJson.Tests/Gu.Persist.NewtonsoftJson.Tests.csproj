@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\JsonRepositoryTests.cs" />
     <Compile Include="Repository\NoBackup.cs" />
+    <Compile Include="Repository\IssueRepros\DataRepositoryIssueReproTests.cs" />
     <Compile Include="Repository\SaveNullDeletesFile.cs" />
     <Compile Include="Repository\SaveNullDeletesFileNotCaching.cs" />
     <Compile Include="Repository\WithDefaultSettings.cs" />

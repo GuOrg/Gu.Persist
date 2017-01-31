@@ -3,6 +3,7 @@
     using Gu.Persist.Core;
     using Gu.Persist.Core.Tests;
     using Gu.Persist.NewtonsoftJson;
+
     using NUnit.Framework;
 
     public class DefaultSingletonRepository : JsonRepositoryTests

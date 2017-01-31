@@ -12,9 +12,9 @@ namespace Gu.Persist.NewtonsoftJson
         public static readonly Serialize<TSetting> Default = new Serialize<TSetting>();
 
         /// <inheritdoc/>
-        public override Stream ToStream<T>(T item)
+        public override Stream ToStream<T>(T item, TSetting setting)
         {
-            return JsonFile.ToStream(item);
+            return JsonFile.ToStream(item, setting.JsonSerializerSettings);
         }
 
         /// <inheritdoc/>
@@ -37,21 +37,23 @@ namespace Gu.Persist.NewtonsoftJson
         }
 
         /// <inheritdoc/>
-        public override T FromStream<T>(Stream stream)
+        public override T FromStream<T>(Stream stream, TSetting setting)
         {
-            return JsonFile.FromStream<T>(stream);
+            return JsonFile.FromStream<T>(stream, setting.JsonSerializerSettings);
         }
 
         /// <inheritdoc/>
-        public override T Clone<T>(T item)
+        public override T Clone<T>(T item, TSetting setting)
         {
-            return JsonFile.Clone(item);
+            return JsonFile.Clone(item, setting.JsonSerializerSettings);
         }
 
         /// <inheritdoc/>
-        public override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>()
+        public override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>(TSetting setting)
         {
-            return JsonEqualsComparer<T>.Default;
+            return setting.JsonSerializerSettings == null
+                       ? JsonEqualsComparer<T>.Default
+                       : new JsonEqualsComparer<T>(setting.JsonSerializerSettings);
         }
     }
 }

@@ -58,10 +58,7 @@ namespace Gu.Persist.Core
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.
         /// </param>
-        protected Repository(
-            Func<TSetting> settingsCreator,
-            IBackuper backuper,
-            Serialize<TSetting> serialize)
+        protected Repository(Func<TSetting> settingsCreator, IBackuper backuper, Serialize<TSetting> serialize)
         {
             Ensure.NotNull(settingsCreator, nameof(settingsCreator));
             Ensure.NotNull(backuper, nameof(backuper));
@@ -210,7 +207,7 @@ namespace Gu.Persist.Core
         public virtual async Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
-            var value = await FileHelper.ReadAsync(file, this.serialize.FromStream<T>)
+            var value = await FileHelper.ReadAsync<T, TSetting>(file, this.Settings, this.serialize)
                                         .ConfigureAwait(false);
             if (this.Settings.IsTrackingDirty)
             {
@@ -377,7 +374,7 @@ namespace Gu.Persist.Core
             this.EnsureCanSave(file, item);
             this.CacheAndTrackCore(file, item);
             using (var stream = item != null
-                                    ? this.serialize.ToStream(item)
+                                    ? this.serialize.ToStream(item, this.Settings)
                                     : null)
             {
                 await this.SaveStreamCoreAsync(file, tempFile, stream)
@@ -465,7 +462,7 @@ namespace Gu.Persist.Core
                 throw new InvalidOperationException("This repository is not tracking dirty.");
             }
 
-            return this.IsDirty(item, this.serialize.DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(item, this.serialize.DefaultStructuralEqualityComparer<T>(this.Settings));
         }
 
         /// <inheritdoc/>
@@ -489,7 +486,7 @@ namespace Gu.Persist.Core
             }
 
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            return this.IsDirty(fileName, item, this.serialize.DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(fileName, item, this.serialize.DefaultStructuralEqualityComparer<T>(this.Settings));
         }
 
         /// <inheritdoc/>
@@ -515,7 +512,7 @@ namespace Gu.Persist.Core
 
             Ensure.NotNull(file, nameof(file));
 
-            return this.IsDirty(file, item, this.serialize.DefaultStructuralEqualityComparer<T>());
+            return this.IsDirty(file, item, this.serialize.DefaultStructuralEqualityComparer<T>(this.Settings));
         }
 
         /// <inheritdoc/>
@@ -647,7 +644,7 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(item));
             }
 
-            return this.serialize.Clone(item);
+            return this.serialize.Clone(item, this.Settings);
         }
 
         /// <inheritdoc/>
@@ -707,7 +704,7 @@ namespace Gu.Persist.Core
         protected virtual T ReadCore<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            var value = FileHelper.Read(file, this.serialize.FromStream<T>);
+            var value = FileHelper.Read<T, TSetting>(file, this.Settings, this.serialize);
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker.Track(file.FullName, value);

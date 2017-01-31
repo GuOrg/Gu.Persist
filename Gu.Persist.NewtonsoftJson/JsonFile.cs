@@ -48,7 +48,10 @@
         public static T Read<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            return FileHelper.Read(new FileInfo(fileName), FromStream<T>);
+            using (var stream = File.OpenRead(fileName))
+            {
+                return FromStream<T>(stream);
+            }
         }
 
         /// <summary>
@@ -57,7 +60,10 @@
         public static T Read<T>(FileInfo file)
         {
             Ensure.Exists(file, nameof(file));
-            return FileHelper.Read(file, FromStream<T>);
+            using (var stream = File.OpenRead(file.FullName))
+            {
+                return FromStream<T>(stream);
+            }
         }
 
         /// <summary>
@@ -66,7 +72,10 @@
         public static T Read<T>(string fileName, JsonSerializerSettings settings)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            return FileHelper.Read(new FileInfo(fileName), stream => FromStream<T>(stream, settings));
+            using (var stream = File.OpenRead(fileName))
+            {
+                return FromStream<T>(stream, settings);
+            }
         }
 
         /// <summary>
@@ -222,8 +231,8 @@
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
-            using (var sr = new StreamReader(stream, DefaultEncoding, true, 1024, true))
-            using (var jsonTextReader = new JsonTextReader(sr))
+            using (var reader = new StreamReader(stream, DefaultEncoding, true, 1024, true))
+            using (var jsonTextReader = new JsonTextReader(reader))
             {
                 return serializer.Deserialize<T>(jsonTextReader);
             }
