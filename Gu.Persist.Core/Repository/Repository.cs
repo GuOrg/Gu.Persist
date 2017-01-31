@@ -371,6 +371,7 @@ namespace Gu.Persist.Core
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(tempFile, nameof(tempFile));
+
             this.EnsureCanSave(file, item);
             this.CacheAndTrackCore(file, item);
             using (var stream = item != null

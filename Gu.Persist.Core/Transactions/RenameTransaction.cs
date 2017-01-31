@@ -20,7 +20,6 @@ namespace Gu.Persist.Core
         {
             foreach (var pair in this.pairs.Distinct(RenamePairComparer.Default))
             {
-#pragma warning disable GU0030 // Use using.
                 var current = LockedFile.Create(pair.Current, f => f.Open(FileMode.Open, FileAccess.Read, FileShare.Delete));
                 if (!overWrite && pair.Renamed.Exists)
                 {
@@ -33,7 +32,6 @@ namespace Gu.Persist.Core
                 try
                 {
                     var renamed = LockedFile.Create(pair.Renamed, f => f.Open(FileMode.OpenOrCreate, FileAccess.Read, FileShare.Delete));
-#pragma warning restore GU0030 // Use using.
                     this.lockedPairs.Add(new RenamePair<LockedFile>(current, renamed));
                 }
                 catch

@@ -13,12 +13,14 @@
 
     using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
 
-    public class GitBackuperTests
+    public class GitBackuperTests : IDisposable
     {
         private readonly DirectoryInfo directory;
+
         private DummySerializable dummy;
         private SingletonRepository repository;
         private LockedFile lockFile;
+        private bool disposed;
 
         public GitBackuperTests()
         {
@@ -54,6 +56,7 @@
             }
 
             // using this because AppVeyor uses two workers for running the tests.
+            this.lockFile?.Dispose();
             this.lockFile = await LockedFile.CreateAsync(lockFileInfo, TimeSpan.FromSeconds(60))
                                             .ConfigureAwait(false);
         }
@@ -140,6 +143,25 @@
         {
             // just so it is not flagged as unused member
             Assert.AreEqual(this.directory.FullName, ((GitBackuper)this.repository.Backuper).Directory);
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            this.disposed = true;
+            if (disposing)
+            {
+                this.lockFile?.Dispose();
+            }
         }
 
         /// <summary>

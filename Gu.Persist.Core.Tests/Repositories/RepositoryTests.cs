@@ -9,10 +9,12 @@ namespace Gu.Persist.Core.Tests.Repositories
 
     using NUnit.Framework;
 
-    public abstract class RepositoryTests
+    public abstract class RepositoryTests : IDisposable
     {
         private readonly DummySerializable dummy;
+
         private LockedFile lockFile;
+        private bool disposed;
 
         protected RepositoryTests()
         {
@@ -63,6 +65,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             {
                 // this could happen if the previous run was stopped in the debugger.
             }
+
+            this.lockFile?.Dispose();
 
             // using this because AppVeyor uses two workers for running the tests.
             this.lockFile = await LockedFile.CreateAsync(lockFileInfo, TimeSpan.FromSeconds(60))
@@ -1059,6 +1063,25 @@ namespace Gu.Persist.Core.Tests.Repositories
                     Assert.AreEqual("b", this.NamedFiles.Backup.ReadAllText());
                     Assert.AreEqual("bb", this.NamedFiles.BackupNewName.ReadAllText());
                 }
+            }
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            this.disposed = true;
+            if (disposing)
+            {
+                this.lockFile?.Dispose();
             }
         }
 
