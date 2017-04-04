@@ -38,7 +38,7 @@
         /// <inheritdoc/>
         public void Backup(LockedFile file)
         {
-            file.Dispose();
+            file.Close();
             Git.StageAndCommit(file.File, false);
         }
 
@@ -96,7 +96,7 @@
         /// <inheritdoc/>
         public void AfterSave(LockedFile file)
         {
-            file.Dispose();
+            file.Close();
             Git.StageAndCommit(file.File, false);
         }
 

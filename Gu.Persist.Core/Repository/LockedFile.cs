@@ -92,6 +92,17 @@
             return new LockedFile(file, null);
         }
 
+        /// <summary>
+        /// Call Close on the stream.
+        /// </summary>
+        public void Close()
+        {
+            this.Stream?.Close();
+        }
+
+        /// <summary>
+        /// Dispose the stream and delete the file.
+        /// </summary>
         public void DisposeAndDeleteFile()
         {
             this.Stream?.Dispose();
