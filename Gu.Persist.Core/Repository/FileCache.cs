@@ -50,11 +50,11 @@
             }
         }
 
-        public void ChangeKey(string @from, string to, bool owerWrite)
+        public void ChangeKey(string @from, string to, bool overWrite)
         {
             lock (this.gate)
             {
-                this.cache.ChangeKey(@from, to, owerWrite);
+                this.cache.ChangeKey(@from, to, overWrite);
             }
         }
 

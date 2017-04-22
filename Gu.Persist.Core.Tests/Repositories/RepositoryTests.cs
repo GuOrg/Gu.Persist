@@ -1,3 +1,4 @@
+#pragma warning disable GU0009 // Name the boolean parameter.
 namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
@@ -44,8 +45,8 @@ namespace Gu.Persist.Core.Tests.Repositories
         [SetUp]
         public void SetUp()
         {
-            this.Directory?.DeleteIfExists(true);
-            this.TargetDirectory?.DeleteIfExists(true);
+            this.Directory?.DeleteIfExists(recursive: true);
+            this.TargetDirectory?.DeleteIfExists(recursive: true);
             this.Repository = this.Create();
             this.Repository.ClearCache();
             this.NamedFiles = new Files(this.GetType().Name, this.Settings);

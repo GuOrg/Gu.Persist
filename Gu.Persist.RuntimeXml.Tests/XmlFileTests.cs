@@ -18,14 +18,14 @@
         [SetUp]
         public void SetUp()
         {
-            this.directory.Delete(true);
+            this.directory.Delete(recursive: true);
             this.directory.Create();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            this.directory.Delete(true);
+            this.directory.Delete(recursive: true);
         }
 
         [Test]

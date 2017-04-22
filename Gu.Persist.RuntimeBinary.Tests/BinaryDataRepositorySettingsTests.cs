@@ -18,12 +18,24 @@
                                                                     1,
                                                                     2);
 
-        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(Directory.FullName, false, false, BackupSettings, ".cde", ".fgh");
+        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(
+            directory: Directory.FullName,
+            isTrackingDirty: false,
+            saveNullDeletesFile: false,
+            backupSettings: BackupSettings,
+            extension: ".cde",
+            tempExtension: ".fgh");
 
         [Test]
         public void RoundtripRepositorySettingsWithRepository()
         {
-            var settings = new DataRepositorySettings(Directory.FullName, true, true, BackupSettings, ".cde", ".fgh");
+            var settings = new DataRepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                saveNullDeletesFile: true,
+                backupSettings: BackupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<DataRepositorySettings>();
@@ -33,7 +45,13 @@
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var settings = new DataRepositorySettings(Directory.FullName, true, true, BackupSettings, ".cde", ".fgh");
+            var settings = new DataRepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                saveNullDeletesFile: true,
+                backupSettings: BackupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var serializer = new BinaryFormatter();
             using (Stream stream = PooledMemoryStream.Borrow())
             {
@@ -47,7 +65,13 @@
         [Test]
         public void RoundtripRepositorySettingsWithNullBackupSettings()
         {
-            var settings = new DataRepositorySettings(Directory.FullName, true, true, BackupSettings, ".cde", ".fgh");
+            var settings = new DataRepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                saveNullDeletesFile: true,
+                backupSettings: BackupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var serializer = new BinaryFormatter();
             using (Stream stream = PooledMemoryStream.Borrow())
             {

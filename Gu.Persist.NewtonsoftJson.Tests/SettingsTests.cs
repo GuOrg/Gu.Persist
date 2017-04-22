@@ -14,18 +14,18 @@
     {
         private static readonly DirectoryInfo Directory = new DirectoryInfo($@"C:\Temp\Gu.Persist\");
         private static readonly DirectoryInfo BackupDir = new DirectoryInfo($@"C:\Temp\Gu.Persist\Backup");
-        private static readonly DataRepositorySettings DataRepositorySettings =
-            new DataRepositorySettings(
-                Directory.FullName,
-                RepositorySettings.CreateDefaultJsonSettings(),
-                false,
-                false,
-                null);
+
+        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(
+            directory: Directory.FullName,
+            jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
+            isTrackingDirty: false,
+            saveNullDeletesFile: false,
+            backupSettings: null);
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            Directory.Delete(true);
+            Directory.Delete(recursive: true);
         }
 
         [Test]
@@ -33,12 +33,12 @@
         {
             var backupSettings = new BackupSettings(BackupDir.FullName, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new RepositorySettings(
-                Directory.FullName,
-                RepositorySettings.CreateDefaultJsonSettings(),
-                false,
-                backupSettings,
-                ".cde",
-                ".fgh");
+                directory: Directory.FullName,
+                jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
+                isTrackingDirty: false,
+                backupSettings: backupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var json = JsonConvert.SerializeObject(settings);
             var roundtripped = JsonConvert.DeserializeObject<RepositorySettings>(json);
             AssertProperties(settings, roundtripped);
@@ -60,11 +60,11 @@
         {
             var backupSettings = new BackupSettings(BackupDir.FullName, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new Core.RepositorySettings(
-                               Directory.FullName,
-                               false,
-                               backupSettings,
-                               ".cde",
-                               ".fgh");
+                               directory: Directory.FullName,
+                               isTrackingDirty: false,
+                               backupSettings: backupSettings,
+                               extension: ".cde",
+                               tempExtension: ".fgh");
             var json = JsonConvert.SerializeObject(settings);
             var roundtripped = JsonConvert.DeserializeObject<Core.RepositorySettings>(json);
             AssertProperties(settings, roundtripped);
@@ -86,12 +86,12 @@
         {
             var backupSettings = new BackupSettings(BackupDir.FullName, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new RepositorySettings(
-                Directory.FullName,
-                RepositorySettings.CreateDefaultJsonSettings(),
-                false,
-                backupSettings,
-                ".cde",
-                ".fgh");
+                directory: Directory.FullName,
+                jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
+                isTrackingDirty: false,
+                backupSettings: backupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<RepositorySettings>();
@@ -103,19 +103,19 @@
         public void RoundtripJsonDataRepositorySettingsWithRepository()
         {
             var backupSettings = new BackupSettings(BackupDir.FullName, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
-            var settings = new NewtonsoftJson.DataRepositorySettings(
-                Directory.FullName,
-                RepositorySettings.CreateDefaultJsonSettings(),
-                false,
-                false,
-                backupSettings,
-                ".cde",
-                ".fgh");
+            var settings = new DataRepositorySettings(
+                directory: Directory.FullName,
+                jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
+                isTrackingDirty: false,
+                saveNullDeletesFile: false,
+                backupSettings: backupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
-            var roundtripped = repository.Read<NewtonsoftJson.DataRepositorySettings>();
+            var roundtripped = repository.Read<DataRepositorySettings>();
             AssertProperties(settings, roundtripped);
-            Assert.IsTrue(JsonEqualsComparer<NewtonsoftJson.DataRepositorySettings>.Default.Equals(settings, roundtripped));
+            Assert.IsTrue(JsonEqualsComparer<DataRepositorySettings>.Default.Equals(settings, roundtripped));
         }
 
         [Test]
@@ -123,11 +123,11 @@
         {
             var backupSettings = new BackupSettings(BackupDir.FullName, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var settings = new Core.RepositorySettings(
-                Directory.FullName,
-                false,
-                backupSettings,
-                ".cde",
-                ".fgh");
+                directory: Directory.FullName,
+                isTrackingDirty: false,
+                backupSettings: backupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<Core.RepositorySettings>();

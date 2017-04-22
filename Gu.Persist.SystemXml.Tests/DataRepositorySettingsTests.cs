@@ -23,12 +23,24 @@
 
         private static readonly DirectoryInfo Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\");
 
-        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(Directory.FullName, false, false, BackupSettings, ".cde", ".fgh");
+        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(
+            directory: Directory.FullName,
+            isTrackingDirty: false,
+            saveNullDeletesFile: false,
+            backupSettings: BackupSettings,
+            extension: ".cde",
+            tempExtension: ".fgh");
 
         [Test]
         public void RoundtripRepositorySettingsWithRepository()
         {
-            var settings = new DataRepositorySettings(Directory.FullName, true, true, BackupSettings, ".cde", ".fgh");
+            var settings = new DataRepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                saveNullDeletesFile: true,
+                backupSettings: BackupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<DataRepositorySettings>();
@@ -38,7 +50,13 @@
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var settings = new DataRepositorySettings(Directory.FullName, true, true, BackupSettings, ".cde", ".fgh");
+            var settings = new DataRepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                saveNullDeletesFile: true,
+                backupSettings: BackupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var sb = new StringBuilder();
             var serializer = new XmlSerializer(settings.GetType());
             using (var writer = new StringWriter(sb))
@@ -59,7 +77,13 @@
         [Test]
         public void RoundtripRepositorySettingsWithNullBackupSettings()
         {
-            var settings = new DataRepositorySettings(Directory.FullName, true, true, null, ".cde", ".fgh");
+            var settings = new DataRepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                saveNullDeletesFile: true,
+                backupSettings: null,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var sb = new StringBuilder();
             var serializer = new XmlSerializer(settings.GetType());
             using (var writer = new StringWriter(sb))
@@ -72,7 +96,7 @@
             ////Console.Write(xml);
             using (var reader = new StringReader(xml))
             {
-               var roundtripped = (DataRepositorySettings)serializer.Deserialize(reader);
+                var roundtripped = (DataRepositorySettings)serializer.Deserialize(reader);
                 AssertProperties(settings, roundtripped);
             }
         }

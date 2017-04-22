@@ -10,19 +10,31 @@
     {
         private static readonly DirectoryInfo Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\");
         private static readonly DirectoryInfo BackupDirectory = new DirectoryInfo(@"C:\Temp\Gu.Persist\Backup\");
-        private static readonly BackupSettings BackupSettings = new BackupSettings(
-                                                            BackupDirectory.FullName,
-                                                            ".abc",
-                                                            BackupSettings.DefaultTimeStampFormat,
-                                                            1,
-                                                            2);
 
-        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(Directory.FullName, false, false, BackupSettings, ".cde", ".fgh");
+        private static readonly BackupSettings BackupSettings = new BackupSettings(
+            directory: BackupDirectory.FullName,
+            extension: ".abc",
+            timeStampFormat: BackupSettings.DefaultTimeStampFormat,
+            numberOfBackups: 1,
+            maxAgeInDays: 2);
+
+        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(
+            directory: Directory.FullName,
+            isTrackingDirty: false,
+            saveNullDeletesFile: false,
+            backupSettings: BackupSettings,
+            extension: ".cde",
+            tempExtension: ".fgh");
 
         [Test]
         public void RoundtripRepositorySettingsWithRepository()
         {
-            var settings = new RepositorySettings(Directory.FullName, false, BackupSettings, ".abc", ".cde");
+            var settings = new RepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: false,
+                backupSettings: BackupSettings,
+                extension: ".abc",
+                tempExtension: ".cde");
             var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<RepositorySettings>();
@@ -32,7 +44,12 @@
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var settings = new RepositorySettings(Directory.FullName, true, BackupSettings, ".abc", ".cde");
+            var settings = new RepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                backupSettings: BackupSettings,
+                extension: ".abc",
+                tempExtension: ".cde");
             var serializer = new BinaryFormatter();
             using (Stream stream = PooledMemoryStream.Borrow())
             {
@@ -46,7 +63,12 @@
         [Test]
         public void RoundtripRepositorySettingsWithNullBackupSettings()
         {
-            var settings = new RepositorySettings(Directory.FullName, true, null, ".abc", ".def");
+            var settings = new RepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                backupSettings: null,
+                extension: ".abc",
+                tempExtension: ".def");
             var serializer = new BinaryFormatter();
             using (Stream stream = PooledMemoryStream.Borrow())
             {

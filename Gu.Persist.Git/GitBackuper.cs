@@ -39,19 +39,19 @@
         public void Backup(LockedFile file)
         {
             file.Close();
-            Git.StageAndCommit(file.File, false);
+            Git.StageAndCommit(file.File, allowEmptyCommit: false);
         }
 
         /// <inheritdoc/>
         public void Backup(FileInfo file)
         {
-            Git.StageAndCommit(file, false);
+            Git.StageAndCommit(file, allowEmptyCommit: false);
         }
 
         /// <inheritdoc/>
         public void Backup(FileInfo file, FileInfo backup)
         {
-            Git.StageAndCommit(file, false);
+            Git.StageAndCommit(file, allowEmptyCommit: false);
         }
 
         /// <inheritdoc/>
@@ -97,7 +97,7 @@
         public void AfterSave(LockedFile file)
         {
             file.Close();
-            Git.StageAndCommit(file.File, false);
+            Git.StageAndCommit(file.File, allowEmptyCommit: false);
         }
 
         /// <inheritdoc/>
@@ -107,7 +107,7 @@
         }
 
         /// <inheritdoc/>
-        void IBackuper.Rename(FileInfo file, string newName, bool owerWrite)
+        void IBackuper.Rename(FileInfo file, string newName, bool overWrite)
         {
             // nop
         }

@@ -1,12 +1,9 @@
 // ReSharper disable UnusedMember.Global
-namespace Gu.Persist.NewtonsoftJson.Tests.Repository
+namespace Gu.Persist.RuntimeBinary.Tests.Repository
 {
     using Gu.Persist.Core;
-    using Gu.Persist.NewtonsoftJson;
 
-    using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
-
-    public class BackupInSubDirrectory : JsonRepositoryTests
+    public class BackupInSubDirectory : BinaryRepositoryTests
     {
         protected override IRepository Create()
         {
@@ -19,7 +16,6 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
 
             var settings = new RepositorySettings(
                 directory: this.TargetDirectory.FullName,
-                jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
                 isTrackingDirty: false,
                 backupSettings: backupSettings);
 

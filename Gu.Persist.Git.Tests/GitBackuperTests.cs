@@ -36,7 +36,12 @@
             }
 
             this.directory.Create();
-            var settings = new RepositorySettings(this.directory.FullName, RepositorySettings.CreateDefaultJsonSettings(), false, null);
+            var settings = new RepositorySettings(
+                directory: this.directory.FullName,
+                jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
+                isTrackingDirty: false,
+                backupSettings: null);
+
             var gitBackuper = new GitBackuper(settings.Directory);
             this.repository = new SingletonRepository(settings, gitBackuper);
             this.dummy = new DummySerializable(1);
@@ -184,7 +189,7 @@
                 fileInfo.Delete();
             }
 
-            Directory.Delete(directory, true);
+            Directory.Delete(directory, recursive: true);
         }
     }
 }

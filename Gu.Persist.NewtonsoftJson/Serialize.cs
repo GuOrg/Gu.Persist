@@ -30,7 +30,7 @@ namespace Gu.Persist.NewtonsoftJson
             var serializer = settings != null
                 ? JsonSerializer.Create(settings.JsonSerializerSettings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(stream, JsonFile.DefaultEncoding, 1024, true)))
+            using (var writer = new JsonTextWriter(new StreamWriter(stream, JsonFile.DefaultEncoding, bufferSize: 1024, leaveOpen: true)))
             {
                 serializer.Serialize(writer, item);
             }

@@ -15,10 +15,10 @@
         protected override IRepository Create()
         {
             var settings = new NewtonsoftJson.RepositorySettings(
-                this.TargetDirectory.FullName,
-                NewtonsoftJson.RepositorySettings.CreateDefaultJsonSettings(),
-                false,
-                null);
+                directory: this.TargetDirectory.FullName,
+                jsonSerializerSettings: NewtonsoftJson.RepositorySettings.CreateDefaultJsonSettings(),
+                isTrackingDirty: false,
+                backupSettings: null);
             return new SingletonRepository(settings);
         }
     }

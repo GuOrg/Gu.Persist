@@ -1,4 +1,5 @@
-﻿namespace Gu.Persist.NewtonsoftJson.Tests.Repository
+﻿#pragma warning disable GU0009 // Name the boolean parameter.
+namespace Gu.Persist.NewtonsoftJson.Tests.Repository
 {
     using Gu.Persist.Core;
     using Gu.Persist.Core.Tests;

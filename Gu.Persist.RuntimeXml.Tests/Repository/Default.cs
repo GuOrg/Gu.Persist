@@ -1,3 +1,4 @@
+#pragma warning disable GU0009 // Name the boolean parameter.
 namespace Gu.Persist.RuntimeXml.Tests.Repository
 {
     using Gu.Persist.Core;

@@ -7,25 +7,28 @@
         public static BackupSettings BackupSettings(DirectoryInfo directory)
         {
             return new BackupSettings(
-                       directory.FullName,
-                       Core.BackupSettings.DefaultExtension,
-                       null,
-                       1,
-                       int.MaxValue);
+                       directory: directory.FullName,
+                       extension: Core.BackupSettings.DefaultExtension,
+                       timeStampFormat: null,
+                       numberOfBackups: 1,
+                       maxAgeInDays: int.MaxValue);
         }
 
         public static RepositorySettings RepositorySettings(DirectoryInfo directory)
         {
-            return new RepositorySettings(directory.FullName, false, BackupSettings(directory));
+            return new RepositorySettings(
+                directory: directory.FullName,
+                isTrackingDirty: false,
+                backupSettings: BackupSettings(directory));
         }
 
         public static DataRepositorySettings DataRepositorySettings(DirectoryInfo directory)
         {
             return new DataRepositorySettings(
-                       directory.FullName,
-                       false,
-                       false,
-                       BackupSettings(directory));
+                       directory: directory.FullName,
+                       isTrackingDirty: false,
+                       saveNullDeletesFile: false,
+                       backupSettings: BackupSettings(directory));
         }
     }
 }

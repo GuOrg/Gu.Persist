@@ -16,10 +16,10 @@
         /// <summary>
         /// Returns the default encoding UTF8.
         /// </summary>
-        public static readonly UTF8Encoding DefaultEncoding = new UTF8Encoding(false, true);
+        public static readonly UTF8Encoding DefaultEncoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
 
         /// <summary>
-        /// Serializes to memorystream, then returns the deserialized object
+        /// Serializes to MemoryStream, then returns the deserialized object
         /// </summary>
         public static T Clone<T>(T item)
         {
@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Serializes to memorystream, then returns the deserialized object
+        /// Serializes to MemoryStream, then returns the deserialized object
         /// </summary>
         public static T Clone<T>(T item, JsonSerializerSettings settings)
         {
@@ -169,7 +169,7 @@
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(file.OpenCreate(), DefaultEncoding, 1024, false)))
+            using (var writer = new JsonTextWriter(new StreamWriter(file.OpenCreate(), DefaultEncoding, bufferSize: 1024, leaveOpen: false)))
             {
                 serializer.Serialize(writer, item);
             }
@@ -237,7 +237,7 @@
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
-            using (var reader = new StreamReader(stream, DefaultEncoding, true, 1024, true))
+            using (var reader = new StreamReader(stream, DefaultEncoding, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true))
             using (var jsonTextReader = new JsonTextReader(reader))
             {
                 return serializer.Deserialize<T>(jsonTextReader);
@@ -261,7 +261,7 @@
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(stream, DefaultEncoding, 1024, true)))
+            using (var writer = new JsonTextWriter(new StreamWriter(stream, DefaultEncoding, bufferSize: 1024, leaveOpen: true)))
             {
                 serializer.Serialize(writer, item);
             }

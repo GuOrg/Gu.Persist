@@ -17,12 +17,21 @@
 
         private static readonly DirectoryInfo Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\");
 
-        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(Directory.FullName, false, false, BackupSettings);
+        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(
+            directory: Directory.FullName,
+            isTrackingDirty: false,
+            saveNullDeletesFile: false,
+            backupSettings: BackupSettings);
 
         [Test]
         public void RoundtripRepositorySettingsWithRepository()
         {
-            var settings = new RepositorySettings(Directory.FullName, false, BackupSettings, ".cde", ".fgh");
+            var settings = new RepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: false,
+                backupSettings: BackupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var repository = new DataRepository(DataRepositorySettings);
             repository.Save(settings);
             var roundtripped = repository.Read<RepositorySettings>();
@@ -32,7 +41,12 @@
         [Test]
         public void RoundtripRepositorySettings()
         {
-            var settings = new RepositorySettings(Directory.FullName, true, BackupSettings, ".cde", ".fgh");
+            var settings = new RepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                backupSettings: BackupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var serializer = new DataContractSerializer(settings.GetType());
             using (Stream stream = PooledMemoryStream.Borrow())
             {
@@ -46,7 +60,12 @@
         [Test]
         public void RoundtripRepositorySettingsWithNullBackupSettings()
         {
-            var settings = new RepositorySettings(Directory.FullName, true, null, ".cde", ".fgh");
+            var settings = new RepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                backupSettings: null,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var serializer = new DataContractSerializer(settings.GetType());
             using (Stream stream = PooledMemoryStream.Borrow())
             {

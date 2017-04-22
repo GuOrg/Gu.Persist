@@ -81,7 +81,7 @@ namespace Gu.Persist.Core.Tests.Backup
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            this.Directory.Delete(true);
+            this.Directory.Delete(recursive: true);
         }
     }
 }

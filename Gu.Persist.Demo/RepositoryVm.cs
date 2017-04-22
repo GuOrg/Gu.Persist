@@ -17,8 +17,8 @@
         private RepositoryVm()
         {
             this.Repository = CreateJsonRepositoryWithGitBackuper();
-            this.ManualSaveSetting = this.Repository.ReadOrCreate(() => (ManualSaveSetting)Activator.CreateInstance(typeof(ManualSaveSetting), true));
-            this.AutoSaveSetting = this.Repository.ReadOrCreate(() => (AutoSaveSetting)Activator.CreateInstance(typeof(AutoSaveSetting), true));
+            this.ManualSaveSetting = this.Repository.ReadOrCreate(() => (ManualSaveSetting)Activator.CreateInstance(typeof(ManualSaveSetting), nonPublic: true));
+            this.AutoSaveSetting = this.Repository.ReadOrCreate(() => (AutoSaveSetting)Activator.CreateInstance(typeof(AutoSaveSetting), nonPublic: true));
             this.AutoSaveSetting.PropertyChanged += (o, e) => this.Save((AutoSaveSetting)o);
         }
 
@@ -49,7 +49,12 @@
         private static SingletonRepository CreateJsonRepositoryWithGitBackuper()
         {
             var jsonSerializerSettings = RepositorySettings.CreateDefaultJsonSettings();
-            var settings = new RepositorySettings(Directories.Default.FullName, jsonSerializerSettings, false, null);
+            var settings = new RepositorySettings(
+                directory: Directories.Default.FullName,
+                jsonSerializerSettings: jsonSerializerSettings,
+                isTrackingDirty: false,
+                backupSettings: null);
+
             var gitBackuper = new GitBackuper(settings.Directory);
             return new SingletonRepository(settings, gitBackuper);
         }

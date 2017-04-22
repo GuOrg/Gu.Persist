@@ -1,4 +1,5 @@
-﻿namespace Gu.Persist.Core.Tests.IO
+﻿#pragma warning disable GU0009 // Name the boolean parameter.
+namespace Gu.Persist.Core.Tests.IO
 {
     using System.IO;
     using System.Threading.Tasks;
@@ -8,7 +9,7 @@
 
     public class FileHelperTests
     {
-        private readonly DirectoryInfo Directory;
+        private readonly DirectoryInfo directory;
         private FileInfo file;
         private FileInfo softDeleteFile;
         private FileInfo backup;
@@ -16,14 +17,14 @@
 
         public FileHelperTests()
         {
-            this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            this.Directory.CreateIfNotExists();
+            this.directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
+            this.directory.CreateIfNotExists();
         }
 
         [SetUp]
         public void SetUp()
         {
-            this.file = this.Directory.CreateFileInfoInDirectory("Setting.cfg");
+            this.file = this.directory.CreateFileInfoInDirectory("Setting.cfg");
             this.softDeleteFile = this.file.GetSoftDeleteFileFor();
             this.backup = this.file.WithNewExtension(BackupSettings.DefaultExtension);
             this.backupSoftDelete = this.backup.GetSoftDeleteFileFor();
@@ -227,8 +228,8 @@
         {
             if (dir != null)
             {
-                var directory = new DirectoryInfo(dir);
-                var fileInfo = FileHelper.CreateFileInfo(directory, fn, ext);
+                var directoryInfo = new DirectoryInfo(dir);
+                var fileInfo = FileHelper.CreateFileInfo(directoryInfo, fn, ext);
                 Assert.AreEqual(expected, fileInfo.FullName);
             }
             else
@@ -241,7 +242,7 @@
         [Test]
         public async Task SaveAsync()
         {
-            var fileInfo = this.Directory.CreateFileInfoInDirectory("SaveAsyncTest.cfg");
+            var fileInfo = this.directory.CreateFileInfoInDirectory("SaveAsyncTest.cfg");
             using (var stream = PooledMemoryStream.Borrow())
             {
                 using (var writer = new StreamWriter(stream))

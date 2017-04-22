@@ -20,20 +20,20 @@
         {
             var backupSettings = new BackupSettings(BackupDir.FullName, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var repositorySettings = new Core.RepositorySettings(
-                                         Directory.FullName,
-                                         false,
-                                         backupSettings,
-                                         ".cde",
-                                         ".fgh");
+                                         directory: Directory.FullName,
+                                         isTrackingDirty: false,
+                                         backupSettings: backupSettings,
+                                         extension: ".cde",
+                                         tempExtension: ".fgh");
             var repository = new SingletonRepository(repositorySettings, RepositorySettings.CreateDefaultJsonSettings());
 
             var jsonRepositorySettings = new RepositorySettings(
-                                             Directory.FullName,
-                                             RepositorySettings.CreateDefaultJsonSettings(),
-                                             false,
-                                             backupSettings,
-                                             ".cde",
-                                             ".fgh");
+                                             directory: Directory.FullName,
+                                             jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
+                                             isTrackingDirty: false,
+                                             backupSettings: backupSettings,
+                                             extension: ".cde",
+                                             tempExtension: ".fgh");
             AssertProperties(jsonRepositorySettings, repository.Settings);
             Assert.IsTrue(JsonEqualsComparer<RepositorySettings>.Default.Equals(jsonRepositorySettings, repository.Settings));
         }
@@ -43,20 +43,20 @@
         {
             var backupSettings = new BackupSettings(BackupDir.FullName, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var repositorySettings = new Core.RepositorySettings(
-                                         Directory.FullName,
-                                         false,
-                                         backupSettings,
-                                         ".cde",
-                                         ".fgh");
+                                         directory: Directory.FullName,
+                                         isTrackingDirty: false,
+                                         backupSettings: backupSettings,
+                                         extension: ".cde",
+                                         tempExtension: ".fgh");
             var created = new SingletonRepository(repositorySettings, RepositorySettings.CreateDefaultJsonSettings());
 
             var jsonRepositorySettings = new RepositorySettings(
-                                             Directory.FullName,
-                                             RepositorySettings.CreateDefaultJsonSettings(),
-                                             false,
-                                             backupSettings,
-                                             ".cde",
-                                             ".fgh");
+                                             directory: Directory.FullName,
+                                             jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
+                                             isTrackingDirty: false,
+                                             backupSettings: backupSettings,
+                                             extension: ".cde",
+                                             tempExtension: ".fgh");
             AssertProperties(jsonRepositorySettings, created.Settings);
             Assert.IsTrue(JsonEqualsComparer<RepositorySettings>.Default.Equals(jsonRepositorySettings, created.Settings));
         }

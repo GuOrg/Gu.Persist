@@ -35,7 +35,12 @@
 
         private static RepositorySettings CreateDefaultSettings()
         {
-            return new RepositorySettings(Directory.FullName, true, null, ".json", ".saving");
+            return new RepositorySettings(
+                directory: Directory.FullName,
+                isTrackingDirty: true,
+                backupSettings: null,
+                extension: ".json",
+                tempExtension: ".saving");
         }
     }
 }

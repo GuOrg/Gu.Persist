@@ -29,7 +29,10 @@ namespace Gu.Persist.SystemXml
         /// </summary>
         // ReSharper disable once UnusedMember.Local
         private RepositorySettings()
-            : base(Directories.AppDirectory().FullName, false, Default.BackupSettings(Directories.AppDirectory()))
+            : base(
+                directory: Directories.AppDirectory().FullName,
+                isTrackingDirty: false,
+                backupSettings: Default.BackupSettings(Directories.AppDirectory()))
         {
         }
 

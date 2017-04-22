@@ -21,7 +21,7 @@
         [TearDown]
         public void TearDown()
         {
-            this.TargetDirectory.DeleteIfExists(true);
+            this.TargetDirectory.DeleteIfExists(recursive: true);
         }
 
         [Test]
@@ -36,7 +36,13 @@
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
             };
 
-            var settings = new DataRepositorySettings(this.TargetDirectory.FullName, jsonSettings, true, true, null);
+            var settings = new DataRepositorySettings(
+                directory: this.TargetDirectory.FullName,
+                jsonSerializerSettings: jsonSettings,
+                isTrackingDirty: true,
+                saveNullDeletesFile: true,
+                backupSettings: null);
+
             var repository = new DataRepository(settings);
             var dummy = new DummyWith<int[]> { Data = new[] { 1, 2, 3 } };
             repository.Save("dummy", dummy);
@@ -57,7 +63,13 @@
             };
 
             jsonSettings.Converters.Add(new ReadOnlyObservableCollectionConverter<int>());
-            var settings = new DataRepositorySettings(this.TargetDirectory.FullName, jsonSettings, trackingDirty, true, null);
+            var settings = new DataRepositorySettings(
+                directory: this.TargetDirectory.FullName,
+                jsonSerializerSettings: jsonSettings,
+                isTrackingDirty: trackingDirty,
+                saveNullDeletesFile: true,
+                backupSettings: null);
+
             var repository = new DataRepository(settings);
             var dummy = new DummyWith<ReadOnlyObservableCollection<int>> { Data = new ReadOnlyObservableCollection<int>(new ObservableCollection<int> { 1, 2, 3 }) };
             repository.Save("dummy", dummy);

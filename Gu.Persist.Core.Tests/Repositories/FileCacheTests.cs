@@ -24,7 +24,7 @@
             var fileCache = new FileCache();
             var expected = new object();
             fileCache.Add(fromKey, expected);
-            fileCache.ChangeKey(fromKey, toKey, true);
+            fileCache.ChangeKey(fromKey, toKey, overWrite: true);
             object actual;
             Assert.IsTrue(fileCache.TryGetValue(toKey, out actual));
             Assert.AreSame(expected, actual);
