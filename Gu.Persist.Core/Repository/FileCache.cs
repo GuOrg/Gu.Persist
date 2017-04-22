@@ -13,8 +13,7 @@
         {
             lock (this.gate)
             {
-                object value;
-                if (this.cache.TryGetValue(fullFileName, out value))
+                if (this.cache.TryGetValue(fullFileName, out object value))
                 {
                     cached = (T)value;
                     return true;
@@ -45,8 +44,7 @@
 
             lock (this.gate)
             {
-                object temp;
-                return this.cache.TryGetValue(fullName, out temp);
+                return this.cache.TryGetValue(fullName, out object temp);
             }
         }
 
@@ -75,8 +73,7 @@
                                     .ToArray();
                 foreach (var key in matches)
                 {
-                    object temp;
-                    this.cache.TryRemove(key, out temp);
+                    this.cache.TryRemove(key, out object _);
                 }
             }
         }

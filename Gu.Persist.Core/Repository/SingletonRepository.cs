@@ -86,8 +86,7 @@
         public override async Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
-            T value;
-            if (this.fileCache.TryGetValue(file.FullName, out value))
+            if (this.fileCache.TryGetValue(file.FullName, out T value))
             {
                 return value;
             }
@@ -99,9 +98,7 @@
 
             lock (this.gate)
             {
-                T cached;
-
-                if (this.fileCache.TryGetValue(file.FullName, out cached))
+                if (this.fileCache.TryGetValue(file.FullName, out T cached))
                 {
                     return cached;
                 }
@@ -155,8 +152,7 @@
         protected override T ReadCore<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            T value;
-            if (this.fileCache.TryGetValue(file.FullName, out value))
+            if (this.fileCache.TryGetValue(file.FullName, out T value))
             {
                 return value;
             }
@@ -193,8 +189,7 @@
         /// </remarks>
         protected void CacheCore<T>(FileInfo file, T item)
         {
-            T cached;
-            if (this.fileCache.TryGetValue(file.FullName, out cached))
+            if (this.fileCache.TryGetValue(file.FullName, out T cached))
             {
                 if (!ReferenceEquals(item, cached))
                 {
@@ -220,8 +215,7 @@
                 throw new ArgumentNullException($"{this.GetType().Name} cannot save null.");
             }
 
-            object cached;
-            if (this.fileCache.TryGetValue(file.FullName, out cached))
+            if (this.fileCache.TryGetValue(file.FullName, out object cached))
             {
                 if (!ReferenceEquals(item, cached))
                 {

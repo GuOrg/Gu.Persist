@@ -51,8 +51,7 @@
             Ensure.NotNull(fullFileName, nameof(fullFileName));
             lock (this.gate)
             {
-                object temp;
-                this.clones.TryRemove(fullFileName, out temp);
+                this.clones.TryRemove(fullFileName, out object temp);
             }
         }
 

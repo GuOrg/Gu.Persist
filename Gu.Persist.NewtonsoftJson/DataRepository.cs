@@ -59,7 +59,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// <param name="settingsCreator">Creates settings if file is missing</param>
         /// <param name="backuper">
         /// The backuper.
-        /// Note that a custom backuper may not use the backupsettings.
+        /// Note that a custom backuper may not use the backup settings.
         /// </param>
         public DataRepository(Func<DataRepositorySettings> settingsCreator, IBackuper backuper)
             : base(settingsCreator, backuper, Serialize<DataRepositorySettings>.Default)

@@ -46,7 +46,7 @@
         }
 
         /// <summary>
-        /// Serializes <paramref name="obj"/> and calculates hashcode from the bytes.
+        /// Serializes <paramref name="obj"/> and calculates hash code from the bytes.
         /// http://stackoverflow.com/a/7244729/1069200
         /// </summary>
         public override int GetHashCode(T obj)

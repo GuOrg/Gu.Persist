@@ -32,8 +32,7 @@
 
         public static PooledMemoryStream Borrow()
         {
-            MemoryStream stream;
-            if (Pool.TryDequeue(out stream))
+            if (Pool.TryDequeue(out MemoryStream stream))
             {
                 return new PooledMemoryStream(stream);
             }
