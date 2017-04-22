@@ -31,4 +31,6 @@
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=553096176D14D34895283BB8CFC99CE1/Shortcut/@EntryValue">ensure_not_null</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=553096176D14D34895283BB8CFC99CE1/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=553096176D14D34895283BB8CFC99CE1/Text/@EntryValue">Ensure.NotNull($item$, nameof($item$));$END$</s:String>
+	<s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/Words/=Backuper/@EntryIndexedValue">True</s:Boolean>
 </wpf:ResourceDictionary>
