@@ -25,7 +25,7 @@
         }
 
         /// <summary>
-        /// The director wwhere the repostory is.
+        /// The director where the repository is.
         /// </summary>
         public string Directory { get; }
 
