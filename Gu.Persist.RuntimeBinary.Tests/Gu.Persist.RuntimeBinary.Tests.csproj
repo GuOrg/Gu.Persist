@@ -122,12 +122,12 @@
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
-        <Reference Include="mscorlib">
+        <Reference Include="Microsoft.Win32.Primitives">
+          <HintPath>..\packages\test\Microsoft.Win32.Primitives\ref\net46\Microsoft.Win32.Primitives.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
-        <Reference Include="Microsoft.Win32.Primitives">
-          <HintPath>..\packages\test\Microsoft.Win32.Primitives\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
-          <Private>True</Private>
+        <Reference Include="mscorlib">
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -159,8 +159,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.AppContext">
-          <HintPath>..\packages\test\System.AppContext\lib\net463\System.AppContext.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.AppContext\ref\net463\System.AppContext.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -170,8 +170,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.Console">
-          <HintPath>..\packages\test\System.Console\lib\net46\System.Console.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Console\ref\net46\System.Console.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -192,8 +192,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.Diagnostics.Tracing">
-          <HintPath>..\packages\test\System.Diagnostics.Tracing\lib\net462\System.Diagnostics.Tracing.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Diagnostics.Tracing\ref\net462\System.Diagnostics.Tracing.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -203,8 +203,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.Globalization.Calendars">
-          <HintPath>..\packages\test\System.Globalization.Calendars\lib\net46\System.Globalization.Calendars.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Globalization.Calendars\ref\net46\System.Globalization.Calendars.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -214,8 +214,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.IO">
-          <HintPath>..\packages\test\System.IO\lib\net462\System.IO.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.IO\ref\net462\System.IO.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -225,8 +225,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.IO.Compression">
-          <HintPath>..\packages\test\System.IO.Compression\lib\net46\System.IO.Compression.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.IO.Compression\ref\net46\System.IO.Compression.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -235,12 +235,12 @@
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
-        <Reference Include="System.IO.Compression.FileSystem">
+        <Reference Include="System.IO.Compression.ZipFile">
+          <HintPath>..\packages\test\System.IO.Compression.ZipFile\ref\net46\System.IO.Compression.ZipFile.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
-        <Reference Include="System.IO.Compression.ZipFile">
-          <HintPath>..\packages\test\System.IO.Compression.ZipFile\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
-          <Private>True</Private>
+        <Reference Include="System.IO.Compression.FileSystem">
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -250,8 +250,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.IO.FileSystem">
-          <HintPath>..\packages\test\System.IO.FileSystem\lib\net46\System.IO.FileSystem.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.IO.FileSystem\ref\net46\System.IO.FileSystem.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -270,8 +270,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>
         <Reference Include="System.IO.FileSystem.Primitives">
-          <HintPath>..\packages\test\System.IO.FileSystem.Primitives\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.IO.FileSystem.Primitives\ref\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -280,12 +280,12 @@
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
-        <Reference Include="System.Core">
+        <Reference Include="System.Net.Http">
+          <HintPath>..\packages\test\System.Net.Http\ref\net46\System.Net.Http.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
-        <Reference Include="System.Net.Http">
-          <HintPath>..\packages\test\System.Net.Http\lib\net46\System.Net.Http.dll</HintPath>
-          <Private>True</Private>
+        <Reference Include="System.Core">
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -295,8 +295,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.Net.Sockets">
-          <HintPath>..\packages\test\System.Net.Sockets\lib\net46\System.Net.Sockets.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Net.Sockets\ref\net46\System.Net.Sockets.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -315,12 +315,12 @@
     </When>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>
-        <Reference Include="System.ComponentModel.Composition">
+        <Reference Include="System.Runtime">
+          <HintPath>..\packages\test\System.Runtime\ref\net462\System.Runtime.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
-        <Reference Include="System.Runtime">
-          <HintPath>..\packages\test\System.Runtime\lib\net462\System.Runtime.dll</HintPath>
-          <Private>True</Private>
+        <Reference Include="System.ComponentModel.Composition">
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -330,8 +330,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.Runtime.InteropServices">
-          <HintPath>..\packages\test\System.Runtime.InteropServices\lib\net463\System.Runtime.InteropServices.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Runtime.InteropServices\ref\net463\System.Runtime.InteropServices.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -341,8 +341,19 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.Runtime.InteropServices.RuntimeInformation">
-          <HintPath>..\packages\test\System.Runtime.InteropServices.RuntimeInformation\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Runtime.InteropServices.RuntimeInformation\ref\netstandard1.1\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+          <Private>False</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
+      <ItemGroup>
+        <Reference Include="System.Runtime.Loader">
+          <HintPath>..\packages\test\System.Runtime.Loader\ref\netstandard1.5\System.Runtime.Loader.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -361,8 +372,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>
         <Reference Include="System.Security.Cryptography.Algorithms">
-          <HintPath>..\packages\test\System.Security.Cryptography.Algorithms\lib\net46\System.Security.Cryptography.Algorithms.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Security.Cryptography.Algorithms\ref\net46\System.Security.Cryptography.Algorithms.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -370,8 +381,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2')">
       <ItemGroup>
         <Reference Include="System.Security.Cryptography.Algorithms">
-          <HintPath>..\packages\test\System.Security.Cryptography.Algorithms\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Security.Cryptography.Algorithms\ref\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -379,8 +390,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6.3'">
       <ItemGroup>
         <Reference Include="System.Security.Cryptography.Algorithms">
-          <HintPath>..\packages\test\System.Security.Cryptography.Algorithms\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Security.Cryptography.Algorithms\ref\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -390,8 +401,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>
         <Reference Include="System.Security.Cryptography.Encoding">
-          <HintPath>..\packages\test\System.Security.Cryptography.Encoding\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Security.Cryptography.Encoding\ref\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -401,8 +412,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>
         <Reference Include="System.Security.Cryptography.Primitives">
-          <HintPath>..\packages\test\System.Security.Cryptography.Primitives\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Security.Cryptography.Primitives\ref\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -412,8 +423,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>
         <Reference Include="System.Security.Cryptography.X509Certificates">
-          <HintPath>..\packages\test\System.Security.Cryptography.X509Certificates\lib\net46\System.Security.Cryptography.X509Certificates.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Security.Cryptography.X509Certificates\ref\net46\System.Security.Cryptography.X509Certificates.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -421,8 +432,8 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>
         <Reference Include="System.Security.Cryptography.X509Certificates">
-          <HintPath>..\packages\test\System.Security.Cryptography.X509Certificates\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
-          <Private>True</Private>
+          <HintPath>..\packages\test\System.Security.Cryptography.X509Certificates\ref\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+          <Private>False</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>

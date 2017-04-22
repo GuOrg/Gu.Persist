@@ -4,7 +4,7 @@ NUGET
     LibGit2Sharp (0.23.1)
       LibGit2Sharp.NativeBinaries (1.0.164)
     LibGit2Sharp.NativeBinaries (1.0.164)
-    Newtonsoft.Json (9.0.1)
+    Newtonsoft.Json (10.0.2)
 
 GROUP Analyzers
 FRAMEWORK: >= NET45
