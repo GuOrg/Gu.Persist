@@ -1,18 +1,12 @@
 ﻿namespace Gu.Persist.Demo
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
     using System.Runtime.CompilerServices;
-    using JetBrains.Annotations;
 
     [Serializable]
     public class ManualSaveSetting : INotifyPropertyChanged
     {
-        public static readonly IReadOnlyList<StringComparison> AllComparisons =
-            Enum.GetValues(typeof(StringComparison)).Cast<StringComparison>().ToArray();
-
         private int value1 = 1;
         private int value2 = 2;
         private StringComparison comparison;
@@ -26,11 +20,7 @@
 
         public int Value1
         {
-            get
-            {
-                return this.value1;
-            }
-
+            get => this.value1;
             set
             {
                 if (value == this.value1)
@@ -45,11 +35,7 @@
 
         public int Value2
         {
-            get
-            {
-                return this.value2;
-            }
-
+            get => this.value2;
             set
             {
                 if (value == this.value2)
@@ -64,11 +50,7 @@
 
         public StringComparison Comparison
         {
-            get
-            {
-                return this.comparison;
-            }
-
+            get => this.comparison;
             set
             {
                 if (value == this.comparison)
@@ -81,7 +63,6 @@
             }
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -26,8 +26,8 @@
 
         public override long Position
         {
-            get { return this.inner.Position; }
-            set { this.inner.Position = value; }
+            get => this.inner.Position;
+            set => this.inner.Position = value;
         }
 
         public static PooledMemoryStream Borrow()

@@ -6,8 +6,6 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
 
-    using JetBrains.Annotations;
-
     [Serializable]
     public class AutoSaveSetting : INotifyPropertyChanged
     {
@@ -27,11 +25,7 @@
 
         public int Value1
         {
-            get
-            {
-                return this.value1;
-            }
-
+            get => this.value1;
             set
             {
                 if (value == this.value1)
@@ -46,11 +40,7 @@
 
         public int Value2
         {
-            get
-            {
-                return this.value2;
-            }
-
+            get => this.value2;
             set
             {
                 if (value == this.value2)
@@ -65,11 +55,7 @@
 
         public StringComparison Comparison
         {
-            get
-            {
-                return this.comparison;
-            }
-
+            get => this.comparison;
             set
             {
                 if (value == this.comparison)
@@ -82,7 +68,6 @@
             }
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

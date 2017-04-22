@@ -4,8 +4,6 @@
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
-    using JetBrains.Annotations;
-
     [Serializable]
     public class DummySerializable : INotifyPropertyChanged, IEquatable<DummySerializable>
     {
@@ -25,11 +23,7 @@
 
         public int Value
         {
-            get
-            {
-                return this.value;
-            }
-
+            get => this.value;
             set
             {
                 if (value == this.value)
@@ -93,7 +87,6 @@
             return this.value;
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

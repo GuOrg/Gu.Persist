@@ -12,8 +12,8 @@
 
         public List<DummySerializable> Dummies
         {
-            get { return this.dummies; }
-            set { this.dummies = value; }
+            get => this.dummies;
+            set => this.dummies = value;
         }
 
         public double Value1 { get; set; }

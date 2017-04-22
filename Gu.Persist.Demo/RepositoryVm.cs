@@ -7,7 +7,6 @@
     using Git;
     using Gu.Persist.Core;
 
-    using JetBrains.Annotations;
     using NewtonsoftJson;
 
     using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
@@ -40,7 +39,7 @@
             this.Log.Add($"Saved: {typeof(T).Name}");
         }
 
-        [NotifyPropertyChangedInvocator]
+        // ReSharper disable once UnusedMember.Global
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
