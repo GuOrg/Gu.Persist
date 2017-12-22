@@ -9,6 +9,7 @@ group Analyzers
   framework: >= net45
   nuget JetBrains.Annotations
   nuget StyleCop.Analyzers
+  nuget IDisposableAnalyzers
   nuget AsyncUsageAnalyzers
   nuget Gu.Analyzers
   nuget WpfAnalyzers

@@ -5,6 +5,7 @@ group Analyzers
   AsyncUsageAnalyzers
   JetBrains.Annotations
   Gu.Analyzers
+  IDisposableAnalyzers
 
 group Test
   Moq

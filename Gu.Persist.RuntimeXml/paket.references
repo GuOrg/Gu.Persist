@@ -3,4 +3,4 @@ group Analyzers
   AsyncUsageAnalyzers
   JetBrains.Annotations
   Gu.Analyzers
-  WpfAnalyzers
+  IDisposableAnalyzers
