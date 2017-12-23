@@ -1,8 +1,8 @@
 source http://www.nuget.org/api/v2/
 framework: >= net45
 
-nuget Newtonsoft.Json 10.0.2
-nuget LibGit2Sharp 0.23.1
+nuget Newtonsoft.Json
+nuget LibGit2Sharp
 
 group Analyzers
   source http://www.nuget.org/api/v2/
