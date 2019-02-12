@@ -6,6 +6,9 @@ Microsoft.CodeAnalysis.FxCopAnalyzers
 ReflectionAnalyzers
 StyleCop.Analyzers
 JetBrains.Annotations
+
 group Test
-Moq
-NUnit
+  NUnit
+  NUnit3TestAdapter
+  Microsoft.NET.Test.Sdk
+  Moq
