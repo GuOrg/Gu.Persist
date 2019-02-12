@@ -178,14 +178,6 @@
     </Analyzer>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\analyzers\PropertyChangedAnalyzers\analyzers\dotnet\cs\Gu.Roslyn.Extensions.dll">
-      <Paket>True</Paket>
-    </Analyzer>
-    <Analyzer Include="..\packages\analyzers\PropertyChangedAnalyzers\analyzers\dotnet\cs\PropertyChangedAnalyzers.dll">
-      <Paket>True</Paket>
-    </Analyzer>
-  </ItemGroup>
-  <ItemGroup>
     <Analyzer Include="..\packages\analyzers\ReflectionAnalyzers\analyzers\dotnet\cs\Gu.Roslyn.Extensions.dll">
       <Paket>True</Paket>
     </Analyzer>
@@ -265,14 +257,6 @@
       <Paket>True</Paket>
     </Analyzer>
     <Analyzer Include="..\packages\analyzers\Text.Analyzers\analyzers\dotnet\cs\Text.CSharp.Analyzers.dll">
-      <Paket>True</Paket>
-    </Analyzer>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\analyzers\WpfAnalyzers\analyzers\dotnet\cs\Gu.Roslyn.Extensions.dll">
-      <Paket>True</Paket>
-    </Analyzer>
-    <Analyzer Include="..\packages\analyzers\WpfAnalyzers\analyzers\dotnet\cs\WpfAnalyzers.dll">
       <Paket>True</Paket>
     </Analyzer>
   </ItemGroup>

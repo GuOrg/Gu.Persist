@@ -1,17 +1,13 @@
 LibGit2Sharp
 Newtonsoft.Json
-
 group Analyzers
-  AsyncUsageAnalyzers
-  Gu.Analyzers
-  IDisposableAnalyzers
-  Microsoft.CodeAnalysis.FxCopAnalyzers
-  PropertyChangedAnalyzers
-  ReflectionAnalyzers
-  StyleCop.Analyzers
-  WpfAnalyzers
-  JetBrains.Annotations
-
+AsyncUsageAnalyzers
+Gu.Analyzers
+IDisposableAnalyzers
+Microsoft.CodeAnalysis.FxCopAnalyzers
+ReflectionAnalyzers
+StyleCop.Analyzers
+JetBrains.Annotations
 group Test
-  Moq
-  NUnit
+Moq
+NUnit
