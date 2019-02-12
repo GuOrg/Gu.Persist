@@ -5,9 +5,9 @@
     internal static class DirectoryInfoExt
     {
         /// <summary>
-        /// Create a subdirector in <paramref name="directory"/> named <paramref name="name"/>
+        /// Create a subdirector in <paramref name="directory"/> named <paramref name="name"/>.
         /// </summary>
-        /// <returns>A new DirectoryInfo that is a subdirectory</returns>
+        /// <returns>A new DirectoryInfo that is a subdirectory.</returns>
         // ReSharper disable once UnusedMember.Global
         internal static DirectoryInfo Subdirectory(this DirectoryInfo directory, string name)
         {
@@ -26,10 +26,10 @@
         }
 
         /// <summary>
-        /// Check if <paramref name="directoryInfo"/> is a subdirectory of <paramref name="potentialParent"></paramref>
+        /// Check if <paramref name="directoryInfo"/> is a subdirectory of <paramref name="potentialParent"></paramref>.
         /// </summary>
         /// <returns>True if if <paramref name="directoryInfo"/> is a subdirectory of <paramref name="potentialParent"></paramref>
-        /// False if they are the same directory or otherwise</returns>
+        /// False if they are the same directory or otherwise.</returns>
         internal static bool IsStrictSubDirectoryOf(this DirectoryInfo directoryInfo, DirectoryInfo potentialParent)
         {
             while (directoryInfo.Parent != null)
@@ -46,9 +46,9 @@
         }
 
         /// <summary>
-        /// Creates a fileinfo in <paramref name="directory"/>
+        /// Creates a fileinfo in <paramref name="directory"/>.
         /// </summary>
-        /// <returns>A FileInfo in the directory</returns>
+        /// <returns>A FileInfo in the directory.</returns>
         internal static FileInfo CreateFileInfoInDirectory(this DirectoryInfo directory, string fileName)
         {
             Ensure.NotNull(directory, nameof(directory));
@@ -59,7 +59,7 @@
         }
 
         /// <summary>
-        /// Creates the directory if not exists
+        /// Creates the directory if not exists.
         /// </summary>
         internal static DirectoryInfo CreateIfNotExists(this DirectoryInfo directory)
         {

@@ -9,7 +9,7 @@
     public interface IFileNameStreamRepository
     {
         /// <summary>
-        /// Reads the file and returns the contents in a memorystream
+        /// Reads the file and returns the contents in a memorystream.
         /// </summary>
         /// <remarks>
         /// This method reads the entire file into memory so it will be memory consuming for large files.
@@ -19,19 +19,19 @@
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
         /// <returns>A stream with the contents of the file.</returns>
         Stream Read(string fileName);
 
         /// <summary>
-        /// Saves <paramref name="stream"/> to a file specified by  <paramref name="fileName"/>
+        /// Saves <paramref name="stream"/> to a file specified by  <paramref name="fileName"/>.
         /// </summary>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
         /// <param name="stream">The stream to save.</param>
         void Save(string fileName, Stream stream);

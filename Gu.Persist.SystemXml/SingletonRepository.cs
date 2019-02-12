@@ -14,7 +14,7 @@ namespace Gu.Persist.SystemXml
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
-        /// Uses <see cref="Directories.Default"/>
+        /// Uses <see cref="Directories.Default"/>.
         /// </summary>
         public SingletonRepository()
             : this(Directories.Default)
@@ -35,7 +35,7 @@ namespace Gu.Persist.SystemXml
         /// If the directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        /// <param name="settingsCreator">Creates settings if file is missing.</param>
         public SingletonRepository(Func<RepositorySettings> settingsCreator)
             : base(settingsCreator, Serialize<RepositorySettings>.Default)
         {
@@ -46,7 +46,7 @@ namespace Gu.Persist.SystemXml
         /// If the directory contains a settings file it is read and used.
         /// If not a new setting is created and saved.
         /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        /// <param name="settingsCreator">Creates settings if file is missing.</param>
         /// <param name="backuper">
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.

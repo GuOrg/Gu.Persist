@@ -62,7 +62,7 @@
         /// If the directory contains a settings file it is read and used.
         /// If not a new setting is created and saved.
         /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        /// <param name="settingsCreator">Creates settings if file is missing.</param>
         public SingletonRepository(Func<RepositorySettings> settingsCreator)
             : base(settingsCreator, Serialize<RepositorySettings>.Default)
         {
@@ -73,7 +73,7 @@
         /// If the directory contains a settings file it is read and used.
         /// If not a new setting is created and saved.
         /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        /// <param name="settingsCreator">Creates settings if file is missing.</param>
         /// <param name="backuper">
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.

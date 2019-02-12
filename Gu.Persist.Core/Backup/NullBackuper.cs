@@ -5,7 +5,7 @@
     using System.IO;
 
     /// <summary>
-    /// A backuper that does not create any backups
+    /// A backuper that does not create any backups.
     /// </summary>
     public sealed class NullBackuper : IBackuper
     {

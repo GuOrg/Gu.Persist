@@ -5,7 +5,7 @@ namespace Gu.Persist.NewtonsoftJson
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Settings used in <see cref="DataRepository"/>
+    /// Settings used in <see cref="DataRepository"/>.
     /// </summary>
     public class DataRepositorySettings : Core.DataRepositorySettings, IJsonRepositorySetting
     {

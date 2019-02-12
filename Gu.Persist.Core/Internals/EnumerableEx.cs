@@ -18,13 +18,13 @@
         /// for the projected type. This operator uses immediate execution, but
         /// only buffers a single result (the current minimal element).
         /// </remarks>
-        /// <typeparam name="TSource">Type of the source sequence</typeparam>
-        /// <typeparam name="TKey">Type of the projected element</typeparam>
-        /// <param name="source">Source sequence</param>
-        /// <param name="selector">Selector to use to pick the results to compare</param>
+        /// <typeparam name="TSource">Type of the source sequence.</typeparam>
+        /// <typeparam name="TKey">Type of the projected element.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="selector">Selector to use to pick the results to compare.</param>
         /// <returns>The minimal element, according to the projection.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null</exception>
-        /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty.</exception>
         internal static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
         {
             return source.MinBy(selector, Comparer<TKey>.Default);
@@ -40,15 +40,15 @@
         /// for the projected type. This operator uses immediate execution, but
         /// only buffers a single result (the current minimal element).
         /// </remarks>
-        /// <typeparam name="TSource">Type of the source sequence</typeparam>
-        /// <typeparam name="TKey">Type of the projected element</typeparam>
-        /// <param name="source">Source sequence</param>
-        /// <param name="selector">Selector to use to pick the results to compare</param>
-        /// <param name="comparer">Comparer to use to compare projected values</param>
+        /// <typeparam name="TSource">Type of the source sequence.</typeparam>
+        /// <typeparam name="TKey">Type of the projected element.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="selector">Selector to use to pick the results to compare.</param>
+        /// <param name="comparer">Comparer to use to compare projected values.</param>
         /// <returns>The minimal element, according to the projection.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="selector"/>
-        /// or <paramref name="comparer"/> is null</exception>
-        /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty</exception>
+        /// or <paramref name="comparer"/> is null.</exception>
+        /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty.</exception>
         internal static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
         {
             using (IEnumerator<TSource> sourceIterator = source.GetEnumerator())
@@ -85,13 +85,13 @@
         /// for the projected type. This operator uses immediate execution, but
         /// only buffers a single result (the current maximal element).
         /// </remarks>
-        /// <typeparam name="TSource">Type of the source sequence</typeparam>
-        /// <typeparam name="TKey">Type of the projected element</typeparam>
-        /// <param name="source">Source sequence</param>
-        /// <param name="selector">Selector to use to pick the results to compare</param>
+        /// <typeparam name="TSource">Type of the source sequence.</typeparam>
+        /// <typeparam name="TKey">Type of the projected element.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="selector">Selector to use to pick the results to compare.</param>
         /// <returns>The maximal element, according to the projection.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null</exception>
-        /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null.</exception>
+        /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty.</exception>
         internal static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
         {
             return source.MaxBy(selector, Comparer<TKey>.Default);
@@ -106,17 +106,17 @@
         /// one encountered will be returned. This overload uses the default comparer
         /// for the projected type. This operator uses immediate execution, but
         /// only buffers a single result (the current maximal element).
-        /// https://code.google.com/p/morelinq/source/browse/MoreLinq/MaxBy.cs?r=2da75c30d5bda7959e5113b702b4bb204a0e4a2c
+        /// https://code.google.com/p/morelinq/source/browse/MoreLinq/MaxBy.cs?r=2da75c30d5bda7959e5113b702b4bb204a0e4a2c.
         /// </remarks>
-        /// <typeparam name="TSource">Type of the source sequence</typeparam>
-        /// <typeparam name="TKey">Type of the projected element</typeparam>
-        /// <param name="source">Source sequence</param>
-        /// <param name="selector">Selector to use to pick the results to compare</param>
-        /// <param name="comparer">Comparer to use to compare projected values</param>
+        /// <typeparam name="TSource">Type of the source sequence.</typeparam>
+        /// <typeparam name="TKey">Type of the projected element.</typeparam>
+        /// <param name="source">Source sequence.</param>
+        /// <param name="selector">Selector to use to pick the results to compare.</param>
+        /// <param name="comparer">Comparer to use to compare projected values.</param>
         /// <returns>The maximal element, according to the projection.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/>, <paramref name="selector"/>
-        /// or <paramref name="comparer"/> is null</exception>
-        /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty</exception>
+        /// or <paramref name="comparer"/> is null.</exception>
+        /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty.</exception>
         internal static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
         {
             using (IEnumerator<TSource> sourceIterator = source.GetEnumerator())

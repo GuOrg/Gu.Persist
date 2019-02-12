@@ -4,7 +4,7 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// A base class for comparers using serialization
+    /// A base class for comparers using serialization.
     /// </summary>
     public abstract class SerializedEqualsComparer<T> : EqualityComparer<T>
     {
@@ -47,7 +47,7 @@
 
         /// <summary>
         /// Serializes <paramref name="obj"/> and calculates hash code from the bytes.
-        /// http://stackoverflow.com/a/7244729/1069200
+        /// http://stackoverflow.com/a/7244729/1069200.
         /// </summary>
         public override int GetHashCode(T obj)
         {
@@ -73,7 +73,7 @@
         }
 
         /// <summary>
-        /// Serialize <paramref name="item"/> and return the bytes
+        /// Serialize <paramref name="item"/> and return the bytes.
         /// </summary>
         protected abstract IPooledStream GetStream(T item);
     }

@@ -42,7 +42,7 @@
 
         /// <summary>
         /// Changes extension and returns the new fileinfo.
-        /// No IO
+        /// No IO.
         /// </summary>
         internal static FileInfo WithNewExtension(this FileInfo file, string newExtension)
         {

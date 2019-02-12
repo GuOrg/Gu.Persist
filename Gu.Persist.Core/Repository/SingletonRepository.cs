@@ -16,7 +16,7 @@
         /// If the directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        /// <param name="settingsCreator">Creates settings if file is missing.</param>
         /// <param name="serialize">Serialization logic.</param>
         protected SingletonRepository(Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
             : base(settingsCreator, serialize)
@@ -30,7 +30,7 @@
         /// If the directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        /// <param name="settingsCreator">Creates settings if file is missing.</param>
         /// <param name="backuper">
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.
@@ -147,7 +147,7 @@
         }
 
         /// <summary>
-        /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/>
+        /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/>.
         /// </summary>
         protected override T ReadCore<T>(FileInfo file)
         {
@@ -174,7 +174,7 @@
         /// Adds <paramref name="item"/> to the cache.
         /// </summary>
         /// <remarks>
-        /// Calls <see cref="CacheCore{T}(FileInfo,T)"/>
+        /// Calls <see cref="CacheCore{T}(FileInfo,T)"/>.
         /// </remarks>
         protected virtual void Cache<T>(FileInfo file, T item)
         {
@@ -185,7 +185,7 @@
         /// Adds <paramref name="item"/> to the cache.
         /// </summary>
         /// <remarks>
-        /// Calls <see cref="CacheCore{T}(FileInfo,T)"/>
+        /// Calls <see cref="CacheCore{T}(FileInfo,T)"/>.
         /// </remarks>
         protected void CacheCore<T>(FileInfo file, T item)
         {

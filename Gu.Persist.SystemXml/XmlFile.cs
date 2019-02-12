@@ -16,7 +16,7 @@
         private static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();
 
         /// <summary>
-        /// Serializes to memorystream, then returns the deserialized object
+        /// Serializes to memorystream, then returns the deserialized object.
         /// </summary>
         public static T Clone<T>(T item)
         {
@@ -28,7 +28,7 @@
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static T Read<T>(string fileName)
         {
@@ -40,7 +40,7 @@
         }
 
         /// <summary>
-        /// Reads an xml file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Reads an xml file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static T Read<T>(FileInfo file)
         {
@@ -49,7 +49,7 @@
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static async Task<T> ReadAsync<T>(string fileName)
         {
@@ -61,7 +61,7 @@
         }
 
         /// <summary>
-        /// Reads an xml file and deserialize the contents
+        /// Reads an xml file and deserialize the contents.
         /// </summary>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
@@ -70,7 +70,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as json
+        /// Saves <paramref name="item"/> as json.
         /// </summary>
         public static void Save<T>(string fileName, T item)
         {
@@ -80,7 +80,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as xml
+        /// Saves <paramref name="item"/> as xml.
         /// </summary>
         public static void Save<T>(FileInfo file, T item)
         {
@@ -97,7 +97,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as json
+        /// Saves <paramref name="item"/> as json.
         /// </summary>
         public static Task SaveAsync<T>(string fileName, T item)
         {
@@ -107,7 +107,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as xml
+        /// Saves <paramref name="item"/> as xml.
         /// </summary>
         public static async Task SaveAsync<T>(FileInfo file, T item)
         {
@@ -120,7 +120,7 @@
         }
 
         /// <summary>
-        /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
+        /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>.
         /// </summary>
         internal static T FromStream<T>(Stream stream)
         {
@@ -133,7 +133,7 @@
         }
 
         /// <summary>
-        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
+        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>.
         /// </summary>
         internal static PooledMemoryStream ToStream<T>(T item)
         {

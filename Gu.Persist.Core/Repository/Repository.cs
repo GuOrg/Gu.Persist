@@ -7,7 +7,7 @@ namespace Gu.Persist.Core
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Base class for a repository
+    /// Base class for a repository.
     /// </summary>
     public abstract class Repository<TSetting> : IRepository,
                                                  IBlockingRepository,
@@ -24,7 +24,7 @@ namespace Gu.Persist.Core
         /// If directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        /// <param name="settingsCreator">Creates settings if file is missing.</param>
         protected Repository(Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
         {
             Ensure.NotNull(settingsCreator, nameof(settingsCreator));
@@ -53,7 +53,7 @@ namespace Gu.Persist.Core
         /// If the directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        /// <param name="settingsCreator">Creates settings if file is missing.</param>
         /// <param name="backuper">
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.
@@ -107,7 +107,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// See <see cref="IRepository.Settings"/>
+        /// See <see cref="IRepository.Settings"/>.
         /// </summary>
         public TSetting Settings { get; }
 
@@ -668,13 +668,13 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Gets the fileinfo for that is used for the given filename
+        /// Gets the fileinfo for that is used for the given filename.
         /// </summary>
         /// <param name="fileName">
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
         protected FileInfo GetFileInfoCore(string fileName)
         {
@@ -683,7 +683,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Get the file that corresponds to <typeparamref name="T"/>
+        /// Get the file that corresponds to <typeparamref name="T"/>.
         /// </summary>
         protected FileInfo GetFileInfoCore<T>()
         {
@@ -691,7 +691,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Read the file corresponding to <typeparamref name="T"/> and return it's contents deserialized to an instance of <typeparamref name="T"/>
+        /// Read the file corresponding to <typeparamref name="T"/> and return it's contents deserialized to an instance of <typeparamref name="T"/>.
         /// </summary>
         protected T ReadCore<T>()
         {
@@ -700,7 +700,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/>
+        /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/>.
         /// </summary>
         protected virtual T ReadCore<T>(FileInfo file)
         {
@@ -752,7 +752,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Save <paramref name="item"/> to a file corresponding to <typeparamref name="T"/>
+        /// Save <paramref name="item"/> to a file corresponding to <typeparamref name="T"/>.
         /// </summary>
         protected void SaveCore<T>(T item)
         {
@@ -790,7 +790,7 @@ namespace Gu.Persist.Core
         ///     2.a) If backup file.delete is renamed to backup name.
         ///     2.b) If no backup file.delete is deleted
         /// 3.b 1) file.delete is renamed back to file
-        ///     2) tempfile is deleted
+        ///     2) tempfile is deleted.
         /// </summary>
         protected void SaveStreamCore(FileInfo file, FileInfo tempFile, Stream stream)
         {
@@ -802,7 +802,7 @@ namespace Gu.Persist.Core
 
         /// <summary>
         /// Save <paramref name="stream"/> to <paramref name="tempFile"/> then rename it to <paramref name="file"/>.
-        /// Uses a <see cref="SaveTransaction"/>
+        /// Uses a <see cref="SaveTransaction"/>.
         /// </summary>
         protected async Task SaveStreamCoreAsync(FileInfo file, FileInfo tempFile, Stream stream)
         {
@@ -814,7 +814,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Check if the file corresponding to <typeparamref name="T"/> exists
+        /// Check if the file corresponding to <typeparamref name="T"/> exists.
         /// </summary>
         protected bool ExistsCore<T>()
         {
@@ -823,7 +823,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Check if <paramref name="file"/> exists
+        /// Check if <paramref name="file"/> exists.
         /// </summary>
         protected bool ExistsCore(FileInfo file)
         {
@@ -832,7 +832,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Handle caching and tracking for <paramref name="item"/>
+        /// Handle caching and tracking for <paramref name="item"/>.
         /// </summary>
         protected virtual void CacheAndTrackCore<T>(FileInfo file, T item)
         {
@@ -843,7 +843,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Throw exception if <paramref name="item"/> cannot be saved to <paramref name="file"/>
+        /// Throw exception if <paramref name="item"/> cannot be saved to <paramref name="file"/>.
         /// </summary>
         protected abstract void EnsureCanSave<T>(FileInfo file, T item);
     }

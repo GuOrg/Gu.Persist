@@ -19,7 +19,7 @@
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
         Task<T> ReadAsync<T>(string fileName);
 
@@ -35,7 +35,7 @@
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
         /// <param name="item">The instance to save.</param>
         Task SaveAsync<T>(string fileName, T item);

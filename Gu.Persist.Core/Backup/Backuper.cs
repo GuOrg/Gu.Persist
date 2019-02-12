@@ -15,7 +15,7 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="IBackupSettings"/>
+        /// Gets the <see cref="IBackupSettings"/>.
         /// </summary>
         public IBackupSettings Setting { get; }
 

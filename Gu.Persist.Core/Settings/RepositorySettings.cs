@@ -36,7 +36,7 @@
         public string TempExtension { get; }
 
         /// <summary>
-        /// Gets or sets if the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes
+        /// Gets or sets if the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes.
         /// </summary>
         public bool IsTrackingDirty { get; }
     }

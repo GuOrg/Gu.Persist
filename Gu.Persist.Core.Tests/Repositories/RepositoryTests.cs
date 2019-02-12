@@ -310,7 +310,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             var list = new List<DummySerializable>
             {
                 this.dummy,
-                new DummySerializable(2)
+                new DummySerializable(2),
             };
             this.Repository.Save(this.NamedFiles.File, list);
             AssertFile.Exists(true, this.NamedFiles.File);

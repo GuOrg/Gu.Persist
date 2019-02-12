@@ -5,7 +5,7 @@ namespace Gu.Persist.Core
     public interface IFileNameRepository
     {
         /// <summary>
-        /// Reads from <paramref name="fileName"/> and deserializes the contents to an instance of <typeparamref name="T"/>
+        /// Reads from <paramref name="fileName"/> and deserializes the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         /// <remarks>
         /// If the repository is a <see cref="ISingletonRepository"/> the repository manages a singleton instance that is returned in future reads.
@@ -15,12 +15,12 @@ namespace Gu.Persist.Core
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
         T Read<T>(string fileName);
 
         /// <summary>
-        /// Serializes <paramref name="item"/> and saves to <paramref name="fileName"/>
+        /// Serializes <paramref name="item"/> and saves to <paramref name="fileName"/>.
         /// </summary>
         /// <remarks>
         /// If the repository is a <see cref="ISingletonRepository"/> the repository manages a singleton instance that is returned in future reads.
@@ -31,7 +31,7 @@ namespace Gu.Persist.Core
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
         void Save<T>(string fileName, T item);
     }

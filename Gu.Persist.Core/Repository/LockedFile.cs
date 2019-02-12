@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// For locking files in a <see cref="SaveTransaction"/>
+    /// For locking files in a <see cref="SaveTransaction"/>.
     /// </summary>
     [System.Diagnostics.DebuggerDisplay("{File.Name}")]
     public sealed class LockedFile : IDisposable

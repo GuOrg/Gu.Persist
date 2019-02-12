@@ -8,7 +8,7 @@ namespace Gu.Persist.SystemXml
     using Gu.Persist.Core;
 
     /// <summary>
-    /// Settings used in <see cref="DataRepository"/>
+    /// Settings used in <see cref="DataRepository"/>.
     /// </summary>
     public class DataRepositorySettings : Core.DataRepositorySettings, IXmlSerializable
     {
@@ -28,7 +28,7 @@ namespace Gu.Persist.SystemXml
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepositorySettings"/> class.
-        /// Needed for serialization
+        /// Needed for serialization.
         /// </summary>
         // ReSharper disable once UnusedMember.Local
         private DataRepositorySettings()

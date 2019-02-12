@@ -12,7 +12,7 @@
         /// If the directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        /// <param name="settingsCreator">Creates settings if file is missing.</param>
         /// <param name="serialize">Serialization logic.</param>
         protected DataRepository(Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
             : base(settingsCreator, serialize)
@@ -25,7 +25,7 @@
         /// If the directory contains a settings file it is read and used.
         /// If not a new default setting is created and saved.
         /// </summary>
-        /// <param name="settingsCreator">Creates settings if file is missing</param>
+        /// <param name="settingsCreator">Creates settings if file is missing.</param>
         /// <param name="backuper">
         /// The backuper.
         /// Note that a custom backuper may not use the backupsettings.

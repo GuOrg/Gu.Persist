@@ -18,7 +18,7 @@
 
         public static ComparerData[] ComparerSource { get; } =
         {
-            new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000)
+            new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000),
         };
 
         [SetUp]
@@ -32,7 +32,7 @@
                 Value2 = 2,
                 Value3 = 3,
                 Value4 = 4,
-                Value5 = 5
+                Value5 = 5,
             };
             this.setting2 = new TypicalSetting
             {
@@ -42,7 +42,7 @@
                 Value2 = 2,
                 Value3 = 3,
                 Value4 = 4,
-                Value5 = 5
+                Value5 = 5,
             };
         }
 

@@ -44,7 +44,7 @@ namespace Gu.Persist.Core.Tests.Backup
                                           this.BackupOneHourOld,
                                           this.BackupOneDayOld,
                                           this.BackupOneMonthOld,
-                                          this.BackupOneYearOld
+                                          this.BackupOneYearOld,
                                       };
         }
 

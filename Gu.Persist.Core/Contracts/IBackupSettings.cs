@@ -5,7 +5,7 @@
         /// <summary>
         /// Gets the format for timestamps used as suffix on backup files.
         /// This must be a valid format string for <see cref="System.DateTime"/>
-        /// Default is yyyy_MM_dd_HH_mm_ss
+        /// Default is yyyy_MM_dd_HH_mm_ss.
         /// </summary>
         string TimeStampFormat { get; }
 

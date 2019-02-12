@@ -5,7 +5,7 @@
     public interface IDataRepository : IRepository
     {
         /// <summary>
-        /// Delete the file used for <typeparamref name="T"/>
+        /// Delete the file used for <typeparamref name="T"/>.
         /// </summary>
         /// <param name="deleteBackups">If true backup files are deleted.</param>
         void Delete<T>(bool deleteBackups);
@@ -17,9 +17,9 @@
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
-        /// <param name="deleteBackups">If true backups are deleted</param>
+        /// <param name="deleteBackups">If true backups are deleted.</param>
         void Delete(string fileName, bool deleteBackups);
 
         /// <summary>

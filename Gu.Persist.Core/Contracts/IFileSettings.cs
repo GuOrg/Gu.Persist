@@ -8,7 +8,7 @@
         string Directory { get; }
 
         /// <summary>
-        /// Gets the extension
+        /// Gets the extension.
         /// </summary>
         string Extension { get; }
     }

@@ -4,7 +4,7 @@
     using System.Globalization;
 
     /// <summary>
-    /// Specifies the behavior of an <see cref="IBackuper"/>
+    /// Specifies the behavior of an <see cref="IBackuper"/>.
     /// </summary>
     [Serializable]
     public class BackupSettings : FileSettings, IBackupSettings

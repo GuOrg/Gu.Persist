@@ -10,7 +10,7 @@
     public interface IFileInfoAsyncStreamRepository
     {
         /// <summary>
-        /// Reads the file <paramref name="file"/> and returns the contents in a memorystream
+        /// Reads the file <paramref name="file"/> and returns the contents in a memorystream.
         /// </summary>
         /// <remarks>
         /// This method reads the entire file into memory so it will be memory consuming for large files.
@@ -31,7 +31,7 @@
         /// </summary>
         /// <param name="file">The file to save to.</param>
         /// <param name="tempFile">The temporary file to use when saving.</param>
-        /// <param name="stream">The contents</param>
+        /// <param name="stream">The contents.</param>
         /// <remarks>
         /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>

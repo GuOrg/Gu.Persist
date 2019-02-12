@@ -7,12 +7,12 @@ namespace Gu.Persist.Core
     using System.Threading.Tasks;
 
     /// <summary>
-    /// http://stackoverflow.com/a/18766131/1069200
+    /// http://stackoverflow.com/a/18766131/1069200.
     /// </summary>
     public static class WaitHandleExtensions
     {
                                       /// <summary>
-                                      /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>
+                                      /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>.
                                       /// </summary>
         public static Task AsTask(this WaitHandle handle)
         {
@@ -20,7 +20,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>
+        /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>.
         /// </summary>
         public static Task AsTask(this WaitHandle handle, TimeSpan timeout)
         {

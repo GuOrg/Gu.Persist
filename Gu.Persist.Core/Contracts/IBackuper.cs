@@ -4,36 +4,36 @@
     using System.IO;
 
     /// <summary>
-    /// Manages backups
+    /// Manages backups.
     /// </summary>
     public interface IBackuper
     {
         /// <summary>
-        /// Creates a backup if <paramref name="file"/> exists
+        /// Creates a backup if <paramref name="file"/> exists.
         /// </summary>
         bool BeforeSave(FileInfo file);
 
         /// <summary>
         /// This method is called by the <see cref="SaveTransaction"/> after the copy to the temp file has finished and before the temp file is renamed to file.
         /// </summary>
-        /// <param name="file">The file to create a backup for</param>
+        /// <param name="file">The file to create a backup for.</param>
         void Backup(LockedFile file);
 
         /// <summary>
-        /// Creates a backup for <paramref name="file"/>
+        /// Creates a backup for <paramref name="file"/>.
         /// </summary>
-        /// <param name="file">The file to create a backup for</param>
+        /// <param name="file">The file to create a backup for.</param>
         void Backup(FileInfo file);
 
         /// <summary>
-        /// Creates a backup for <paramref name="file"/>
+        /// Creates a backup for <paramref name="file"/>.
         /// </summary>
-        /// <param name="file">The file to create a backup for</param>
+        /// <param name="file">The file to create a backup for.</param>
         /// <param name="backup">The file to use as backup.</param>
         void Backup(FileInfo file, FileInfo backup);
 
         /// <summary>
-        /// Checks if there is a soft delete file available or if there are backup(s)
+        /// Checks if there is a soft delete file available or if there are backup(s).
         /// </summary>
         bool CanRestore(FileInfo file);
 
@@ -68,7 +68,7 @@
         void Rename(FileInfo file, string newName, bool overWrite);
 
         /// <summary>
-        /// Deletes all backups for <paramref name="file"/>
+        /// Deletes all backups for <paramref name="file"/>.
         /// </summary>
         void DeleteBackups(FileInfo file);
 

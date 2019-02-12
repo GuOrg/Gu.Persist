@@ -8,7 +8,7 @@
         /// Clears the cache.
         ///  </summary>
         /// <remarks>
-        /// Calling this means that singletons will no longer be resturned by the repository
+        /// Calling this means that singletons will no longer be resturned by the repository.
         /// </remarks>
         void ClearCache();
 
@@ -34,7 +34,7 @@
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
         /// <param name="item">The item to save.</param>
         void SaveAndClose<T>(string fileName, T item);

@@ -8,7 +8,7 @@ namespace Gu.Persist.SystemXml
     using Gu.Persist.Core;
 
     /// <summary>
-    /// Specifies the behavior of a <see cref="SingletonRepository"/>
+    /// Specifies the behavior of a <see cref="SingletonRepository"/>.
     /// </summary>
     public class RepositorySettings : Core.RepositorySettings, IXmlSerializable
     {
@@ -25,7 +25,7 @@ namespace Gu.Persist.SystemXml
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
-        /// Needed for serialization
+        /// Needed for serialization.
         /// </summary>
         // ReSharper disable once UnusedMember.Local
         private RepositorySettings()

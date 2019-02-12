@@ -11,9 +11,9 @@ namespace Gu.Persist.Core
         internal static readonly string SoftDeleteExtension = ".delete";
 
         /// <summary>
-        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
+        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>.
         /// </summary>
-        /// <param name="serialize">Deserializer</param>
+        /// <param name="serialize">Deserializer.</param>
         internal static T Read<T, TSettings>(this FileInfo file, TSettings setting, Serialize<TSettings> serialize)
         {
             using (var stream = File.OpenRead(file.FullName))
@@ -23,7 +23,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>
+        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>.
         /// </summary>
         internal static async Task<T> ReadAsync<T, TSettings>(this FileInfo file, TSettings setting, Serialize<TSettings> serialize)
         {
@@ -53,7 +53,7 @@ namespace Gu.Persist.Core
 
         /// <summary>
         /// Generic method for saving a file async
-        /// Creates or overwrites <paramref name="file"/>
+        /// Creates or overwrites <paramref name="file"/>.
         /// </summary>
         internal static async Task SaveAsync(this FileInfo file, Stream stream)
         {

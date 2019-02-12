@@ -13,7 +13,7 @@
             var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
             var value = new DummySerializable
             {
-                Value = 1
+                Value = 1,
             };
             this.Repository.Save(fileInfo, value);
             var json = System.IO.File.ReadAllText(fileInfo.FullName);

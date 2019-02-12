@@ -19,7 +19,7 @@
         public static readonly UTF8Encoding DefaultEncoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
 
         /// <summary>
-        /// Serializes to MemoryStream, then returns the deserialized object
+        /// Serializes to MemoryStream, then returns the deserialized object.
         /// </summary>
         public static T Clone<T>(T item)
         {
@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Serializes to MemoryStream, then returns the deserialized object
+        /// Serializes to MemoryStream, then returns the deserialized object.
         /// </summary>
         public static T Clone<T>(T item, JsonSerializerSettings settings)
         {
@@ -43,7 +43,7 @@
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static T Read<T>(string fileName)
         {
@@ -55,7 +55,7 @@
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static T Read<T>(FileInfo file)
         {
@@ -67,7 +67,7 @@
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static T Read<T>(string fileName, JsonSerializerSettings settings)
         {
@@ -79,7 +79,7 @@
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static T Read<T>(FileInfo file, JsonSerializerSettings settings)
         {
@@ -88,7 +88,7 @@
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static async Task<T> ReadAsync<T>(string fileName)
         {
@@ -100,7 +100,7 @@
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
@@ -109,7 +109,7 @@
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static async Task<T> ReadAsync<T>(string fileName, JsonSerializerSettings settings)
         {
@@ -121,7 +121,7 @@
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>
+        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
         public static Task<T> ReadAsync<T>(FileInfo file, JsonSerializerSettings settings)
         {
@@ -130,7 +130,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as json
+        /// Saves <paramref name="item"/> as json.
         /// </summary>
         public static void Save<T>(string fileName, T item)
         {
@@ -140,7 +140,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as json
+        /// Saves <paramref name="item"/> as json.
         /// </summary>
         public static void Save<T>(FileInfo file, T item)
         {
@@ -150,7 +150,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as json
+        /// Saves <paramref name="item"/> as json.
         /// </summary>
         public static void Save<T>(string fileName, T item, JsonSerializerSettings settings)
         {
@@ -160,7 +160,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as json
+        /// Saves <paramref name="item"/> as json.
         /// </summary>
         public static void Save<T>(FileInfo file, T item, JsonSerializerSettings settings)
         {
@@ -176,7 +176,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as json
+        /// Saves <paramref name="item"/> as json.
         /// </summary>
         public static Task SaveAsync<T>(string fileName, T item)
         {
@@ -186,7 +186,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as json
+        /// Saves <paramref name="item"/> as json.
         /// </summary>
         public static async Task SaveAsync<T>(FileInfo file, T item)
         {
@@ -199,7 +199,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as json
+        /// Saves <paramref name="item"/> as json.
         /// </summary>
         public static Task SaveAsync<T>(string fileName, T item, JsonSerializerSettings settings)
         {
@@ -209,7 +209,7 @@
         }
 
         /// <summary>
-        /// Saves <paramref name="item"/> as json
+        /// Saves <paramref name="item"/> as json.
         /// </summary>
         public static async Task SaveAsync<T>(FileInfo file, T item, JsonSerializerSettings settings)
         {
@@ -222,7 +222,7 @@
         }
 
         /// <summary>
-        /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
+        /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>.
         /// </summary>
         internal static T FromStream<T>(Stream stream)
         {
@@ -230,7 +230,7 @@
         }
 
         /// <summary>
-        /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>
+        /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>.
         /// </summary>
         internal static T FromStream<T>(Stream stream, JsonSerializerSettings settings)
         {
@@ -245,7 +245,7 @@
         }
 
         /// <summary>
-        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
+        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>.
         /// </summary>
         internal static PooledMemoryStream ToStream<T>(T item)
         {
@@ -253,7 +253,7 @@
         }
 
         /// <summary>
-        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>
+        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>.
         /// </summary>
         internal static PooledMemoryStream ToStream<T>(T item, JsonSerializerSettings settings)
         {

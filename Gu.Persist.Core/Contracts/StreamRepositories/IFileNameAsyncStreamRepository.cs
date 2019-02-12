@@ -16,7 +16,7 @@
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
         /// <remarks>
         /// This method reads the entire file into memory so it will be memory consuming for large files.
@@ -32,9 +32,9 @@
         /// Filename can be either of:
         /// C:\Temp\FileName.cfg
         /// FileName.cfg
-        /// FileName
+        /// FileName.
         /// </param>
-        /// <param name="stream">The contents</param>
+        /// <param name="stream">The contents.</param>
         /// <remarks>
         /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>

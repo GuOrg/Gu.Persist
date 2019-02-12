@@ -11,7 +11,7 @@ namespace Gu.Persist.Core
     public class RenamePair : RenamePair<FileInfo>
     {
         /// <summary>
-        /// Gets an empty array of <see cref="RenamePair"/>
+        /// Gets an empty array of <see cref="RenamePair"/>.
         /// </summary>
         public static readonly IReadOnlyList<RenamePair> EmptyArray = new RenamePair[0];
 

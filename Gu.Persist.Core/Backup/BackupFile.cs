@@ -20,7 +20,7 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="FileInfo"/>
+        /// Gets the <see cref="FileInfo"/>.
         /// </summary>
         public FileInfo File { get; }
 
