@@ -6,16 +6,18 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
+
   <PropertyGroup>
     <Version>0.2.0.3</Version>
     <Authors>Johan Larsson</Authors>
-    <Company>Johan Larsson</Company>
     <Description>Manages saving and reading files.</Description>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
   </PropertyGroup>
+  
   <ItemGroup>
     <AdditionalFiles Include="PublicAPI.Shipped.txt" />
     <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
   </ItemGroup>
+  
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

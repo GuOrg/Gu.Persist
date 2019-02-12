@@ -12,4 +12,3 @@
 [assembly: InternalsVisibleTo("Gu.Persist.SystemXml.Tests", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Persist.Git", AllInternalsVisible = true)]
 [assembly: InternalsVisibleTo("Gu.Persist.Git.Tests", AllInternalsVisible = true)]
-
