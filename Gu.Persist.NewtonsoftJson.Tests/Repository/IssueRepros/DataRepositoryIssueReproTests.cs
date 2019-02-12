@@ -77,6 +77,31 @@
             CollectionAssert.AreEqual(dummy.Data, roundtrip.Data);
         }
 
+        [Test]
+        public void SaveMultipleTimes()
+        {
+            var repository = new DataRepository(
+                new DataRepositorySettings(
+                    directory: TargetDirectory.FullName,
+                    jsonSerializerSettings: new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        TypeNameHandling = TypeNameHandling.Objects,
+                        Culture = CultureInfo.InvariantCulture,
+                        MissingMemberHandling = MissingMemberHandling.Error,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                        Formatting = Formatting.Indented,
+                    },
+                    isTrackingDirty: false,
+                    saveNullDeletesFile: false,
+                    backupSettings: null));
+            var dummy = new DummyWith<int[]> { Data = new[] { 1, 2, 3 } };
+            for (int i = 0; i < 100; i++)
+            {
+                repository.Save(dummy);
+            }
+        }
+
         public class DummyWith<T>
         {
             public T Data { get; set; }

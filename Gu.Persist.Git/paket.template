@@ -6,8 +6,5 @@ licenseUrl http://opensource.org/licenses/MIT
 releasenotes
   FEATURE: Update git reference.
 
-excludeddependencies
-  StyleCop.Analyzers
-  AsyncUsageAnalyzers
-  JetBrains.Annotations
-  Gu.Analyzers
+excludedgroups
+  Analyzers

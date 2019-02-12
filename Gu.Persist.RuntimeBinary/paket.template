@@ -3,9 +3,5 @@ tags xml save settings
 projectUrl https://github.com/JohanLarsson/Gu.Persist
 licenseUrl http://opensource.org/licenses/MIT
 
-excludeddependencies
-  StyleCop.Analyzers
-  AsyncUsageAnalyzers
-  JetBrains.Annotations
-  Gu.Analyzers
-  WpfAnalyzers
+excludedGroups
+  Analyzers

@@ -6,9 +6,5 @@ licenseUrl http://opensource.org/licenses/MIT
 releasenotes
   BUGFIX: Use settings when reading, saving & cloning
 
-excludeddependencies
-  StyleCop.Analyzers
-  AsyncUsageAnalyzers
-  JetBrains.Annotations
-  Gu.Analyzers
-  WpfAnalyzers
+excludedGroups
+  Analyzers
