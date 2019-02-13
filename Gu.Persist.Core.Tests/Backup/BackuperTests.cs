@@ -20,7 +20,7 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void BackupWhenNotExtsis()
+        public void BackupWhenNotExists()
         {
             var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, null, 1, 3));
             AssertFile.Exists(false, this.File);

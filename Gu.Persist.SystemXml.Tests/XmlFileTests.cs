@@ -53,8 +53,8 @@
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.xml");
-            XmlFile.Save(file.Name, dummy);
-            var read = XmlFile.Read<DummySerializable>(file.Name);
+            XmlFile.Save(file.FullName, dummy);
+            var read = XmlFile.Read<DummySerializable>(file.FullName);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }
@@ -87,8 +87,8 @@
         {
             var dummy = new DummySerializable { Value = 1 };
             var file = this.directory.CreateFileInfoInDirectory("dummy.xml");
-            await XmlFile.SaveAsync(file.Name, dummy).ConfigureAwait(false);
-            var read = await XmlFile.ReadAsync<DummySerializable>(file.Name).ConfigureAwait(false);
+            await XmlFile.SaveAsync(file.FullName, dummy).ConfigureAwait(false);
+            var read = await XmlFile.ReadAsync<DummySerializable>(file.FullName).ConfigureAwait(false);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }

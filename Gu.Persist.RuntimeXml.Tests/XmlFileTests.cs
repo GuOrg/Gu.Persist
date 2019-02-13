@@ -41,7 +41,7 @@
         public void SaveThenRead()
         {
             var dummy = new DummySerializable { Value = 1 };
-            var file = this.directory.CreateFileInfoInDirectory("dummy.xml");
+            var file = this.directory.CreateFileInfoInDirectory("dummy.runtimexml");
             XmlFile.Save(file, dummy);
             var read = XmlFile.Read<DummySerializable>(file);
             Assert.AreNotSame(dummy, read);
@@ -52,9 +52,9 @@
         public void SaveThenReadName()
         {
             var dummy = new DummySerializable { Value = 1 };
-            var file = this.directory.CreateFileInfoInDirectory("dummy.json");
-            XmlFile.Save(file.Name, dummy);
-            var read = XmlFile.Read<DummySerializable>(file.Name);
+            var file = this.directory.CreateFileInfoInDirectory("dummy.runtimexml");
+            XmlFile.Save(file.FullName, dummy);
+            var read = XmlFile.Read<DummySerializable>(file.FullName);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }
@@ -63,7 +63,7 @@
         public void SaveTwiceThenRead()
         {
             var dummy = new DummySerializable { Value = 1 };
-            var file = this.directory.CreateFileInfoInDirectory("dummy.xml");
+            var file = this.directory.CreateFileInfoInDirectory("dummy.runtimexml");
             XmlFile.Save(file, dummy);
             XmlFile.Save(file, dummy);
             var read = XmlFile.Read<DummySerializable>(file);
@@ -75,7 +75,7 @@
         public async Task SaveAsyncThenRead()
         {
             var dummy = new DummySerializable { Value = 1 };
-            var file = this.directory.CreateFileInfoInDirectory("dummy.xml");
+            var file = this.directory.CreateFileInfoInDirectory("dummy.runtimexml");
             await XmlFile.SaveAsync(file, dummy).ConfigureAwait(false);
             var read = await XmlFile.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
             Assert.AreNotSame(dummy, read);
@@ -86,9 +86,9 @@
         public async Task SaveAsyncThenReadName()
         {
             var dummy = new DummySerializable { Value = 1 };
-            var file = this.directory.CreateFileInfoInDirectory("dummy.xml");
-            await XmlFile.SaveAsync(file.Name, dummy).ConfigureAwait(false);
-            var read = await XmlFile.ReadAsync<DummySerializable>(file.Name).ConfigureAwait(false);
+            var file = this.directory.CreateFileInfoInDirectory("dummy.runtimexml");
+            await XmlFile.SaveAsync(file.FullName, dummy).ConfigureAwait(false);
+            var read = await XmlFile.ReadAsync<DummySerializable>(file.FullName).ConfigureAwait(false);
             Assert.AreNotSame(dummy, read);
             Assert.AreEqual(dummy.Value, read.Value);
         }
@@ -97,7 +97,7 @@
         public async Task SaveAsyncTwiceThenRead()
         {
             var dummy = new DummySerializable { Value = 1 };
-            var file = this.directory.CreateFileInfoInDirectory("dummy.xml");
+            var file = this.directory.CreateFileInfoInDirectory("dummy.runtimexml");
             await XmlFile.SaveAsync(file, dummy).ConfigureAwait(false);
             await XmlFile.SaveAsync(file, dummy).ConfigureAwait(false);
             var read = await XmlFile.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
