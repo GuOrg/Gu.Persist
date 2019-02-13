@@ -185,7 +185,7 @@
             {
                 var fileInfo = new FileInfo(fileName)
                 {
-                    Attributes = FileAttributes.Normal
+                    Attributes = FileAttributes.Normal,
                 };
                 fileInfo.Delete();
             }

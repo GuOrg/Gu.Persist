@@ -4,11 +4,9 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
-    using Gu.Persist.Git;
     using Gu.Persist.Core;
-
+    using Gu.Persist.Git;
     using Gu.Persist.NewtonsoftJson;
-
     using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
 
     public class RepositoryVm : INotifyPropertyChanged

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+
 [assembly: AssemblyTitle("Gu.Persist.RuntimeBinary.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]

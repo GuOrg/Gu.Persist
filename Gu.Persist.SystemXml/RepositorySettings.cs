@@ -36,12 +36,14 @@ namespace Gu.Persist.SystemXml
         {
         }
 
-        XmlSchema IXmlSerializable.GetSchema()
+        /// <inheritdoc/>
+        public XmlSchema GetSchema()
         {
             return null;
         }
 
-        void IXmlSerializable.ReadXml(XmlReader reader)
+        /// <inheritdoc/>
+        public void ReadXml(XmlReader reader)
         {
             reader.ReadStartElement();
             this.SetPrivate(nameof(this.Directory), reader.ReadElementString(nameof(this.Directory)));
@@ -52,7 +54,8 @@ namespace Gu.Persist.SystemXml
             reader.ReadEndElement();
         }
 
-        void IXmlSerializable.WriteXml(XmlWriter writer)
+        /// <inheritdoc/>
+        public void WriteXml(XmlWriter writer)
         {
             writer.WriteElementString(nameof(this.Directory), this.Directory);
             writer.WriteElementString(nameof(this.Extension), this.Extension);

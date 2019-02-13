@@ -65,14 +65,19 @@
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && !this.disposed)
+            if (this.disposed)
+            {
+                return;
+            }
+
+            this.disposed = true;
+            if (disposing)
             {
                 this.inner.SetLength(0);
 
                 Pool.Enqueue(this.inner);
             }
 
-            this.disposed = true;
             base.Dispose(disposing);
         }
 
