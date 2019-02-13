@@ -8,26 +8,26 @@
         internal static void ChangeKey<TKey, TValue>(
             this ConcurrentDictionary<TKey, TValue> dictionary,
             TKey fromKey,
-            TKey tokey,
-            bool owerWrite)
+            TKey toKey,
+            bool overWrite)
         {
-                        TValue value;
-            if (dictionary.ContainsKey(tokey))
+            TValue value;
+            if (dictionary.ContainsKey(toKey))
             {
-                if (owerWrite)
+                if (overWrite)
                 {
-                    dictionary.TryRemove(tokey, out value);
+                    dictionary.TryRemove(toKey, out value);
                 }
                 else
                 {
-                    var message = $"Changing key from {fromKey} to {tokey} failed. Dictionary already has tokey";
+                    var message = $"Changing key from {fromKey} to {toKey} failed. Dictionary already has toKey";
                     throw new InvalidOperationException(message);
                 }
             }
 
             if (dictionary.TryRemove(fromKey, out value))
             {
-                if (dictionary.TryAdd(tokey, value))
+                if (dictionary.TryAdd(toKey, value))
                 {
                     return;
                 }

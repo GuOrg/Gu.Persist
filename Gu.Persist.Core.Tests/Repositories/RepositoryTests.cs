@@ -333,61 +333,55 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         [TestCase(true)]
         [TestCase(false)]
-        public void DeleteType(bool deleteBakups)
+        public void DeleteType(bool deleteBackups)
         {
-            var dataRepository = this.Repository as IDataRepository;
-            if (dataRepository == null)
+            if (this.Repository is IDataRepository dataRepository)
             {
-                return;
-            }
+                this.TypeFiles.File.CreatePlaceHolder();
+                this.TypeFiles.SoftDelete.CreatePlaceHolder();
+                if (this.IsBackingUp)
+                {
+                    this.TypeFiles.Backup.CreatePlaceHolder();
+                    AssertFile.Exists(true, this.TypeFiles.Backup);
+                }
 
-            this.TypeFiles.File.CreatePlaceHolder();
-            this.TypeFiles.SoftDelete.CreatePlaceHolder();
-            if (this.IsBackingUp)
-            {
-                this.TypeFiles.Backup.CreatePlaceHolder();
-                AssertFile.Exists(true, this.TypeFiles.Backup);
-            }
+                AssertFile.Exists(true, this.TypeFiles.File);
+                AssertFile.Exists(true, this.TypeFiles.SoftDelete);
 
-            AssertFile.Exists(true, this.TypeFiles.File);
-            AssertFile.Exists(true, this.TypeFiles.SoftDelete);
-
-            dataRepository.Delete<DummySerializable>(deleteBakups);
-            AssertFile.Exists(false, this.TypeFiles.File);
-            AssertFile.Exists(false, this.TypeFiles.SoftDelete);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(!deleteBakups, this.TypeFiles.Backup);
+                dataRepository.Delete<DummySerializable>(deleteBackups);
+                AssertFile.Exists(false, this.TypeFiles.File);
+                AssertFile.Exists(false, this.TypeFiles.SoftDelete);
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(!deleteBackups, this.TypeFiles.Backup);
+                }
             }
         }
 
         [TestCase(true)]
         [TestCase(false)]
-        public void DeleteName(bool deleteBakups)
+        public void DeleteName(bool deleteBackups)
         {
-            var dataRepository = this.Repository as IDataRepository;
-            if (dataRepository == null)
+            if (this.Repository is IDataRepository dataRepository)
             {
-                return;
-            }
+                this.NamedFiles.File.CreatePlaceHolder();
+                this.NamedFiles.SoftDelete.CreatePlaceHolder();
+                if (this.IsBackingUp)
+                {
+                    this.NamedFiles.Backup.CreatePlaceHolder();
+                    AssertFile.Exists(true, this.NamedFiles.Backup);
+                }
 
-            this.NamedFiles.File.CreatePlaceHolder();
-            this.NamedFiles.SoftDelete.CreatePlaceHolder();
-            if (this.IsBackingUp)
-            {
-                this.NamedFiles.Backup.CreatePlaceHolder();
-                AssertFile.Exists(true, this.NamedFiles.Backup);
-            }
+                AssertFile.Exists(true, this.NamedFiles.File);
+                AssertFile.Exists(true, this.NamedFiles.SoftDelete);
 
-            AssertFile.Exists(true, this.NamedFiles.File);
-            AssertFile.Exists(true, this.NamedFiles.SoftDelete);
-
-            dataRepository.Delete(this.NamedFiles.File, deleteBakups);
-            AssertFile.Exists(false, this.NamedFiles.File);
-            AssertFile.Exists(false, this.NamedFiles.SoftDelete);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(!deleteBakups, this.NamedFiles.Backup);
+                dataRepository.Delete(this.NamedFiles.File, deleteBackups);
+                AssertFile.Exists(false, this.NamedFiles.File);
+                AssertFile.Exists(false, this.NamedFiles.SoftDelete);
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(!deleteBackups, this.NamedFiles.Backup);
+                }
             }
         }
 

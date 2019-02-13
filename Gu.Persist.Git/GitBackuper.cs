@@ -15,7 +15,7 @@
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GitBackuper"/> class.
-        /// Creates a git repository in <paramref name="directory"/>
+        /// Creates a git repository in <paramref name="directory"/>.
         /// </summary>
         public GitBackuper(string directory)
         {
