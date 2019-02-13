@@ -179,7 +179,7 @@ namespace Gu.Persist.Core
             Ensure.NotNullOrEmpty(fileName, nameof(fileName));
             if (extension != null)
             {
-                if (!extension.StartsWith("."))
+                if (!extension.StartsWith(".", StringComparison.Ordinal))
                 {
                     extension = "." + extension;
                 }
@@ -214,7 +214,7 @@ namespace Gu.Persist.Core
                 return extension;
             }
 
-            if (!extension.StartsWith("."))
+            if (!extension.StartsWith(".", StringComparison.Ordinal))
             {
                 return "." + extension;
             }

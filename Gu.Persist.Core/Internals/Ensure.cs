@@ -58,8 +58,8 @@
         // ReSharper disable once UnusedMember.Global
         internal static void HasExtension(FileInfo file, string extension, string parameterName, string message = null)
         {
-            NotNull(file, "file");
-            NotNullOrEmpty(extension, "extension");
+            NotNull(file, nameof(file));
+            NotNullOrEmpty(extension, nameof(extension));
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (!string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase))
             {

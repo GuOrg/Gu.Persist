@@ -2,7 +2,9 @@
 {
     using System.IO;
 
+#pragma warning disable CA1716 // Identifiers should not match keywords
     public static class Default
+#pragma warning restore CA1716 // Identifiers should not match keywords
     {
         public static BackupSettings BackupSettings(DirectoryInfo directory)
         {
