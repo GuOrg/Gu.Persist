@@ -1,0 +1,10 @@
+LibGit2Sharp
+Newtonsoft.Json
+group Analyzers
+AsyncUsageAnalyzers
+Gu.Analyzers
+IDisposableAnalyzers
+Microsoft.CodeAnalysis.FxCopAnalyzers
+ReflectionAnalyzers
+StyleCop.Analyzers
+JetBrains.Annotations

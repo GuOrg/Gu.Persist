@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="Gu.Persist.Demo.ManualSaveSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Gu.Persist.Demo"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DataContext="{d:DesignInstance local:ManualSaveSettingsViewModel}"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             mc:Ignorable="d">
+    <UserControl.DataContext>
+        <local:ManualSaveSettingsViewModel />
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <ItemsControl DataContext="{Binding ManualSaveSetting}" Style="{StaticResource SettingsListStyle}">
+            <TextBlock Style="{StaticResource HeaderStyle}" Text="Manual Grejs" />
+            <HeaderedContentControl Header="Value 1">
+                <TextBox Text="{Binding Value1}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="Value 2">
+                <TextBox Text="{Binding Value2}" />
+            </HeaderedContentControl>
+
+            <HeaderedContentControl Header="Enum">
+                <ComboBox ItemsSource="{x:Static local:AutoSaveSetting.AllComparisons}" SelectedItem="{Binding Comparison}" />
+            </HeaderedContentControl>
+        </ItemsControl>
+
+        <UniformGrid Grid.Row="1"
+                     Height="50"
+                     Rows="1">
+            <Button Command="{Binding SaveCommand}" Content="Save" />
+        </UniformGrid>
+    </Grid>
+</UserControl>
