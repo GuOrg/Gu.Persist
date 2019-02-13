@@ -10,7 +10,9 @@ namespace Gu.Persist.Core
     /// The exception that was thrown in restore is the inner exception.
     /// </summary>
     [Serializable]
+#pragma warning disable CA1032 // Implement standard exception constructors
     public class RestoreException : IOException
+#pragma warning restore CA1032 // Implement standard exception constructors
     {
         public RestoreException(Exception saveException, Exception innerException)
             : base("Restore failed", innerException)

@@ -31,7 +31,7 @@ namespace Gu.Persist.Core
             Ensure.NotNull(serialize, nameof(serialize));
             this.serialize = serialize;
             this.Settings = settingsCreator();
-            Directory.CreateDirectory(this.Settings.Directory);
+            _ = Directory.CreateDirectory(this.Settings.Directory);
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker = new DirtyTracker(this);
@@ -56,7 +56,7 @@ namespace Gu.Persist.Core
         /// <param name="settingsCreator">Creates settings if file is missing.</param>
         /// <param name="backuper">
         /// The backuper.
-        /// Note that a custom backuper may not use the backupsettings.
+        /// Note that a custom backuper may not use the backup settings.
         /// </param>
         protected Repository(Func<TSetting> settingsCreator, IBackuper backuper, Serialize<TSetting> serialize)
         {
@@ -65,7 +65,7 @@ namespace Gu.Persist.Core
             Ensure.NotNull(serialize, nameof(serialize));
             this.serialize = serialize;
             this.Settings = settingsCreator();
-            Directory.CreateDirectory(this.Settings.Directory);
+            _ = Directory.CreateDirectory(this.Settings.Directory);
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker = new DirtyTracker(this);
@@ -90,7 +90,7 @@ namespace Gu.Persist.Core
         /// </summary>
         /// <param name="backuper">
         /// The backuper.
-        /// Note that a custom backuper may not use the backupsettings.
+        /// Note that a custom backuper may not use the backup settings.
         /// </param>
         protected Repository(TSetting settings, IBackuper backuper, Serialize<TSetting> serialize)
         {

@@ -8,7 +8,7 @@ namespace Gu.Persist.Core
 
         void Track<T>(string fullFileName, T item);
 
-        void Rename(string oldName, string newName, bool owerWrite);
+        void Rename(string oldName, string newName, bool overWrite);
 
         void ClearCache();
 

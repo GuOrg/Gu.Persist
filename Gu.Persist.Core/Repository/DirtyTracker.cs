@@ -28,13 +28,13 @@
             }
         }
 
-        public void Rename(string oldName, string newName, bool owerWrite)
+        public void Rename(string oldName, string newName, bool overWrite)
         {
             Ensure.NotNull(oldName, nameof(oldName));
             Ensure.NotNull(newName, nameof(newName));
             lock (this.gate)
             {
-                this.clones.ChangeKey(oldName, newName, owerWrite);
+                this.clones.ChangeKey(oldName, newName, overWrite);
             }
         }
 
@@ -54,7 +54,7 @@
                 this.clones.TryRemove(fullFileName, out _);
             }
         }
-        
+
         /// <summary>
         /// Only checks the cache, does not read from file.
         /// </summary>

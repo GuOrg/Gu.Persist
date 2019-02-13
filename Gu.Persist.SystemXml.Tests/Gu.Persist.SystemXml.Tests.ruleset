@@ -119,4 +119,7 @@
     <Rule Id="AvoidAsyncVoid" Action="Error" />
     <Rule Id="UseConfigureAwait" Action="Error" />
   </Rules>
+  <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
+    <Rule Id="CA1051" Action="None" />
+  </Rules>
 </RuleSet>

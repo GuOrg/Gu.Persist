@@ -11,9 +11,9 @@ namespace Gu.Persist.Core
     /// </summary>
     public static class WaitHandleExtensions
     {
-                                      /// <summary>
-                                      /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>.
-                                      /// </summary>
+        /// <summary>
+        /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>.
+        /// </summary>
         public static Task AsTask(this WaitHandle handle)
         {
             return AsTask(handle, Timeout.InfiniteTimeSpan);
@@ -32,17 +32,17 @@ namespace Gu.Persist.Core
                         var localTcs = (TaskCompletionSource<object>)state;
                         if (timedOut)
                         {
-                            localTcs.TrySetCanceled();
+                            _ = localTcs.TrySetCanceled();
                         }
                         else
                         {
-                            localTcs.TrySetResult(null);
+                            _ = localTcs.TrySetResult(null);
                         }
                     },
                 tcs,
                 timeout,
                 executeOnlyOnce: true);
-            tcs.Task.ContinueWith((_, state) => ((RegisteredWaitHandle)state).Unregister(null), registration, TaskScheduler.Default);
+            _ = tcs.Task.ContinueWith((_, state) => ((RegisteredWaitHandle)state).Unregister(null), registration, TaskScheduler.Default);
             return tcs.Task;
         }
     }
