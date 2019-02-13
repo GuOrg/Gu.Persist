@@ -51,19 +51,19 @@
         /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty.</exception>
         internal static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
         {
-            using (IEnumerator<TSource> sourceIterator = source.GetEnumerator())
+            using (var sourceIterator = source.GetEnumerator())
             {
                 if (!sourceIterator.MoveNext())
                 {
                     throw new InvalidOperationException("Sequence was empty");
                 }
 
-                TSource min = sourceIterator.Current;
-                TKey minKey = selector(min);
+                var min = sourceIterator.Current;
+                var minKey = selector(min);
                 while (sourceIterator.MoveNext())
                 {
-                    TSource candidate = sourceIterator.Current;
-                    TKey candidateProjected = selector(candidate);
+                    var candidate = sourceIterator.Current;
+                    var candidateProjected = selector(candidate);
                     if (comparer.Compare(candidateProjected, minKey) < 0)
                     {
                         min = candidate;
@@ -119,19 +119,19 @@
         /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty.</exception>
         internal static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
         {
-            using (IEnumerator<TSource> sourceIterator = source.GetEnumerator())
+            using (var sourceIterator = source.GetEnumerator())
             {
                 if (!sourceIterator.MoveNext())
                 {
                     throw new InvalidOperationException("Sequence was empty");
                 }
 
-                TSource max = sourceIterator.Current;
-                TKey maxKey = selector(max);
+                var max = sourceIterator.Current;
+                var maxKey = selector(max);
                 while (sourceIterator.MoveNext())
                 {
-                    TSource candidate = sourceIterator.Current;
-                    TKey candidateProjected = selector(candidate);
+                    var candidate = sourceIterator.Current;
+                    var candidateProjected = selector(candidate);
                     if (comparer.Compare(candidateProjected, maxKey) > 0)
                     {
                         max = candidate;

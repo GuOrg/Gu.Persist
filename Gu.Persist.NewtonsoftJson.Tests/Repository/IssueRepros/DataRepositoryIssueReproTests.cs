@@ -82,7 +82,7 @@
         {
             var repository = new DataRepository(
                 new DataRepositorySettings(
-                    directory: TargetDirectory.FullName,
+                    directory: this.TargetDirectory.FullName,
                     jsonSerializerSettings: new JsonSerializerSettings
                     {
                         NullValueHandling = NullValueHandling.Ignore,
@@ -96,7 +96,7 @@
                     saveNullDeletesFile: false,
                     backupSettings: null));
             var dummy = new DummyWith<int[]> { Data = new[] { 1, 2, 3 } };
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 repository.Save(dummy);
             }

@@ -156,7 +156,7 @@
             file.Refresh();
             if (file.Exists)
             {
-                string message = $"Trying to restore {backup.FullName} when there is already an original: {file.FullName}";
+                var message = $"Trying to restore {backup.FullName} when there is already an original: {file.FullName}";
                 throw new InvalidOperationException(message);
             }
 

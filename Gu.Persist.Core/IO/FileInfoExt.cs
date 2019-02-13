@@ -91,7 +91,7 @@
                 throw new ArgumentException("Fail", nameof(extension));
             }
 
-            string fileName = file.FullName.Substring(0, file.FullName.Length - extension.Length);
+            var fileName = file.FullName.Substring(0, file.FullName.Length - extension.Length);
             return new FileInfo(fileName);
         }
 

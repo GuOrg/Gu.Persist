@@ -4,10 +4,10 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
-    using Git;
+    using Gu.Persist.Git;
     using Gu.Persist.Core;
 
-    using NewtonsoftJson;
+    using Gu.Persist.NewtonsoftJson;
 
     using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
 

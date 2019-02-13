@@ -2,7 +2,7 @@
 {
     using System.IO;
     using System.Threading.Tasks;
-    using Core;
+    using Gu.Persist.Core;
     using Gu.Persist.Core.Tests;
 
     using NUnit.Framework;

@@ -51,10 +51,10 @@
             Ensure.NotNull(fullFileName, nameof(fullFileName));
             lock (this.gate)
             {
-                this.clones.TryRemove(fullFileName, out object temp);
+                this.clones.TryRemove(fullFileName, out _);
             }
         }
-
+        
         /// <summary>
         /// Only checks the cache, does not read from file.
         /// </summary>

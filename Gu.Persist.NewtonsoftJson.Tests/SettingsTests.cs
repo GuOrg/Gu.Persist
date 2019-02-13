@@ -1,7 +1,7 @@
 ﻿namespace Gu.Persist.NewtonsoftJson.Tests
 {
     using System.IO;
-    using Core;
+    using Gu.Persist.Core;
 
     using Newtonsoft.Json;
 

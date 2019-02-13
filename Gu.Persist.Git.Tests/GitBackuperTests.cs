@@ -94,7 +94,7 @@
 
             using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
-                int count = 0;
+                var count = 0;
                 while (!git.Commits.Any() && count < 10)
                 {
                     // give the repository time to update.
@@ -153,6 +153,7 @@
         public void Dispose()
         {
             this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)

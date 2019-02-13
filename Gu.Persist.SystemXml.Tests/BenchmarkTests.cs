@@ -53,7 +53,7 @@
             var comparer = XmlEqualsComparer<TypicalSetting>.Default;
             var warmup = comparer.Equals(this.setting1, this.setting2);
             var sw = Stopwatch.StartNew();
-            for (int i = 0; i < data.Times; i++)
+            for (var i = 0; i < data.Times; i++)
             {
                 var result = comparer.Equals(this.setting1, this.setting2);
             }
@@ -74,7 +74,7 @@
             var comparer = XmlEqualsComparer<TypicalSetting>.Default;
             var warmup = comparer.GetHashCode(this.setting1);
             var sw = Stopwatch.StartNew();
-            for (int i = 0; i < data.Times; i++)
+            for (var i = 0; i < data.Times; i++)
             {
                 var result = comparer.GetHashCode(this.setting1);
             }

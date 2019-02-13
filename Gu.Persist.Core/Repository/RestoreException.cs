@@ -6,7 +6,7 @@ namespace Gu.Persist.Core
     using System.Security.Permissions;
 
     /// <summary>
-    /// This is thrown when restor fails.
+    /// This is thrown when restore fails.
     /// The exception that was thrown in restore is the inner exception.
     /// </summary>
     [Serializable]
