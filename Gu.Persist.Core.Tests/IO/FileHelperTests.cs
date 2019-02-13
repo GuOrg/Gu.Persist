@@ -82,7 +82,8 @@ namespace Gu.Persist.Core.Tests.IO
         [Test]
         public void SoftDeleteWhenNoFile()
         {
-            this.file.SoftDelete();
+            var soft = this.file.SoftDelete();
+            Assert.AreEqual(null, soft);
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(false, this.softDeleteFile);
             AssertFile.Exists(true, this.backup);
@@ -92,7 +93,8 @@ namespace Gu.Persist.Core.Tests.IO
         public void SoftDeleteWhenNoSoftFile()
         {
             this.file.CreatePlaceHolder();
-            this.file.SoftDelete();
+            var soft = this.file.SoftDelete();
+            Assert.AreEqual(soft.FullName, this.softDeleteFile.FullName);
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(true, this.softDeleteFile);
             AssertFile.Exists(true, this.backup);
@@ -103,7 +105,8 @@ namespace Gu.Persist.Core.Tests.IO
         {
             this.file.WriteAllText("File");
             this.softDeleteFile.WriteAllText("Soft");
-            this.file.SoftDelete();
+            var soft = this.file.SoftDelete();
+            Assert.AreEqual(soft.FullName, this.softDeleteFile.FullName);
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(true, this.softDeleteFile);
             Assert.AreEqual("File", this.softDeleteFile.ReadAllText());
@@ -215,7 +218,8 @@ namespace Gu.Persist.Core.Tests.IO
         public void SoftDeleteWhenOnlySoftFile()
         {
             this.softDeleteFile.CreatePlaceHolder();
-            this.file.SoftDelete();
+            var soft = this.file.SoftDelete();
+            Assert.AreEqual(null, soft);
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(true, this.softDeleteFile);
         }

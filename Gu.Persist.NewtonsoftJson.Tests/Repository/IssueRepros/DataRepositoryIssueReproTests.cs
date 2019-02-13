@@ -102,12 +102,12 @@
             }
         }
 
-        public class DummyWith<T>
+        internal class DummyWith<T>
         {
             public T Data { get; set; }
         }
 
-        public class ReadOnlyObservableCollectionConverter<T> : JsonConverter
+        internal class ReadOnlyObservableCollectionConverter<T> : JsonConverter
         {
             public override bool CanWrite { get; } = false;
 

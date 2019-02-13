@@ -8,7 +8,9 @@ namespace Gu.Persist.Core
 
     internal static class FileHelper
     {
+#pragma warning disable CA1802 // Use literals where appropriate
         internal static readonly string SoftDeleteExtension = ".delete";
+#pragma warning restore CA1802 // Use literals where appropriate
 
         /// <summary>
         /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>.
@@ -152,7 +154,7 @@ namespace Gu.Persist.Core
             }
 
             backup.DeleteSoftDeleteFileFor();
-            backup.SoftDelete();
+            _ = backup.SoftDelete();
             File.Move(file.FullName, backup.FullName);
             file.Refresh();
         }
