@@ -11,29 +11,37 @@
             TKey toKey,
             bool overWrite)
         {
-            TValue value;
-            if (dictionary.ContainsKey(toKey))
+            if (dictionary.TryRemove(fromKey, out var value))
             {
                 if (overWrite)
                 {
-                    dictionary.TryRemove(toKey, out value);
+                    dictionary[toKey] = value;
                 }
                 else
                 {
-                    var message = $"Changing key from {fromKey} to {toKey} failed. Dictionary already has toKey";
-                    throw new InvalidOperationException(message);
+                    if (dictionary.TryAdd(toKey, value))
+                    {
+                        return;
+                    }
+
+                    throw new InvalidOperationException($"Changing key from {fromKey} to {toKey} failed. Dictionary already has toKey");
                 }
             }
-
-            if (dictionary.TryRemove(fromKey, out value))
+            else
             {
-                if (dictionary.TryAdd(toKey, value))
+                if (overWrite)
                 {
-                    return;
+                    dictionary[toKey] = value;
                 }
+                else
+                {
+                    if (dictionary.TryAdd(toKey, value))
+                    {
+                        return;
+                    }
 
-                var message = $"Could not add {fromKey} to dictionary";
-                throw new InvalidOperationException(message);
+                    throw new InvalidOperationException($"Changing key from {fromKey} to {toKey} failed. Dictionary already has toKey");
+                }
             }
         }
     }
