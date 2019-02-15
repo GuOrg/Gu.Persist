@@ -74,7 +74,7 @@ namespace Gu.Persist.Git
                     case FileStatus.Ignored:
                         throw new InvalidOperationException($"FileStatus: {status}");
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new ArgumentOutOfRangeException(nameof(file), status, "Unknown status.");
                 }
             }
         }

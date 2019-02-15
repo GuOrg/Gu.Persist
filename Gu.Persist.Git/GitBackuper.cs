@@ -77,7 +77,7 @@
                 case FileStatus.Ignored:
                     return false;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(file), status, "Unknown status.");
             }
         }
 

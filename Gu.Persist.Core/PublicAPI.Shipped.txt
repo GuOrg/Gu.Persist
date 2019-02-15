@@ -385,3 +385,4 @@ virtual Gu.Persist.Core.SingletonRepository<TSetting>.Cache<T>(System.IO.FileInf
 virtual Gu.Persist.Core.SingletonRepository<TSetting>.SaveAndClose<T>(System.IO.FileInfo file, T item) -> void
 virtual Gu.Persist.Core.SingletonRepository<TSetting>.SaveAndClose<T>(T item) -> void
 virtual Gu.Persist.Core.SingletonRepository<TSetting>.SaveAndClose<T>(string fileName, T item) -> void
+

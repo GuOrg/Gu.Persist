@@ -69,7 +69,7 @@
                 var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
                 if (softDelete.Exists)
                 {
-                    this.Restore(file, softDelete);
+                    Restore(file, softDelete);
                     return true;
                 }
 
@@ -145,11 +145,11 @@
             var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
             if (softDelete.Exists)
             {
-                this.Restore(file, softDelete);
+                Restore(file, softDelete);
             }
         }
 
-        internal void Restore(FileInfo file, FileInfo backup)
+        internal static void Restore(FileInfo file, FileInfo backup)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(backup, nameof(backup));

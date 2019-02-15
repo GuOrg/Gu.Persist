@@ -19,7 +19,9 @@
         /// </summary>
         public IBackupSettings Setting { get; }
 
+#pragma warning disable CA1819 // Properties should not return arrays
         protected string[] BackupExtensions => new[] { this.Setting.Extension, FileHelper.SoftDeleteExtension };
+#pragma warning restore CA1819 // Properties should not return arrays
 
         /// <summary>
         /// Creates a backuper for the given settings.

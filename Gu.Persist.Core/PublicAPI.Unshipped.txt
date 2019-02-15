@@ -1,1 +1,5 @@
-﻿
+﻿Gu.Persist.Core.TempFileSettings.Equals(Gu.Persist.Core.TempFileSettings other) -> bool
+override Gu.Persist.Core.TempFileSettings.Equals(object obj) -> bool
+override Gu.Persist.Core.TempFileSettings.GetHashCode() -> int
+static Gu.Persist.Core.TempFileSettings.operator !=(Gu.Persist.Core.TempFileSettings left, Gu.Persist.Core.TempFileSettings right) -> bool
+static Gu.Persist.Core.TempFileSettings.operator ==(Gu.Persist.Core.TempFileSettings left, Gu.Persist.Core.TempFileSettings right) -> bool
