@@ -7,6 +7,7 @@ namespace Gu.Persist.Core.Tests.IO
 
     using NUnit.Framework;
 
+    [NonParallelizable]
     public class FileHelperTests
     {
         private readonly DirectoryInfo directory;

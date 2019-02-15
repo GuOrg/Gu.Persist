@@ -9,6 +9,7 @@ namespace Gu.Persist.Core.Tests.Backup
 
     using NUnit.Framework;
 
+    [NonParallelizable]
     public class BackuperTests : BackupTests
     {
         private DummySerializable dummy;

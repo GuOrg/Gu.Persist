@@ -8,6 +8,7 @@ namespace Gu.Persist.Core.Tests.Backup
 
     using NUnit.Framework;
 
+    [NonParallelizable]
     public class NullBackuperTests : BackupTests
     {
         private NullBackuper backuper;
