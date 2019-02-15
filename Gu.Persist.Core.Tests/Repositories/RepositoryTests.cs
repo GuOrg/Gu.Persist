@@ -496,7 +496,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
             else
             {
-                Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(null));
+                _ = Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(null));
             }
         }
 
@@ -808,7 +808,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
             else
             {
-                Assert.Throws<InvalidOperationException>(() => this.Repository.IsDirty(this.dummy));
+                var exception = Assert.Throws<InvalidOperationException>(() => this.Repository.IsDirty(this.dummy));
+                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
             }
         }
 
@@ -827,7 +828,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
             else
             {
-                Assert.Throws<InvalidOperationException>(() => this.Repository.IsDirty(this.NamedFiles.File, this.dummy));
+                var exception = Assert.Throws<InvalidOperationException>(() => this.Repository.IsDirty(this.NamedFiles.File, this.dummy));
+                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
             }
         }
 

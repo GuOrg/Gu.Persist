@@ -19,7 +19,7 @@ namespace Gu.Persist.Core.Tests.IO
         public FileHelperTests()
         {
             this.directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            this.directory.CreateIfNotExists();
+            _ = this.directory.CreateIfNotExists();
         }
 
         [SetUp]

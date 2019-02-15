@@ -81,7 +81,7 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(true, this.Backup);
 
             var exception = Assert.Throws<InvalidOperationException>(() => this.backuper.TryRestore(this.File));
-            Assert.AreEqual("Expected file C:\\Temp\\Gu.Persist\\NullBackuperTests\\Meh.cfg to not exist", exception.Message);
+            Assert.AreEqual("Expected file C:\\Temp\\Gu.Persist\\NullBackuperTests\\Meh.cfg to not exist.", exception.Message);
 
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(true, this.SoftDelete);

@@ -41,7 +41,7 @@
             {
                 var illegalCahrs = FileInfoExt.InvalidFileNameChars.Where(c => s.IndexOf(c) != -1).ToArray();
                 var illegals = string.Join(", ", illegalCahrs.Select(x => $"'{x}'"));
-                var message = $@"{s} is not a valid filename. Contains: {{{illegals}}}";
+                var message = $@"{s} is not a valid filename. Contains: {{{illegals}}}.";
                 IsValidFileName(s, parameterName, message);
             }
         }
@@ -65,7 +65,7 @@
             {
                 if (message == null)
                 {
-                    throw new ArgumentException($"Expected extension: {extension}, was: {file.Extension}", parameterName);
+                    throw new ArgumentException($"Expected extension: {extension}, was: {file.Extension}.", parameterName);
                 }
 
                 throw new ArgumentException(parameterName, message);
@@ -80,7 +80,7 @@
             {
                 if (message == null)
                 {
-                    throw new ArgumentException($"Expected extension to not be {extension}", parameterName);
+                    throw new ArgumentException($"Expected extension to not be {extension}.", parameterName);
                 }
 
                 throw new ArgumentException(parameterName, message);
@@ -96,7 +96,7 @@
             {
                 if (message == null)
                 {
-                    throw new ArgumentException($"Expected not be any of {{{string.Join(", ", extensions)}}}, was: {file.Extension}", parameterName);
+                    throw new ArgumentException($"Expected not be any of {{{string.Join(", ", extensions)}}}, was: {file.Extension}.", parameterName);
                 }
 
                 throw new ArgumentException(parameterName, message);
@@ -111,7 +111,7 @@
             {
                 if (message == null)
                 {
-                    throw new FileNotFoundException($"Expected file {file.FullName} to exist");
+                    throw new FileNotFoundException($"Expected file {file.FullName} to exist.");
                 }
 
                 throw new FileNotFoundException(message);
@@ -126,7 +126,7 @@
             {
                 if (message == null)
                 {
-                    throw new InvalidOperationException($"Expected file {file.FullName} to not exist");
+                    throw new InvalidOperationException($"Expected file {file.FullName} to not exist.");
                 }
 
                 throw new InvalidOperationException(message);

@@ -84,7 +84,8 @@ namespace Gu.Persist.Core.Tests.Backup
 
             var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
 
-            Assert.Throws<InvalidOperationException>(() => backuper.TryRestore(this.File));
+            var exception = Assert.Throws<InvalidOperationException>(() => backuper.TryRestore(this.File));
+            Assert.AreEqual("Expected file C:\\Temp\\Gu.Persist\\BackuperTests\\Meh.cfg to not exist.", exception.Message);
 
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(false, this.SoftDelete);
