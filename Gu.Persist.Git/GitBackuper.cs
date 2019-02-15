@@ -39,19 +39,19 @@
         public void Backup(LockedFile file)
         {
             file.Close();
-            Git.StageAndCommit(file.File, allowEmptyCommit: false);
+            _ = Git.StageAndCommit(file.File, allowEmptyCommit: false);
         }
 
         /// <inheritdoc/>
         public void Backup(FileInfo file)
         {
-            Git.StageAndCommit(file, allowEmptyCommit: false);
+            _ = Git.StageAndCommit(file, allowEmptyCommit: false);
         }
 
         /// <inheritdoc/>
         public void Backup(FileInfo file, FileInfo backup)
         {
-            Git.StageAndCommit(file, allowEmptyCommit: false);
+            _ = Git.StageAndCommit(file, allowEmptyCommit: false);
         }
 
         /// <inheritdoc/>

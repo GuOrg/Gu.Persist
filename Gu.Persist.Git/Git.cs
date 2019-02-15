@@ -18,14 +18,14 @@ namespace Gu.Persist.Git
         {
             if (!Directory.Exists(directory))
             {
-                Directory.CreateDirectory(directory);
-                Repository.Init(directory);
+                _ = Directory.CreateDirectory(directory);
+                _ = Repository.Init(directory);
                 return;
             }
 
             if (!Repository.IsValid(directory))
             {
-                Repository.Init(directory);
+                _ = Repository.Init(directory);
             }
         }
 

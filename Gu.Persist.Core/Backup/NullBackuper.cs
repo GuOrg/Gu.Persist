@@ -135,21 +135,10 @@
         /// <inheritdoc/>
         public void DeleteBackups(FileInfo file)
         {
-            var soft = file.GetSoftDeleteFileFor();
-            soft?.Delete();
+            file.GetSoftDeleteFileFor()?.Delete();
         }
 
-        // ReSharper disable once UnusedMember.Global
-        internal void Restore(FileInfo file)
-        {
-            var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
-            if (softDelete.Exists)
-            {
-                Restore(file, softDelete);
-            }
-        }
-
-        internal static void Restore(FileInfo file, FileInfo backup)
+        private static void Restore(FileInfo file, FileInfo backup)
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull(backup, nameof(backup));
@@ -160,7 +149,7 @@
                 throw new InvalidOperationException(message);
             }
 
-            FileHelper.Restore(file, backup);
+            file.Restore(backup);
         }
     }
 }
