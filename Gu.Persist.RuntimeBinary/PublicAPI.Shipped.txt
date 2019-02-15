@@ -1,0 +1,26 @@
+﻿Gu.Persist.RuntimeBinary.BinaryEqualsComparer<T>
+Gu.Persist.RuntimeBinary.BinaryEqualsComparer<T>.BinaryEqualsComparer() -> void
+Gu.Persist.RuntimeBinary.BinaryFile
+Gu.Persist.RuntimeBinary.DataRepository
+Gu.Persist.RuntimeBinary.DataRepository.DataRepository() -> void
+Gu.Persist.RuntimeBinary.DataRepository.DataRepository(Gu.Persist.Core.DataRepositorySettings settings) -> void
+Gu.Persist.RuntimeBinary.DataRepository.DataRepository(System.Func<Gu.Persist.Core.DataRepositorySettings> settingsCreator) -> void
+Gu.Persist.RuntimeBinary.DataRepository.DataRepository(System.Func<Gu.Persist.Core.DataRepositorySettings> settingsCreator, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.RuntimeBinary.DataRepository.DataRepository(System.IO.DirectoryInfo directory) -> void
+Gu.Persist.RuntimeBinary.SingletonRepository
+Gu.Persist.RuntimeBinary.SingletonRepository.SingletonRepository() -> void
+Gu.Persist.RuntimeBinary.SingletonRepository.SingletonRepository(Gu.Persist.Core.RepositorySettings settings) -> void
+Gu.Persist.RuntimeBinary.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.Core.RepositorySettings> settingsCreator) -> void
+Gu.Persist.RuntimeBinary.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.Core.RepositorySettings> settingsCreator, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.RuntimeBinary.SingletonRepository.SingletonRepository(System.IO.DirectoryInfo directory) -> void
+override Gu.Persist.RuntimeBinary.BinaryEqualsComparer<T>.GetStream(T item) -> Gu.Persist.Core.IPooledStream
+static Gu.Persist.RuntimeBinary.BinaryFile.Clone<T>(T item) -> T
+static Gu.Persist.RuntimeBinary.BinaryFile.Read<T>(System.IO.FileInfo file) -> T
+static Gu.Persist.RuntimeBinary.BinaryFile.Read<T>(string fileName) -> T
+static Gu.Persist.RuntimeBinary.BinaryFile.ReadAsync<T>(System.IO.FileInfo file) -> System.Threading.Tasks.Task<T>
+static Gu.Persist.RuntimeBinary.BinaryFile.ReadAsync<T>(string fileName) -> System.Threading.Tasks.Task<T>
+static Gu.Persist.RuntimeBinary.BinaryFile.Save<T>(System.IO.FileInfo file, T item) -> void
+static Gu.Persist.RuntimeBinary.BinaryFile.Save<T>(string fileName, T item) -> void
+static Gu.Persist.RuntimeBinary.BinaryFile.SaveAsync<T>(System.IO.FileInfo file, T item) -> System.Threading.Tasks.Task
+static Gu.Persist.RuntimeBinary.BinaryFile.SaveAsync<T>(string fileName, T item) -> System.Threading.Tasks.Task
+static readonly Gu.Persist.RuntimeBinary.BinaryEqualsComparer<T>.Default -> Gu.Persist.RuntimeBinary.BinaryEqualsComparer<T>

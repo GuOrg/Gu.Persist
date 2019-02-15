@@ -12,7 +12,7 @@
     public static class BinaryFile
     {
         /// <summary>
-        /// Serializes to memorystream, then returns the deserialized object.
+        /// Serializes to <see cref="MemoryStream"/>, then returns the deserialized object.
         /// </summary>
         public static T Clone<T>(T item)
         {
