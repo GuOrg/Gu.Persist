@@ -1,0 +1,53 @@
+﻿Gu.Persist.NewtonsoftJson.DataRepository
+Gu.Persist.NewtonsoftJson.DataRepository.DataRepository() -> void
+Gu.Persist.NewtonsoftJson.DataRepository.DataRepository(Gu.Persist.Core.DataRepositorySettings settings, Newtonsoft.Json.JsonSerializerSettings jsonSerializerSettings) -> void
+Gu.Persist.NewtonsoftJson.DataRepository.DataRepository(Gu.Persist.Core.DataRepositorySettings settings, Newtonsoft.Json.JsonSerializerSettings jsonSerializerSettings, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.NewtonsoftJson.DataRepository.DataRepository(Gu.Persist.NewtonsoftJson.DataRepositorySettings settings) -> void
+Gu.Persist.NewtonsoftJson.DataRepository.DataRepository(Gu.Persist.NewtonsoftJson.DataRepositorySettings settings, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.NewtonsoftJson.DataRepository.DataRepository(System.Func<Gu.Persist.NewtonsoftJson.DataRepositorySettings> settingsCreator) -> void
+Gu.Persist.NewtonsoftJson.DataRepository.DataRepository(System.Func<Gu.Persist.NewtonsoftJson.DataRepositorySettings> settingsCreator, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.NewtonsoftJson.DataRepository.DataRepository(System.IO.DirectoryInfo directory) -> void
+Gu.Persist.NewtonsoftJson.DataRepository.DataRepository(string directory) -> void
+Gu.Persist.NewtonsoftJson.DataRepositorySettings
+Gu.Persist.NewtonsoftJson.DataRepositorySettings.DataRepositorySettings(string directory, Newtonsoft.Json.JsonSerializerSettings jsonSerializerSettings, bool isTrackingDirty, bool saveNullDeletesFile, Gu.Persist.Core.BackupSettings backupSettings, string extension = ".cfg", string tempExtension = ".tmp") -> void
+Gu.Persist.NewtonsoftJson.DataRepositorySettings.JsonSerializerSettings.get -> Newtonsoft.Json.JsonSerializerSettings
+Gu.Persist.NewtonsoftJson.IJsonRepositorySetting
+Gu.Persist.NewtonsoftJson.IJsonRepositorySetting.JsonSerializerSettings.get -> Newtonsoft.Json.JsonSerializerSettings
+Gu.Persist.NewtonsoftJson.JsonEqualsComparer<T>
+Gu.Persist.NewtonsoftJson.JsonEqualsComparer<T>.JsonEqualsComparer(Newtonsoft.Json.JsonSerializerSettings settings) -> void
+Gu.Persist.NewtonsoftJson.JsonFile
+Gu.Persist.NewtonsoftJson.RepositorySettings
+Gu.Persist.NewtonsoftJson.RepositorySettings.JsonSerializerSettings.get -> Newtonsoft.Json.JsonSerializerSettings
+Gu.Persist.NewtonsoftJson.RepositorySettings.RepositorySettings(string directory, Newtonsoft.Json.JsonSerializerSettings jsonSerializerSettings, bool isTrackingDirty, Gu.Persist.Core.BackupSettings backupSettings, string extension = ".cfg", string tempExtension = ".tmp") -> void
+Gu.Persist.NewtonsoftJson.SingletonRepository
+Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository() -> void
+Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(Gu.Persist.Core.RepositorySettings settings, Newtonsoft.Json.JsonSerializerSettings jsonSettings) -> void
+Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(Gu.Persist.Core.RepositorySettings settings, Newtonsoft.Json.JsonSerializerSettings jsonSettings, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(Gu.Persist.NewtonsoftJson.RepositorySettings settings) -> void
+Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(Gu.Persist.NewtonsoftJson.RepositorySettings settings, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(Newtonsoft.Json.JsonSerializerSettings jsonSettings) -> void
+Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.NewtonsoftJson.RepositorySettings> settingsCreator) -> void
+Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.NewtonsoftJson.RepositorySettings> settingsCreator, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(System.IO.DirectoryInfo directory) -> void
+Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(System.IO.DirectoryInfo directory, Newtonsoft.Json.JsonSerializerSettings jsonSettings) -> void
+static Gu.Persist.NewtonsoftJson.JsonFile.Clone<T>(T item) -> T
+static Gu.Persist.NewtonsoftJson.JsonFile.Clone<T>(T item, Newtonsoft.Json.JsonSerializerSettings settings) -> T
+static Gu.Persist.NewtonsoftJson.JsonFile.Read<T>(System.IO.FileInfo file) -> T
+static Gu.Persist.NewtonsoftJson.JsonFile.Read<T>(System.IO.FileInfo file, Newtonsoft.Json.JsonSerializerSettings settings) -> T
+static Gu.Persist.NewtonsoftJson.JsonFile.Read<T>(string fileName) -> T
+static Gu.Persist.NewtonsoftJson.JsonFile.Read<T>(string fileName, Newtonsoft.Json.JsonSerializerSettings settings) -> T
+static Gu.Persist.NewtonsoftJson.JsonFile.ReadAsync<T>(System.IO.FileInfo file) -> System.Threading.Tasks.Task<T>
+static Gu.Persist.NewtonsoftJson.JsonFile.ReadAsync<T>(System.IO.FileInfo file, Newtonsoft.Json.JsonSerializerSettings settings) -> System.Threading.Tasks.Task<T>
+static Gu.Persist.NewtonsoftJson.JsonFile.ReadAsync<T>(string fileName) -> System.Threading.Tasks.Task<T>
+static Gu.Persist.NewtonsoftJson.JsonFile.ReadAsync<T>(string fileName, Newtonsoft.Json.JsonSerializerSettings settings) -> System.Threading.Tasks.Task<T>
+static Gu.Persist.NewtonsoftJson.JsonFile.Save<T>(System.IO.FileInfo file, T item) -> void
+static Gu.Persist.NewtonsoftJson.JsonFile.Save<T>(System.IO.FileInfo file, T item, Newtonsoft.Json.JsonSerializerSettings settings) -> void
+static Gu.Persist.NewtonsoftJson.JsonFile.Save<T>(string fileName, T item) -> void
+static Gu.Persist.NewtonsoftJson.JsonFile.Save<T>(string fileName, T item, Newtonsoft.Json.JsonSerializerSettings settings) -> void
+static Gu.Persist.NewtonsoftJson.JsonFile.SaveAsync<T>(System.IO.FileInfo file, T item) -> System.Threading.Tasks.Task
+static Gu.Persist.NewtonsoftJson.JsonFile.SaveAsync<T>(System.IO.FileInfo file, T item, Newtonsoft.Json.JsonSerializerSettings settings) -> System.Threading.Tasks.Task
+static Gu.Persist.NewtonsoftJson.JsonFile.SaveAsync<T>(string fileName, T item) -> System.Threading.Tasks.Task
+static Gu.Persist.NewtonsoftJson.JsonFile.SaveAsync<T>(string fileName, T item, Newtonsoft.Json.JsonSerializerSettings settings) -> System.Threading.Tasks.Task
+static Gu.Persist.NewtonsoftJson.RepositorySettings.CreateDefaultJsonSettings() -> Newtonsoft.Json.JsonSerializerSettings
+static readonly Gu.Persist.NewtonsoftJson.JsonEqualsComparer<T>.Default -> Gu.Persist.NewtonsoftJson.JsonEqualsComparer<T>
+static readonly Gu.Persist.NewtonsoftJson.JsonFile.DefaultEncoding -> System.Text.UTF8Encoding
