@@ -25,7 +25,7 @@ namespace Gu.Persist.Core.Tests.Backup
         public BackupTests()
         {
             this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
-            this.Directory.CreateIfNotExists();
+            _ = this.Directory.CreateIfNotExists();
 
             this.File = this.Directory.CreateFileInfoInDirectory("Meh.cfg");
             this.SoftDelete = this.File.WithAppendedExtension(FileHelper.SoftDeleteExtension);

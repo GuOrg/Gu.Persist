@@ -14,7 +14,7 @@ namespace Gu.Persist.Core.Tests
         [Test]
         public void MinBackupAgeTest()
         {
-            Assert.Inconclusive("Should backups made close to eachother in time be merged some way");
+            Assert.Inconclusive("Should backups made close to each other in time be merged some way");
         }
 
         [Test]

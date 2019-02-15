@@ -5,7 +5,9 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
     using Gu.Persist.Core.Tests;
     using NUnit.Framework;
 
+#pragma warning disable CA1716 // Identifiers should not match keywords
     public class Default : BinaryRepositoryTests
+#pragma warning restore CA1716 // Identifiers should not match keywords
     {
         [Test]
         public void SavesSettingsFile()

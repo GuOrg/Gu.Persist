@@ -10,7 +10,9 @@
 
         public string Name { get; set; }
 
+#pragma warning disable CA2227 // Collection properties should be read only
         public List<DummySerializable> Dummies
+#pragma warning restore CA2227 // Collection properties should be read only
         {
             get => this.dummies;
             set => this.dummies = value;

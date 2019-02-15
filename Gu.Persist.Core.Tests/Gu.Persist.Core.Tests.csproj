@@ -8,10 +8,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Gu.Persist.Core\Gu.Persist.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Sandbox\" />
-  </ItemGroup>
   
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

@@ -13,13 +13,13 @@
     [Explicit("Longrunning benchmarks")]
     public class BenchmarkTests
     {
-        private TypicalSetting setting1;
-        private TypicalSetting setting2;
-
-        public static ComparerData[] ComparerSource { get; } =
+        private static readonly ComparerData[] ComparerSource =
         {
             new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000),
         };
+
+        private TypicalSetting setting1;
+        private TypicalSetting setting2;
 
         [SetUp]
         public void SetUp()

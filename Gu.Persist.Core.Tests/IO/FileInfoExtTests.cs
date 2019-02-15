@@ -52,10 +52,10 @@
             Assert.AreEqual(expected, newFile.FullName);
         }
 
-        [TestCase(@"C:\Temp\Meh.cfg", "cfg", @"C:\Temp\Meh")]
-        [TestCase(@"C:\Temp\Meh.cfg", ".cfg", @"C:\Temp\Meh")]
-        [TestCase(@"C:\Temp\Meh.cfg", ".bak", null)]
-        public void RemoveExtension(string filename, string extension, string expected)
+        [TestCase("cfg", @"C:\Temp\Meh")]
+        [TestCase(".cfg", @"C:\Temp\Meh")]
+        [TestCase(".bak", null)]
+        public void RemoveExtension(string extension, string expected)
         {
             if (expected != null)
             {
@@ -64,7 +64,8 @@
             }
             else
             {
-                Assert.Throws<ArgumentException>(() => this.file.WithRemovedExtension(extension));
+                var exception = Assert.Throws<ArgumentException>(() => this.file.WithRemovedExtension(extension));
+                Assert.AreEqual("Fail\r\nParameter name: extension", exception.Message);
             }
         }
 

@@ -22,12 +22,12 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void BackupWhenNotExtsis()
+        public void BackupWhenNotExists()
         {
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.Backup);
 
-            this.backuper.BeforeSave(this.File);
+            Assert.AreEqual(false, this.backuper.BeforeSave(this.File));
 
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.Backup);
@@ -80,7 +80,8 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(true, this.SoftDelete);
             AssertFile.Exists(true, this.Backup);
 
-            Assert.Throws<InvalidOperationException>(() => this.backuper.TryRestore(this.File));
+            var exception = Assert.Throws<InvalidOperationException>(() => this.backuper.TryRestore(this.File));
+            Assert.AreEqual("Expected file C:\\Temp\\Gu.Persist\\NullBackuperTests\\Meh.cfg to not exist", exception.Message);
 
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(true, this.SoftDelete);
