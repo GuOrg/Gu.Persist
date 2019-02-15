@@ -1,1 +1,40 @@
-﻿
+﻿Gu.Persist.SystemXml.DataRepository
+Gu.Persist.SystemXml.DataRepository.DataRepository() -> void
+Gu.Persist.SystemXml.DataRepository.DataRepository(Gu.Persist.Core.IRepositorySettings settings) -> void
+Gu.Persist.SystemXml.DataRepository.DataRepository(Gu.Persist.Core.IRepositorySettings settings, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.SystemXml.DataRepository.DataRepository(System.Func<Gu.Persist.SystemXml.DataRepositorySettings> settingsCreator) -> void
+Gu.Persist.SystemXml.DataRepository.DataRepository(System.Func<Gu.Persist.SystemXml.DataRepositorySettings> settingsCreator, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.SystemXml.DataRepository.DataRepository(System.IO.DirectoryInfo directory) -> void
+Gu.Persist.SystemXml.DataRepositorySettings
+Gu.Persist.SystemXml.DataRepositorySettings.DataRepositorySettings(string directory, bool isTrackingDirty, bool saveNullDeletesFile, Gu.Persist.Core.BackupSettings backupSettings, string extension = ".cfg", string tempExtension = ".tmp") -> void
+Gu.Persist.SystemXml.DataRepositorySettings.GetSchema() -> System.Xml.Schema.XmlSchema
+Gu.Persist.SystemXml.DataRepositorySettings.ReadXml(System.Xml.XmlReader reader) -> void
+Gu.Persist.SystemXml.DataRepositorySettings.WriteXml(System.Xml.XmlWriter writer) -> void
+Gu.Persist.SystemXml.RepositorySettings
+Gu.Persist.SystemXml.RepositorySettings.GetSchema() -> System.Xml.Schema.XmlSchema
+Gu.Persist.SystemXml.RepositorySettings.ReadXml(System.Xml.XmlReader reader) -> void
+Gu.Persist.SystemXml.RepositorySettings.RepositorySettings(string directory, bool isTrackingDirty, Gu.Persist.Core.BackupSettings backupSettings, string extension = ".cfg", string tempExtension = ".tmp") -> void
+Gu.Persist.SystemXml.RepositorySettings.WriteXml(System.Xml.XmlWriter writer) -> void
+Gu.Persist.SystemXml.SingletonRepository
+Gu.Persist.SystemXml.SingletonRepository.SingletonRepository() -> void
+Gu.Persist.SystemXml.SingletonRepository.SingletonRepository(Gu.Persist.Core.IRepositorySettings settings) -> void
+Gu.Persist.SystemXml.SingletonRepository.SingletonRepository(Gu.Persist.Core.IRepositorySettings settings, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.SystemXml.SingletonRepository.SingletonRepository(Gu.Persist.SystemXml.RepositorySettings settings) -> void
+Gu.Persist.SystemXml.SingletonRepository.SingletonRepository(Gu.Persist.SystemXml.RepositorySettings settings, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.SystemXml.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.SystemXml.RepositorySettings> settingsCreator) -> void
+Gu.Persist.SystemXml.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.SystemXml.RepositorySettings> settingsCreator, Gu.Persist.Core.IBackuper backuper) -> void
+Gu.Persist.SystemXml.SingletonRepository.SingletonRepository(System.IO.DirectoryInfo directory) -> void
+Gu.Persist.SystemXml.XmlEqualsComparer<T>
+Gu.Persist.SystemXml.XmlEqualsComparer<T>.XmlEqualsComparer() -> void
+Gu.Persist.SystemXml.XmlFile
+override Gu.Persist.SystemXml.XmlEqualsComparer<T>.GetStream(T item) -> Gu.Persist.Core.IPooledStream
+static Gu.Persist.SystemXml.XmlFile.Clone<T>(T item) -> T
+static Gu.Persist.SystemXml.XmlFile.Read<T>(System.IO.FileInfo file) -> T
+static Gu.Persist.SystemXml.XmlFile.Read<T>(string fileName) -> T
+static Gu.Persist.SystemXml.XmlFile.ReadAsync<T>(System.IO.FileInfo file) -> System.Threading.Tasks.Task<T>
+static Gu.Persist.SystemXml.XmlFile.ReadAsync<T>(string fileName) -> System.Threading.Tasks.Task<T>
+static Gu.Persist.SystemXml.XmlFile.Save<T>(System.IO.FileInfo file, T item) -> void
+static Gu.Persist.SystemXml.XmlFile.Save<T>(string fileName, T item) -> void
+static Gu.Persist.SystemXml.XmlFile.SaveAsync<T>(System.IO.FileInfo file, T item) -> System.Threading.Tasks.Task
+static Gu.Persist.SystemXml.XmlFile.SaveAsync<T>(string fileName, T item) -> System.Threading.Tasks.Task
+static readonly Gu.Persist.SystemXml.XmlEqualsComparer<T>.Default -> Gu.Persist.SystemXml.XmlEqualsComparer<T>
