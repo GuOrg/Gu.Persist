@@ -26,6 +26,7 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static T Read<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -38,6 +39,7 @@
         /// <summary>
         /// Read the contents of <paramref name="file"/> and serialize it to <typeparamref name="T"/>.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         public static T Read<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -47,6 +49,7 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static async Task<T> ReadAsync<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -59,6 +62,7 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -68,6 +72,7 @@
         /// <summary>
         /// Saves <paramref name="item"/> as json.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static void Save<T>(string fileName, T item)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -78,6 +83,7 @@
         /// <summary>
         /// Save the binary representation of <paramref name="item"/>.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         public static void Save<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
@@ -93,6 +99,7 @@
         /// <summary>
         /// Saves <paramref name="item"/> as json.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static Task SaveAsync<T>(string fileName, T item)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -103,6 +110,7 @@
         /// <summary>
         /// Save the binary representation of <paramref name="item"/>.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         public static async Task SaveAsync<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));

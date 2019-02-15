@@ -45,6 +45,7 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static T Read<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -69,6 +70,7 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static T Read<T>(string fileName, JsonSerializerSettings settings)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -90,6 +92,7 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static async Task<T> ReadAsync<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -111,6 +114,7 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static async Task<T> ReadAsync<T>(string fileName, JsonSerializerSettings settings)
         {
             Ensure.NotNull(fileName, nameof(fileName));

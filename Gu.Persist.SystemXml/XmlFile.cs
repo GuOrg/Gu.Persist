@@ -16,7 +16,7 @@
         private static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();
 
         /// <summary>
-        /// Serializes to memorystream, then returns the deserialized object.
+        /// Serializes to <see cref="MemoryStream"/>, then returns the deserialized object.
         /// </summary>
         public static T Clone<T>(T item)
         {
@@ -30,6 +30,7 @@
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static T Read<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -42,6 +43,8 @@
         /// <summary>
         /// Reads an xml file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <returns>The deserialized content.</returns>
         public static T Read<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -63,6 +66,7 @@
         /// <summary>
         /// Reads an xml file and deserialize the contents.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -72,6 +76,7 @@
         /// <summary>
         /// Saves <paramref name="item"/> as json.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static void Save<T>(string fileName, T item)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -82,6 +87,7 @@
         /// <summary>
         /// Saves <paramref name="item"/> as xml.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         public static void Save<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
@@ -99,6 +105,7 @@
         /// <summary>
         /// Saves <paramref name="item"/> as json.
         /// </summary>
+        /// <param name="fileName">The full name of the file.</param>
         public static Task SaveAsync<T>(string fileName, T item)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -109,6 +116,7 @@
         /// <summary>
         /// Saves <paramref name="item"/> as xml.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         public static async Task SaveAsync<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
