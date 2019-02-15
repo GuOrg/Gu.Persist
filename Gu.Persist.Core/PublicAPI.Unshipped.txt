@@ -1,2 +1,1 @@
-﻿Gu.Persist.Core.DirtyTracker.Rename(string oldName, string newName, bool overWrite) -> void
-Gu.Persist.Core.IDirtyTracker.Rename(string oldName, string newName, bool overWrite) -> void
+﻿

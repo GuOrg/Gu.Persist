@@ -542,11 +542,11 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public void Rename<T>(string newName, bool owerWrite)
+        public void Rename<T>(string newName, bool overWrite)
         {
             Ensure.IsValidFileName(newName, nameof(newName));
             var fileInfo = this.GetFileInfo<T>();
-            this.Rename(fileInfo, newName, owerWrite);
+            this.Rename(fileInfo, newName, overWrite);
         }
 
         /// <inheritdoc/>

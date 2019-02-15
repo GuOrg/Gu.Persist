@@ -40,7 +40,7 @@ Gu.Persist.Core.DirtyTracker.ClearCache() -> void
 Gu.Persist.Core.DirtyTracker.DirtyTracker(Gu.Persist.Core.ICloner cloner) -> void
 Gu.Persist.Core.DirtyTracker.IsDirty<T>(string fullFileName, T item, System.Collections.Generic.IEqualityComparer<T> comparer) -> bool
 Gu.Persist.Core.DirtyTracker.RemoveFromCache(string fullFileName) -> void
-Gu.Persist.Core.DirtyTracker.Rename(string oldName, string newName, bool owerWrite) -> void
+Gu.Persist.Core.DirtyTracker.Rename(string oldName, string newName, bool overWrite) -> void
 Gu.Persist.Core.DirtyTracker.Track<T>(string fullFileName, T item) -> void
 Gu.Persist.Core.FileCache
 Gu.Persist.Core.FileCache.Add<T>(string fullName, T value) -> void
@@ -105,7 +105,7 @@ Gu.Persist.Core.IDirtyTracker
 Gu.Persist.Core.IDirtyTracker.ClearCache() -> void
 Gu.Persist.Core.IDirtyTracker.IsDirty<T>(string fullFileName, T item, System.Collections.Generic.IEqualityComparer<T> comparer) -> bool
 Gu.Persist.Core.IDirtyTracker.RemoveFromCache(string fullFileName) -> void
-Gu.Persist.Core.IDirtyTracker.Rename(string oldName, string newName, bool owerWrite) -> void
+Gu.Persist.Core.IDirtyTracker.Rename(string oldName, string newName, bool overWrite) -> void
 Gu.Persist.Core.IDirtyTracker.Track<T>(string fullFileName, T item) -> void
 Gu.Persist.Core.IFileInfoAsyncRepository
 Gu.Persist.Core.IFileInfoAsyncRepository.ReadAsync<T>(System.IO.FileInfo file) -> System.Threading.Tasks.Task<T>
@@ -238,7 +238,7 @@ Gu.Persist.Core.Repository<TSetting>.ReadOrCreateCore<T>(System.IO.FileInfo file
 Gu.Persist.Core.Repository<TSetting>.RemoveFromDirtyTracker<T>(T item) -> void
 Gu.Persist.Core.Repository<TSetting>.Rename(System.IO.FileInfo oldName, string newName, bool overWrite) -> void
 Gu.Persist.Core.Repository<TSetting>.Rename(string oldName, string newName, bool overWrite) -> void
-Gu.Persist.Core.Repository<TSetting>.Rename<T>(string newName, bool owerWrite) -> void
+Gu.Persist.Core.Repository<TSetting>.Rename<T>(string newName, bool overWrite) -> void
 Gu.Persist.Core.Repository<TSetting>.Repository(System.Func<TSetting> settingsCreator, Gu.Persist.Core.IBackuper backuper, Gu.Persist.Core.Serialize<TSetting> serialize) -> void
 Gu.Persist.Core.Repository<TSetting>.Repository(System.Func<TSetting> settingsCreator, Gu.Persist.Core.Serialize<TSetting> serialize) -> void
 Gu.Persist.Core.Repository<TSetting>.Repository(TSetting settings, Gu.Persist.Core.IBackuper backuper, Gu.Persist.Core.Serialize<TSetting> serialize) -> void

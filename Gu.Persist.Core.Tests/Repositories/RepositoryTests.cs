@@ -975,7 +975,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         [TestCase(true)]
         [TestCase(false)]
-        public void RenameTypeOverwrite(bool owerWrite)
+        public void RenameTypeOverwrite(bool overWrite)
         {
             this.TypeFiles.File.CreatePlaceHolder("a");
             this.TypeFiles.SoftDelete.CreatePlaceHolder("c");
@@ -988,7 +988,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                 this.TypeFiles.BackupNewName.CreatePlaceHolder("bb");
             }
 
-            if (owerWrite)
+            if (overWrite)
             {
                 this.Repository.Rename<DummySerializable>("NewName", true);
                 AssertFile.Exists(false, this.TypeFiles.File);
@@ -1020,7 +1020,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         [TestCase(true)]
         [TestCase(false)]
-        public void RenameFileNameOverwrite(bool owerWrite)
+        public void RenameFileNameOverwrite(bool overWrite)
         {
             this.NamedFiles.File.CreatePlaceHolder("a");
             this.NamedFiles.SoftDelete.CreatePlaceHolder("c");
@@ -1033,7 +1033,7 @@ namespace Gu.Persist.Core.Tests.Repositories
                 this.NamedFiles.BackupNewName.CreatePlaceHolder("bb");
             }
 
-            if (owerWrite)
+            if (overWrite)
             {
                 this.Repository.Rename(this.NamedFiles.File, "NewName", true);
                 AssertFile.Exists(false, this.NamedFiles.File);
