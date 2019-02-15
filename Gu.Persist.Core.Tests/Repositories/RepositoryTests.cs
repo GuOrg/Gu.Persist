@@ -275,7 +275,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
             else
             {
-                Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(null));
+                _ = Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(null));
             }
         }
 
@@ -300,7 +300,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
             else
             {
-                Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(this.NamedFiles.File, null));
+                _ = Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(this.NamedFiles.File, null));
             }
         }
 
@@ -521,7 +521,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
             else
             {
-                Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(this.NamedFiles.File, null));
+                _ = Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(this.NamedFiles.File, null));
             }
         }
 
@@ -596,7 +596,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
             else
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => this.Repository.SaveAsync<DummySerializable>(this.NamedFiles.File, null));
+                _ = Assert.ThrowsAsync<ArgumentNullException>(() => this.Repository.SaveAsync<DummySerializable>(this.NamedFiles.File, null));
             }
         }
 
@@ -621,7 +621,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
             else
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => this.Repository.SaveAsync<DummySerializable>(null));
+                _ = Assert.ThrowsAsync<ArgumentNullException>(() => this.Repository.SaveAsync<DummySerializable>(null));
             }
         }
 

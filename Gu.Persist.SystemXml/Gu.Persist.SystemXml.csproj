@@ -4,7 +4,7 @@
     <TargetFramework>net45</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <DocumentationFile>bin\Release\Gu.Persist.SystemXml.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>Gu.Persist.SystemXml.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup>
