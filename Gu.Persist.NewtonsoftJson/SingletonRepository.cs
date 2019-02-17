@@ -30,6 +30,7 @@
         /// This creates a setting file for the repository in the directory if it does not exist.
         /// After this the settings file will be used.
         /// </summary>
+        /// <param name="jsonSettings">The <see cref="JsonSerializerSettings"/>.</param>
         public SingletonRepository(JsonSerializerSettings jsonSettings)
             : this(Directories.Default, jsonSettings)
         {
@@ -41,6 +42,7 @@
         /// This creates a setting file for the repository in the directory if it does not exist.
         /// After this the settings file will be used.
         /// </summary>
+        /// <param name="directory">The <see cref="DirectoryInfo"/>.</param>
         public SingletonRepository(DirectoryInfo directory)
             : base(() => CreateDefaultSettings(directory), Serialize<RepositorySettings>.Default)
         {
@@ -52,6 +54,8 @@
         /// This creates a setting file for the repository in the directory if it does not exist.
         /// After this the settings file will be used.
         /// </summary>
+        /// <param name="directory">The <see cref="DirectoryInfo"/>.</param>
+        /// <param name="jsonSettings">The <see cref="JsonSerializerSettings"/>.</param>
         public SingletonRepository(DirectoryInfo directory, JsonSerializerSettings jsonSettings)
             : base(() => CreateDefaultSettings(directory, jsonSettings), Serialize<RepositorySettings>.Default)
         {
@@ -86,6 +90,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="RepositorySettings"/>.</param>
         public SingletonRepository(RepositorySettings settings)
             : base(settings, Serialize<RepositorySettings>.Default)
         {
@@ -94,6 +99,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="RepositorySettings"/>.</param>
+        /// <param name="backuper">The <see cref="IBackuper"/>.</param>
         public SingletonRepository(RepositorySettings settings, IBackuper backuper)
             : base(settings, backuper, Serialize<RepositorySettings>.Default)
         {
@@ -102,6 +109,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="Core.RepositorySettings"/>.</param>
+        /// <param name="jsonSettings">The <see cref="JsonSerializerSettings"/>.</param>
         public SingletonRepository(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
             : base(Create(settings, jsonSettings), Serialize<RepositorySettings>.Default)
         {
@@ -110,6 +119,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="Core.RepositorySettings"/>.</param>
+        /// <param name="jsonSettings">The <see cref="JsonSerializerSettings"/>.</param>
+        /// <param name="backuper">The <see cref="IBackuper"/>.</param>
         public SingletonRepository(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings, IBackuper backuper)
             : base(Create(settings, jsonSettings), backuper, Serialize<RepositorySettings>.Default)
         {

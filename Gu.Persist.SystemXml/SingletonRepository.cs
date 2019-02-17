@@ -25,6 +25,7 @@ namespace Gu.Persist.SystemXml
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
+        /// <param name="directory">The <see cref="DirectoryInfo"/>.</param>
         public SingletonRepository(DirectoryInfo directory)
             : base(() => CreateDefaultSettings(directory), Serialize<RepositorySettings>.Default)
         {
@@ -57,24 +58,30 @@ namespace Gu.Persist.SystemXml
         }
 
         /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
+        /// <param name="settings">The <see cref="RepositorySettings"/>.</param>
         public SingletonRepository(RepositorySettings settings)
             : base(settings, Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
+        /// <param name="settings">The <see cref="RepositorySettings"/>.</param>
+        /// <param name="backuper">The <see cref="IBackuper"/>.</param>
         public SingletonRepository(RepositorySettings settings, IBackuper backuper)
             : base(settings, backuper, Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
+        /// <param name="settings">The <see cref="IRepositorySettings"/>.</param>
         public SingletonRepository(IRepositorySettings settings)
             : base(CreateSettings(settings), Serialize<RepositorySettings>.Default)
         {
         }
 
         /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
+        /// <param name="settings">The <see cref="IRepositorySettings"/>.</param>
+        /// <param name="backuper">The <see cref="IBackuper"/>.</param>
         public SingletonRepository(IRepositorySettings settings, IBackuper backuper)
             : base(CreateSettings(settings), backuper, Serialize<RepositorySettings>.Default)
         {

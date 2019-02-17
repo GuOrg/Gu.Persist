@@ -24,6 +24,7 @@ namespace Gu.Persist.SystemXml
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// It will use BinaryRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
+        /// <param name="directory">The <see cref="DirectoryInfo"/>.</param>
         public DataRepository(DirectoryInfo directory)
             : base(() => CreateDefaultSettings(directory), Serialize<DataRepositorySettings>.Default)
         {
@@ -48,7 +49,7 @@ namespace Gu.Persist.SystemXml
         /// <param name="settingsCreator">Creates settings if file is missing.</param>
         /// <param name="backuper">
         /// The backuper.
-        /// Note that a custom backuper may not use the backupsettings.
+        /// Note that a custom backuper may not use the backup settings.
         /// </param>
         public DataRepository(Func<DataRepositorySettings> settingsCreator, IBackuper backuper)
             : base(settingsCreator, backuper, Serialize<DataRepositorySettings>.Default)
@@ -58,6 +59,7 @@ namespace Gu.Persist.SystemXml
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="Core.IRepositorySettings"/>.</param>
         public DataRepository(Core.IRepositorySettings settings)
             : base(Create(settings), Serialize<DataRepositorySettings>.Default)
         {
@@ -66,6 +68,8 @@ namespace Gu.Persist.SystemXml
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="Core.IRepositorySettings"/>.</param>
+        /// <param name="backuper">The <see cref="IBackuper"/>.</param>
         public DataRepository(Core.IRepositorySettings settings, IBackuper backuper)
             : base(Create(settings), backuper, Serialize<DataRepositorySettings>.Default)
         {

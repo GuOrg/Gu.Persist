@@ -35,6 +35,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// It will use BinaryRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
+        /// <param name="directory">The <see cref="DirectoryInfo"/>.</param>
         public DataRepository(DirectoryInfo directory)
             : base(() => CreateDefaultSettings(directory), Serialize<DataRepositorySettings>.Default)
         {
@@ -77,6 +78,8 @@ namespace Gu.Persist.NewtonsoftJson
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="DataRepositorySettings"/>.</param>
+        /// <param name="backuper">The <see cref="IBackuper"/>.</param>
         public DataRepository(DataRepositorySettings settings, IBackuper backuper)
             : base(settings, backuper, Serialize<DataRepositorySettings>.Default)
         {
@@ -85,6 +88,8 @@ namespace Gu.Persist.NewtonsoftJson
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
+        /// <param name="jsonSerializerSettings">The <see cref="JsonSerializerSettings"/>.</param>
+        /// <param name="settings">The <see cref="Core.DataRepositorySettings"/>.</param>
         public DataRepository(Core.DataRepositorySettings settings, JsonSerializerSettings jsonSerializerSettings)
             : base(Create(settings, jsonSerializerSettings), Serialize<DataRepositorySettings>.Default)
         {
@@ -93,6 +98,9 @@ namespace Gu.Persist.NewtonsoftJson
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="Core.DataRepositorySettings"/>.</param>
+        /// <param name="jsonSerializerSettings">The <see cref="JsonSerializerSettings"/>.</param>
+        /// <param name="backuper">The <see cref="IBackuper"/>.</param>
         public DataRepository(Core.DataRepositorySettings settings, JsonSerializerSettings jsonSerializerSettings, IBackuper backuper)
             : base(Create(settings, jsonSerializerSettings), backuper, Serialize<DataRepositorySettings>.Default)
         {
