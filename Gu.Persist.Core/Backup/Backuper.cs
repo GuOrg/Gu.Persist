@@ -24,12 +24,13 @@
 #pragma warning restore CA1819 // Properties should not return arrays
 
         /// <summary>
-        /// Creates a backuper for the given settings.
+        /// Creates a <see cref="Backuper"/> for the settings or <see cref="NullBackuper.Default"/> if <paramref name="setting"/> is null.
         /// </summary>
         /// <remarks>
         /// If <paramref name="setting"/> is null a <see cref="NullBackuper"/> is returned.
         /// </remarks>
         /// <param name="setting">The setting to use for backups.</param>
+        /// <returns>An <see cref="IBackuper"/></returns>
         public static IBackuper Create(BackupSettings setting)
         {
             if (setting != null)

@@ -111,10 +111,4 @@
     <Rule Id="SA1652" Action="None" />
     <Rule Id="SA0001" Action="None" />
   </Rules>
-  <Rules AnalyzerId="AsyncUsageAnalyzers" RuleNamespace="AsyncUsageAnalyzers">
-    <Rule Id="AvoidAsyncSuffix" Action="None" />
-    <Rule Id="UseAsyncSuffix" Action="None" />
-    <Rule Id="AvoidAsyncVoid" Action="Error" />
-    <Rule Id="UseConfigureAwait" Action="Error" />
-  </Rules>
 </RuleSet>
