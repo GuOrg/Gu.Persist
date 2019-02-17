@@ -753,7 +753,10 @@ namespace Gu.Persist.Core
 
         /// <summary>
         /// Save <paramref name="item"/> to a file corresponding to <typeparamref name="T"/>.
+        /// Calls <see cref="SaveCore{T}(FileInfo,T)"/>.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="item">The <typeparamref name="T"/> to serialize and save.</param>
         protected void SaveCore<T>(T item)
         {
             var file = this.GetFileInfoCore<T>();
@@ -764,6 +767,9 @@ namespace Gu.Persist.Core
         /// Calls <see cref="SaveCore{T}(FileInfo,FileInfo,T)"/>
         /// Uses file.WithNewExtension(this.Settings.TempExtension) as temp file.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="item">The <typeparamref name="T"/> to serialize and save.</param>
         protected void SaveCore<T>(FileInfo file, T item)
         {
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
@@ -771,9 +777,19 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Caches and tracks if needed.
-        /// Then serializes and saves.
+        /// 1) All files in the transaction are locked.
+        /// 2) If file exists it is renamed to file.delete
+        /// 3) The contents of <paramref name="stream"/> is saved to <paramref name="tempFile"/>
+        /// 4.a 1) On success <paramref name="tempFile"/> is renamed to <paramref name="file"/>
+        ///     2.a) If backup file.delete is renamed to backup name.
+        ///     2.b) If no backup file.delete is deleted
+        /// 4.b 1) file.delete is renamed back to file
+        ///     2) <paramref name="tempFile"/> is deleted.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="tempFile">The temporary file to save to.</param>
+        /// <param name="item">The <typeparamref name="T"/> to serialize and save.</param>
         protected void SaveCore<T>(FileInfo file, FileInfo tempFile, T item)
         {
             this.CacheAndTrackCore(file, item);
@@ -784,14 +800,18 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// 1) If file exists it is renamed to file.delete
-        /// 2) The contents of <paramref name="stream"/> is saved to tempFile
-        /// 3.a 1) On success tempfile is renamed to <paramref name="file"/>
+        /// 1) All files in the transaction are locked.
+        /// 2) If file exists it is renamed to file.delete
+        /// 3) The contents of <paramref name="stream"/> is saved to <paramref name="tempFile"/>
+        /// 4.a 1) On success <paramref name="tempFile"/> is renamed to <paramref name="file"/>
         ///     2.a) If backup file.delete is renamed to backup name.
         ///     2.b) If no backup file.delete is deleted
-        /// 3.b 1) file.delete is renamed back to file
-        ///     2) tempfile is deleted.
+        /// 4.b 1) file.delete is renamed back to file
+        ///     2) <paramref name="tempFile"/> is deleted.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="tempFile">The temporary file to save to.</param>
+        /// <param name="stream">The <see cref="Stream"/>.</param>
         protected void SaveStreamCore(FileInfo file, FileInfo tempFile, Stream stream)
         {
             using (var transaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
@@ -801,9 +821,19 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Save <paramref name="stream"/> to <paramref name="tempFile"/> then rename it to <paramref name="file"/>.
-        /// Uses a <see cref="SaveTransaction"/>.
+        /// 1) All files in the transaction are locked.
+        /// 2) If file exists it is renamed to file.delete
+        /// 3) The contents of <paramref name="stream"/> is saved to <paramref name="tempFile"/>
+        /// 4.a 1) On success <paramref name="tempFile"/> is renamed to <paramref name="file"/>
+        ///     2.a) If backup file.delete is renamed to backup name.
+        ///     2.b) If no backup file.delete is deleted
+        /// 4.b 1) file.delete is renamed back to file
+        ///     2) <paramref name="tempFile"/> is deleted.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="tempFile">The temporary file to save to.</param>
+        /// <param name="stream">The <see cref="Stream"/>.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         protected async Task SaveStreamCoreAsync(FileInfo file, FileInfo tempFile, Stream stream)
         {
             using (var saveTransaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
