@@ -17,6 +17,7 @@
         /// Initializes a new instance of the <see cref="GitBackuper"/> class.
         /// Creates a git repository in <paramref name="directory"/>.
         /// </summary>
+        /// <param name="directory">The directory path.</param>
         public GitBackuper(string directory)
         {
             this.Directory = directory;
@@ -25,7 +26,7 @@
         }
 
         /// <summary>
-        /// The director where the repository is.
+        /// Gets the directory where the repository is.
         /// </summary>
         public string Directory { get; }
 

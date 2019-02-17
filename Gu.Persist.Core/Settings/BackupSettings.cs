@@ -9,10 +9,22 @@
     [Serializable]
     public class BackupSettings : FileSettings, IBackupSettings
     {
+        /// <summary>
+        /// The default timestamp format.
+        /// </summary>
         public static readonly string DefaultTimeStampFormat = "yyyy_MM_dd_HH_mm_ss";
+
+        /// <summary>
+        /// The default backup file extension.
+        /// </summary>
         public static readonly string DefaultExtension = ".bak";
 
         /// <summary>Initializes a new instance of the <see cref="BackupSettings"/> class.</summary>
+        /// <param name="directory">The directory path.</param>
+        /// <param name="extension">The backup file extension.</param>
+        /// <param name="timeStampFormat">The timestamp suffix format. Example 'yyyy_MM_dd_HH_mm_ss'.</param>
+        /// <param name="numberOfBackups">The max number of backups tro keep.</param>
+        /// <param name="maxAgeInDays">The max age of backups.</param>
         public BackupSettings(
             string directory,
             string extension,
@@ -37,7 +49,7 @@
         }
 
         /// <summary>
-        /// Gets the format of the timestamp suffix. Example 'yyyy_MM_dd_HH_mm_ss'
+        /// Gets the format of the timestamp suffix. Example 'yyyy_MM_dd_HH_mm_ss'.
         /// </summary>
         public string TimeStampFormat { get; }
 

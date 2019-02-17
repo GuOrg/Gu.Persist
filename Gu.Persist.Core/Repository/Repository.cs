@@ -107,7 +107,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// See <see cref="IRepository.Settings"/>.
+        /// Gets the <see cref="IRepository.Settings"/>.
         /// </summary>
         public TSetting Settings { get; }
 
@@ -668,7 +668,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Gets the fileinfo for that is used for the given filename.
+        /// Gets the <see cref="FileInfo"/> for that is used for the given filename.
         /// </summary>
         /// <param name="fileName">
         /// Filename can be either of:
@@ -676,6 +676,7 @@ namespace Gu.Persist.Core
         /// FileName.cfg
         /// FileName.
         /// </param>
+        /// <returns>The <see cref="FileInfo"/>.</returns>
         protected FileInfo GetFileInfoCore(string fileName)
         {
             var file = FileHelper.CreateFileInfo(fileName, this.Settings);
@@ -685,6 +686,8 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Get the file that corresponds to <typeparamref name="T"/>.
         /// </summary>
+        /// <typeparam name="T">The type.</typeparam>
+        /// <returns>The <see cref="FileInfo"/>.</returns>
         protected FileInfo GetFileInfoCore<T>()
         {
             return FileHelper.CreateFileInfo<T>(this.Settings);
@@ -693,6 +696,8 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Read the file corresponding to <typeparamref name="T"/> and return it's contents deserialized to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <typeparam name="T">The type to read and deserialize.</typeparam>
+        /// <returns>The deserialized instance.</returns>
         protected T ReadCore<T>()
         {
             var file = this.GetFileInfoCore<T>();
@@ -702,10 +707,13 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <typeparam name="T">The type to read and deserialize.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <returns>The deserialized instance.</returns>
         protected virtual T ReadCore<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
-            var value = FileHelper.Read<T, TSetting>(file, this.Settings, this.serialize);
+            var value = file.Read<T, TSetting>(this.Settings, this.serialize);
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker.Track(file.FullName, value);
@@ -718,6 +726,9 @@ namespace Gu.Persist.Core
         /// Read the file corresponding to <typeparamref name="T"/> return it's contents deserialized to an instance of <typeparamref name="T"/> if it exists.
         /// If the file does not exist a new instance is created and saved, then this instance is returned.
         /// </summary>
+        /// <typeparam name="T">The type to read and deserialize.</typeparam>
+        /// <param name="creator">The <see cref="Func{T}"/>.</param>
+        /// <returns>The deserialized instance.</returns>
         protected T ReadOrCreateCore<T>(Func<T> creator)
         {
             Ensure.NotNull(creator, nameof(creator));
@@ -729,6 +740,10 @@ namespace Gu.Persist.Core
         /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/> if it exists.
         /// If the file does not exist a new instance is created and saved, then this instance is returned.
         /// </summary>
+        /// <typeparam name="T">The type to read and deserialize.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="creator">The <see cref="Func{T}"/>.</param>
+        /// <returns>The deserialized instance.</returns>
         protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator)
         {
             Ensure.NotNull(file, nameof(file));
@@ -779,7 +794,7 @@ namespace Gu.Persist.Core
         /// <summary>
         /// 1) All files in the transaction are locked.
         /// 2) If file exists it is renamed to file.delete
-        /// 3) The contents of <paramref name="stream"/> is saved to <paramref name="tempFile"/>
+        /// 3) The contents of <paramref name="item"/> is saved to <paramref name="tempFile"/>
         /// 4.a 1) On success <paramref name="tempFile"/> is renamed to <paramref name="file"/>
         ///     2.a) If backup file.delete is renamed to backup name.
         ///     2.b) If no backup file.delete is deleted
@@ -846,6 +861,8 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Check if the file corresponding to <typeparamref name="T"/> exists.
         /// </summary>
+        /// <typeparam name="T">The type to get corresponding file name for.</typeparam>
+        /// <returns>True if a file exists.</returns>
         protected bool ExistsCore<T>()
         {
             var file = this.GetFileInfoCore<T>();
@@ -855,6 +872,8 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Check if <paramref name="file"/> exists.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <returns>True if the file exists.</returns>
         protected bool ExistsCore(FileInfo file)
         {
             file.Refresh();
@@ -864,6 +883,9 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Handle caching and tracking for <paramref name="item"/>.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="item">The <typeparamref name="T"/>.</param>
         protected virtual void CacheAndTrackCore<T>(FileInfo file, T item)
         {
             if (this.Settings.IsTrackingDirty)
@@ -875,6 +897,9 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Throw exception if <paramref name="item"/> cannot be saved to <paramref name="file"/>.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="item">The <typeparamref name="T"/>.</param>
         protected abstract void EnsureCanSave<T>(FileInfo file, T item);
     }
 }

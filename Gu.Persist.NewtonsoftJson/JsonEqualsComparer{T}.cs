@@ -17,6 +17,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonEqualsComparer{T}"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         public JsonEqualsComparer(JsonSerializerSettings settings)
         {
             this.settings = settings;

@@ -11,6 +11,7 @@
         /// <summary>
         /// Creates a backup if <paramref name="file"/> exists.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         bool BeforeSave(FileInfo file);
 
         /// <summary>
@@ -35,6 +36,7 @@
         /// <summary>
         /// Checks if there is a soft delete file available or if there are backup(s).
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         bool CanRestore(FileInfo file);
 
         /// <summary>
@@ -43,6 +45,7 @@
         /// 1) Soft delete file.
         /// 2) Newest backup if any.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <returns>True if a backup was found and successfully restored. Now <paramref name="file"/> can be read.</returns>
         bool TryRestore(FileInfo file);
 
@@ -55,8 +58,15 @@
         /// This means that the save transaction is complete and was successful.
         /// The files are still locked by the transaction.
         /// </summary>
+        /// <param name="file">The <see cref="LockedFile"/>.</param>
         void AfterSave(LockedFile file);
 
+        /// <summary>
+        /// Check if <paramref name="file"/> can be renamed to <paramref name="newName"/>.
+        /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="newName">The new name.</param>
+        /// <returns>True if <paramref name="file"/> can be renamed to <paramref name="newName"/>.</returns>
         bool CanRename(FileInfo file, string newName);
 
         /// <summary>
@@ -64,12 +74,13 @@
         /// </summary>
         /// <param name="file">The file to rename backups for.</param>
         /// <param name="newName">The new name.</param>
-        /// <param name="overWrite">Overwrite newname if exists.</param>
+        /// <param name="overWrite">Overwrite <paramref name="newName"/> if exists.</param>
         void Rename(FileInfo file, string newName, bool overWrite);
 
         /// <summary>
         /// Deletes all backups for <paramref name="file"/>.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         void DeleteBackups(FileInfo file);
 
         /// <summary>

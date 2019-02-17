@@ -32,6 +32,9 @@
             this.TempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
 
+        /// <summary>
+        /// Gets the <see cref="BackupSettings"/>.
+        /// </summary>
         public BackupSettings BackupSettings { get; }
 
         /// <summary>

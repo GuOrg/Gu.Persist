@@ -10,14 +10,19 @@
     {
         public FileSettings(string directory, string extension)
         {
-            Ensure.NotNull(directory, nameof(directory));
             Ensure.NotNull(extension, nameof(extension));
-            this.Directory = directory;
+            this.Directory = directory ?? throw new ArgumentNullException(nameof(directory));
             this.Extension = FileHelper.PrependDotIfMissing(extension);
         }
 
+        /// <summary>
+        /// Gets the path to the directory.
+        /// </summary>
         public string Directory { get; }
 
+        /// <summary>
+        /// Gets the extension.
+        /// </summary>
         public string Extension { get; }
     }
 }

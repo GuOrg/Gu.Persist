@@ -146,9 +146,7 @@
             this.fileCache.TryRemove(item);
         }
 
-        /// <summary>
-        /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/>.
-        /// </summary>
+        /// <inheritdoc/>
         protected override T ReadCore<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
