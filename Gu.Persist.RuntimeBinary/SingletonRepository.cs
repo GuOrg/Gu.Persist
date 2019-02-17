@@ -25,6 +25,7 @@ namespace Gu.Persist.RuntimeBinary
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// It will use BinaryRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
+        /// <param name="directory">The <see cref="DirectoryInfo"/>.</param>
         public SingletonRepository(DirectoryInfo directory)
             : base(() => Default.RepositorySettings(directory), Serialize<RepositorySettings>.Default)
         {
@@ -59,6 +60,7 @@ namespace Gu.Persist.RuntimeBinary
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="Core.RepositorySettings"/>.</param>
         public SingletonRepository(Core.RepositorySettings settings)
             : base(settings, Serialize<RepositorySettings>.Default)
         {

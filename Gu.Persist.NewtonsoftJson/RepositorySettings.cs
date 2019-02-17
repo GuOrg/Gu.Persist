@@ -12,6 +12,12 @@ namespace Gu.Persist.NewtonsoftJson
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
         /// </summary>
+        /// <param name="directory">The <see cref="string"/>.</param>
+        /// <param name="jsonSerializerSettings">The <see cref="JsonSerializerSettings"/>.</param>
+        /// <param name="isTrackingDirty">Configures if the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes.</param>
+        /// <param name="backupSettings">The <see cref="BackupSettings"/>.</param>
+        /// <param name="extension">The file extension..</param>
+        /// <param name="tempExtension">The temp file extension. Files are first written to temp files then changed extension for atomic writes.</param>
         [JsonConstructor]
         public RepositorySettings(
             string directory,

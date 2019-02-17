@@ -30,7 +30,7 @@
         /// If <paramref name="setting"/> is null a <see cref="NullBackuper"/> is returned.
         /// </remarks>
         /// <param name="setting">The setting to use for backups.</param>
-        /// <returns>An <see cref="IBackuper"/></returns>
+        /// <returns>An <see cref="IBackuper"/>.</returns>
         public static IBackuper Create(BackupSettings setting)
         {
             if (setting != null)

@@ -10,6 +10,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositorySettings"/> class.
         /// </summary>
+        /// <param name="directory">The <see cref="string"/>.</param>
+        /// <param name="isTrackingDirty">Configures if the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes.</param>
+        /// <param name="backupSettings">The <see cref="BackupSettings"/>.</param>
+        /// <param name="extension">The file extension.</param>
+        /// <param name="tempExtension">The temp file extension. Files are first written to temp files then changed extension for atomic writes.</param>
         public RepositorySettings(
             string directory,
             bool isTrackingDirty,
@@ -30,13 +35,13 @@
         public BackupSettings BackupSettings { get; }
 
         /// <summary>
-        /// Gets or sets the file extension used when saving files.
+        /// Gets the file extension used when saving files.
         /// On successful save the file extension is replaced.
         /// </summary>
         public string TempExtension { get; }
 
         /// <summary>
-        /// Gets or sets if the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes.
+        /// Gets a value indicating whether the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes.
         /// </summary>
         public bool IsTrackingDirty { get; }
     }

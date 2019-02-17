@@ -25,6 +25,7 @@ namespace Gu.Persist.RuntimeXml
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// It will use XmlRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
+        /// <param name="directory">The <see cref="DirectoryInfo"/>.</param>
         public SingletonRepository(DirectoryInfo directory)
             : base(() => Default.RepositorySettings(directory), Serialize<RepositorySettings>.Default)
         {
@@ -59,6 +60,7 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="RepositorySettings"/>.</param>
         public SingletonRepository(RepositorySettings settings)
             : base(settings, Serialize<RepositorySettings>.Default)
         {
@@ -67,6 +69,8 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="RepositorySettings"/>.</param>
+        /// <param name="backuper">The <see cref="IBackuper"/>.</param>
         public SingletonRepository(RepositorySettings settings, IBackuper backuper)
             : base(settings, backuper, Serialize<RepositorySettings>.Default)
         {

@@ -70,6 +70,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="DataRepositorySettings"/>.</param>
         public DataRepository(DataRepositorySettings settings)
             : base(settings, Serialize<DataRepositorySettings>.Default)
         {

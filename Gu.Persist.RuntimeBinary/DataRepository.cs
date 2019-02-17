@@ -23,6 +23,7 @@ namespace Gu.Persist.RuntimeBinary
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// It will use BinaryRepositorySettings.DefaultFor(directory) as settings.
         /// </summary>
+        /// <param name="directory">The <see cref="DirectoryInfo"/>.</param>
         public DataRepository(DirectoryInfo directory)
             : base(() => Default.DataRepositorySettings(directory), Serialize<DataRepositorySettings>.Default)
         {
@@ -57,6 +58,7 @@ namespace Gu.Persist.RuntimeBinary
         /// <summary>
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
+        /// <param name="settings">The <see cref="Core.DataRepositorySettings"/>.</param>
         public DataRepository(Core.DataRepositorySettings settings)
             : base(settings, Serialize<DataRepositorySettings>.Default)
         {
