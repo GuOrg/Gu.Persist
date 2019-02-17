@@ -73,4 +73,7 @@
     <Rule Id="SA1633" Action="None" />
     <Rule Id="SA0001" Action="None" />
   </Rules>
+  <Rules AnalyzerId="AsyncUsageAnalyzers" RuleNamespace="AsyncUsageAnalyzers">
+    <Rule Id="UseAsyncSuffix" Action="None" />
+  </Rules>
 </RuleSet>

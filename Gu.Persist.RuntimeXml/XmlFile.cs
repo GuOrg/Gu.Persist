@@ -18,6 +18,9 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Serializes to <see cref="MemoryStream"/>, then returns the deserialized object.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="item">The <typeparamref name="T"/>.</param>
+        /// <returns>The deep clone.</returns>
         public static T Clone<T>(T item)
         {
             Ensure.NotNull<object>(item, nameof(item));
@@ -30,7 +33,9 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <typeparam name="T">The type to deserialize the contents of the file to.</typeparam>
         /// <param name="fileName">The full name of the file.</param>
+        /// <returns>The deserialized content.</returns>
         public static T Read<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -41,9 +46,11 @@ namespace Gu.Persist.RuntimeXml
         }
 
         /// <summary>
-        /// Read the contents of <paramref name="file"/> and serialize it to <typeparamref name="T"/>.
+        /// Reads an xml file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <typeparam name="T">The type to deserialize the contents of the file to.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <returns>The deserialized content.</returns>
         public static T Read<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -53,7 +60,9 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
         /// </summary>
-        /// <param name="fileName">The full name of the file.</param>
+        /// <typeparam name="T">The type to deserialize the contents of the file to.</typeparam>
+        /// <param name="fileName">The name of the file.</param>
+        /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
         public static async Task<T> ReadAsync<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -64,9 +73,11 @@ namespace Gu.Persist.RuntimeXml
         }
 
         /// <summary>
-        /// Read the file and deserialize the contents to an instance of <typeparamref name="T"/>.
+        /// Reads an xml file and deserialize the contents.
         /// </summary>
+        /// <typeparam name="T">The type to deserialize the contents of the file to.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
             Ensure.NotNull(file, nameof(file));
@@ -76,7 +87,9 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Saves <paramref name="item"/> as json.
         /// </summary>
-        /// <param name="fileName">The full name of the file.</param>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="fileName">The file name.</param>
+        /// <param name="item">The <typeparamref name="T"/>.</param>
         public static void Save<T>(string fileName, T item)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -87,7 +100,9 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Saves <paramref name="item"/> as xml.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="item">The instance to serialize.</param>
         public static void Save<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
@@ -106,7 +121,10 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Saves <paramref name="item"/> as json.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="fileName">The full name of the file.</param>
+        /// <param name="item">The instance to serialize.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
         public static Task SaveAsync<T>(string fileName, T item)
         {
             Ensure.NotNull(fileName, nameof(fileName));
@@ -117,7 +135,10 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Saves <paramref name="item"/> as xml.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="item">The instance to serialize.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
         public static async Task SaveAsync<T>(FileInfo file, T item)
         {
             Ensure.NotNull(file, nameof(file));
@@ -131,6 +152,9 @@ namespace Gu.Persist.RuntimeXml
         /// <summary>
         /// Deserialize the contents of <paramref name="stream"/> to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <typeparam name="T">The type to deserialize the contents to.</typeparam>
+        /// <param name="stream">The <see cref="Stream"/>.</param>
+        /// <returns>The deserialized contents.</returns>
         internal static T FromStream<T>(Stream stream)
         {
             var serializer = Serializers.GetOrAdd(typeof(T), x => new DataContractSerializer(typeof(T)));
@@ -147,8 +171,11 @@ namespace Gu.Persist.RuntimeXml
         }
 
         /// <summary>
-        /// Serialize <paramref name="item"/> to a <see cref="MemoryStream"/>.
+        /// Serialize <paramref name="item"/> to a <see cref="PooledMemoryStream"/>.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="item">The instance to serialize.</param>
+        /// <returns>The <see cref="PooledMemoryStream"/>.</returns>
         internal static PooledMemoryStream ToStream<T>(T item)
         {
             var ms = PooledMemoryStream.Borrow();

@@ -8,9 +8,7 @@
     /// </summary>
     public abstract class SerializedEqualsComparer<T> : EqualityComparer<T>
     {
-        /// <summary>
-        /// Serializes <paramref name="x"/> and <paramref name="y"/> and compares the bytes.
-        /// </summary>
+        /// <inheritdoc />
         public override bool Equals(T x, T y)
         {
             if (x == null && y == null)
@@ -45,10 +43,7 @@
             return true;
         }
 
-        /// <summary>
-        /// Serializes <paramref name="obj"/> and calculates hash code from the bytes.
-        /// http://stackoverflow.com/a/7244729/1069200.
-        /// </summary>
+        /// <inheritdoc />
         public override int GetHashCode(T obj)
         {
             if (obj == null)
