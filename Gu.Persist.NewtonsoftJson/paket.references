@@ -1,10 +1,11 @@
 Newtonsoft.Json
+
 group Analyzers
-AsyncUsageAnalyzers
-Gu.Analyzers
-IDisposableAnalyzers
-Microsoft.CodeAnalysis.FxCopAnalyzers
-PublicApiAnalyzer
-ReflectionAnalyzers
-StyleCop.Analyzers
-JetBrains.Annotations
+  AsyncUsageAnalyzers
+  Gu.Analyzers
+  IDisposableAnalyzers
+  Microsoft.CodeAnalysis.FxCopAnalyzers
+  PublicApiAnalyzer
+  ReflectionAnalyzers
+  StyleCop.Analyzers
+  JetBrains.Annotations

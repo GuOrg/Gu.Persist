@@ -3,5 +3,5 @@ tags save settings
 projectUrl https://github.com/JohanLarsson/Gu.Persist
 licenseUrl http://opensource.org/licenses/MIT
 
-excludedGroups
+excludedgroups
   Analyzers

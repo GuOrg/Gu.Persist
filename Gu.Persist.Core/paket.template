@@ -6,5 +6,5 @@ licenseUrl http://opensource.org/licenses/MIT
 releasenotes
   BUGFIX: Use settings when reading, saving & cloning
 
-excludedGropus
+excludedgroups
   Analyzers
