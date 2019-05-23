@@ -5,6 +5,11 @@
     <CodeAnalysisRuleSet>Gu.Persist.NewtonsoftJson.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Gu.Persist.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Gu.Persist.Core.Tests\Gu.Persist.Core.Tests.csproj" />
     <ProjectReference Include="..\Gu.Persist.Core\Gu.Persist.Core.csproj" />

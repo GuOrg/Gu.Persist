@@ -13,6 +13,11 @@
     <Description>Manages saving and reading files.</Description>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Gu.Persist.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   
   <ItemGroup>
     <AdditionalFiles Include="PublicAPI.Shipped.txt" />

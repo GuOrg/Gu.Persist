@@ -45,6 +45,12 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>Gu.Persist.Demo.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Gu.Persist.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />

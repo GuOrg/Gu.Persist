@@ -1,9 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <CodeAnalysisRuleSet>Gu.Persist.RuntimeBinary.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Gu.Persist.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\Gu.Persist.Core.Tests\Gu.Persist.Core.Tests.csproj" />
     <ProjectReference Include="..\Gu.Persist.Core\Gu.Persist.Core.csproj" />
