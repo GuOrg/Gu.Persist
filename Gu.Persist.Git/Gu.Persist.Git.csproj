@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>net46</TargetFramework>
     <CodeAnalysisRuleSet>Gu.Persist.Git.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>0.2.0.5</Version>
+    <Version>0.2.0.6</Version>
     <Authors>Johan Larsson</Authors>
     <Description>Use a git repository for backups.</Description>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
