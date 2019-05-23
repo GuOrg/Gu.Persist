@@ -1,3 +1,6 @@
+#### 0.2.0.4
+* Sign the binaries.
+
 #### 0.2.0
 * BREAKING CHANGE: Split repository in SingletonRepository & DataRepository.
 * BREAKING CHANGE: Reorder arguments in save methods to be like System.IO.File.Save.
