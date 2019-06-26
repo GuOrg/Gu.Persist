@@ -9,7 +9,7 @@ group Analyzers
   nuget Gu.Analyzers
   nuget IDisposableAnalyzers
   nuget Microsoft.CodeAnalysis.FxCopAnalyzers
-  nuget PublicApiAnalyzer prerelease
+  nuget Microsoft.CodeAnalysis.PublicApiAnalyzers
   nuget ReflectionAnalyzers prerelease
   nuget StyleCop.Analyzers prerelease
   nuget JetBrains.Annotations
