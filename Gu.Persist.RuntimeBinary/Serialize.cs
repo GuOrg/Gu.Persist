@@ -20,8 +20,7 @@
         /// <inheritdoc/>
         public override void ToStream<T>(T item, Stream stream, TSetting settings)
         {
-            var source = item as Stream;
-            if (source != null)
+            if (item is Stream source)
             {
                 source.CopyTo(stream);
                 return;

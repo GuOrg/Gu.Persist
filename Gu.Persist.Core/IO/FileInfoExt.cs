@@ -119,8 +119,7 @@
                 newFile = file.Directory.CreateFileInfoInDirectory(string.Concat(newName, file.Extension));
             }
 
-            var backupSettings = setting as IBackupSettings;
-            if (backupSettings != null)
+            if (setting is IBackupSettings backupSettings)
             {
                 var timeStamp = file.GetTimeStamp(backupSettings);
                 newFile = newFile.WithTimeStamp(timeStamp, backupSettings);

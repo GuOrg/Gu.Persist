@@ -20,7 +20,7 @@
                 }
             }
 
-            cached = default(T);
+            cached = default;
             return false;
         }
 

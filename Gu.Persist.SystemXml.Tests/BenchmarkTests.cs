@@ -51,11 +51,15 @@
         public void XmlEquals(ComparerData data)
         {
             var comparer = XmlEqualsComparer<TypicalSetting>.Default;
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             var warmup = comparer.Equals(this.setting1, this.setting2);
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             var sw = Stopwatch.StartNew();
             for (var i = 0; i < data.Times; i++)
             {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
                 var result = comparer.Equals(this.setting1, this.setting2);
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
 
             sw.Stop();
@@ -72,11 +76,15 @@
         public void GetHashCode(ComparerData data)
         {
             var comparer = XmlEqualsComparer<TypicalSetting>.Default;
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             var warmup = comparer.GetHashCode(this.setting1);
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             var sw = Stopwatch.StartNew();
             for (var i = 0; i < data.Times; i++)
             {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
                 var result = comparer.GetHashCode(this.setting1);
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             }
 
             sw.Stop();

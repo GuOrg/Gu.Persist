@@ -105,7 +105,7 @@
         /// </summary>
         public void DisposeAndDeleteFile()
         {
-            this.Stream?.Dispose();
+            this.Dispose();
             this.File.Delete();
         }
 

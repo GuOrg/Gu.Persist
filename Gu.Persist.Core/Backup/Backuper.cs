@@ -64,12 +64,22 @@
         /// <inheritdoc/>
         public virtual void Backup(LockedFile file)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             this.Backup(file.File);
         }
 
         /// <inheritdoc/>
         public virtual void Backup(FileInfo file)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.Exists(file, nameof(file));
             var backupFile = BackupFile.CreateFor(file, this.Setting);
             this.Backup(file, backupFile);
