@@ -71,10 +71,17 @@
         /// <inheritdoc/>
         public override void Rename(FileInfo oldName, FileInfo newName, bool overWrite)
         {
-            Ensure.NotNull(oldName, nameof(oldName));
-            Ensure.NotNull(newName, nameof(newName));
-            base.Rename(oldName, newName, overWrite);
+            if (oldName is null)
+            {
+                throw new ArgumentNullException(nameof(oldName));
+            }
 
+            if (newName is null)
+            {
+                throw new ArgumentNullException(nameof(newName));
+            }
+
+            base.Rename(oldName, newName, overWrite);
             this.fileCache.ChangeKey(oldName.FullName, newName.FullName, overWrite);
             if (this.Settings.IsTrackingDirty)
             {
@@ -85,7 +92,12 @@
         /// <inheritdoc/>
         public override async Task<T> ReadAsync<T>(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
+            // not checking exists, framework exception is more familiar.
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             if (this.fileCache.TryGetValue(file.FullName, out T value))
             {
                 return value;
@@ -129,7 +141,11 @@
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(FileInfo file, T item)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             this.EnsureCanSave(file, item);
             this.SaveAndCloseCore(file, item);
         }
@@ -149,7 +165,11 @@
         /// <inheritdoc/>
         protected override T ReadCore<T>(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             if (this.fileCache.TryGetValue(file.FullName, out T value))
             {
                 return value;

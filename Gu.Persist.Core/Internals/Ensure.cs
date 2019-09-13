@@ -9,7 +9,6 @@
     internal static class Ensure
     {
         [JetBrains.Annotations.ContractAnnotation("halt <= value:null")]
-        [Obsolete("Simplify.")]
         internal static void NotNull<T>(T value, string parameterName, [CallerMemberName] string caller = null)
             where T : class
         {

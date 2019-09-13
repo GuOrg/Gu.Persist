@@ -1,11 +1,12 @@
 ﻿namespace Gu.Persist.NewtonsoftJson
 {
+    using System;
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
 
     using Gu.Persist.Core;
-
+    using JetBrains.Annotations;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -116,7 +117,11 @@
         /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
         public static async Task<T> ReadAsync<T>(string fileName)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
+            if (fileName is null)
+            {
+                throw new System.ArgumentNullException(nameof(fileName));
+            }
+
             using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
             {
                 return FromStream<T>(stream);
@@ -132,7 +137,11 @@
         /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
         public static async Task<T> ReadAsync<T>(string fileName, JsonSerializerSettings settings)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
+            if (fileName is null)
+            {
+                throw new System.ArgumentNullException(nameof(fileName));
+            }
+
             using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
             {
                 return FromStream<T>(stream, settings);
@@ -170,10 +179,18 @@
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="fileName">The file name.</param>
         /// <param name="item">The <typeparamref name="T"/>.</param>
-        public static void Save<T>(string fileName, T item)
+        public static void Save<T>(string fileName, [NotNull] T item)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             Save(new FileInfo(fileName), item);
         }
 
@@ -185,8 +202,16 @@
         /// <param name="item">The instance to serialize.</param>
         public static void Save<T>(FileInfo file, T item)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             Save(file, item, null);
         }
 
@@ -199,8 +224,16 @@
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         public static void Save<T>(string fileName, T item, JsonSerializerSettings settings)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             Save(new FileInfo(fileName), item, settings);
         }
 
@@ -213,8 +246,16 @@
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         public static void Save<T>(FileInfo file, T item, JsonSerializerSettings settings)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
@@ -233,8 +274,16 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
         public static Task SaveAsync<T>(string fileName, T item)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             return SaveAsync(new FileInfo(fileName), item);
         }
 
@@ -247,8 +296,16 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
         public static async Task SaveAsync<T>(FileInfo file, T item)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             using (var stream = ToStream(item))
             {
                 await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
@@ -265,8 +322,16 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
         public static Task SaveAsync<T>(string fileName, T item, JsonSerializerSettings settings)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             return SaveAsync(new FileInfo(fileName), item, settings);
         }
 
@@ -280,8 +345,16 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
         public static async Task SaveAsync<T>(FileInfo file, T item, JsonSerializerSettings settings)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             using (var stream = ToStream(item, settings))
             {
                 await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);

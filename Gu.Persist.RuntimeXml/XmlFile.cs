@@ -7,6 +7,7 @@ namespace Gu.Persist.RuntimeXml
     using System.Threading.Tasks;
 
     using Gu.Persist.Core;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Helper class for serializing and deserializing using <see cref="DataContractSerializer"/>.
@@ -21,9 +22,13 @@ namespace Gu.Persist.RuntimeXml
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="item">The <typeparamref name="T"/>.</param>
         /// <returns>The deep clone.</returns>
-        public static T Clone<T>(T item)
+        public static T Clone<T>([NotNull] T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             using (var stream = ToStream(item))
             {
                 return FromStream<T>(stream);
@@ -38,7 +43,11 @@ namespace Gu.Persist.RuntimeXml
         /// <returns>The deserialized content.</returns>
         public static T Read<T>(string fileName)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             using (var stream = File.OpenRead(fileName))
             {
                 return FromStream<T>(stream);
@@ -53,7 +62,11 @@ namespace Gu.Persist.RuntimeXml
         /// <returns>The deserialized content.</returns>
         public static T Read<T>(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return Read<T>(file.FullName);
         }
 
@@ -65,7 +78,11 @@ namespace Gu.Persist.RuntimeXml
         /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
         public static async Task<T> ReadAsync<T>(string fileName)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
             {
                 return FromStream<T>(stream);
@@ -80,7 +97,11 @@ namespace Gu.Persist.RuntimeXml
         /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return ReadAsync<T>(file.FullName);
         }
 
@@ -92,8 +113,16 @@ namespace Gu.Persist.RuntimeXml
         /// <param name="item">The <typeparamref name="T"/>.</param>
         public static void Save<T>(string fileName, T item)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             Save(new FileInfo(fileName), item);
         }
 
@@ -105,8 +134,16 @@ namespace Gu.Persist.RuntimeXml
         /// <param name="item">The instance to serialize.</param>
         public static void Save<T>(FileInfo file, T item)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             var serializer = Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
 
             using (var stream = file.OpenCreate())
@@ -127,8 +164,16 @@ namespace Gu.Persist.RuntimeXml
         /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
         public static Task SaveAsync<T>(string fileName, T item)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             return SaveAsync(new FileInfo(fileName), item);
         }
 
@@ -141,8 +186,16 @@ namespace Gu.Persist.RuntimeXml
         /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
         public static async Task SaveAsync<T>(FileInfo file, T item)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             using (var stream = ToStream(item))
             {
                 await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);

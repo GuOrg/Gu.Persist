@@ -12,13 +12,12 @@
 
         public DirtyTracker(ICloner cloner)
         {
-            Ensure.NotNull(cloner, nameof(cloner));
-            this.cloner = cloner;
+            this.cloner = cloner ?? throw new ArgumentNullException(nameof(cloner));
         }
 
         public void Track<T>(string fullFileName, T item)
         {
-            Ensure.NotNull(fullFileName, nameof(fullFileName));
+            Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
             var clone = item == null
                             ? (object)null
                             : this.cloner.Clone(item);
@@ -30,8 +29,8 @@
 
         public void Rename(string oldName, string newName, bool overWrite)
         {
-            Ensure.NotNull(oldName, nameof(oldName));
-            Ensure.NotNull(newName, nameof(newName));
+            Ensure.NotNullOrEmpty(oldName, nameof(oldName));
+            Ensure.NotNullOrEmpty(newName, nameof(newName));
             lock (this.gate)
             {
                 this.clones.ChangeKey(oldName, newName, overWrite);

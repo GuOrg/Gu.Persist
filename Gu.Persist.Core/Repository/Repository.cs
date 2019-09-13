@@ -25,6 +25,7 @@ namespace Gu.Persist.Core
         /// If not a new default setting is created and saved.
         /// </summary>
         /// <param name="settingsCreator">Creates settings if file is missing.</param>
+        /// <param name="serialize">The <see cref="Serialize{TSetting}"/>.</param>
         protected Repository(Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
         {
             if (settingsCreator is null)
@@ -85,6 +86,7 @@ namespace Gu.Persist.Core
         /// Initializes a new instance of the <see cref="Repository{TSetting}"/> class.
         /// Creates a new <see cref="Repository{TSetting}"/> with <paramref name="settings"/>.
         /// </summary>
+        /// <param name="serialize">The <see cref="Serialize{TSetting}"/>.</param>
         protected Repository(TSetting settings, Serialize<TSetting> serialize)
             : this(settings, Backup.Backuper.Create(settings.BackupSettings), serialize)
         {
@@ -98,11 +100,15 @@ namespace Gu.Persist.Core
         /// The backuper.
         /// Note that a custom backuper may not use the backup settings.
         /// </param>
+        /// <param name="serialize">The <see cref="Serialize{TSetting}"/>.</param>
         protected Repository(TSetting settings, IBackuper backuper, Serialize<TSetting> serialize)
         {
-            Ensure.NotNull<object>(settings, nameof(settings));
-            Ensure.NotNull(serialize, nameof(serialize));
-            this.serialize = serialize;
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            this.serialize = serialize ?? throw new ArgumentNullException(nameof(serialize));
             new DirectoryInfo(settings.Directory).CreateIfNotExists();
             this.Settings = settings;
             this.Backuper = backuper;
@@ -169,7 +175,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void DeleteBackups(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             this.Backuper.DeleteBackups(file);
         }
 
@@ -190,7 +200,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual bool Exists(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return this.ExistsCore(file);
         }
 
@@ -212,7 +226,12 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual async Task<T> ReadAsync<T>(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file)); // not checking exists, framework exception is more familiar.
+            // not checking exists, framework exception is more familiar.
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             var value = await FileHelper.ReadAsync<T, TSetting>(file, this.Settings, this.serialize)
                                         .ConfigureAwait(false);
             if (this.Settings.IsTrackingDirty)
@@ -247,7 +266,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         Task<Stream> IFileInfoAsyncStreamRepository.ReadAsync(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return file.ReadAsync();
         }
 
@@ -262,7 +285,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual T Read<T>(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return this.ReadCore<T>(file);
         }
 
@@ -276,7 +303,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         Stream IFileInfoStreamRepository.Read(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return file.OpenRead();
         }
 
@@ -291,7 +322,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual T ReadOrCreate<T>(Func<T> creator)
         {
-            Ensure.NotNull(creator, nameof(creator));
+            if (creator is null)
+            {
+                throw new ArgumentNullException(nameof(creator));
+            }
+
             return this.ReadOrCreateCore(creator);
         }
 
@@ -299,7 +334,11 @@ namespace Gu.Persist.Core
         public virtual T ReadOrCreate<T>(string fileName, Func<T> creator)
         {
             Ensure.IsValidFileName(fileName, nameof(fileName));
-            Ensure.NotNull(creator, nameof(creator));
+            if (creator is null)
+            {
+                throw new ArgumentNullException(nameof(creator));
+            }
+
             var file = this.GetFileInfoCore(fileName);
             return this.ReadOrCreate(file, creator);
         }
@@ -307,8 +346,16 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual T ReadOrCreate<T>(FileInfo file, Func<T> creator)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(creator, nameof(creator));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (creator is null)
+            {
+                throw new ArgumentNullException(nameof(creator));
+            }
+
             return this.ReadOrCreateCore(file, creator);
         }
 
@@ -332,7 +379,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void Save<T>(FileInfo file, T item)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             this.EnsureCanSave(file, item);
             this.SaveCore(file, item);
         }
@@ -340,8 +391,16 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void Save<T>(FileInfo file, FileInfo tempFile, T item)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(tempFile, nameof(tempFile));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (tempFile is null)
+            {
+                throw new ArgumentNullException(nameof(tempFile));
+            }
+
             this.EnsureCanSave(file, item);
             this.SaveCore(file, tempFile, item);
         }
@@ -366,7 +425,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(FileInfo file, T item)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             this.EnsureCanSave(file, item);
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
             return this.SaveAsync(file, tempFile, item);
@@ -375,8 +438,15 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual async Task SaveAsync<T>(FileInfo file, FileInfo tempFile, T item)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(tempFile, nameof(tempFile));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (tempFile is null)
+            {
+                throw new ArgumentNullException(nameof(tempFile));
+            }
 
             this.EnsureCanSave(file, item);
             this.CacheAndTrackCore(file, item);
@@ -411,7 +481,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         void IFileInfoStreamRepository.Save(FileInfo file, Stream stream)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             this.EnsureCanSave(file, stream);
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
             this.SaveStreamCore(file, tempFile, stream);
@@ -420,7 +494,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         void IFileInfoStreamRepository.Save(FileInfo file, FileInfo tempFile, Stream stream)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             this.EnsureCanSave(file, stream);
             this.SaveStreamCore(file, tempFile, stream);
         }
@@ -447,7 +525,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         Task IFileInfoAsyncStreamRepository.SaveAsync(FileInfo file, Stream stream)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             this.EnsureCanSave(file, stream);
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
             return this.SaveStreamCoreAsync(file, tempFile, stream);
@@ -456,7 +538,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         Task IFileInfoAsyncStreamRepository.SaveAsync(FileInfo file, FileInfo tempFile, Stream stream)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             this.EnsureCanSave(file, stream);
             return this.SaveStreamCoreAsync(file, tempFile, stream);
         }
@@ -512,12 +598,15 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual bool IsDirty<T>(FileInfo file, T item)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             if (!this.Settings.IsTrackingDirty)
             {
                 throw new InvalidOperationException("This repository is not tracking dirty.");
             }
-
-            Ensure.NotNull(file, nameof(file));
 
             return this.IsDirty(file, item, this.serialize.DefaultStructuralEqualityComparer<T>(this.Settings));
         }
@@ -525,12 +614,16 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual bool IsDirty<T>(FileInfo file, T item, IEqualityComparer<T> comparer)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             if (!this.Settings.IsTrackingDirty)
             {
                 throw new InvalidOperationException("This repository is not tracking dirty.");
             }
 
-            Ensure.NotNull(file, nameof(file));
             if (!this.Settings.IsTrackingDirty)
             {
                 throw new InvalidOperationException("Cannot check IsDirty if not Setting.IsTrackingDirty");
@@ -578,7 +671,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public bool CanRename(FileInfo oldName, string newName)
         {
-            Ensure.NotNull(oldName, nameof(oldName));
+            if (oldName is null)
+            {
+                throw new ArgumentNullException(nameof(oldName));
+            }
+
             Ensure.IsValidFileName(newName, nameof(newName));
             var newFile = this.GetFileInfoCore(newName);
             return this.CanRename(oldName, newFile);
@@ -596,8 +693,16 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public bool CanRename(FileInfo oldName, FileInfo newName)
         {
-            Ensure.NotNull(oldName, nameof(oldName));
-            Ensure.NotNull(newName, nameof(newName));
+            if (oldName is null)
+            {
+                throw new ArgumentNullException(nameof(oldName));
+            }
+
+            if (newName is null)
+            {
+                throw new ArgumentNullException(nameof(newName));
+            }
+
             oldName.Refresh();
             if (!oldName.Exists)
             {
@@ -622,8 +727,16 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void Rename(FileInfo oldName, FileInfo newName, bool overWrite)
         {
-            Ensure.NotNull(oldName, nameof(oldName));
-            Ensure.NotNull(newName, nameof(newName));
+            if (oldName is null)
+            {
+                throw new ArgumentNullException(nameof(oldName));
+            }
+
+            if (newName is null)
+            {
+                throw new ArgumentNullException(nameof(newName));
+            }
+
             var pairs = new List<RenamePair> { new RenamePair(oldName, newName) };
             var oldSoftDelete = oldName.GetSoftDeleteFileFor();
             if (oldSoftDelete?.Exists == true)
@@ -718,7 +831,11 @@ namespace Gu.Persist.Core
         /// <returns>The deserialized instance.</returns>
         protected virtual T ReadCore<T>(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             var value = file.Read<T, TSetting>(this.Settings, this.serialize);
             if (this.Settings.IsTrackingDirty)
             {
@@ -737,7 +854,11 @@ namespace Gu.Persist.Core
         /// <returns>The deserialized instance.</returns>
         protected T ReadOrCreateCore<T>(Func<T> creator)
         {
-            Ensure.NotNull(creator, nameof(creator));
+            if (creator is null)
+            {
+                throw new ArgumentNullException(nameof(creator));
+            }
+
             var file = this.GetFileInfoCore<T>();
             return this.ReadOrCreateCore(file, creator);
         }
@@ -752,8 +873,16 @@ namespace Gu.Persist.Core
         /// <returns>The deserialized instance.</returns>
         protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(creator, nameof(creator));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (creator is null)
+            {
+                throw new ArgumentNullException(nameof(creator));
+            }
+
             T item;
             if (this.ExistsCore<T>())
             {
