@@ -15,6 +15,8 @@
         /// If the repository is a <see cref="ISingletonRepository"/> the repository manages a singleton instance that is returned in future reads.
         /// Also for <see cref="ISingletonRepository"/> a check is made to ensure that the same instance is saved.
         /// </remarks>
+        /// <typeparam name="T">The type to read from the file.</typeparam>
+        /// <returns>The deserialized contents of the file.</returns>
         T Read<T>();
 
         /// <summary>
@@ -27,6 +29,8 @@
         /// Also for <see cref="ISingletonRepository"/> a check is made to ensure that the same instance is saved.
         /// </remarks>
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="item">The item.</param>
         void Save<T>(T item);
     }
 }

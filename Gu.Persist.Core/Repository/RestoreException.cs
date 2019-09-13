@@ -27,7 +27,7 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// The exception that was thrown during the failed save the triggered the restore.
+        /// Gets the exception that was thrown during the failed save the triggered the restore.
         /// </summary>
         public Exception SaveException { get; }
 

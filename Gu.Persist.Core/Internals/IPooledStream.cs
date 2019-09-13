@@ -5,7 +5,7 @@
     public interface IPooledStream : IDisposable
     {
         /// <summary>
-        /// See <see cref="System.IO.MemoryStream.Length"/>.
+        /// Gets the <see cref="System.IO.MemoryStream.Length"/>.
         /// </summary>
         long Length { get; }
 

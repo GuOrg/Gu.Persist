@@ -16,6 +16,9 @@
         /// If the repository is a <see cref="ISingletonRepository"/> the repository manages a singleton instance that is returned in future reads.
         /// Also for <see cref="ISingletonRepository"/> a check is made to ensure that the same instance is saved.
         /// </remarks>
+        /// <typeparam name="T">The type to deserialize to.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
         Task<T> ReadAsync<T>(FileInfo file);
 
         /// <summary>
@@ -26,6 +29,10 @@
         /// If the repository is a <see cref="ISingletonRepository"/> the repository manages a singleton instance that is returned in future reads.
         /// Also for <see cref="ISingletonRepository"/> a check is made to ensure that the same instance is saved.
         /// </remarks>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="item">The item.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task SaveAsync<T>(FileInfo file, T item);
     }
 }

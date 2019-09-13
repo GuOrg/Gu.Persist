@@ -197,6 +197,7 @@
         /// </remarks>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="item">The item.</param>
         protected virtual void Cache<T>(FileInfo file, T item)
         {
             this.CacheCore(file, item);
@@ -208,8 +209,9 @@
         /// <remarks>
         /// Calls <see cref="CacheCore{T}(FileInfo,T)"/>.
         /// </remarks>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         protected void CacheCore<T>(FileInfo file, [NotNull] T item)
         {
             if (file is null)

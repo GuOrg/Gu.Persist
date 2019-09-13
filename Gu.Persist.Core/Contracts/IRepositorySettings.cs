@@ -15,7 +15,7 @@ namespace Gu.Persist.Core
         string TempExtension { get; }
 
         /// <summary>
-        /// Gets if the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes.
+        /// Gets a value indicating whether the repository keeps a cache of last saved/read bytes to use for comparing if instance has changes.
         /// </summary>
         bool IsTrackingDirty { get; }
     }

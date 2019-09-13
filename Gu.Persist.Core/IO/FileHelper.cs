@@ -15,7 +15,7 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">The type to read from the file.</typeparam>
         /// <typeparam name="TSettings">The type of <paramref name="setting"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="setting">The <typeparamref name="TSettings"/>.</param>

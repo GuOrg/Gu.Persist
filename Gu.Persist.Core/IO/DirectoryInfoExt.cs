@@ -46,7 +46,7 @@
         }
 
         /// <summary>
-        /// Creates a fileinfo in <paramref name="directory"/>.
+        /// Creates a <see cref="FileInfo"/> in <paramref name="directory"/>.
         /// </summary>
         /// <returns>A FileInfo in the directory.</returns>
         internal static FileInfo CreateFileInfoInDirectory(this DirectoryInfo directory, string fileName)

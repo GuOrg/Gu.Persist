@@ -11,6 +11,7 @@
         /// <summary>
         /// Serialize <paramref name="item"/> to a Stream.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="item">
         /// This can be either an instance of <typeparamref name="T"/> or a <see cref="Stream"/>.
         /// </param>
@@ -20,6 +21,7 @@
         /// <summary>
         /// Serialize <paramref name="item"/> to a Stream.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="item">
         /// This can be either an instance of <typeparamref name="T"/> or a <see cref="Stream"/>.
         /// </param>
@@ -32,6 +34,7 @@
         /// <summary>
         /// Deserialize <paramref name="stream"/> to an instance of <typeparamref name="T"/>.
         /// </summary>
+        /// <typeparam name="T">The type to read from the file.</typeparam>
         /// <param name="stream">
         /// The stream to read from.
         /// </param>
@@ -41,11 +44,13 @@
         /// <summary>
         /// Serialize then deserialize <paramref name="item"/> to create a deep copy.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         public abstract T Clone<T>(T item, TSettings settings);
 
         /// <summary>
         /// Gets the comparer to use when checking <see cref="IDirty.IsDirty{T}(T)"/>.
         /// </summary>
+        /// <typeparam name="T">The type to read from the file.</typeparam>
         public abstract IEqualityComparer<T> DefaultStructuralEqualityComparer<T>(TSettings settings);
     }
 }

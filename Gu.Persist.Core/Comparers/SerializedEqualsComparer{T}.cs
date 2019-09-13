@@ -6,6 +6,7 @@
     /// <summary>
     /// A base class for comparers using serialization.
     /// </summary>
+    /// <typeparam name="T">The type to read from the file.</typeparam>
     public abstract class SerializedEqualsComparer<T> : EqualityComparer<T>
     {
         /// <inheritdoc />
@@ -70,6 +71,8 @@
         /// <summary>
         /// Serialize <paramref name="item"/> and return the bytes.
         /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>A <see cref="IPooledStream"/>.</returns>
         protected abstract IPooledStream GetStream(T item);
     }
 }

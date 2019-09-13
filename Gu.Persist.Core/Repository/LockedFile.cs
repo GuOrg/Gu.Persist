@@ -18,12 +18,12 @@
         }
 
         /// <summary>
-        /// The locked file.
+        /// Gets the locked file.
         /// </summary>
         public FileInfo File { get; }
 
         /// <summary>
-        /// The stream locking the <see cref="File"/>
+        /// Gets the stream locking the <see cref="File"/>
         /// Can be null if file does not exits.
         /// </summary>
         public Stream Stream { get; }

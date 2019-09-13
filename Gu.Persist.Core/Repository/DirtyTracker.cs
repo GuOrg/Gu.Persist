@@ -61,6 +61,9 @@
         /// <summary>
         /// Only checks the cache, does not read from file.
         /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="comparer">The <see cref="IEqualityComparer{T}"/>.</param>
         public bool IsDirty<T>(string fullFileName, T item, IEqualityComparer<T> comparer)
         {
             Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));

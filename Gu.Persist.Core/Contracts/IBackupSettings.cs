@@ -15,7 +15,7 @@
         ////bool Hidden { get; }
 
         /// <summary>
-        /// Gest the number of backups to keep.
+        /// Gets the number of backups to keep.
         /// If 0 an unlimited amount of backups are kept.
         /// </summary>
         int NumberOfBackups { get; }

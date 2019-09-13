@@ -16,6 +16,7 @@
         /// This method reads the entire file into memory so it will be memory consuming for large files.
         /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>
+        /// <typeparam name="T">The type to read from the file.</typeparam>
         Stream Read<T>();
 
         /// <summary>
@@ -25,6 +26,8 @@
         /// <remarks>
         /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>
+        /// <typeparam name="T">The type to save to the file.</typeparam>
+        /// <param name="stream">The <see cref="Stream"/>.</param>
         void Save<T>(Stream stream);
     }
 }

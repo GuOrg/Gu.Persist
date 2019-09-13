@@ -3,7 +3,7 @@
   "settings": {
     "documentationRules": {
       "companyName": "PlaceholderCompany",
-      "documentInternalElements": false,
+      "documentInternalElements": false
     }
   }
 }
