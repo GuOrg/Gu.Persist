@@ -11,6 +11,11 @@
     {
         public static BackupSettings BackupSettings(DirectoryInfo directory)
         {
+            if (directory is null)
+            {
+                throw new System.ArgumentNullException(nameof(directory));
+            }
+
             return new BackupSettings(
                        directory: directory.FullName,
                        extension: Core.BackupSettings.DefaultExtension,
@@ -21,6 +26,11 @@
 
         public static RepositorySettings RepositorySettings(DirectoryInfo directory)
         {
+            if (directory is null)
+            {
+                throw new System.ArgumentNullException(nameof(directory));
+            }
+
             return new RepositorySettings(
                 directory: directory.FullName,
                 isTrackingDirty: false,
@@ -29,6 +39,11 @@
 
         public static DataRepositorySettings DataRepositorySettings(DirectoryInfo directory)
         {
+            if (directory is null)
+            {
+                throw new System.ArgumentNullException(nameof(directory));
+            }
+
             return new DataRepositorySettings(
                        directory: directory.FullName,
                        isTrackingDirty: false,

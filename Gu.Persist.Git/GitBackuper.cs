@@ -39,6 +39,11 @@
         /// <inheritdoc/>
         public void Backup(LockedFile file)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             file.Close();
             _ = Git.StageAndCommit(file.File, allowEmptyCommit: false);
         }
@@ -46,18 +51,33 @@
         /// <inheritdoc/>
         public void Backup(FileInfo file)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             _ = Git.StageAndCommit(file, allowEmptyCommit: false);
         }
 
         /// <inheritdoc/>
         public void Backup(FileInfo file, FileInfo backup)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             _ = Git.StageAndCommit(file, allowEmptyCommit: false);
         }
 
         /// <inheritdoc/>
         public bool CanRestore(FileInfo file)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             var status = Git.GetStatus(file);
             switch (status)
             {

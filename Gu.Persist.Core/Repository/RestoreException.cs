@@ -35,6 +35,11 @@ namespace Gu.Persist.Core
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            if (info is null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
+
             info.AddValue(nameof(this.SaveException), this.SaveException, typeof(Exception));
             base.GetObjectData(info, context);
         }

@@ -25,9 +25,13 @@
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="item">The <typeparamref name="T"/>.</param>
         /// <returns>The deep clone.</returns>
-        public static T Clone<T>(T item)
+        public static T Clone<T>([NotNull] T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             using (var stream = ToStream(item))
             {
                 return FromStream<T>(stream);
@@ -41,9 +45,18 @@
         /// <param name="item">The <typeparamref name="T"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deep clone.</returns>
-        public static T Clone<T>(T item, JsonSerializerSettings settings)
+        public static T Clone<T>([NotNull] T item, JsonSerializerSettings settings)
         {
-            Ensure.NotNull<object>(item, nameof(item));
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
             using (var stream = ToStream(item, settings))
             {
                 return FromStream<T>(stream, settings);
@@ -58,7 +71,11 @@
         /// <returns>The deserialized content.</returns>
         public static T Read<T>(string fileName)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             using (var stream = File.OpenRead(fileName))
             {
                 return FromStream<T>(stream);
@@ -73,7 +90,11 @@
         /// <returns>The deserialized content.</returns>
         public static T Read<T>(FileInfo file)
         {
-            Ensure.Exists(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             using (var stream = File.OpenRead(file.FullName))
             {
                 return FromStream<T>(stream);
@@ -89,7 +110,11 @@
         /// <returns>The deserialized content.</returns>
         public static T Read<T>(string fileName, JsonSerializerSettings settings)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             using (var stream = File.OpenRead(fileName))
             {
                 return FromStream<T>(stream, settings);
@@ -105,7 +130,11 @@
         /// <returns>The deserialized content.</returns>
         public static T Read<T>(FileInfo file, JsonSerializerSettings settings)
         {
-            Ensure.Exists(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return Read<T>(file.FullName, settings);
         }
 

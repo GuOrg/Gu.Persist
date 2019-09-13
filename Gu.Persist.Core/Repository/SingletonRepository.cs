@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Threading.Tasks;
+    using JetBrains.Annotations;
 
     public abstract class SingletonRepository<TSetting> : Repository<TSetting>, ISingletonRepository
         where TSetting : IRepositorySettings
@@ -207,8 +208,20 @@
         /// <remarks>
         /// Calls <see cref="CacheCore{T}(FileInfo,T)"/>.
         /// </remarks>
-        protected void CacheCore<T>(FileInfo file, T item)
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="item">The <see cref="T"/>.</param>
+        protected void CacheCore<T>(FileInfo file, [NotNull] T item)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             if (this.fileCache.TryGetValue(file.FullName, out T cached))
             {
                 if (!ReferenceEquals(item, cached))
@@ -224,12 +237,22 @@
 
         protected override void CacheAndTrackCore<T>(FileInfo file, T item)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             this.Cache(file, item);
             base.CacheAndTrackCore(file, item);
         }
 
         protected override void EnsureCanSave<T>(FileInfo file, T item)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             if (item == null)
             {
                 throw new ArgumentNullException($"{this.GetType().Name} cannot save null.");

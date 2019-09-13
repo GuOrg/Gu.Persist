@@ -932,6 +932,11 @@ namespace Gu.Persist.Core
         /// <param name="item">The <typeparamref name="T"/> to serialize and save.</param>
         protected void SaveCore<T>(FileInfo file, T item)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
             this.SaveCore(file, tempFile, item);
         }
@@ -1021,6 +1026,11 @@ namespace Gu.Persist.Core
         /// <returns>True if the file exists.</returns>
         protected bool ExistsCore(FileInfo file)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             file.Refresh();
             return file.Exists;
         }
@@ -1033,6 +1043,11 @@ namespace Gu.Persist.Core
         /// <param name="item">The <typeparamref name="T"/>.</param>
         protected virtual void CacheAndTrackCore<T>(FileInfo file, T item)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             if (this.Settings.IsTrackingDirty)
             {
                 this.Tracker.Track(file.FullName, item);
