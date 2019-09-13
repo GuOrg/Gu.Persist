@@ -119,7 +119,7 @@
         {
             if (fileName is null)
             {
-                throw new System.ArgumentNullException(nameof(fileName));
+                throw new ArgumentNullException(nameof(fileName));
             }
 
             using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
@@ -139,7 +139,7 @@
         {
             if (fileName is null)
             {
-                throw new System.ArgumentNullException(nameof(fileName));
+                throw new ArgumentNullException(nameof(fileName));
             }
 
             using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
@@ -156,7 +156,11 @@
         /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
-            Ensure.Exists(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return ReadAsync<T>(file.FullName);
         }
 
@@ -169,7 +173,11 @@
         /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
         public static Task<T> ReadAsync<T>(FileInfo file, JsonSerializerSettings settings)
         {
-            Ensure.Exists(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return ReadAsync<T>(file.FullName, settings);
         }
 

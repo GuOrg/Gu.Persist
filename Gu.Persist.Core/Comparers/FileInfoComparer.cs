@@ -7,11 +7,24 @@
     /// <inheritdoc/>
     public sealed class FileInfoComparer : EqualityComparer<FileInfo>
     {
+        /// <summary>
+        /// The default instance.
+        /// </summary>
         public new static readonly FileInfoComparer Default = new FileInfoComparer();
 
         /// <inheritdoc/>
         public override bool Equals(FileInfo x, FileInfo y)
         {
+            if (x is null)
+            {
+                throw new ArgumentNullException(nameof(x));
+            }
+
+            if (y is null)
+            {
+                throw new ArgumentNullException(nameof(y));
+            }
+
             x.Refresh();
             y.Refresh();
             return string.Equals(x.FullName, y.FullName, StringComparison.OrdinalIgnoreCase);

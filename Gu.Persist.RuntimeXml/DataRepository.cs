@@ -59,7 +59,7 @@ namespace Gu.Persist.RuntimeXml
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
         /// <param name="settings">The <see cref="Core.DataRepositorySettings"/>.</param>
-        public DataRepository(Core.DataRepositorySettings settings)
+        public DataRepository(DataRepositorySettings settings)
             : base(settings, Serialize<DataRepositorySettings>.Default)
         {
         }

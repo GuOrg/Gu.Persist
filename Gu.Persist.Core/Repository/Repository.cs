@@ -684,6 +684,16 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public void Rename(FileInfo oldName, string newName, bool overWrite)
         {
+            if (oldName is null)
+            {
+                throw new ArgumentNullException(nameof(oldName));
+            }
+
+            if (newName is null)
+            {
+                throw new ArgumentNullException(nameof(newName));
+            }
+
             Ensure.Exists(oldName, nameof(oldName));
             Ensure.IsValidFileName(newName, nameof(newName));
             var newFile = this.GetFileInfoCore(newName);

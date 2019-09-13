@@ -882,6 +882,19 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
+        public void CanRenameTypeWhenIllegalName()
+        {
+            this.TypeFiles.File.CreatePlaceHolder();
+            if (this.IsBackingUp)
+            {
+                this.TypeFiles.Backup.CreatePlaceHolder();
+            }
+
+            var exception = Assert.Throws<ArgumentException>(() => this.Repository.CanRename<DummySerializable>("NewName<>"));
+            Assert.AreEqual("newName\r\nParameter name: NewName<> is not a valid filename. Contains: {'<', '>'}.", exception.Message);
+        }
+
+        [Test]
         public void CanRenameFileNameHappyPath()
         {
             this.NamedFiles.File.CreatePlaceHolder();

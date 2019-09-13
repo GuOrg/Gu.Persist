@@ -90,7 +90,7 @@ namespace Gu.Persist.SystemXml
         {
             var field = GetBackingField<Core.DataRepositorySettings>(propertyName) ??
                         GetBackingField<Core.RepositorySettings>(propertyName) ??
-                        GetBackingField<Core.FileSettings>(propertyName);
+                        GetBackingField<FileSettings>(propertyName);
             Ensure.NotNull(field, nameof(field));
             field.SetValue(this, value);
         }

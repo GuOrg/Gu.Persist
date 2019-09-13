@@ -8,7 +8,7 @@
     /// <summary>
     /// For locking files in a <see cref="SaveTransaction"/>.
     /// </summary>
-    [System.Diagnostics.DebuggerDisplay("{File.Name}")]
+    [DebuggerDisplay("{File.Name}")]
     public sealed class LockedFile : IDisposable
     {
         private LockedFile(FileInfo file, Stream stream)
@@ -65,6 +65,16 @@
         /// </summary>
         public static LockedFile Create(FileInfo file, Func<FileInfo, Stream> stream)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             return new LockedFile(file, stream(file));
         }
 
@@ -76,6 +86,11 @@
             if (file == null)
             {
                 return null;
+            }
+
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
             }
 
             if (file.Exists)

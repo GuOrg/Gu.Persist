@@ -60,7 +60,7 @@ namespace Gu.Persist.SystemXml
         /// Initializes a new instance of the <see cref="DataRepository"/> class.
         /// </summary>
         /// <param name="settings">The <see cref="Core.IRepositorySettings"/>.</param>
-        public DataRepository(Core.IRepositorySettings settings)
+        public DataRepository(IRepositorySettings settings)
             : base(Create(settings), Serialize<DataRepositorySettings>.Default)
         {
         }
@@ -70,7 +70,7 @@ namespace Gu.Persist.SystemXml
         /// </summary>
         /// <param name="settings">The <see cref="Core.IRepositorySettings"/>.</param>
         /// <param name="backuper">The <see cref="IBackuper"/>.</param>
-        public DataRepository(Core.IRepositorySettings settings, IBackuper backuper)
+        public DataRepository(IRepositorySettings settings, IBackuper backuper)
             : base(Create(settings), backuper, Serialize<DataRepositorySettings>.Default)
         {
         }

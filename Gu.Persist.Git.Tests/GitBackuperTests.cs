@@ -131,12 +131,12 @@
             var file = this.directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
             Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));
             this.repository.Save(file, this.dummy);
-            var json = System.IO.File.ReadAllText(file.FullName);
+            var json = File.ReadAllText(file.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
             Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));
             this.dummy.Value++;
             JsonFile.Save(file, this.dummy);
-            json = System.IO.File.ReadAllText(file.FullName);
+            json = File.ReadAllText(file.FullName);
             Assert.AreEqual("{\"Value\":2}", json);
             Assert.AreEqual(true, this.repository.Backuper.CanRestore(file), "CanRestore after save");
             Assert.AreEqual(true, this.repository.Backuper.TryRestore(file), "TryRestore");

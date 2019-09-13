@@ -61,7 +61,7 @@ namespace Gu.Persist.RuntimeBinary
         /// Initializes a new instance of the <see cref="SingletonRepository"/> class.
         /// </summary>
         /// <param name="settings">The <see cref="Core.RepositorySettings"/>.</param>
-        public SingletonRepository(Core.RepositorySettings settings)
+        public SingletonRepository(RepositorySettings settings)
             : base(settings, Serialize<RepositorySettings>.Default)
         {
         }
