@@ -9,6 +9,7 @@
     internal static class Ensure
     {
         [JetBrains.Annotations.ContractAnnotation("halt <= value:null")]
+        [Obsolete("Simplify.")]
         internal static void NotNull<T>(T value, string parameterName, [CallerMemberName] string caller = null)
             where T : class
         {
@@ -58,7 +59,6 @@
         // ReSharper disable once UnusedMember.Global
         internal static void HasExtension(FileInfo file, string extension, string parameterName, string message = null)
         {
-            NotNull(file, nameof(file));
             NotNullOrEmpty(extension, nameof(extension));
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (!string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase))
@@ -74,7 +74,6 @@
 
         internal static void ExtensionIsNot(FileInfo file, string extension, string parameterName, string message = null)
         {
-            NotNull(file, "file");
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase))
             {
@@ -89,8 +88,6 @@
 
         internal static void ExtensionIsNotAnyOf(FileInfo file, string[] extensions, string parameterName, string message = null)
         {
-            NotNull(file, "file");
-            NotNull(extensions, "extensions");
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (extensions.Any(x => string.Equals(file.Extension, x, StringComparison.OrdinalIgnoreCase)))
             {
@@ -105,7 +102,6 @@
 
         internal static void Exists(FileInfo file, string message = null)
         {
-            NotNull(file, "file");
             file.Refresh();
             if (!file.Exists)
             {
@@ -120,7 +116,6 @@
 
         internal static void DoesNotExist(FileInfo file, string message = null)
         {
-            NotNull(file, "file");
             file.Refresh();
             if (file.Exists)
             {

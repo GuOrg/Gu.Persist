@@ -74,7 +74,6 @@
 
         internal static FileInfo WithAppendedExtension(this FileInfo file, string extension)
         {
-            Ensure.NotNull(file, nameof(file));
             Ensure.NotNullOrEmpty(extension, nameof(extension));
             extension = FileHelper.PrependDotIfMissing(extension);
             return new FileInfo(string.Concat(file.FullName, extension));
@@ -82,7 +81,6 @@
 
         internal static FileInfo WithRemovedExtension(this FileInfo file, string extension)
         {
-            Ensure.NotNull(file, nameof(file));
             Ensure.NotNullOrEmpty(extension, nameof(extension));
             var ext = Path.GetExtension(file.FullName);
             extension = FileHelper.PrependDotIfMissing(extension);
@@ -141,8 +139,6 @@
 
         internal static DateTime GetTimeStamp(this FileInfo file, IBackupSettings setting)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(setting, nameof(setting));
             if (setting.TimeStampFormat == null)
             {
                 return file.CreationTime;
@@ -163,9 +159,6 @@
 
         internal static FileInfo WithTimeStamp(this FileInfo file, DateTime time, IBackupSettings setting)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(setting, nameof(setting));
-
             if (string.IsNullOrWhiteSpace(setting.TimeStampFormat) && setting.NumberOfBackups <= 1)
             {
                 return file;
@@ -178,8 +171,6 @@
 
         internal static FileInfo WithRemovedTimeStamp(this FileInfo file, IBackupSettings setting)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(setting, nameof(setting));
             if (setting.TimeStampFormat == null)
             {
                 return file;

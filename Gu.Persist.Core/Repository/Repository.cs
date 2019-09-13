@@ -27,9 +27,12 @@ namespace Gu.Persist.Core
         /// <param name="settingsCreator">Creates settings if file is missing.</param>
         protected Repository(Func<TSetting> settingsCreator, Serialize<TSetting> serialize)
         {
-            Ensure.NotNull(settingsCreator, nameof(settingsCreator));
-            Ensure.NotNull(serialize, nameof(serialize));
-            this.serialize = serialize;
+            if (settingsCreator is null)
+            {
+                throw new ArgumentNullException(nameof(settingsCreator));
+            }
+
+            this.serialize = serialize ?? throw new ArgumentNullException(nameof(serialize));
             this.Settings = settingsCreator();
             _ = Directory.CreateDirectory(this.Settings.Directory);
             if (this.Settings.IsTrackingDirty)
@@ -58,12 +61,16 @@ namespace Gu.Persist.Core
         /// The backuper.
         /// Note that a custom backuper may not use the backup settings.
         /// </param>
+        /// <param name="serialize">The <see cref="Serialize{TSetting}"/>.</param>
         protected Repository(Func<TSetting> settingsCreator, IBackuper backuper, Serialize<TSetting> serialize)
         {
-            Ensure.NotNull(settingsCreator, nameof(settingsCreator));
-            Ensure.NotNull(backuper, nameof(backuper));
-            Ensure.NotNull(serialize, nameof(serialize));
-            this.serialize = serialize;
+            if (settingsCreator is null)
+            {
+                throw new ArgumentNullException(nameof(settingsCreator));
+            }
+
+            this.serialize = serialize ?? throw new ArgumentNullException(nameof(serialize));
+            this.Backuper = backuper ?? throw new ArgumentNullException(nameof(backuper));
             this.Settings = settingsCreator();
             _ = Directory.CreateDirectory(this.Settings.Directory);
             if (this.Settings.IsTrackingDirty)
@@ -71,7 +78,6 @@ namespace Gu.Persist.Core
                 this.Tracker = new DirtyTracker(this);
             }
 
-            this.Backuper = backuper;
             this.Settings = this.ReadOrCreateCore(() => this.Settings);
         }
 

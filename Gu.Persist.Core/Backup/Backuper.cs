@@ -9,8 +9,7 @@
     {
         protected Backuper(IBackupSettings setting)
         {
-            Ensure.NotNull(setting, nameof(setting));
-            this.Setting = setting;
+            this.Setting = setting ?? throw new ArgumentNullException(nameof(setting));
             new DirectoryInfo(setting.Directory).CreateIfNotExists();
         }
 
@@ -44,8 +43,12 @@
         /// <inheritdoc/>
         public virtual bool BeforeSave(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.ExtensionIsNotAnyOf(file, this.BackupExtensions, "file");
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            Ensure.ExtensionIsNotAnyOf(file, this.BackupExtensions, nameof(file));
             file.Refresh();
             if (!file.Exists)
             {
@@ -88,14 +91,28 @@
         /// <inheritdoc/>
         public virtual void Backup(FileInfo file, FileInfo backup)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (backup is null)
+            {
+                throw new ArgumentNullException(nameof(backup));
+            }
+
             Ensure.Exists(file, nameof(file));
-            Ensure.NotNull(backup, nameof(backup));
             FileHelper.Backup(file, backup);
         }
 
         /// <inheritdoc/>
         public bool CanRestore(FileInfo file)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             var softDelete = file.GetSoftDeleteFileFor();
             if (softDelete.Exists)
             {
@@ -109,7 +126,11 @@
         /// <inheritdoc/>
         public virtual bool TryRestore(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.ExtensionIsNotAnyOf(file, this.BackupExtensions, "file");
             Ensure.DoesNotExist(file);
 
@@ -142,7 +163,11 @@
         /// <inheritdoc/>
         public virtual void AfterSave(LockedFile file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.ExtensionIsNotAnyOf(file.File, this.BackupExtensions, "file");
 
             file.File.DeleteSoftDeleteFileFor();
@@ -190,7 +215,11 @@
         /// <inheritdoc/>
         public bool CanRename(FileInfo file, string newName)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.NotNullOrEmpty(newName, nameof(newName));
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
@@ -225,7 +254,11 @@
         /// <inheritdoc/>
         public void Rename(FileInfo file, string newName, bool overWrite)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.NotNullOrEmpty(newName, nameof(newName));
             using (var transaction = new RenameTransaction(this.GetRenamePairs(file, newName)))
             {
@@ -233,9 +266,14 @@
             }
         }
 
+        /// <inheritdoc />
         public IReadOnlyList<RenamePair> GetRenamePairs(FileInfo file, string newName)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.NotNullOrEmpty(newName, nameof(newName));
             var pairs = new List<RenamePair>();
             var soft = file.GetSoftDeleteFileFor();
@@ -277,7 +315,11 @@
         // ReSharper disable once UnusedMember.Global
         internal virtual void Restore(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.ExtensionIsNotAnyOf(file, this.BackupExtensions, "file");
 
             var softDelete = file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
@@ -296,11 +338,19 @@
 
         protected virtual void Restore(FileInfo file, FileInfo backup)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(backup, nameof(backup));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (backup is null)
+            {
+                throw new ArgumentNullException(nameof(backup));
+            }
+
             Ensure.DoesNotExist(file, $"Trying to restore {backup.FullName} when there is already an original: {file.FullName}");
             backup.DeleteSoftDeleteFileFor();
-            FileHelper.Restore(file, backup);
+            file.Restore(backup);
         }
     }
 }

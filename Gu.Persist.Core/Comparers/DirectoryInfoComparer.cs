@@ -44,7 +44,11 @@
         /// <inheritdoc/>
         public override int GetHashCode(DirectoryInfo obj)
         {
-            Ensure.NotNull(obj, nameof(obj));
+            if (obj is null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+
             return OrdinalIgnoreCaseComparer.GetHashCode(TrimBackslash(obj.FullName));
         }
 

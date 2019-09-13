@@ -51,9 +51,7 @@
         /// <returns>A FileInfo in the directory.</returns>
         internal static FileInfo CreateFileInfoInDirectory(this DirectoryInfo directory, string fileName)
         {
-            Ensure.NotNull(directory, nameof(directory));
             Ensure.NotNullOrEmpty(fileName, nameof(fileName));
-
             var path = Path.Combine(directory.FullName, fileName);
             return new FileInfo(path);
         }

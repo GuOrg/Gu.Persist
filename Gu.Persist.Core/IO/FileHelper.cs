@@ -72,14 +72,12 @@ namespace Gu.Persist.Core
 
         internal static void HardDelete(this FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
             file.DeleteSoftDeleteFileFor();
             file.Delete();
         }
 
         internal static void DeleteSoftDeleteFileFor(this FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
             var softDelete = file.GetSoftDeleteFileFor();
             softDelete?.Delete();
         }

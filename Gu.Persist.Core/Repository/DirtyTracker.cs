@@ -48,7 +48,11 @@
 
         public void RemoveFromCache(string fullFileName)
         {
-            Ensure.NotNull(fullFileName, nameof(fullFileName));
+            if (fullFileName is null)
+            {
+                throw new ArgumentNullException(nameof(fullFileName));
+            }
+
             lock (this.gate)
             {
                 this.clones.TryRemove(fullFileName, out _);
@@ -61,7 +65,7 @@
         public bool IsDirty<T>(string fullFileName, T item, IEqualityComparer<T> comparer)
         {
             Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
-            Ensure.NotNull(comparer, nameof(comparer));
+            comparer = comparer ?? EqualityComparer<T>.Default;
             object clone;
             lock (this.gate)
             {

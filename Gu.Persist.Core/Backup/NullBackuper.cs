@@ -18,6 +18,11 @@
         /// <inheritdoc/>
         public bool BeforeSave(FileInfo file)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             var softDelete = file.SoftDelete();
             return softDelete != null;
         }
@@ -42,7 +47,11 @@
         /// <inheritdoc/>
         public bool CanRestore(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             var softDelete = file.GetSoftDeleteFileFor();
             if (softDelete.Exists)
             {
@@ -55,7 +64,11 @@
         /// <inheritdoc/>
         public bool TryRestore(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.ExtensionIsNot(file, FileHelper.SoftDeleteExtension, "file");
             Ensure.DoesNotExist(file);
             file.Refresh();
@@ -86,7 +99,11 @@
         /// <inheritdoc/>
         public void AfterSave(LockedFile file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.ExtensionIsNot(file.File, FileHelper.SoftDeleteExtension, "file");
             file.File.DeleteSoftDeleteFileFor();
         }
@@ -94,7 +111,11 @@
         /// <inheritdoc/>
         public bool CanRename(FileInfo file, string newName)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.NotNullOrEmpty(newName, nameof(newName));
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
@@ -112,7 +133,11 @@
         /// <inheritdoc/>
         public void Rename(FileInfo file, string newName, bool overWrite)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.NotNullOrEmpty(newName, nameof(newName));
             using (var transaction = new RenameTransaction(this.GetRenamePairs(file, newName)))
             {
@@ -122,7 +147,11 @@
 
         public IReadOnlyList<RenamePair> GetRenamePairs(FileInfo file, string newName)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             Ensure.NotNullOrEmpty(newName, nameof(newName));
             var soft = file.GetSoftDeleteFileFor();
             if (soft.Exists)
@@ -142,8 +171,16 @@
 
         private static void Restore(FileInfo file, FileInfo backup)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull(backup, nameof(backup));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (backup is null)
+            {
+                throw new ArgumentNullException(nameof(backup));
+            }
+
             file.Refresh();
             if (file.Exists)
             {

@@ -80,7 +80,11 @@
         /// <inheritdoc/>
         public virtual void Delete(FileInfo file, bool deleteBackups)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             file.Delete();
             file.DeleteSoftDeleteFileFor();
             if (deleteBackups)

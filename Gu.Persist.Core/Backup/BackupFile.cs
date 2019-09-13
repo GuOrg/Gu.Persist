@@ -12,8 +12,17 @@
     {
         private BackupFile(FileInfo file, IBackupSettings setting)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (setting is null)
+            {
+                throw new ArgumentNullException(nameof(setting));
+            }
+
             Ensure.Exists(file);
-            Ensure.NotNull(setting, nameof(setting));
 
             this.File = file;
             this.TimeStamp = file.GetTimeStamp(setting);
