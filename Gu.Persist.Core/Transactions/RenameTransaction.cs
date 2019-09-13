@@ -44,7 +44,7 @@ namespace Gu.Persist.Core
             foreach (var pair in this.lockedPairs)
             {
                 pair.Renamed.DisposeAndDeleteFile();
-                File.Move(pair.Current.File.FullName, pair.Renamed.File.FullName);
+                _ = Kernel32.MoveFileEx(pair.Current.File.FullName, pair.Renamed.File.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
             }
         }
 

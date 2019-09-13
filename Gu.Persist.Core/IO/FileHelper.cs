@@ -93,10 +93,9 @@ namespace Gu.Persist.Core
             }
 
             var soft = file.WithAppendedExtension(SoftDeleteExtension);
-            File.Delete(soft.FullName);
             try
             {
-                File.Move(file.FullName, soft.FullName);
+                _ = Kernel32.MoveFileEx(file.FullName, soft.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
             }
             catch (Exception)
             {
@@ -119,17 +118,6 @@ namespace Gu.Persist.Core
             {
                 file.Attributes &= ~FileAttributes.Hidden;
             }
-        }
-
-        internal static void MoveTo(this FileInfo source, FileInfo destination, bool overWrite)
-        {
-            destination.Refresh();
-            if (destination.Exists && overWrite)
-            {
-                File.Delete(destination.FullName);
-            }
-
-            File.Move(source.FullName, destination.FullName);
         }
 
         internal static FileInfo CreateFileInfo<T>(IFileSettings setting)
@@ -157,9 +145,8 @@ namespace Gu.Persist.Core
                 return;
             }
 
-            backup.DeleteSoftDeleteFileFor();
             _ = backup.SoftDelete();
-            File.Move(file.FullName, backup.FullName);
+            _ = Kernel32.MoveFileEx(file.FullName, backup.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
             file.Refresh();
         }
 
@@ -176,8 +163,7 @@ namespace Gu.Persist.Core
                 return;
             }
 
-            file.Delete();
-            File.Move(backup.FullName, file.FullName);
+            _ = Kernel32.MoveFileEx(backup.FullName, file.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
         }
 
         internal static FileInfo CreateFileInfo(DirectoryInfo directory, string fileName, string extension)

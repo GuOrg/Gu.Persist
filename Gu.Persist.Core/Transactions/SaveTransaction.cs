@@ -88,8 +88,8 @@ namespace Gu.Persist.Core
                 this.lockedFile.DisposeAndDeleteFile();
                 if (this.contents != null)
                 {
-                    File.Move(this.tempFile.FullName, this.file.FullName);
-                    this.lockedTempFile.DisposeAndDeleteFile();
+                    _ = Kernel32.MoveFileEx(this.tempFile.FullName, this.file.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
+                    this.lockedTempFile.Dispose();
                 }
 
                 this.lockedSoftDelete.DisposeAndDeleteFile();
