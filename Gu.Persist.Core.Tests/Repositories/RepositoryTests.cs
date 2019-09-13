@@ -435,6 +435,23 @@ namespace Gu.Persist.Core.Tests.Repositories
                 AssertFile.Exists(false, this.TypeFiles.Backup);
             }
 
+            var read = this.Read<DummySerializable>(this.TypeFiles.File);
+            Assert.AreEqual(this.dummy.Value, read.Value);
+            Assert.AreNotSame(this.dummy, read);
+        }
+
+        [Test]
+        public void SaveTypeTwice()
+        {
+            AssertFile.Exists(false, this.TypeFiles.File);
+            this.Repository.Save(this.dummy);
+            AssertFile.Exists(true, this.TypeFiles.File);
+            AssertFile.Exists(false, this.TypeFiles.SoftDelete);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.TypeFiles.Backup);
+            }
+
             this.dummy.Value++;
             this.Repository.Save(this.dummy);
             AssertFile.Exists(true, this.TypeFiles.File);
@@ -451,6 +468,23 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         [Test]
         public void SaveFileName()
+        {
+            AssertFile.Exists(false, this.NamedFiles.File);
+            this.Repository.Save(this.NamedFiles.File, this.dummy);
+            AssertFile.Exists(true, this.NamedFiles.File);
+            AssertFile.Exists(false, this.NamedFiles.SoftDelete);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.NamedFiles.Backup);
+            }
+
+            var read = this.Read<DummySerializable>(this.NamedFiles.File);
+            Assert.AreEqual(this.dummy.Value, read.Value);
+            Assert.AreNotSame(this.dummy, read);
+        }
+
+        [Test]
+        public void SaveFileNameTwice()
         {
             AssertFile.Exists(false, this.NamedFiles.File);
             this.Repository.Save(this.NamedFiles.File, this.dummy);
