@@ -78,7 +78,7 @@ namespace Gu.Persist.Core
         /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
         /// </remarks>
         /// <typeparam name="T">The type to read from the file.</typeparam>
-        /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
+        /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
         Task<T> ReadAsync<T>();
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Gu.Persist.Core
         /// FileName.cfg
         /// FileName.
         /// </param>
-        /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
+        /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
         Task<T> ReadAsync<T>(string fileName);
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Gu.Persist.Core
         /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
         /// </remarks>
         /// <typeparam name="T">The type to read from the file.</typeparam>
-        /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
+        /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
         T Read<T>();
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Gu.Persist.Core
         /// <param name="creator">
         /// A <see cref="Func{TResult}"/> that is used for creating an instance if the file is missing.
         /// </param>
-        /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
+        /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
         T ReadOrCreate<T>(Func<T> creator);
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Gu.Persist.Core
         /// FileName.cfg
         /// FileName.
         /// </param>
-        /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
+        /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
         T Read<T>(string fileName);
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Gu.Persist.Core
         /// <param name="creator">
         /// A <see cref="Func{TResult}"/> that is used for creating an instance if the file is missing.
         /// </param>
-        /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
+        /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
         T ReadOrCreate<T>(string fileName, Func<T> creator);
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Gu.Persist.Core
         /// <seealso cref="IRepository.Save{T}(FileInfo, FileInfo, T)"/>
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         void Save<T>(T item);
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace Gu.Persist.Core
         /// FileName.cfg
         /// FileName.
         /// </param>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         void Save<T>(string fileName, T item);
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Gu.Persist.Core
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         void Save<T>(FileInfo file, T item);
 
         /// <summary>
@@ -229,14 +229,14 @@ namespace Gu.Persist.Core
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="tempFile">The file to use as temporary file when saving.</param>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         void Save<T>(FileInfo file, FileInfo tempFile, T item);
 
         /// <summary>
         /// <see cref="IRepository.Save{T}(T)"/>.
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         /// <returns>A <see cref="Task"/> representing the save operation.</returns>
         Task SaveAsync<T>(T item);
 
@@ -250,7 +250,7 @@ namespace Gu.Persist.Core
         /// FileName.
         /// </param>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         /// <returns>A <see cref="Task"/> representing the save operation.</returns>
         Task SaveAsync<T>(string fileName, T item);
 
@@ -259,7 +259,7 @@ namespace Gu.Persist.Core
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         /// <returns>A <see cref="Task"/> representing the save operation.</returns>
         Task SaveAsync<T>(FileInfo file, T item);
 
@@ -269,7 +269,7 @@ namespace Gu.Persist.Core
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="tempFile">The file to use as temporary file when saving.</param>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         /// <returns>A <see cref="Task"/> representing the save operation.</returns>
         Task SaveAsync<T>(FileInfo file, FileInfo tempFile, T item);
 
@@ -346,7 +346,7 @@ namespace Gu.Persist.Core
         /// Removes <paramref name="item"/> from the <see cref="IDirtyTracker"/> cache.
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         void RemoveFromDirtyTracker<T>(T item);
 
         /// <summary>

@@ -7,6 +7,7 @@
     using System.Xml.Serialization;
 
     using Gu.Persist.Core;
+    using JetBrains.Annotations;
 
     /// <summary>
     /// Helper methods for serializing and deserializing xml.
@@ -53,7 +54,11 @@
         /// <returns>The deserialized content.</returns>
         public static T Read<T>(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return Read<T>(file.FullName);
         }
 
@@ -80,7 +85,11 @@
         /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
         public static Task<T> ReadAsync<T>(FileInfo file)
         {
-            Ensure.NotNull(file, nameof(file));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             return ReadAsync<T>(file.FullName);
         }
 
@@ -90,10 +99,18 @@
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="fileName">The file name.</param>
         /// <param name="item">The <typeparamref name="T"/>.</param>
-        public static void Save<T>(string fileName, T item)
+        public static void Save<T>(string fileName, [NotNull] T item)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             Save(new FileInfo(fileName), item);
         }
 
@@ -105,8 +122,16 @@
         /// <param name="item">The instance to serialize.</param>
         public static void Save<T>(FileInfo file, T item)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             var serializer = Serializers.GetOrAdd(item.GetType(), x => new XmlSerializer(item.GetType()));
             using (var stream = file.OpenCreate())
             {

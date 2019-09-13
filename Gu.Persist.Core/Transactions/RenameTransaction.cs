@@ -29,7 +29,9 @@ namespace Gu.Persist.Core
         {
             foreach (var pair in this.pairs.Distinct(RenamePairComparer.Default))
             {
+#pragma warning disable CA2000, IDE0068 // Dispose objects before losing scope
                 var current = LockedFile.Create(pair.Current, f => f.Open(FileMode.Open, FileAccess.Read, FileShare.Delete));
+#pragma warning restore CA2000, IDE0068 // Dispose objects before losing scope
                 if (!overWrite && pair.Renamed.Exists)
                 {
                     current.Dispose();
@@ -40,7 +42,9 @@ namespace Gu.Persist.Core
 
                 try
                 {
+#pragma warning disable CA2000 // Dispose objects before losing scope
                     var renamed = LockedFile.Create(pair.Renamed, f => f.Open(FileMode.OpenOrCreate, FileAccess.Read, FileShare.Delete));
+#pragma warning restore CA2000 // Dispose objects before losing scope
                     this.lockedPairs.Add(new RenamePair<LockedFile>(current, renamed));
                 }
                 catch

@@ -112,7 +112,7 @@
         /// <param name="settings">The <see cref="Core.RepositorySettings"/>.</param>
         /// <param name="jsonSettings">The <see cref="JsonSerializerSettings"/>.</param>
         public SingletonRepository(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
-            : base(Create(settings, jsonSettings), Serialize<RepositorySettings>.Default)
+            : base(CreateSettings(settings ?? throw new ArgumentNullException(nameof(settings)), jsonSettings), Serialize<RepositorySettings>.Default)
         {
         }
 
@@ -123,26 +123,26 @@
         /// <param name="jsonSettings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <param name="backuper">The <see cref="IBackuper"/>.</param>
         public SingletonRepository(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings, IBackuper backuper)
-            : base(Create(settings, jsonSettings), backuper, Serialize<RepositorySettings>.Default)
+            : base(CreateSettings(settings ?? throw new ArgumentNullException(nameof(settings)), jsonSettings), backuper, Serialize<RepositorySettings>.Default)
         {
         }
 
         private static RepositorySettings CreateDefaultSettings(DirectoryInfo directory)
         {
-            return Create(Default.RepositorySettings(directory));
+            return CreateSettings(Default.RepositorySettings(directory));
         }
 
         private static RepositorySettings CreateDefaultSettings(DirectoryInfo directory, JsonSerializerSettings jsonSerializerSettings)
         {
-            return Create(Create(Default.RepositorySettings(directory), jsonSerializerSettings));
+            return CreateSettings(CreateSettings(Default.RepositorySettings(directory), jsonSerializerSettings));
         }
 
-        private static RepositorySettings Create(Core.RepositorySettings settings)
+        private static RepositorySettings CreateSettings(Core.RepositorySettings settings)
         {
-            return Create(settings, RepositorySettings.CreateDefaultJsonSettings());
+            return CreateSettings(settings, RepositorySettings.CreateDefaultJsonSettings());
         }
 
-        private static RepositorySettings Create(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
+        private static RepositorySettings CreateSettings(Core.RepositorySettings settings, JsonSerializerSettings jsonSettings)
         {
             return new RepositorySettings(
                        settings.Directory,

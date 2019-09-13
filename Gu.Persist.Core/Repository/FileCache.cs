@@ -39,7 +39,7 @@
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="value"/>.</typeparam>
         /// <param name="fullFileName">The file name.</param>
-        /// <param name="value">The <see cref="T"/>.</param>
+        /// <param name="value">The value.</param>
         public void Add<T>(string fullFileName, T value)
         {
             Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
@@ -50,7 +50,7 @@
 
             lock (this.gate)
             {
-                this.cache.AddOrUpdate(fullFileName, value, (_, __) => value);
+                _ = this.cache.AddOrUpdate(fullFileName, value, (_, __) => value);
             }
         }
 

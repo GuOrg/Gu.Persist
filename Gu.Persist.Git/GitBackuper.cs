@@ -105,6 +105,11 @@
         /// <inheritdoc/>
         public bool TryRestore(FileInfo file)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             var canRestore = this.CanRestore(file);
             if (canRestore)
             {
@@ -117,8 +122,13 @@
         /// <inheritdoc/>
         public void AfterSave(LockedFile file)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             file.Close();
-            Git.StageAndCommit(file.File, allowEmptyCommit: false);
+            _ = Git.StageAndCommit(file.File, allowEmptyCommit: false);
         }
 
         /// <inheritdoc/>

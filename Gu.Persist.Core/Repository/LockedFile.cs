@@ -36,6 +36,11 @@
         /// <returns>A <see cref="LockedFile"/>.</returns>
         public static async Task<LockedFile> CreateAsync(FileInfo file, TimeSpan timeout)
         {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
             var stopwatch = Stopwatch.StartNew();
             while (file.Exists)
             {

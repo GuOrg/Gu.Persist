@@ -12,7 +12,7 @@ namespace Gu.Persist.Core
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="fullFileName">The file name.</param>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}"/>.</param>
         /// <returns>True if <paramref name="item"/> has changed since last save.</returns>
         bool IsDirty<T>(string fullFileName, T item, IEqualityComparer<T> comparer);
@@ -22,7 +22,7 @@ namespace Gu.Persist.Core
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="fullFileName">The file name.</param>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         void Track<T>(string fullFileName, T item);
 
         /// <summary>

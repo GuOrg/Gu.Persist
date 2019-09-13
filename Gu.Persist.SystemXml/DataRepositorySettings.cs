@@ -55,6 +55,11 @@ namespace Gu.Persist.SystemXml
         /// <inheritdoc/>
         public void ReadXml(XmlReader reader)
         {
+            if (reader is null)
+            {
+                throw new System.ArgumentNullException(nameof(reader));
+            }
+
             reader.ReadStartElement();
             this.SetPrivate(nameof(this.Directory), reader.ReadElementString(nameof(this.Directory)));
             this.SetPrivate(nameof(this.Extension), reader.ReadElementString(nameof(this.Extension)));
@@ -68,6 +73,11 @@ namespace Gu.Persist.SystemXml
         /// <inheritdoc/>
         public void WriteXml(XmlWriter writer)
         {
+            if (writer is null)
+            {
+                throw new System.ArgumentNullException(nameof(writer));
+            }
+
             writer.WriteElementString(nameof(this.Directory), this.Directory);
             writer.WriteElementString(nameof(this.Extension), this.Extension);
             writer.WriteElementString(nameof(this.TempExtension), this.TempExtension);

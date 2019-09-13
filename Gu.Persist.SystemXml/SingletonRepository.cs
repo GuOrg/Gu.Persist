@@ -75,7 +75,7 @@ namespace Gu.Persist.SystemXml
         /// <summary>Initializes a new instance of the <see cref="SingletonRepository"/> class.</summary>
         /// <param name="settings">The <see cref="IRepositorySettings"/>.</param>
         public SingletonRepository(IRepositorySettings settings)
-            : base(CreateSettings(settings), Serialize<RepositorySettings>.Default)
+            : base(CreateSettings(settings ?? throw new ArgumentNullException(nameof(settings))), Serialize<RepositorySettings>.Default)
         {
         }
 
@@ -83,7 +83,7 @@ namespace Gu.Persist.SystemXml
         /// <param name="settings">The <see cref="IRepositorySettings"/>.</param>
         /// <param name="backuper">The <see cref="IBackuper"/>.</param>
         public SingletonRepository(IRepositorySettings settings, IBackuper backuper)
-            : base(CreateSettings(settings), backuper, Serialize<RepositorySettings>.Default)
+            : base(CreateSettings(settings ?? throw new ArgumentNullException(nameof(settings))), backuper, Serialize<RepositorySettings>.Default)
         {
         }
 

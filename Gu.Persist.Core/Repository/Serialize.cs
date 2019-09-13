@@ -48,8 +48,8 @@
         /// Serialize then deserialize <paramref name="item"/> to create a deep copy.
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
-        /// <param name="item">The <see cref="T"/>.</param>
-        /// <param name="settings">The <typeparamref name=""/> cref="TSettings"/>.</param>
+        /// <param name="item">The item.</param>
+        /// <param name="settings">The <typeparamref name="TSettings"/> cref="TSettings"/>.</param>
         /// <returns>A deep copy.</returns>
         public abstract T Clone<T>(T item, TSettings settings);
 

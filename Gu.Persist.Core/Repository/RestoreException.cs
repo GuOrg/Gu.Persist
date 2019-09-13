@@ -25,8 +25,10 @@ namespace Gu.Persist.Core
             this.SaveException = saveException;
         }
 
-        /// <inheritdoc />
+#pragma warning disable SA1648 // inheritdoc should be used with inheriting class
+                              /// <inheritdoc />
         protected RestoreException(SerializationInfo info, StreamingContext context)
+#pragma warning restore SA1648 // inheritdoc should be used with inheriting class
             : base(info, context)
         {
             this.SaveException = (Exception)info.GetValue(nameof(this.SaveException), typeof(Exception));

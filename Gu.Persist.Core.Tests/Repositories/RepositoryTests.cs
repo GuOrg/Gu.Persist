@@ -1053,7 +1053,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
             else
             {
-                Assert.Throws<InvalidOperationException>(() => this.Repository.Rename<DummySerializable>("NewName", false));
+                _ = Assert.Throws<InvalidOperationException>(() => this.Repository.Rename<DummySerializable>("NewName", false));
                 Assert.AreEqual("a", this.TypeFiles.File.ReadAllText());
                 Assert.AreEqual("c", this.TypeFiles.SoftDelete.ReadAllText());
 
@@ -1098,7 +1098,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
             else
             {
-                Assert.Throws<InvalidOperationException>(() => this.Repository.Rename(this.NamedFiles.File, "NewName", false));
+                _ = Assert.Throws<InvalidOperationException>(() => this.Repository.Rename(this.NamedFiles.File, "NewName", false));
                 Assert.AreEqual("a", this.NamedFiles.File.ReadAllText());
                 Assert.AreEqual("c", this.NamedFiles.SoftDelete.ReadAllText());
 

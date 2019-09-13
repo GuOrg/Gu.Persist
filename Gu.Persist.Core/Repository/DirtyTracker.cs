@@ -31,7 +31,7 @@
                             : this.cloner.Clone(item);
             lock (this.gate)
             {
-                this.clones.AddOrUpdate(fullFileName, clone, (f, o) => clone);
+                _ = this.clones.AddOrUpdate(fullFileName, clone, (f, o) => clone);
             }
         }
 
@@ -74,7 +74,7 @@
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="fullFileName">The file name.</param>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}"/>.</param>
         /// <returns>True if <paramref name="item"/> has changed since last save.</returns>
         public bool IsDirty<T>(string fullFileName, T item, IEqualityComparer<T> comparer)
@@ -84,7 +84,7 @@
             object clone;
             lock (this.gate)
             {
-                this.clones.TryGetValue(fullFileName, out clone);
+                _ = this.clones.TryGetValue(fullFileName, out clone);
             }
 
             return !comparer.Equals((T)clone, item);

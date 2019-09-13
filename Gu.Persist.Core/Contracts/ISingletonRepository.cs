@@ -20,7 +20,7 @@
         /// Next read will read a new instance from disk.
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         void RemoveFromCache<T>(T item);
 
         /// <summary>
@@ -29,7 +29,7 @@
         /// <seealso cref="ISingletonRepository.RemoveFromCache{T}(T)"/>
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         void SaveAndClose<T>(T item);
 
         /// <summary>
@@ -54,7 +54,7 @@
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
-        /// <param name="item">The <see cref="T"/>.</param>
+        /// <param name="item">The item.</param>
         void SaveAndClose<T>(FileInfo file, T item);
     }
 }
