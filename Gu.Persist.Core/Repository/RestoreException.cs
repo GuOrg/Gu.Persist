@@ -14,12 +14,18 @@ namespace Gu.Persist.Core
     public class RestoreException : IOException
 #pragma warning restore CA1032 // Implement standard exception constructors
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RestoreException"/> class.
+        /// </summary>
+        /// <param name="saveException">The <see cref="Exception"/> when saved.</param>
+        /// <param name="innerException">The <see cref="Exception"/>.</param>
         public RestoreException(Exception saveException, Exception innerException)
             : base("Restore failed", innerException)
         {
             this.SaveException = saveException;
         }
 
+        /// <inheritdoc />
         protected RestoreException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {

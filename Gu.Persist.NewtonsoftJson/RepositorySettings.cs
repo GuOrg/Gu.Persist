@@ -44,6 +44,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// <summary>
         /// The <see cref="JsonSerializerSettings"/> that will be used if none are specified.
         /// </summary>
+        /// <returns>An instance of <see cref="JsonSerializerSettings"/>.</returns>
         public static JsonSerializerSettings CreateDefaultJsonSettings()
         {
             return new JsonSerializerSettings

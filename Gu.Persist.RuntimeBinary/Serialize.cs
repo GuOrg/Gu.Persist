@@ -9,6 +9,9 @@
     internal sealed class Serialize<TSetting> : Gu.Persist.Core.Serialize<TSetting>
         where TSetting : RepositorySettings
     {
+        /// <summary>
+        /// The default instance.
+        /// </summary>
         internal static readonly Serialize<TSetting> Default = new Serialize<TSetting>();
 
         /// <inheritdoc/>

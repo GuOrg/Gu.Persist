@@ -1,5 +1,8 @@
 ﻿namespace Gu.Persist.Core
 {
+    /// <summary>
+    /// Configures how backup is done.
+    /// </summary>
     public interface IBackupSettings : IFileSettings
     {
         /// <summary>

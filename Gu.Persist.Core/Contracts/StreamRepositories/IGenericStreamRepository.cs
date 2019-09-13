@@ -17,6 +17,7 @@
         /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>
         /// <typeparam name="T">The type to read from the file.</typeparam>
+        /// <returns>The <see cref="Stream"/> read from the file.</returns>
         Stream Read<T>();
 
         /// <summary>

@@ -12,6 +12,7 @@
         /// Creates a backup if <paramref name="file"/> exists.
         /// </summary>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <returns>True if a backup was created.</returns>
         bool BeforeSave(FileInfo file);
 
         /// <summary>
@@ -37,6 +38,7 @@
         /// Checks if there is a soft delete file available or if there are backup(s).
         /// </summary>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <returns>True if there is a soft delete file available or if there are backup(s).</returns>
         bool CanRestore(FileInfo file);
 
         /// <summary>
@@ -88,6 +90,7 @@
         /// </summary>
         /// <param name="file">The file to rename backups for.</param>
         /// <param name="newName">The new name.</param>
+        /// <returns>The renamed pairs.</returns>
         IReadOnlyList<RenamePair> GetRenamePairs(FileInfo file, string newName);
     }
 }

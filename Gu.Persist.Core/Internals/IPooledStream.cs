@@ -2,6 +2,9 @@
 {
     using System;
 
+    /// <summary>
+    /// A pooled stream.
+    /// </summary>
     public interface IPooledStream : IDisposable
     {
         /// <summary>
@@ -12,6 +15,7 @@
         /// <summary>
         /// See <see cref="System.IO.MemoryStream.GetBuffer()"/>.
         /// </summary>
+        /// <returns>The array of bytes.</returns>
         byte[] GetBuffer();
     }
 }

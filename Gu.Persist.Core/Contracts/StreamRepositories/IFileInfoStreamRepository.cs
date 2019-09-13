@@ -15,6 +15,7 @@
         /// This method reads the entire file into memory so it will be memory consuming for large files.
         /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <returns>A stream with the contents of the file.</returns>
         Stream Read(FileInfo file);
 

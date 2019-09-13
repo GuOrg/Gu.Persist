@@ -5,6 +5,9 @@
     /// <inheritdoc/>
     public sealed class XmlEqualsComparer<T> : SerializedEqualsComparer<T>
     {
+        /// <summary>
+        /// The default instance.
+        /// </summary>
         public new static readonly XmlEqualsComparer<T> Default = new XmlEqualsComparer<T>();
 
         /// <inheritdoc/>

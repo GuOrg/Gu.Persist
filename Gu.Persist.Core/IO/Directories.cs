@@ -4,6 +4,9 @@ namespace Gu.Persist.Core
     using System;
     using System.IO;
 
+    /// <summary>
+    /// Exposes common system directories.
+    /// </summary>
     public static class Directories
     {
         private static DirectoryInfo @default;

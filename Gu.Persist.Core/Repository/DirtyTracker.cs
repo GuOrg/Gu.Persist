@@ -4,17 +4,25 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Tracks if files have c hanged since last save.
+    /// </summary>
     public sealed class DirtyTracker : IDirtyTracker
     {
         private readonly ICloner cloner;
         private readonly ConcurrentDictionary<string, object> clones = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private readonly object gate = new object();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirtyTracker"/> class.
+        /// </summary>
+        /// <param name="cloner">The <see cref="ICloner"/>.</param>
         public DirtyTracker(ICloner cloner)
         {
             this.cloner = cloner ?? throw new ArgumentNullException(nameof(cloner));
         }
 
+        /// <inheritdoc/>
         public void Track<T>(string fullFileName, T item)
         {
             Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
@@ -27,6 +35,7 @@
             }
         }
 
+        /// <inheritdoc/>
         public void Rename(string oldName, string newName, bool overWrite)
         {
             Ensure.NotNullOrEmpty(oldName, nameof(oldName));
@@ -37,6 +46,7 @@
             }
         }
 
+        /// <inheritdoc/>
         public void ClearCache()
         {
             lock (this.gate)
@@ -45,6 +55,7 @@
             }
         }
 
+        /// <inheritdoc/>
         public void RemoveFromCache(string fullFileName)
         {
             if (fullFileName is null)
@@ -62,8 +73,10 @@
         /// Only checks the cache, does not read from file.
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="fullFileName">The file name.</param>
         /// <param name="item">The <see cref="T"/>.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}"/>.</param>
+        /// <returns>True if <paramref name="item"/> has changed since last save.</returns>
         public bool IsDirty<T>(string fullFileName, T item, IEqualityComparer<T> comparer)
         {
             Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));

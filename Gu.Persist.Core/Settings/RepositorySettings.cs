@@ -2,9 +2,15 @@
 {
     using System;
 
+    /// <summary>
+    /// A setting for <see cref="Repository{TSetting}"/>.
+    /// </summary>
     [Serializable]
     public class RepositorySettings : FileSettings, IRepositorySettings
     {
+        /// <summary>
+        /// The default name of the backup directory.
+        /// </summary>
         protected static readonly string DefaultBackupDirectoryName = "Backup";
 
         /// <summary>

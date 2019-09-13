@@ -5,8 +5,15 @@
     using System.IO;
     using System.Linq;
 
+    /// <summary>
+    /// An <see cref="IBackuper"/> that saves copies.
+    /// </summary>
     public class Backuper : IBackuper
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Backuper"/> class.
+        /// </summary>
+        /// <param name="setting">The <see cref="IBackupSettings"/>.</param>
         protected Backuper(IBackupSettings setting)
         {
             this.Setting = setting ?? throw new ArgumentNullException(nameof(setting));
@@ -19,6 +26,9 @@
         public IBackupSettings Setting { get; }
 
 #pragma warning disable CA1819 // Properties should not return arrays
+        /// <summary>
+        /// Gets the extensions for backup files and soft delete files.
+        /// </summary>
         protected string[] BackupExtensions => new[] { this.Setting.Extension, FileHelper.SoftDeleteExtension };
 #pragma warning restore CA1819 // Properties should not return arrays
 
@@ -336,6 +346,11 @@
             }
         }
 
+        /// <summary>
+        /// Restore <paramref name="file"/> from <paramref name="backup"/>.
+        /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="backup">The backup <see cref="FileInfo"/>.</param>
         protected virtual void Restore(FileInfo file, FileInfo backup)
         {
             if (file is null)

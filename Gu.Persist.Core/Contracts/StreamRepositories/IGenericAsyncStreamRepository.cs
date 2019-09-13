@@ -27,6 +27,7 @@
         /// </summary>
         /// <typeparam name="T">The type to save to the file.</typeparam>
         /// <param name="stream">The <see cref="Stream"/>.</param>
+        /// <returns>A <see cref="Task"/> representing the save operation.</returns>
         Task SaveAsync<T>(Stream stream);
     }
 }

@@ -38,6 +38,7 @@ namespace Gu.Persist.Core
         /// FileName.cfg
         /// FileName.
         /// </param>
+        /// <param name="item">The <see cref="T"/>.</param>
         void Save<T>(string fileName, T item);
     }
 }

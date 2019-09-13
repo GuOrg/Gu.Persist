@@ -8,6 +8,11 @@
     [Serializable]
     public class FileSettings : IFileSettings
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileSettings"/> class.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="extension">The extensions.</param>
         public FileSettings(string directory, string extension)
         {
             Ensure.NotNull(extension, nameof(extension));

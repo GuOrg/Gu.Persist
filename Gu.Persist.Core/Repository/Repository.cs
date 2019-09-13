@@ -9,6 +9,7 @@ namespace Gu.Persist.Core
     /// <summary>
     /// Base class for a repository.
     /// </summary>
+    /// <typeparam name="TSetting">The type of setting.</typeparam>
     public abstract class Repository<TSetting> : IRepository,
                                                  IBlockingRepository,
                                                  IAsyncRepository,
@@ -87,6 +88,7 @@ namespace Gu.Persist.Core
         /// Creates a new <see cref="Repository{TSetting}"/> with <paramref name="settings"/>.
         /// </summary>
         /// <param name="serialize">The <see cref="Serialize{TSetting}"/>.</param>
+        /// <param name="settings">The <see cref="TSetting"/>.</param>
         protected Repository(TSetting settings, Serialize<TSetting> serialize)
             : this(settings, Backup.Backuper.Create(settings.BackupSettings), serialize)
         {
@@ -101,6 +103,7 @@ namespace Gu.Persist.Core
         /// Note that a custom backuper may not use the backup settings.
         /// </param>
         /// <param name="serialize">The <see cref="Serialize{TSetting}"/>.</param>
+        /// <param name="settings">The <see cref="TSetting"/>.</param>
         protected Repository(TSetting settings, IBackuper backuper, Serialize<TSetting> serialize)
         {
             if (settings == null)

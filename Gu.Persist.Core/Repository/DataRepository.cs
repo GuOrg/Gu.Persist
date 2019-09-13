@@ -3,6 +3,10 @@
     using System;
     using System.IO;
 
+    /// <summary>
+    /// A repository that does not cache reads nor track dirty.
+    /// </summary>
+    /// <typeparam name="TSetting">The type of settings.</typeparam>
     public abstract class DataRepository<TSetting> : Repository<TSetting>, IDataRepository
         where TSetting : IDataRepositorySettings
     {
@@ -93,6 +97,7 @@
             }
         }
 
+        /// <inheritdoc/>
         protected override void EnsureCanSave<T>(FileInfo file, T item)
         {
             if (!this.Settings.SaveNullDeletesFile && item == null)

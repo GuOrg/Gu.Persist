@@ -63,6 +63,11 @@
         /// </summary>
         public int MaxAgeInDays { get; }
 
+        /// <summary>
+        /// Check if <paramref name="format"/> is a valid timestamp format.
+        /// Valid formats can be roundtripped using <see cref="DateTime.ToString(string)"/> and <see cref="DateTime.Parse(string)"/>.
+        /// </summary>
+        /// <param name="format">The format string.</param>
         public static void ValidateTimestampFormat(string format)
         {
             if (!string.IsNullOrEmpty(format))

@@ -1,5 +1,8 @@
 ﻿namespace Gu.Persist.Core
 {
+    /// <summary>
+    /// Settings for storing and reading files.
+    /// </summary>
     public interface IFileSettings
     {
         /// <summary>

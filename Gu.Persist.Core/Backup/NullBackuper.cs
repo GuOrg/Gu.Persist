@@ -9,6 +9,9 @@
     /// </summary>
     public sealed class NullBackuper : IBackuper
     {
+        /// <summary>
+        /// The default instance.
+        /// </summary>
         public static readonly NullBackuper Default = new NullBackuper();
 
         private NullBackuper()
@@ -33,6 +36,7 @@
             // nop;
         }
 
+        /// <inheritdoc/>
         void IBackuper.Backup(FileInfo file)
         {
             // nop
@@ -145,6 +149,7 @@
             }
         }
 
+        /// <inheritdoc/>
         public IReadOnlyList<RenamePair> GetRenamePairs(FileInfo file, string newName)
         {
             if (file is null)

@@ -28,8 +28,8 @@
         /// Also for <see cref="ISingletonRepository"/> a check is made to ensure that the same instance is saved.
         /// </remarks>
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
-        /// <param name="item">The item.</param>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="item">The item.</param>
         void Save<T>(FileInfo file, T item);
     }
 }

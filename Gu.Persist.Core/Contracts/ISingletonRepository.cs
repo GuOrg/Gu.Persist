@@ -2,6 +2,9 @@
 {
     using System.IO;
 
+    /// <summary>
+    /// A repository that manages singleton instances.
+    /// </summary>
     public interface ISingletonRepository : IRepository
     {
         /// <summary>

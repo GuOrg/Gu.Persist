@@ -4,11 +4,21 @@
     using System.Collections.Concurrent;
     using System.Linq;
 
+    /// <summary>
+    /// For caching an instance by corresponding file name.
+    /// </summary>
     public sealed class FileCache
     {
         private readonly ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private readonly object gate = new object();
 
+        /// <summary>
+        /// Get the cached instance for a <paramref name="fullFileName"/> if it exists.
+        /// </summary>
+        /// <typeparam name="T">The type of <paramref name="cached"/>.</typeparam>
+        /// <param name="fullFileName">The file name.</param>
+        /// <param name="cached">The cahced instance.</param>
+        /// <returns>True if a cached instance for a <paramref name="fullFileName"/> exists.</returns>
         public bool TryGetValue<T>(string fullFileName, out T cached)
         {
             lock (this.gate)
@@ -24,9 +34,15 @@
             return false;
         }
 
-        public void Add<T>(string fullName, T value)
+        /// <summary>
+        /// Add <paramref name="value"/> to the cache.
+        /// </summary>
+        /// <typeparam name="T">The type of <paramref name="value"/>.</typeparam>
+        /// <param name="fullFileName">The file name.</param>
+        /// <param name="value">The <see cref="T"/>.</param>
+        public void Add<T>(string fullFileName, T value)
         {
-            Ensure.NotNullOrEmpty(fullName, nameof(fullName));
+            Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
             if (value == null)
             {
                 return;
@@ -34,20 +50,31 @@
 
             lock (this.gate)
             {
-                this.cache.AddOrUpdate(fullName, value, (_, __) => value);
+                this.cache.AddOrUpdate(fullFileName, value, (_, __) => value);
             }
         }
 
-        public bool ContainsKey(string fullName)
+        /// <summary>
+        /// Check if a value is cached for the file name.
+        /// </summary>
+        /// <param name="fullFileName">The file name.</param>
+        /// <returns>True if a cached value was found.</returns>
+        public bool ContainsKey(string fullFileName)
         {
-            Ensure.NotNullOrEmpty(fullName, nameof(fullName));
+            Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
 
             lock (this.gate)
             {
-                return this.cache.TryGetValue(fullName, out _);
+                return this.cache.TryGetValue(fullFileName, out _);
             }
         }
 
+        /// <summary>
+        /// Change the key for a cached instance.
+        /// </summary>
+        /// <param name="from">The old key.</param>
+        /// <param name="to">The new key.</param>
+        /// <param name="overWrite">Replace if exists.</param>
         public void ChangeKey(string @from, string to, bool overWrite)
         {
             lock (this.gate)
@@ -56,6 +83,9 @@
             }
         }
 
+        /// <summary>
+        /// Clear the cache.
+        /// </summary>
         public void Clear()
         {
             lock (this.gate)
@@ -64,6 +94,11 @@
             }
         }
 
+        /// <summary>
+        /// Remove <paramref name="item"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
+        /// <param name="item">The item.</param>
         public void TryRemove<T>(T item)
         {
             lock (this.gate)

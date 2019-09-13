@@ -5,6 +5,11 @@
     using System.Threading.Tasks;
     using JetBrains.Annotations;
 
+    /// <summary>
+    /// A repository that manages a singleton instance for files.
+    /// Useful for settings.
+    /// </summary>
+    /// <typeparam name="TSetting">The type of settings.</typeparam>
     public abstract class SingletonRepository<TSetting> : Repository<TSetting>, ISingletonRepository
         where TSetting : IRepositorySettings
     {
@@ -237,6 +242,7 @@
             }
         }
 
+        /// <inheritdoc/>
         protected override void CacheAndTrackCore<T>(FileInfo file, T item)
         {
             if (file is null)
@@ -248,6 +254,7 @@
             base.CacheAndTrackCore(file, item);
         }
 
+        /// <inheritdoc/>
         protected override void EnsureCanSave<T>(FileInfo file, T item)
         {
             if (file is null)

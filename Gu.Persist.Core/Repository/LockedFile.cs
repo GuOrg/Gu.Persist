@@ -32,11 +32,11 @@
         /// Create a locked file.
         /// </summary>
         /// <param name="file">The file to create.</param>
-        /// <param name="timeout">The max time to wait.</param>
+        /// <param name="timeout">The max time to wait if the file exists.</param>
+        /// <returns>A <see cref="LockedFile"/>.</returns>
         public static async Task<LockedFile> CreateAsync(FileInfo file, TimeSpan timeout)
         {
             var stopwatch = Stopwatch.StartNew();
-            start:
             while (file.Exists)
             {
                 await Task.Delay(10)
@@ -48,21 +48,15 @@
                 }
             }
 
-            try
-            {
-                return Create(file, f => f.Create());
-            }
-#pragma warning disable CA1031 // Do not catch general exception types
-            catch
-#pragma warning restore CA1031 // Do not catch general exception types
-            {
-                goto start;
-            }
+            return Create(file, f => f.Create());
         }
 
         /// <summary>
         /// Create a <see cref="LockedFile"/> throws if <paramref name="file"/> does not exits.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="stream">Specifies how the file should be locked.</param>
+        /// <returns>A <see cref="LockedFile"/>.</returns>
         public static LockedFile Create(FileInfo file, Func<FileInfo, Stream> stream)
         {
             if (file is null)
@@ -81,6 +75,9 @@
         /// <summary>
         /// Create a <see cref="LockedFile"/> returns null if <paramref name="file"/> does not exits.
         /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="stream">Specifies how the file should be locked.</param>
+        /// <returns>A <see cref="LockedFile"/>.</returns>
         public static LockedFile CreateIfExists(FileInfo file, Func<FileInfo, Stream> stream)
         {
             if (file == null)

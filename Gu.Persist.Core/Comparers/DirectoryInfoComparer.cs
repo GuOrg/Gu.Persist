@@ -7,6 +7,9 @@
     /// <inheritdoc/>
     public sealed class DirectoryInfoComparer : EqualityComparer<DirectoryInfo>
     {
+        /// <summary>
+        /// The default instance.
+        /// </summary>
         public new static readonly DirectoryInfoComparer Default = new DirectoryInfoComparer();
         private static readonly StringComparer OrdinalIgnoreCaseComparer = StringComparer.OrdinalIgnoreCase;
         private static readonly char[] BackSlash = { '\\' };

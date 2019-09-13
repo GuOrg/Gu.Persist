@@ -10,12 +10,14 @@
     public interface IFileInfoAsyncStreamRepository
     {
         /// <summary>
-        /// Reads the file <paramref name="file"/> and returns the contents in a memorystream.
+        /// Reads the file <paramref name="file"/> and returns the contents in a <see cref="Stream"/>.
         /// </summary>
         /// <remarks>
         /// This method reads the entire file into memory so it will be memory consuming for large files.
         /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <returns>A <see cref="Stream"/> read from the file.</returns>
         Task<Stream> ReadAsync(FileInfo file);
 
         /// <summary>
@@ -24,6 +26,9 @@
         /// <remarks>
         /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="stream">The <see cref="Stream"/>.</param>
+        /// <returns>A <see cref="Task"/> representing the save operation.</returns>
         Task SaveAsync(FileInfo file, Stream stream);
 
         /// <summary>
@@ -35,6 +40,7 @@
         /// <remarks>
         /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>
+        /// <returns>A <see cref="Task"/> representing the save operation.</returns>
         Task SaveAsync(FileInfo file, FileInfo tempFile, Stream stream);
     }
 }

@@ -9,12 +9,13 @@ namespace Gu.Persist.Core
     /// <summary>
     /// http://stackoverflow.com/a/18766131/1069200.
     /// </summary>
-    public static class WaitHandleExtensions
+    internal static class WaitHandleExtensions
     {
         /// <summary>
         /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>.
         /// </summary>
-        public static Task AsTask(this WaitHandle handle)
+        /// <returns>A <see cref="Task"/> representing the <paramref name="handle"/>.</returns>
+        internal static Task AsTask(this WaitHandle handle)
         {
             return AsTask(handle, Timeout.InfiniteTimeSpan);
         }
@@ -22,7 +23,7 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Turn <paramref name="handle"/> into an awaitable <see cref="Task"/>.
         /// </summary>
-        public static Task AsTask(this WaitHandle handle, TimeSpan timeout)
+        internal static Task AsTask(this WaitHandle handle, TimeSpan timeout)
         {
             var tcs = new TaskCompletionSource<object>();
             var registration = ThreadPool.RegisterWaitForSingleObject(

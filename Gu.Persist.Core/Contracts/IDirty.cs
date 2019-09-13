@@ -3,6 +3,9 @@
     using System.Collections.Generic;
     using System.IO;
 
+    /// <summary>
+    /// Expose methods for checking if an instance has changed since last saved.
+    /// </summary>
     public interface IDirty
     {
         /// <summary>

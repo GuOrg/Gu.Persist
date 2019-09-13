@@ -1,5 +1,8 @@
 namespace Gu.Persist.Core
 {
+    /// <summary>
+    /// Settings for <see cref="Repository{TSetting}"/>.
+    /// </summary>
     public interface IRepositorySettings : IFileSettings
     {
         /// <summary>

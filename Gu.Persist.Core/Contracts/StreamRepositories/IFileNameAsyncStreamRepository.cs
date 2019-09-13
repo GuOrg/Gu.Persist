@@ -38,6 +38,7 @@
         /// <remarks>
         /// When using streams no caching nor dirtytracking is performed.
         /// </remarks>
+        /// <returns>A <see cref="Task"/> representing the save operation.</returns>
         Task SaveAsync(string fileName, Stream stream);
     }
 }

@@ -32,7 +32,7 @@
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="item">The item.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <returns>A <see cref="Task"/> representing the save operation.</returns>
         Task SaveAsync<T>(FileInfo file, T item);
     }
 }
