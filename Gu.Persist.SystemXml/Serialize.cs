@@ -7,7 +7,7 @@
     internal sealed class Serialize<TSetting> : Gu.Persist.Core.Serialize<TSetting>
         where TSetting : Core.RepositorySettings
     {
-        public static readonly Serialize<TSetting> Default = new Serialize<TSetting>();
+        internal static readonly Serialize<TSetting> Default = new Serialize<TSetting>();
 
         /// <inheritdoc/>
         public override Stream ToStream<T>(T item, TSetting setting)

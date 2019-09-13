@@ -93,7 +93,7 @@ namespace Gu.Persist.Core
             var soft = file.WithAppendedExtension(SoftDeleteExtension);
             try
             {
-                _ = Kernel32.MoveFileEx(file.FullName, soft.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
+                _ = Kernel32.MoveFileEx(file.FullName, soft.FullName, MoveFileFlags.REPLACE_EXISTING);
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch
@@ -146,7 +146,7 @@ namespace Gu.Persist.Core
             }
 
             _ = backup.SoftDelete();
-            _ = Kernel32.MoveFileEx(file.FullName, backup.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
+            _ = Kernel32.MoveFileEx(file.FullName, backup.FullName, MoveFileFlags.REPLACE_EXISTING);
             file.Refresh();
         }
 
@@ -163,7 +163,7 @@ namespace Gu.Persist.Core
                 return;
             }
 
-            _ = Kernel32.MoveFileEx(backup.FullName, file.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
+            _ = Kernel32.MoveFileEx(backup.FullName, file.FullName, MoveFileFlags.REPLACE_EXISTING);
         }
 
         internal static FileInfo CreateFileInfo(DirectoryInfo directory, string fileName, string extension)

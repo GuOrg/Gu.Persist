@@ -8,9 +8,9 @@
 
     internal static class FileInfoExt
     {
-        public static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
+        internal static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
         //// ReSharper disable once UnusedMember.Global
-        public static readonly char[] InvalidPathChars = Path.GetInvalidPathChars();
+        internal static readonly char[] InvalidPathChars = Path.GetInvalidPathChars();
         private static readonly ConcurrentDictionary<string, string> TimeStampPatternMap = new ConcurrentDictionary<string, string>();
 
         /// <summary>

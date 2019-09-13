@@ -102,7 +102,7 @@
             }
         }
 
-        internal class DummyWith<T>
+        public class DummyWith<T>
         {
             public T Data { get; set; }
         }

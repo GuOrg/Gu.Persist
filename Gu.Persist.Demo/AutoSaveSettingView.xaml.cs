@@ -3,7 +3,7 @@
     using System.Windows.Controls;
 
     /// <summary>
-    /// Interaction logic for AutoSaveSetting.xaml
+    /// Interaction logic for AutoSaveSetting.xaml.
     /// </summary>
     public partial class AutoSaveSettingView : UserControl
     {

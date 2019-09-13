@@ -18,7 +18,7 @@ namespace Gu.Persist.Core
         private LockedFile lockedTempFile;
         private bool fileExistedBefore;
 
-        public SaveTransaction(FileInfo file, FileInfo tempFile, object contents, IBackuper backuper)
+        internal SaveTransaction(FileInfo file, FileInfo tempFile, object contents, IBackuper backuper)
         {
             this.file = file;
             this.tempFile = tempFile;
@@ -26,7 +26,15 @@ namespace Gu.Persist.Core
             this.backuper = backuper ?? NullBackuper.Default;
         }
 
-        public void Commit<TSetting>(Serialize<TSetting> serialize, TSetting setting)
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            this.lockedFile?.Dispose();
+            this.lockedSoftDelete?.DisposeAndDeleteFile();
+            this.lockedTempFile?.DisposeAndDeleteFile();
+        }
+
+        internal void Commit<TSetting>(Serialize<TSetting> serialize, TSetting setting)
         {
             this.BeforeCopy();
             if (this.contents != null)
@@ -37,7 +45,7 @@ namespace Gu.Persist.Core
             this.AfterCopy();
         }
 
-        public async Task CommitAsync()
+        internal async Task CommitAsync()
         {
             this.BeforeCopy();
             if (this.contents != null)
@@ -47,14 +55,6 @@ namespace Gu.Persist.Core
             }
 
             this.AfterCopy();
-        }
-
-        /// <inheritdoc/>
-        public void Dispose()
-        {
-            this.lockedFile?.Dispose();
-            this.lockedSoftDelete?.DisposeAndDeleteFile();
-            this.lockedTempFile?.DisposeAndDeleteFile();
         }
 
         private void BeforeCopy()
@@ -88,7 +88,7 @@ namespace Gu.Persist.Core
                 this.lockedFile.DisposeAndDeleteFile();
                 if (this.contents != null)
                 {
-                    _ = Kernel32.MoveFileEx(this.tempFile.FullName, this.file.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
+                    _ = Kernel32.MoveFileEx(this.tempFile.FullName, this.file.FullName, MoveFileFlags.REPLACE_EXISTING);
                     this.lockedTempFile.Dispose();
                 }
 

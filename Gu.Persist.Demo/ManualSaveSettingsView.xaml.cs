@@ -3,7 +3,7 @@
     using System.Windows.Controls;
 
     /// <summary>
-    /// Interaction logic for ManualSaveSettingsView.xaml
+    /// Interaction logic for ManualSaveSettingsView.xaml.
     /// </summary>
     public partial class ManualSaveSettingsView : UserControl
     {

@@ -11,12 +11,21 @@ namespace Gu.Persist.Core
         private readonly IReadOnlyList<RenamePair> pairs;
         private readonly List<RenamePair<LockedFile>> lockedPairs = new List<RenamePair<LockedFile>>();
 
-        public RenameTransaction(IReadOnlyList<RenamePair> pairs)
+        internal RenameTransaction(IReadOnlyList<RenamePair> pairs)
         {
             this.pairs = pairs;
         }
 
-        public void Commit(bool overWrite)
+        public void Dispose()
+        {
+            foreach (var lockedFile in this.lockedPairs)
+            {
+                lockedFile.Current?.Dispose();
+                lockedFile.Renamed?.Dispose();
+            }
+        }
+
+        internal void Commit(bool overWrite)
         {
             foreach (var pair in this.pairs.Distinct(RenamePairComparer.Default))
             {
@@ -44,22 +53,13 @@ namespace Gu.Persist.Core
             foreach (var pair in this.lockedPairs)
             {
                 pair.Renamed.DisposeAndDeleteFile();
-                _ = Kernel32.MoveFileEx(pair.Current.File.FullName, pair.Renamed.File.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
-            }
-        }
-
-        public void Dispose()
-        {
-            foreach (var lockedFile in this.lockedPairs)
-            {
-                lockedFile.Current?.Dispose();
-                lockedFile.Renamed?.Dispose();
+                _ = Kernel32.MoveFileEx(pair.Current.File.FullName, pair.Renamed.File.FullName, MoveFileFlags.REPLACE_EXISTING);
             }
         }
 
         private class RenamePairComparer : IEqualityComparer<RenamePair>
         {
-            public static readonly RenamePairComparer Default = new RenamePairComparer();
+            internal static readonly RenamePairComparer Default = new RenamePairComparer();
 
             private static readonly StringComparer StringComparer = StringComparer.OrdinalIgnoreCase;
 

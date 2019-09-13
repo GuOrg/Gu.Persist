@@ -16,21 +16,55 @@
             this.inner = inner;
         }
 
+        /// <inheritdoc/>
         public override bool CanRead => !this.disposed;
 
+        /// <inheritdoc/>
         public override bool CanSeek => !this.disposed;
 
+        /// <inheritdoc/>
         public override bool CanWrite => !this.disposed;
 
+        /// <inheritdoc/>
         public override long Length => this.inner.Length;
 
+        /// <inheritdoc/>
         public override long Position
         {
             get => this.inner.Position;
             set => this.inner.Position = value;
         }
 
-        public static PooledMemoryStream Borrow()
+        /// <inheritdoc/>
+        public override void Flush()
+        {
+            // nop
+        }
+
+        /// <inheritdoc/>
+        public override long Seek(long offset, SeekOrigin origin) => this.inner.Seek(offset, origin);
+
+        /// <inheritdoc/>
+        public override void SetLength(long value) => this.inner.SetLength(value);
+
+        /// <inheritdoc/>
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            this.CheckDisposed();
+            return this.inner.Read(buffer, offset, count);
+        }
+
+        /// <inheritdoc/>
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            this.CheckDisposed();
+            this.inner.Write(buffer, offset, count);
+        }
+
+        /// <inheritdoc/>
+        public byte[] GetBuffer() => this.inner.GetBuffer();
+
+        internal static PooledMemoryStream Borrow()
         {
             if (Pool.TryDequeue(out var stream))
             {
@@ -40,29 +74,7 @@
             return new PooledMemoryStream(new MemoryStream());
         }
 
-        public override void Flush()
-        {
-            // nop
-        }
-
-        public override long Seek(long offset, SeekOrigin origin) => this.inner.Seek(offset, origin);
-
-        public override void SetLength(long value) => this.inner.SetLength(value);
-
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            this.CheckDisposed();
-            return this.inner.Read(buffer, offset, count);
-        }
-
-        public override void Write(byte[] buffer, int offset, int count)
-        {
-            this.CheckDisposed();
-            this.inner.Write(buffer, offset, count);
-        }
-
-        public byte[] GetBuffer() => this.inner.GetBuffer();
-
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             if (this.disposed)
