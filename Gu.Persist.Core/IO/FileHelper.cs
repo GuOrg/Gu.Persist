@@ -97,7 +97,9 @@ namespace Gu.Persist.Core
             {
                 _ = Kernel32.MoveFileEx(file.FullName, soft.FullName, MoveFileFlags.MOVEFILE_REPLACE_EXISTING);
             }
-            catch (Exception)
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 // Swallowing here, no way to know that the file has not been touched.
                 return null;

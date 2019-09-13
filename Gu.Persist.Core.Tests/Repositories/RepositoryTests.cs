@@ -62,7 +62,9 @@ namespace Gu.Persist.Core.Tests.Repositories
             {
                 lockFileInfo.Delete();
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 // this could happen if the previous run was stopped in the debugger.
             }
