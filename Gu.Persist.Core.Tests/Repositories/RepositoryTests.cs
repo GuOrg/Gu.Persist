@@ -165,23 +165,105 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         [TestCase(true)]
         [TestCase(false)]
-        public void ReadOrCreateType(bool exists)
+        public void ReadOrCreateFileInfo(bool exists)
         {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+
             if (exists)
             {
-                this.Save(this.TypeFiles.File, this.dummy);
+                this.Save(fileInfo, dummy);
             }
 
-            var read = this.Repository.ReadOrCreate(() => this.dummy);
-            AssertFile.Exists(true, this.TypeFiles.File);
+            var read = this.Repository.ReadOrCreate(fileInfo, () => dummy);
+            AssertFile.Exists(true, fileInfo);
             if (exists)
             {
-                Assert.AreNotSame(this.dummy, read);
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
             }
             else
             {
-                Assert.AreEqual(this.dummy.Value, read.Value);
-                Assert.AreSame(this.dummy, read);
+                Assert.AreSame(dummy, read);
+            }
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ReadOrCreateFullName(bool exists)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+
+            if (exists)
+            {
+                this.Save(fileInfo, dummy);
+            }
+
+            var read = this.Repository.ReadOrCreate(fileInfo.FullName, () => dummy);
+            AssertFile.Exists(true, fileInfo);
+            if (exists)
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreSame(dummy, read);
+            }
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ReadOrCreateName(bool exists)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+
+            if (exists)
+            {
+                this.Save(fileInfo, dummy);
+            }
+
+            var read = this.Repository.ReadOrCreate(fileInfo.Name, () => dummy);
+            AssertFile.Exists(true, fileInfo);
+            if (exists)
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreSame(dummy, read);
+            }
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ReadOrCreateGeneric(bool exists)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+
+            if (exists)
+            {
+                this.Save(fileInfo, dummy);
+            }
+
+            var read = this.Repository.ReadOrCreate(() => dummy);
+            AssertFile.Exists(true, fileInfo);
+            if (exists)
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreSame(dummy, read);
             }
         }
 

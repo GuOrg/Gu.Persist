@@ -334,7 +334,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual T ReadOrCreate<T>(string fileName, Func<T> creator)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             if (creator is null)
             {
                 throw new ArgumentNullException(nameof(creator));
