@@ -2,127 +2,134 @@
 {
     using System;
     using System.Globalization;
-    using System.IO;
 
     using Gu.Persist.Core;
-
-    using Moq;
 
     using NUnit.Framework;
 
     public class FileInfoExtTests
     {
-        private readonly DirectoryInfo directoryInfo = new DirectoryInfo(@"C:\Temp");
-        private BackupSettings setting;
-        private FileInfo file;
-        private FileInfo backupFile;
-
-        [SetUp]
-        public void SetUp()
-        {
-            this.setting = new BackupSettings(
-                this.directoryInfo.FullName,
-                BackupSettings.DefaultExtension,
-                BackupSettings.DefaultTimeStampFormat,
-                3,
-                3);
-            this.file = this.directoryInfo.CreateFileInfoInDirectory("Meh.cfg");
-            this.backupFile = this.file.WithNewExtension(this.setting.Extension);
-        }
-
         [TestCase("New", true)]
         public void IsValidFileName(string name, bool expected)
         {
             Assert.AreEqual(expected, FileInfoExt.IsValidFileName(name));
         }
 
-        [TestCase("bak", @"C:\Temp\Meh.bak")]
-        [TestCase(".bak", @"C:\Temp\Meh.bak")]
-        public void ChangeExtension(string extension, string expected)
+        [TestCase("bak")]
+        [TestCase(".bak")]
+        public void ChangeExtension(string extension)
         {
-            var newFile = this.file.WithNewExtension(extension);
-            Assert.AreEqual(expected, newFile.FullName);
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            var file = directory.CreateFileInfoInDirectory(nameof(this.ChangeExtension) + ".cfg");
+            var newFile = file.WithNewExtension(extension);
+            var expected = directory.CreateFileInfoInDirectory(nameof(this.ChangeExtension) + ".bak");
+            Assert.AreEqual(expected.FullName, newFile.FullName);
         }
 
-        [TestCase("delete", @"C:\Temp\Meh.cfg.delete")]
-        [TestCase(".delete", @"C:\Temp\Meh.cfg.delete")]
-        public void AppendExtension(string extension, string expected)
+        [TestCase("delete")]
+        [TestCase(".delete")]
+        public void AppendExtension(string extension)
         {
-            var newFile = this.file.WithAppendedExtension(extension);
-            Assert.AreEqual(expected, newFile.FullName);
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            var file = directory.CreateFileInfoInDirectory(nameof(this.AppendExtension) + ".cfg");
+            var newFile = file.WithAppendedExtension(extension);
+            var expected = directory.CreateFileInfoInDirectory(nameof(this.AppendExtension) + ".cfg.delete");
+            Assert.AreEqual(expected.FullName, newFile.FullName);
         }
 
-        [TestCase("cfg", @"C:\Temp\Meh")]
-        [TestCase(".cfg", @"C:\Temp\Meh")]
-        [TestCase(".bak", null)]
-        public void RemoveExtension(string extension, string expected)
+        [TestCase("cfg")]
+        [TestCase(".cfg")]
+        [TestCase("bak")]
+        [TestCase(".bak")]
+        public void RemoveExtension(string extension)
         {
-            if (expected != null)
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            if (extension.EndsWith("cfg", StringComparison.Ordinal))
             {
-                var newFile = this.file.WithRemovedExtension(extension);
-                Assert.AreEqual(expected, newFile.FullName);
+                var file = directory.CreateFileInfoInDirectory(nameof(this.AppendExtension) + ".cfg");
+                var newFile = file.WithRemovedExtension(extension);
+                var expected = directory.CreateFileInfoInDirectory(nameof(this.AppendExtension));
+                Assert.AreEqual(expected.FullName, newFile.FullName);
             }
             else
             {
-                var exception = Assert.Throws<ArgumentException>(() => this.file.WithRemovedExtension(extension));
+                var file = directory.CreateFileInfoInDirectory(nameof(this.AppendExtension) + ".cfg");
+                var exception = Assert.Throws<ArgumentException>(() => file.WithRemovedExtension(extension));
                 Assert.AreEqual("Fail\r\nParameter name: extension", exception.Message);
             }
         }
 
-        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg", "New", @"C:\Temp\New.2015_06_14_16_54_12.cfg")]
-        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg", "New.cfg", @"C:\Temp\New.2015_06_14_16_54_12.cfg")]
-        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg", "New.bak", @"C:\Temp\New.2015_06_14_16_54_12.bak")]
-        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg.delete", "New.bak.delete", @"C:\Temp\New.2015_06_14_16_54_12.bak.delete")]
-        [TestCase(@"C:\Temp\Old.2015_06_14_16_54_12.cfg.delete", "New.bak", @"C:\Temp\New.2015_06_14_16_54_12.bak.delete")]
-        public void WithNewNameTimeStamped(string filename, string newName, string expected)
+        [TestCase("Old.2015_06_14_16_54_12.cfg",        "New",            "New.2015_06_14_16_54_12.cfg")]
+        [TestCase("Old.2015_06_14_16_54_12.cfg",        "New.cfg",        "New.2015_06_14_16_54_12.cfg")]
+        [TestCase("Old.2015_06_14_16_54_12.cfg",        "New.bak",        "New.2015_06_14_16_54_12.bak")]
+        [TestCase("Old.2015_06_14_16_54_12.cfg.delete", "New.bak.delete", "New.2015_06_14_16_54_12.bak.delete")]
+        [TestCase("Old.2015_06_14_16_54_12.cfg.delete", "New.bak",        "New.2015_06_14_16_54_12.bak.delete")]
+        public void WithNewNameTimeStamped(string oldName, string newName, string expected)
         {
-            var settings = Mock.Of<IBackupSettings>(x => x.TimeStampFormat == BackupSettings.DefaultTimeStampFormat);
-            var originalFile = new FileInfo(filename);
-            var newFile = originalFile.WithNewName(newName, settings);
-            Assert.AreEqual(expected, newFile.FullName);
-            Assert.AreEqual(filename, originalFile.FullName);
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
+            var oldFile = directory.CreateFileInfoInDirectory(oldName);
+            var newFile = oldFile.WithNewName(newName, settings);
+            Assert.AreEqual(expected, newFile.Name);
+            Assert.AreEqual(oldName, oldFile.Name);
         }
 
-        [TestCase(@"C:\Temp\Old.cfg", "New", @"C:\Temp\New.cfg")]
-        [TestCase(@"C:\Temp\Old.cfg", "New.cfg", @"C:\Temp\New.cfg")]
-        [TestCase(@"C:\Temp\Old.cfg.delete", "New", @"C:\Temp\New.cfg.delete")]
-        [TestCase(@"C:\Temp\Old.cfg", "New.bak", @"C:\Temp\New.bak")]
-        [TestCase(@"C:\Temp\Old.cfg.delete", "New.bak", @"C:\Temp\New.bak.delete")]
-        public void WithNewNameNoTimestampBackup(string filename, string newName, string expected)
+        [TestCase("Old.cfg",        "New",     "New.cfg")]
+        [TestCase("Old.cfg",        "New.cfg", "New.cfg")]
+        [TestCase("Old.cfg.delete", "New",     "New.cfg.delete")]
+        [TestCase("Old.cfg",        "New.bak", "New.bak")]
+        [TestCase("Old.cfg.delete", "New.bak", "New.bak.delete")]
+        public void WithNewNameNoTimestampBackup(string oldName, string newName, string expected)
         {
-            var settings = Mock.Of<IBackupSettings>(x => x.TimeStampFormat == (string)null);
-            var originalFile = new FileInfo(filename);
-            var newFile = originalFile.WithNewName(newName, settings);
-            Assert.AreEqual(expected, newFile.FullName);
-            Assert.AreEqual(filename, originalFile.FullName);
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            var settings = new BackupSettings(directory.FullName, ".bak", null, 1, int.MaxValue);
+            var oldFile = directory.CreateFileInfoInDirectory(oldName);
+            var newFile = oldFile.WithNewName(newName, settings);
+            Assert.AreEqual(expected, newFile.Name);
+            Assert.AreEqual(oldName, oldFile.Name);
         }
 
-        [TestCase(@"C:\Temp\Old.cfg", "New", @"C:\Temp\New.cfg")]
-        [TestCase(@"C:\Temp\Old.cfg", "New.cfg", @"C:\Temp\New.cfg")]
-        [TestCase(@"C:\Temp\Old.cfg", "New.bak", @"C:\Temp\New.bak")]
-        [TestCase(@"C:\Temp\Old.cfg", "New.bak.delete", @"C:\Temp\New.bak.delete")]
-        public void WithNewNameNoTimestamp(string filename, string newName, string expected)
+        [TestCase("Old.cfg", "New",            "New.cfg")]
+        [TestCase("Old.cfg", "New.cfg",        "New.cfg")]
+        [TestCase("Old.cfg", "New.bak",        "New.bak")]
+        [TestCase("Old.cfg", "New.bak.delete", "New.bak.delete")]
+        public void WithNewNameNoTimestamp(string oldName, string newName, string expected)
         {
-            var settings = Mock.Of<IFileSettings>();
-            var originalFile = new FileInfo(filename);
-            var newFile = originalFile.WithNewName(newName, settings);
-            Assert.AreEqual(expected, newFile.FullName);
-            Assert.AreEqual(filename, originalFile.FullName);
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            var settings = new FileSettings(directory.FullName, ".cfg");
+            var oldFile = directory.CreateFileInfoInDirectory(oldName);
+            var newFile = oldFile.WithNewName(newName, settings);
+            Assert.AreEqual(expected, newFile.Name);
+            Assert.AreEqual(oldName, oldFile.Name);
         }
 
         [Test]
         public void AddTimeStamp()
         {
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
             var time = new DateTime(2015, 06, 14, 16, 54, 12);
-            var timestamped = this.file.WithTimeStamp(time, this.setting);
-            Assert.AreEqual(@"C:\Temp\Meh.2015_06_14_16_54_12.cfg", timestamped.FullName);
+            var file = directory.CreateFileInfoInDirectory(nameof(this.AddTimeStamp) + ".cfg");
+            var timestamped = file.WithTimeStamp(time, settings);
+            var expected = directory.CreateFileInfoInDirectory(nameof(this.AddTimeStamp) + ".2015_06_14_16_54_12.cfg");
+            Assert.AreEqual(expected.FullName, timestamped.FullName);
         }
 
         [Test]
         public void GetTimeStamp()
         {
-            var timestamped = new FileInfo(@"C:\Temp\Meh.2015_06_14_16_54_12.bak");
-            var actual = timestamped.GetTimeStamp(this.setting);
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            var file = directory.CreateFileInfoInDirectory(nameof(this.AddTimeStamp) + ".2015_06_14_16_54_12.bak");
+            var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
+            var actual = file.GetTimeStamp(settings);
             var expected = new DateTime(2015, 06, 14, 16, 54, 12);
             Assert.AreEqual(expected, actual);
         }
@@ -130,32 +137,46 @@
         [Test]
         public void TimeStampRoundtrip()
         {
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
+            var file = directory.CreateFileInfoInDirectory(nameof(this.TimeStampRoundtrip) + ".bak");
             var time = new DateTime(2015, 06, 14, 16, 54, 12);
-            var timestamped = this.backupFile.WithTimeStamp(time, this.setting);
-            var actual = timestamped.GetTimeStamp(this.setting);
+            var timestamped = file.WithTimeStamp(time, settings);
+            var actual = timestamped.GetTimeStamp(settings);
             Assert.AreEqual(time, actual);
 
-            var removeTimeStamp = timestamped.WithRemovedTimeStamp(this.setting);
-            Assert.AreEqual(this.backupFile.FullName, removeTimeStamp.FullName);
+            var removeTimeStamp = timestamped.WithRemovedTimeStamp(settings);
+            Assert.AreEqual(file.FullName, removeTimeStamp.FullName);
         }
 
         [Test]
         public void TimeStampRoundtrip2()
         {
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
+            var file = directory.CreateFileInfoInDirectory(nameof(this.TimeStampRoundtrip) + ".bak");
             var time = new DateTime(2015, 06, 14, 16, 54, 12);
-            var timestamped = this.file.WithTimeStamp(time, this.setting);
-            var actual = timestamped.GetTimeStamp(this.setting);
+            var timestamped = file.WithTimeStamp(time, settings);
+            var actual = timestamped.GetTimeStamp(settings);
             Assert.AreEqual(time, actual);
 
-            var removeTimeStamp = timestamped.WithRemovedTimeStamp(this.setting);
-            Assert.AreEqual(this.file.FullName, removeTimeStamp.FullName);
+            var removeTimeStamp = timestamped.WithRemovedTimeStamp(settings);
+            Assert.AreEqual(file.FullName, removeTimeStamp.FullName);
         }
 
         [Test]
         public void RemoveTimeStamp()
         {
-            var fileInfo = this.file.WithRemovedTimeStamp(this.setting);
-            Assert.AreEqual(this.file.FullName, fileInfo.FullName);
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+            var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
+            var file = directory.CreateFileInfoInDirectory(nameof(this.TimeStampRoundtrip) + ".2015_06_14_16_54_12.bak");
+
+            var fileInfo = file.WithRemovedTimeStamp(settings);
+            var expected = directory.CreateFileInfoInDirectory(nameof(this.TimeStampRoundtrip) + ".bak");
+            Assert.AreEqual(expected.FullName, fileInfo.FullName);
         }
 
         [Test]
