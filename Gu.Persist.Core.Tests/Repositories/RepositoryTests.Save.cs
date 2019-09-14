@@ -758,5 +758,97 @@ namespace Gu.Persist.Core.Tests.Repositories
             Assert.AreEqual(dummy.Value, read.Value);
             Assert.AreNotSame(dummy, read);
         }
+
+        [Test]
+        public void SaveFileInfoWhenFileAndSoftDeleteExists()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetTestFileInfo();
+            var backupFile = repository.GetTestBackupFileInfo();
+            file.CreateFileOnDisk();
+            file.GetSoftDeleteFileFor().CreateFileOnDisk();
+            this.Repository.Save(file, dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
+            {
+                AssertFile.Exists(true, backupFile);
+            }
+
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public void SaveFullNameWhenFileAndSoftDeleteExists()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetTestFileInfo();
+            var backupFile = repository.GetTestBackupFileInfo();
+            file.CreateFileOnDisk();
+            file.GetSoftDeleteFileFor().CreateFileOnDisk();
+            this.Repository.Save(file.FullName, dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
+            {
+                AssertFile.Exists(true, backupFile);
+            }
+
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public void SaveNameWhenFileAndSoftDeleteExists()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetTestFileInfo();
+            var backupFile = repository.GetTestBackupFileInfo();
+            file.CreateFileOnDisk();
+            file.GetSoftDeleteFileFor().CreateFileOnDisk();
+            this.Repository.Save(file.Name, dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
+            {
+                AssertFile.Exists(true, backupFile);
+            }
+
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public void SaveGenericWhenFileAndSoftDeleteExists()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetGenericTestFileInfo(dummy);
+            var backupFile = repository.GetGenericTestBackupFileInfo(dummy);
+            file.CreateFileOnDisk();
+            file.GetSoftDeleteFileFor().CreateFileOnDisk();
+            this.Repository.Save(dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
+            {
+                AssertFile.Exists(true, backupFile);
+            }
+
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
     }
 }
