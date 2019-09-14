@@ -2,19 +2,15 @@
 namespace Gu.Persist.Core.Tests.IO
 {
     using System.IO;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using Gu.Persist.Core;
 
     using NUnit.Framework;
 
-    [NonParallelizable]
     public class FileHelperTests
     {
         private readonly DirectoryInfo directory;
-        private FileInfo file;
-        private FileInfo softDeleteFile;
-        private FileInfo backup;
-        private FileInfo backupSoftDelete;
 
         public FileHelperTests()
         {
@@ -23,207 +19,256 @@ namespace Gu.Persist.Core.Tests.IO
             _ = this.directory.CreateIfNotExists();
         }
 
-        [SetUp]
-        public void SetUp()
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
         {
-            this.file = this.directory.CreateFileInfoInDirectory("Setting.cfg");
-            this.softDeleteFile = this.file.GetSoftDeleteFileFor();
-            this.backup = this.file.WithNewExtension(BackupSettings.DefaultExtension);
-            this.backupSoftDelete = this.backup.GetSoftDeleteFileFor();
-            this.backup.CreateFileOnDisk();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            this.file.Delete();
-            this.backup.Delete();
-            this.softDeleteFile.Delete();
+            this.directory.Delete(true);
         }
 
         [Test]
         public void HardDeleteWhenNoFile()
         {
-            this.file.HardDelete();
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(false, this.softDeleteFile);
-            AssertFile.Exists(true, this.backup);
+            var file = this.CreateFileInfo();
+            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            file.HardDelete();
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(false, softDeleteFile);
+            AssertFile.Exists(true, backup);
         }
 
         [Test]
         public void HardDeleteWhenNoSoftFile()
         {
-            this.file.CreateFileOnDisk();
-            this.file.HardDelete();
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(false, this.softDeleteFile);
-            AssertFile.Exists(true, this.backup);
+            var file = this.CreateFileInfo();
+            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            file.CreateFileOnDisk();
+            file.HardDelete();
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(false, softDeleteFile);
+            AssertFile.Exists(true, backup);
         }
 
         [Test]
         public void HardDeleteWhenHasSoftFile()
         {
-            this.file.CreateFileOnDisk();
-            this.softDeleteFile.CreateFileOnDisk();
-            this.file.HardDelete();
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(false, this.softDeleteFile);
-            AssertFile.Exists(true, this.backup);
+            var file = this.CreateFileInfo();
+            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            file.CreateFileOnDisk();
+            softDeleteFile.CreateFileOnDisk();
+            file.HardDelete();
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(false, softDeleteFile);
+            AssertFile.Exists(true, backup);
         }
 
         [Test]
         public void HardDeleteWhenOnlySoftFile()
         {
-            this.softDeleteFile.CreateFileOnDisk();
-            this.file.HardDelete();
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(false, this.softDeleteFile);
-            AssertFile.Exists(true, this.backup);
+            var file = this.CreateFileInfo();
+            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            softDeleteFile.CreateFileOnDisk();
+            file.HardDelete();
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(false, softDeleteFile);
+            AssertFile.Exists(true, backup);
         }
 
         [Test]
         public void SoftDeleteWhenNoFile()
         {
-            var soft = this.file.SoftDelete();
+            var file = this.CreateFileInfo();
+            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            var soft = file.SoftDelete();
             Assert.AreEqual(null, soft);
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(false, this.softDeleteFile);
-            AssertFile.Exists(true, this.backup);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(false, softDeleteFile);
+            AssertFile.Exists(true, backup);
         }
 
         [Test]
         public void SoftDeleteWhenNoSoftFile()
         {
-            this.file.CreateFileOnDisk();
-            var soft = this.file.SoftDelete();
-            Assert.AreEqual(soft.FullName, this.softDeleteFile.FullName);
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(true, this.softDeleteFile);
-            AssertFile.Exists(true, this.backup);
+            var file = this.CreateFileInfo();
+            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            file.CreateFileOnDisk();
+            var soft = file.SoftDelete();
+            Assert.AreEqual(soft.FullName, softDeleteFile.FullName);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, softDeleteFile);
+            AssertFile.Exists(true, backup);
         }
 
         [Test]
         public void SoftDeleteWhenHasSoftFile()
         {
-            this.file.WriteAllText("File");
-            this.softDeleteFile.WriteAllText("Soft");
-            var soft = this.file.SoftDelete();
-            Assert.AreEqual(soft.FullName, this.softDeleteFile.FullName);
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(true, this.softDeleteFile);
-            Assert.AreEqual("File", this.softDeleteFile.ReadAllText());
-            AssertFile.Exists(true, this.backup);
+            var file = this.CreateFileInfo();
+            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            file.WriteAllText("File");
+            softDeleteFile.WriteAllText("Soft");
+            var soft = file.SoftDelete();
+            Assert.AreEqual(soft.FullName, softDeleteFile.FullName);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, softDeleteFile);
+            Assert.AreEqual("File", softDeleteFile.ReadAllText());
+            AssertFile.Exists(true, backup);
         }
 
         [Test]
         public void BackupWhenNoFile()
         {
-            this.backup.Delete();
-            AssertFile.Exists(false, this.file);
-            FileHelper.Backup(this.file, this.backup);
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(false, this.backup);
+            var file = this.CreateFileInfo();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            backup.Delete();
+            AssertFile.Exists(false, file);
+            FileHelper.Backup(file, backup);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(false, backup);
         }
 
         [Test]
         public void BackupWhenNoFileButHasBackup()
         {
-            this.backup.WriteAllText("Backup");
-            AssertFile.Exists(false, this.file);
-            FileHelper.Backup(this.file, this.backup);
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(true, this.backup);
-            Assert.AreEqual("Backup", this.backup.ReadAllText());
+            var file = this.CreateFileInfo();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            backup.WriteAllText("Backup");
+            AssertFile.Exists(false, file);
+            FileHelper.Backup(file, backup);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, backup);
+            Assert.AreEqual("Backup", backup.ReadAllText());
         }
 
         [Test]
         public void BackupWhenNoBackupFile()
         {
-            this.file.WriteAllText("File");
-            FileHelper.Backup(this.file, this.backup);
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(true, this.backup);
-            Assert.AreEqual("File", this.backup.ReadAllText());
+            var file = this.CreateFileInfo();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            file.WriteAllText("File");
+            FileHelper.Backup(file, backup);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, backup);
+            Assert.AreEqual("File", backup.ReadAllText());
         }
 
         [Test]
         public void BackupWhenHasBackupFile()
         {
-            this.file.WriteAllText("File");
-            this.backup.WriteAllText("Backup");
-            FileHelper.Backup(this.file, this.backup);
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(true, this.backup);
-            Assert.AreEqual("File", this.backup.ReadAllText());
+            var file = this.CreateFileInfo();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            file.WriteAllText("File");
+            backup.WriteAllText("Backup");
+            FileHelper.Backup(file, backup);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, backup);
+            Assert.AreEqual("File", backup.ReadAllText());
         }
 
         [Test]
         public void BackupWhenHasBackupFileAndBackupHasSoftDelete()
         {
-            this.backupSoftDelete.WriteAllText("OldSoft");
-            this.file.WriteAllText("File");
-            this.backup.WriteAllText("Backup");
-            FileHelper.Backup(this.file, this.backup);
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(true, this.backup);
-            Assert.AreEqual("File", this.backup.ReadAllText());
-            AssertFile.Exists(true, this.backupSoftDelete);
-            Assert.AreEqual("Backup", this.backupSoftDelete.ReadAllText());
+            var file = this.CreateFileInfo();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            var backupSoftDelete = backup.GetSoftDeleteFileFor();
+            backup.CreateFileOnDisk();
+            backupSoftDelete.WriteAllText("OldSoft");
+            file.WriteAllText("File");
+            backup.WriteAllText("Backup");
+            FileHelper.Backup(file, backup);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, backup);
+            Assert.AreEqual("File", backup.ReadAllText());
+            AssertFile.Exists(true, backupSoftDelete);
+            Assert.AreEqual("Backup", backupSoftDelete.ReadAllText());
         }
 
         [Test]
         public void RestoreWhenNoFile()
         {
-            this.backup.Delete();
-            AssertFile.Exists(false, this.file);
-            this.file.Restore(this.backup);
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(false, this.backup);
+            var file = this.CreateFileInfo();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            backup.Delete();
+            AssertFile.Exists(false, file);
+            file.Restore(backup);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(false, backup);
         }
 
         [Test]
         public void RestoreWhenSoftDeleteFile()
         {
-            this.softDeleteFile.WriteAllText("Soft");
-            this.backup.Delete();
-            AssertFile.Exists(false, this.file);
-            this.file.Restore(this.softDeleteFile);
-            AssertFile.Exists(true, this.file);
-            Assert.AreEqual("Soft", this.file.ReadAllText());
-            AssertFile.Exists(false, this.backup);
-            AssertFile.Exists(false, this.softDeleteFile);
+            var file = this.CreateFileInfo();
+            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            softDeleteFile.WriteAllText("Soft");
+            backup.Delete();
+            AssertFile.Exists(false, file);
+            file.Restore(softDeleteFile);
+            AssertFile.Exists(true, file);
+            Assert.AreEqual("Soft", file.ReadAllText());
+            AssertFile.Exists(false, backup);
+            AssertFile.Exists(false, softDeleteFile);
         }
 
         [Test]
         public void RestoreWhenNoRestoreFile()
         {
-            this.backup.Delete();
-            this.file.WriteAllText("File");
-            this.file.Restore(this.backup);
-            AssertFile.Exists(true, this.file);
-            AssertFile.Exists(false, this.backup);
-            Assert.AreEqual("File", this.file.ReadAllText());
+            var file = this.CreateFileInfo();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            backup.Delete();
+            file.WriteAllText("File");
+            file.Restore(backup);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, backup);
+            Assert.AreEqual("File", file.ReadAllText());
         }
 
         [Test]
         public void RestoreWhenHasRestoreFile()
         {
-            this.file.WriteAllText("File");
-            this.backup.WriteAllText("Restore");
-            this.file.Restore(this.backup);
-            AssertFile.Exists(true, this.file);
-            AssertFile.Exists(false, this.backup);
-            Assert.AreEqual("Restore", this.file.ReadAllText());
+            var file = this.CreateFileInfo();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            file.WriteAllText("File");
+            backup.WriteAllText("Restore");
+            file.Restore(backup);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, backup);
+            Assert.AreEqual("Restore", file.ReadAllText());
         }
 
         [Test]
         public void SoftDeleteWhenOnlySoftFile()
         {
-            this.softDeleteFile.CreateFileOnDisk();
-            var soft = this.file.SoftDelete();
+            var file = this.CreateFileInfo();
+            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
+            backup.CreateFileOnDisk();
+            softDeleteFile.CreateFileOnDisk();
+            var soft = file.SoftDelete();
             Assert.AreEqual(null, soft);
-            AssertFile.Exists(false, this.file);
-            AssertFile.Exists(true, this.softDeleteFile);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, softDeleteFile);
         }
 
         [TestCase(@"C:\Temp", "Setting", "cfg", @"C:\Temp\Setting.cfg")]
@@ -276,5 +321,8 @@ namespace Gu.Persist.Core.Tests.IO
             text = File.ReadAllText(fileInfo.FullName);
             Assert.AreEqual("3", text);
         }
+
+        private FileInfo CreateFileInfo([CallerMemberName] string name = null) =>
+            this.directory.CreateFileInfoInDirectory(name + ".cfg");
     }
 }
