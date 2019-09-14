@@ -979,7 +979,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             Assert.AreNotSame(list, read);
 
             list.RemoveAt(1);
-            repository.Save( list);
+            repository.Save(list);
             if (repository.Settings.BackupSettings != null)
             {
                 AssertFile.Exists(true, backupFile);

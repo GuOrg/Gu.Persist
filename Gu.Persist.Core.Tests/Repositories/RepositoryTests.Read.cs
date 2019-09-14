@@ -356,6 +356,5 @@ namespace Gu.Persist.Core.Tests.Repositories
                 Assert.AreNotSame(read1, read2);
             }
         }
-
     }
 }
