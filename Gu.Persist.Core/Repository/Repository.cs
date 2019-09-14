@@ -280,7 +280,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual T Read<T>(string fileName)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             return this.Read<T>(file);
         }

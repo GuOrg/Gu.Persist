@@ -128,7 +128,7 @@ namespace Gu.Persist.Core
         internal static FileInfo CreateFileInfo<TFileSettings>(string fileName, TFileSettings settings)
             where TFileSettings : IFileSettings
         {
-            var file = new FileInfo(Path.Combine(settings.Directory, fileName + settings.Extension));
+            var file = new FileInfo(Path.Combine(settings.Directory, fileName + (fileName.EndsWith(settings.Extension, StringComparison.InvariantCulture) ? string.Empty : settings.Extension)));
             return file;
         }
 

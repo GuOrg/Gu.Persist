@@ -3,6 +3,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Reflection;
     using System.Threading.Tasks;
@@ -47,21 +48,6 @@ namespace Gu.Persist.Core.Tests.Repositories
             this.RepoSettingFile = this.Directory.CreateFileInfoInDirectory(string.Concat(this.Settings.GetType().Name, this.Settings.Extension));
         }
 
-        [OneTimeSetUp]
-        public void OneTimeSetup()
-        {
-            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
-
-            // Default directory is created in %APPDATA%/AppName
-            // overriding it here in tests.
-            typeof(Directories).GetField("default", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly).SetValue(null, directory);
-            this.Directory = directory;
-
-            // Just a check to be sure test is not producing files outside %TEMP%
-            Assert.AreEqual(true, this.CreateRepository().Settings.Directory.StartsWith(Directories.TempDirectory.FullName));
-        }
-
         [TearDown]
         public void TearDown()
         {
@@ -78,10 +64,46 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
+        public void ReadFileInfo()
+        {
+            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
+            var dummy = new DummySerializable(1);
+            this.Save(fileInfo, dummy);
+            var repository = this.CreateRepository();
+            var read = repository.Read<DummySerializable>(fileInfo);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
         public void ReadFileName()
         {
-            this.Save(this.NamedFiles.File, this.dummy);
-            var read = this.Repository.Read<DummySerializable>(this.NamedFiles.File);
+            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
+            var dummy = new DummySerializable(1);
+            this.Save(fileInfo, dummy);
+            var repository = this.CreateRepository();
+            var read = repository.Read<DummySerializable>(fileInfo.Name);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public void ReadFullFileName()
+        {
+            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
+            var dummy = new DummySerializable(1);
+            this.Save(fileInfo, dummy);
+            var repository = this.CreateRepository();
+            var read = repository.Read<DummySerializable>(fileInfo.FullName);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public void ReadGeneric()
+        {
+            this.Save(this.TypeFiles.File, this.dummy);
+            var read = this.Repository.Read<DummySerializable>();
             Assert.AreEqual(this.dummy.Value, read.Value);
             Assert.AreNotSame(this.dummy, read);
         }
@@ -91,15 +113,6 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             this.Save(this.NamedFiles.File, this.dummy);
             var read = await this.Repository.ReadAsync<DummySerializable>(this.NamedFiles.File).ConfigureAwait(false);
-            Assert.AreEqual(this.dummy.Value, read.Value);
-            Assert.AreNotSame(this.dummy, read);
-        }
-
-        [Test]
-        public void ReadGeneric()
-        {
-            this.Save(this.TypeFiles.File, this.dummy);
-            var read = this.Repository.Read<DummySerializable>();
             Assert.AreEqual(this.dummy.Value, read.Value);
             Assert.AreNotSame(this.dummy, read);
         }
