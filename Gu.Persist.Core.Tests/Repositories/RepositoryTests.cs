@@ -2,7 +2,6 @@
 namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Reflection;
@@ -168,6 +167,35 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
+        public void SaveFileNameCaches()
+        {
+            this.Repository.Save(this.NamedFiles.File, this.dummy);
+            var read = this.Repository.Read<DummySerializable>(this.NamedFiles.File);
+            if (this.Repository is ISingletonRepository)
+            {
+                Assert.AreSame(this.dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(this.dummy.Value, read.Value);
+                Assert.AreNotSame(this.dummy, read);
+            }
+
+            this.dummy.Value++;
+            this.Repository.Save(this.NamedFiles.File, this.dummy);
+            read = this.Repository.Read<DummySerializable>(this.NamedFiles.File);
+            if (this.Repository is ISingletonRepository)
+            {
+                Assert.AreSame(this.dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(this.dummy.Value, read.Value);
+                Assert.AreNotSame(this.dummy, read);
+            }
+        }
+
+        [Test]
         public void SaveTypeCaches()
         {
             this.Repository.Save(this.dummy);
@@ -185,27 +213,6 @@ namespace Gu.Persist.Core.Tests.Repositories
             this.dummy.Value++;
             this.Repository.Save(this.dummy);
             read = this.Read<DummySerializable>(this.TypeFiles.File);
-            Assert.AreEqual(this.dummy.Value, read.Value);
-        }
-
-        [Test]
-        public void SaveFileNameCaches()
-        {
-            this.Repository.Save(this.NamedFiles.File, this.dummy);
-            var read = this.Repository.Read<DummySerializable>(this.NamedFiles.File);
-            if (this.Repository is ISingletonRepository)
-            {
-                Assert.AreSame(this.dummy, read);
-            }
-            else
-            {
-                Assert.AreEqual(this.dummy, read);
-                Assert.AreNotSame(this.dummy, read);
-            }
-
-            this.dummy.Value++;
-            this.Repository.Save(this.NamedFiles.File, this.dummy);
-            read = this.Read<DummySerializable>(this.NamedFiles.File);
             Assert.AreEqual(this.dummy.Value, read.Value);
         }
 
