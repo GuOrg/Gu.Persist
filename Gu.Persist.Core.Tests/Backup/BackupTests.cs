@@ -24,7 +24,8 @@ namespace Gu.Persist.Core.Tests.Backup
 
         public BackupTests()
         {
-            this.Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
+            this.Directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                        .CreateSubdirectory(this.GetType().FullName);
             _ = this.Directory.CreateIfNotExists();
 
             this.File = this.Directory.CreateFileInfoInDirectory("Meh.cfg");

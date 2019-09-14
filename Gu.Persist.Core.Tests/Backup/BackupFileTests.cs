@@ -60,22 +60,22 @@
             Assert.AreEqual(this.BackupOneMinuteOld.FullName, restore.FullName);
         }
 
-        [TestCase(@"C:\Temp\Gu.Persist\BackupFileTests\Meh.bak")]
-        public void CreateForNoTimestamp(string expected)
+        [Test]
+        public void CreateForNoTimestamp()
         {
             this.File.CreateFileOnDisk();
             var setting = new BackupSettings(this.File.DirectoryName, BackupSettings.DefaultExtension, null, 1, int.MaxValue);
             var backup = BackupFile.CreateFor(this.File, setting);
-            Assert.AreEqual(expected, backup.FullName);
+            StringAssert.IsMatch(@"BackupFileTests\\Meh\.bak", backup.FullName);
         }
 
-        [TestCase(@"C:\\Temp\\Gu.Persist\\BackupFileTests\\Meh\.\d\d\d\d_\d\d_\d\d_\d\d_\d\d_\d\d\.bak")]
-        public void CreateFor(string expected)
+        [Test]
+        public void CreateFor()
         {
             this.File.CreateFileOnDisk();
             var backupSettings = new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, 1);
             var backup = BackupFile.CreateFor(this.File, backupSettings);
-            StringAssert.IsMatch(expected, backup.FullName);
+            StringAssert.IsMatch(@"BackupFileTests\\Meh\.\d\d\d\d_\d\d_\d\d_\d\d_\d\d_\d\d\.bak", backup.FullName);
         }
 
         [TestCase(@"C:\Temp\Meh.2015_06_13_17_05_15.bak")]
