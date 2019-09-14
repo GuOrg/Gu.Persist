@@ -68,15 +68,6 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void ReadFileGeneric()
-        {
-            this.Save(this.TypeFiles.File, this.dummy);
-            var read = this.Repository.Read<DummySerializable>();
-            Assert.AreEqual(this.dummy.Value, read.Value);
-            Assert.AreNotSame(this.dummy, read);
-        }
-
-        [Test]
         public void ReadFileInfo()
         {
             var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
@@ -115,19 +106,61 @@ namespace Gu.Persist.Core.Tests.Repositories
         [Test]
         public void ReadGeneric()
         {
-            this.Save(this.TypeFiles.File, this.dummy);
-            var read = this.Repository.Read<DummySerializable>();
-            Assert.AreEqual(this.dummy.Value, read.Value);
-            Assert.AreNotSame(this.dummy, read);
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + this.Repository.Settings.Extension);
+            var dummy = new DummySerializable(1);
+            this.Save(fileInfo, dummy);
+            var repository = this.CreateRepository();
+            var read = repository.Read<DummySerializable>();
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
         }
 
         [Test]
-        public async Task ReadAsync()
+        public async Task ReadAsyncFileInfo()
         {
-            this.Save(this.NamedFiles.File, this.dummy);
-            var read = await this.Repository.ReadAsync<DummySerializable>(this.NamedFiles.File).ConfigureAwait(false);
-            Assert.AreEqual(this.dummy.Value, read.Value);
-            Assert.AreNotSame(this.dummy, read);
+            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
+            var dummy = new DummySerializable(1);
+            this.Save(fileInfo, dummy);
+            var repository = this.CreateRepository();
+            var read = await repository.ReadAsync<DummySerializable>(fileInfo).ConfigureAwait(false);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public async Task ReadAsyncFileName()
+        {
+            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
+            var dummy = new DummySerializable(1);
+            this.Save(fileInfo, dummy);
+            var repository = this.CreateRepository();
+            var read = await repository.ReadAsync<DummySerializable>(fileInfo.Name).ConfigureAwait(false);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public async Task ReadAsyncFullFileName()
+        {
+            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
+            var dummy = new DummySerializable(1);
+            this.Save(fileInfo, dummy);
+            var repository = this.CreateRepository();
+            var read = await repository.ReadAsync<DummySerializable>(fileInfo.FullName).ConfigureAwait(false);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public async Task ReadAsyncGeneric()
+        {
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + this.Repository.Settings.Extension);
+            var dummy = new DummySerializable(1);
+            this.Save(fileInfo, dummy);
+            var repository = this.CreateRepository();
+            var read = await repository.ReadAsync<DummySerializable>().ConfigureAwait(false);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
         }
 
         [TestCase(true)]

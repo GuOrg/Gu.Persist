@@ -221,7 +221,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual Task<T> ReadAsync<T>(string fileName)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var fileInfo = this.GetFileInfoCore(fileName);
             return this.ReadAsync<T>(fileInfo);
         }
@@ -810,6 +809,11 @@ namespace Gu.Persist.Core
         /// <returns>The <see cref="FileInfo"/>.</returns>
         protected FileInfo GetFileInfoCore(string fileName)
         {
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             var file = FileHelper.CreateFileInfo(fileName, this.Settings);
             return file;
         }
