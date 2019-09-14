@@ -18,7 +18,8 @@ namespace Gu.Persist.Core.Tests.IO
 
         public FileHelperTests()
         {
-            this.directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().Name);
+            this.directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                        .CreateSubdirectory(this.GetType().FullName);
             _ = this.directory.CreateIfNotExists();
         }
 
