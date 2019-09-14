@@ -420,48 +420,90 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void SaveThenReadGeneric()
+        public void SaveThenReadFileInfo()
         {
-            AssertFile.Exists(false, this.TypeFiles.File);
-            this.Repository.Save(this.dummy);
-            AssertFile.Exists(true, this.TypeFiles.File);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(false, this.TypeFiles.Backup);
-            }
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            AssertFile.Exists(false, fileInfo);
+            repository.Save(fileInfo, dummy);
+            AssertFile.Exists(true, fileInfo);
 
-            var read = this.Repository.Read<DummySerializable>();
-            Assert.AreEqual(this.dummy.Value, read.Value);
-            if (this.Repository is ISingletonRepository)
+            var read = repository.Read<DummySerializable>(fileInfo);
+            if (repository is ISingletonRepository)
             {
-                Assert.AreSame(this.dummy, read);
+                Assert.AreSame(dummy, read);
             }
             else
             {
-                Assert.AreNotSame(this.dummy, read);
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+        }
+
+        [Test]
+        public void SaveThenReadFullName()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            AssertFile.Exists(false, fileInfo);
+            repository.Save(fileInfo.FullName, dummy);
+            AssertFile.Exists(true, fileInfo);
+
+            var read = repository.Read<DummySerializable>(fileInfo.FullName);
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
             }
         }
 
         [Test]
         public void SaveThenReadName()
         {
-            AssertFile.Exists(false, this.NamedFiles.File);
-            this.Repository.Save(this.NamedFiles.File, this.dummy);
-            AssertFile.Exists(true, this.NamedFiles.File);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(false, this.NamedFiles.Backup);
-            }
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            AssertFile.Exists(false, fileInfo);
+            repository.Save(fileInfo.Name, dummy);
+            AssertFile.Exists(true, fileInfo);
 
-            var read = this.Repository.Read<DummySerializable>(this.NamedFiles.File);
-            Assert.AreEqual(this.dummy.Value, read.Value);
-            if (this.Repository is ISingletonRepository)
+            var read = repository.Read<DummySerializable>(fileInfo.Name);
+            if (repository is ISingletonRepository)
             {
-                Assert.AreSame(this.dummy, read);
+                Assert.AreSame(dummy, read);
             }
             else
             {
-                Assert.AreNotSame(this.dummy, read);
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+        }
+
+        [Test]
+        public void SaveThenReadGeneric()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            AssertFile.Exists(false, fileInfo);
+            repository.Save(dummy);
+            AssertFile.Exists(true, fileInfo);
+
+            var read = repository.Read<DummySerializable>();
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
             }
         }
 

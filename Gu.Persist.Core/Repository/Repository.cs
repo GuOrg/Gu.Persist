@@ -375,7 +375,11 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void Save<T>(string fileName, T item)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             var file = this.GetFileInfoCore(fileName);
             this.EnsureCanSave(file, item);
             this.SaveCore(file, item);
