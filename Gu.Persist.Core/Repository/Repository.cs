@@ -425,7 +425,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual Task SaveAsync<T>(string fileName, T item)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             this.EnsureCanSave(file, item);
             return this.SaveAsync(file, item);

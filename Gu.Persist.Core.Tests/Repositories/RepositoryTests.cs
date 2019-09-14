@@ -508,6 +508,94 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
+        public async Task SaveThenReadAsyncFileInfo()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            AssertFile.Exists(false, fileInfo);
+            await repository.SaveAsync(fileInfo, dummy).ConfigureAwait(false);
+            AssertFile.Exists(true, fileInfo);
+
+            var read = await repository.ReadAsync<DummySerializable>(fileInfo).ConfigureAwait(false);
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+        }
+
+        [Test]
+        public async Task SaveThenReadAsyncFullName()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            AssertFile.Exists(false, fileInfo);
+            await repository.SaveAsync(fileInfo.FullName, dummy).ConfigureAwait(false);
+            AssertFile.Exists(true, fileInfo);
+
+            var read = await repository.ReadAsync<DummySerializable>(fileInfo.FullName).ConfigureAwait(false);
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+        }
+
+        [Test]
+        public async Task SaveThenReadAsyncName()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            AssertFile.Exists(false, fileInfo);
+            await repository.SaveAsync(fileInfo.Name, dummy).ConfigureAwait(false);
+            AssertFile.Exists(true, fileInfo);
+
+            var read = await repository.ReadAsync<DummySerializable>(fileInfo.Name).ConfigureAwait(false);
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+        }
+
+        [Test]
+        public async Task SaveThenReadAsyncGeneric()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            AssertFile.Exists(false, fileInfo);
+            await repository.SaveAsync(dummy).ConfigureAwait(false);
+            AssertFile.Exists(true, fileInfo);
+
+            var read = await repository.ReadAsync<DummySerializable>().ConfigureAwait(false);
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+        }
+
+        [Test]
         public void SaveNullGeneric()
         {
             this.Repository.Save(this.dummy);
