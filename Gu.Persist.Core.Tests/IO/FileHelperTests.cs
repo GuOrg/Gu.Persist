@@ -29,7 +29,7 @@ namespace Gu.Persist.Core.Tests.IO
             this.softDeleteFile = this.file.GetSoftDeleteFileFor();
             this.backup = this.file.WithNewExtension(BackupSettings.DefaultExtension);
             this.backupSoftDelete = this.backup.GetSoftDeleteFileFor();
-            this.backup.CreatePlaceHolder();
+            this.backup.CreateFileOnDisk();
         }
 
         [TearDown]
@@ -52,7 +52,7 @@ namespace Gu.Persist.Core.Tests.IO
         [Test]
         public void HardDeleteWhenNoSoftFile()
         {
-            this.file.CreatePlaceHolder();
+            this.file.CreateFileOnDisk();
             this.file.HardDelete();
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(false, this.softDeleteFile);
@@ -62,8 +62,8 @@ namespace Gu.Persist.Core.Tests.IO
         [Test]
         public void HardDeleteWhenHasSoftFile()
         {
-            this.file.CreatePlaceHolder();
-            this.softDeleteFile.CreatePlaceHolder();
+            this.file.CreateFileOnDisk();
+            this.softDeleteFile.CreateFileOnDisk();
             this.file.HardDelete();
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(false, this.softDeleteFile);
@@ -73,7 +73,7 @@ namespace Gu.Persist.Core.Tests.IO
         [Test]
         public void HardDeleteWhenOnlySoftFile()
         {
-            this.softDeleteFile.CreatePlaceHolder();
+            this.softDeleteFile.CreateFileOnDisk();
             this.file.HardDelete();
             AssertFile.Exists(false, this.file);
             AssertFile.Exists(false, this.softDeleteFile);
@@ -93,7 +93,7 @@ namespace Gu.Persist.Core.Tests.IO
         [Test]
         public void SoftDeleteWhenNoSoftFile()
         {
-            this.file.CreatePlaceHolder();
+            this.file.CreateFileOnDisk();
             var soft = this.file.SoftDelete();
             Assert.AreEqual(soft.FullName, this.softDeleteFile.FullName);
             AssertFile.Exists(false, this.file);
@@ -218,7 +218,7 @@ namespace Gu.Persist.Core.Tests.IO
         [Test]
         public void SoftDeleteWhenOnlySoftFile()
         {
-            this.softDeleteFile.CreatePlaceHolder();
+            this.softDeleteFile.CreateFileOnDisk();
             var soft = this.file.SoftDelete();
             Assert.AreEqual(null, soft);
             AssertFile.Exists(false, this.file);

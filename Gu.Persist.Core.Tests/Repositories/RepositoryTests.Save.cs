@@ -1,3 +1,4 @@
+#pragma warning disable GU0009 // Name the boolean parameter.
 namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
@@ -668,6 +669,94 @@ namespace Gu.Persist.Core.Tests.Repositories
             {
                 _ = Assert.Throws<ArgumentNullException>(() => repository.Save<DummySerializable>(null));
             }
+        }
+
+        [Test]
+        public void SaveFileInfoWhenTempFileExists()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetTestFileInfo();
+            var backupFile = repository.GetTestBackupFileInfo();
+            file.TempFile(repository.Settings).CreateFileOnDisk();
+            this.Repository.Save(file, dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
+            {
+                AssertFile.Exists(false, backupFile);
+            }
+
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public void SaveFullNameWhenTempFileExists()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetTestFileInfo();
+            var backupFile = repository.GetTestBackupFileInfo();
+            file.TempFile(repository.Settings).CreateFileOnDisk();
+            this.Repository.Save(file.FullName, dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
+            {
+                AssertFile.Exists(false, backupFile);
+            }
+
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public void SaveNameWhenTempFileExists()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetTestFileInfo();
+            var backupFile = repository.GetTestBackupFileInfo();
+            file.TempFile(repository.Settings).CreateFileOnDisk();
+            this.Repository.Save(file.Name, dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
+            {
+                AssertFile.Exists(false, backupFile);
+            }
+
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
+        [Test]
+        public void SaveGenericWhenTempFileExists()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetGenericTestFileInfo(dummy);
+            var backupFile = repository.GetGenericTestBackupFileInfo(dummy);
+            file.TempFile(repository.Settings).CreateFileOnDisk();
+            this.Repository.Save(dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
+            {
+                AssertFile.Exists(false, backupFile);
+            }
+
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
         }
     }
 }

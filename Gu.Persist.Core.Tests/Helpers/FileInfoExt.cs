@@ -11,12 +11,12 @@
             return file.WithNewExtension(settings.TempExtension);
         }
 
-        public static void CreatePlaceHolder(this FileInfo file)
+        public static void CreateFileOnDisk(this FileInfo file)
         {
-            CreatePlaceHolder(file, file.FullName);
+            CreateFileOnDisk(file, file.FullName);
         }
 
-        public static void CreatePlaceHolder(this FileInfo file, string text)
+        public static void CreateFileOnDisk(this FileInfo file, string text)
         {
             Assert.NotNull(file.Directory);
             if (!file.Directory.Exists)

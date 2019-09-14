@@ -60,7 +60,7 @@ namespace Gu.Persist.Core.Tests.Backup
             }
 
             this.OtherBackup.Delete();
-            this.OtherBackup.CreatePlaceHolder();
+            this.OtherBackup.CreateFileOnDisk();
             this.SoftDelete.Delete();
         }
 

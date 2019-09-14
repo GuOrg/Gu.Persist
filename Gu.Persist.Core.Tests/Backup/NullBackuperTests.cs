@@ -73,8 +73,8 @@ namespace Gu.Persist.Core.Tests.Backup
         public void TryRestoreWhenHasBackupAndOriginal()
         {
             this.File.WriteAllText("File");
-            this.SoftDelete.CreatePlaceHolder();
-            this.Backup.CreatePlaceHolder();
+            this.SoftDelete.CreateFileOnDisk();
+            this.Backup.CreateFileOnDisk();
 
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(true, this.SoftDelete);
@@ -144,11 +144,11 @@ namespace Gu.Persist.Core.Tests.Backup
         [Test]
         public void PurgeWhenHasSoftDelete()
         {
-            this.File.CreatePlaceHolder();
-            this.SoftDelete.CreatePlaceHolder();
+            this.File.CreateFileOnDisk();
+            this.SoftDelete.CreateFileOnDisk();
             foreach (var backup in this.TimestampedBackups)
             {
-                backup.CreatePlaceHolder();
+                backup.CreateFileOnDisk();
             }
 
             using (var lockedFile = this.LockedFile())
@@ -168,9 +168,9 @@ namespace Gu.Persist.Core.Tests.Backup
         [Test]
         public void PurgeDeletesSoftDeletesNoTimestamp()
         {
-            this.File.CreatePlaceHolder();
-            this.SoftDelete.CreatePlaceHolder();
-            this.Backup.CreatePlaceHolder();
+            this.File.CreateFileOnDisk();
+            this.SoftDelete.CreateFileOnDisk();
+            this.Backup.CreateFileOnDisk();
             using (var lockedFile = this.LockedFile())
             {
                 this.backuper.AfterSave(lockedFile);
@@ -186,12 +186,12 @@ namespace Gu.Persist.Core.Tests.Backup
         {
             foreach (var backup in this.TimestampedBackups)
             {
-                backup.CreatePlaceHolder();
+                backup.CreateFileOnDisk();
             }
 
-            this.SoftDelete.CreatePlaceHolder();
-            this.File.CreatePlaceHolder();
-            this.Backup.CreatePlaceHolder();
+            this.SoftDelete.CreateFileOnDisk();
+            this.File.CreateFileOnDisk();
+            this.Backup.CreateFileOnDisk();
             using (var lockedFile = this.LockedFile())
             {
                 this.backuper.AfterSave(lockedFile);
