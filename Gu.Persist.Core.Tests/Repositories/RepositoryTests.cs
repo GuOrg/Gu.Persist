@@ -14,11 +14,24 @@ namespace Gu.Persist.Core.Tests.Repositories
 
     public abstract class RepositoryTests
     {
-        private readonly DummySerializable dummy;
+        private readonly DummySerializable dummy = new DummySerializable(1);
 
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         protected RepositoryTests()
         {
-            this.dummy = new DummySerializable(1);
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
+
+            // Default directory is created in %APPDATA%/AppName
+            // overriding it here in tests.
+            typeof(Directories).GetField("default", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly).SetValue(null, directory);
+            this.Directory = directory;
+
+            // Just a check to be sure test is not producing files outside %TEMP%
+            // ReSharper disable once VirtualMemberCallInConstructor
+#pragma warning disable CA2214 // Do not call overridable methods in constructors
+            Assert.AreEqual(true, this.CreateRepository().Settings.Directory.StartsWith(Directories.TempDirectory.FullName, StringComparison.InvariantCulture));
+#pragma warning restore CA2214 // Do not call overridable methods in constructors
         }
 
         public RepositorySettings Settings => (RepositorySettings)this.Repository?.Settings;
@@ -29,7 +42,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         public IRepository Repository { get; private set; }
 
-        public DirectoryInfo Directory { get; private set; }
+        public DirectoryInfo Directory { get; }
 
         public Files NamedFiles { get; private set; }
 
