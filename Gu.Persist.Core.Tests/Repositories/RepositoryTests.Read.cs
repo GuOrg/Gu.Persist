@@ -5,7 +5,6 @@ namespace Gu.Persist.Core.Tests.Repositories
 
     public abstract partial class RepositoryTests
     {
-
         [Test]
         public void ReadFileInfo()
         {
