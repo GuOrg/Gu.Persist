@@ -20,7 +20,7 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
 
         protected override IRepository Create()
         {
-            return new DataRepository(this.TargetDirectory);
+            return new DataRepository(this.Directory);
         }
     }
 }

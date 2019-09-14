@@ -11,14 +11,14 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
         protected override IRepository Create()
         {
             var backupSettings = new BackupSettings(
-                directory: this.TargetDirectory.FullName + "\\Backup",
+                directory: this.Directory.FullName + "\\Backup",
                 extension: ".bak",
                 timeStampFormat: BackupSettings.DefaultTimeStampFormat,
                 numberOfBackups: 1,
                 maxAgeInDays: int.MaxValue);
 
             var settings = new RepositorySettings(
-                directory: this.TargetDirectory.FullName,
+                directory: this.Directory.FullName,
                 jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
                 isTrackingDirty: false,
                 backupSettings: backupSettings);

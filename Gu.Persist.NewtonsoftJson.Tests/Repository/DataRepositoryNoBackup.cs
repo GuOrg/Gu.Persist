@@ -16,7 +16,7 @@
         protected override IRepository Create()
         {
             var settings = new NewtonsoftJson.DataRepositorySettings(
-                directory: this.TargetDirectory.FullName,
+                directory: this.Directory.FullName,
                 jsonSerializerSettings: NewtonsoftJson.RepositorySettings.CreateDefaultJsonSettings(),
                 isTrackingDirty: false,
                 saveNullDeletesFile: false,

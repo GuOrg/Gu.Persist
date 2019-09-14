@@ -4,18 +4,16 @@ namespace Gu.Persist.Core.Tests.Repositories
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
     using System.Threading.Tasks;
 
     using Gu.Persist.Core;
 
     using NUnit.Framework;
 
-    public abstract class RepositoryTests : IDisposable
+    public abstract class RepositoryTests
     {
         private readonly DummySerializable dummy;
-
-        private LockedFile lockFile;
-        private bool disposed;
 
         protected RepositoryTests()
         {
@@ -30,11 +28,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         public IRepository Repository { get; private set; }
 
-        public DirectoryInfo Directory => this.Repository?.Settings.Directory != null
-                                              ? new DirectoryInfo(this.Repository.Settings.Directory)
-                                              : null;
-
-        public DirectoryInfo TargetDirectory => new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().FullName);
+        public DirectoryInfo Directory { get; private set; }
 
         public Files NamedFiles { get; private set; }
 
@@ -45,8 +39,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [SetUp]
         public void SetUp()
         {
-            this.Directory?.DeleteIfExists(recursive: true);
-            this.TargetDirectory?.DeleteIfExists(recursive: true);
+            this.Directory.DeleteIfExists(recursive: true);
             this.Repository = this.Create();
             this.Repository.ClearCache();
             this.NamedFiles = new Files(this.GetType().Name, this.Settings);
@@ -55,37 +48,24 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [OneTimeSetUp]
-        public async Task OneTimeSetup()
+        public void OneTimeSetup()
         {
-            var lockFileInfo = Directories.TempDirectory.CreateFileInfoInDirectory("test.lock");
-            try
-            {
-                lockFileInfo.Delete();
-            }
-#pragma warning disable CA1031 // Do not catch general exception types
-            catch
-#pragma warning restore CA1031 // Do not catch general exception types
-            {
-                // this could happen if the previous run was stopped in the debugger.
-            }
+            var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
+                                       .CreateSubdirectory(this.GetType().FullName);
 
-            this.lockFile?.Dispose();
+            // Default directory is created in %APPDATA%/AppName
+            // overriding it here in tests.
+            typeof(Directories).GetField("default", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly).SetValue(null, directory);
+            this.Directory = directory;
 
-            // using this because AppVeyor uses two workers for running the tests.
-            this.lockFile = await LockedFile.CreateAsync(lockFileInfo, TimeSpan.FromSeconds(60))
-                                            .ConfigureAwait(false);
+            // Just a check to be sure test is not producing files outside %TEMP%
+            Assert.AreEqual(true, this.Create().Settings.Directory.StartsWith(Directories.TempDirectory.FullName));
         }
 
         [TearDown]
         public void TearDown()
         {
             this.Directory.DeleteIfExists(true);
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            this.lockFile?.DisposeAndDeleteFile();
         }
 
         [Test]
@@ -1109,26 +1089,6 @@ namespace Gu.Persist.Core.Tests.Repositories
                     Assert.AreEqual("b", this.NamedFiles.Backup.ReadAllText());
                     Assert.AreEqual("bb", this.NamedFiles.BackupNewName.ReadAllText());
                 }
-            }
-        }
-
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (this.disposed)
-            {
-                return;
-            }
-
-            this.disposed = true;
-            if (disposing)
-            {
-                this.lockFile?.Dispose();
             }
         }
 

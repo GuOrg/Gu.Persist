@@ -15,7 +15,7 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
         protected override IRepository Create()
         {
             var settings = new RepositorySettings(
-                directory: this.TargetDirectory.FullName,
+                directory: this.Directory.FullName,
                 isTrackingDirty: true,
                 backupSettings: null);
             return new SingletonRepository(settings);
