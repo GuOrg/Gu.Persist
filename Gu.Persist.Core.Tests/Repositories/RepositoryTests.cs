@@ -89,7 +89,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void ReadFileType()
+        public void ReadFileGeneric()
         {
             this.Save(this.TypeFiles.File, this.dummy);
             var read = this.Repository.Read<DummySerializable>();
@@ -116,7 +116,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void ReadType()
+        public void ReadGeneric()
         {
             this.Save(this.TypeFiles.File, this.dummy);
             var read = this.Repository.Read<DummySerializable>();
@@ -211,7 +211,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void SaveThenReadType()
+        public void SaveThenReadGeneric()
         {
             AssertFile.Exists(false, this.TypeFiles.File);
             this.Repository.Save(this.dummy);
@@ -257,7 +257,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void SaveNullType()
+        public void SaveNullGeneric()
         {
             this.Repository.Save(this.dummy);
             AssertFile.Exists(true, this.TypeFiles.File);
@@ -388,7 +388,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void DeleteBackupsType()
+        public void DeleteBackupsGeneric()
         {
             this.TypeFiles.SoftDelete.CreatePlaceHolder();
             AssertFile.Exists(true, this.TypeFiles.SoftDelete);
@@ -426,7 +426,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void SaveType()
+        public void SaveGeneric()
         {
             AssertFile.Exists(false, this.TypeFiles.File);
             this.Repository.Save(this.dummy);
@@ -830,7 +830,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void IsDirtyType()
+        public void IsDirtyGeneric()
         {
             if (this.Settings.IsTrackingDirty)
             {
