@@ -5,7 +5,7 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
 
     public class BackupInSubDirectory : BinaryRepositoryTests
     {
-        protected override IRepository Create()
+        protected override IRepository CreateRepository()
         {
             var backupSettings = new BackupSettings(
                 directory: this.Directory.FullName + "\\Backup",

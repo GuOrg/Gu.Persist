@@ -8,7 +8,7 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
 
     public class BackupInSubDirrectory : JsonRepositoryTests
     {
-        protected override IRepository Create()
+        protected override IRepository CreateRepository()
         {
             var backupSettings = new BackupSettings(
                 directory: this.Directory.FullName + "\\Backup",

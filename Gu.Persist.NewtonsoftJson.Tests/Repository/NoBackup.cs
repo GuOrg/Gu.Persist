@@ -12,7 +12,7 @@
             Assert.AreSame(NullBackuper.Default, this.Repository.Backuper);
         }
 
-        protected override IRepository Create()
+        protected override IRepository CreateRepository()
         {
             var settings = new NewtonsoftJson.RepositorySettings(
                 directory: this.Directory.FullName,

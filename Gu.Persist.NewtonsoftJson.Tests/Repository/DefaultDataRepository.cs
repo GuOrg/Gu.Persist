@@ -14,7 +14,7 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
             AssertFile.Exists(true, this.RepoSettingFile);
         }
 
-        protected override IRepository Create()
+        protected override IRepository CreateRepository()
         {
             return new DataRepository();
         }

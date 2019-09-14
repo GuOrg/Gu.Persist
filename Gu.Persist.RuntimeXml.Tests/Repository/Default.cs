@@ -15,7 +15,7 @@ namespace Gu.Persist.RuntimeXml.Tests.Repository
             AssertFile.Exists(true, this.RepoSettingFile);
         }
 
-        protected override IRepository Create()
+        protected override IRepository CreateRepository()
         {
             return new SingletonRepository();
         }

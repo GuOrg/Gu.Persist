@@ -11,10 +11,10 @@ namespace Gu.Persist.SystemXml.Tests.Repository
         [Test]
         public void CreateSecond()
         {
-            Assert.DoesNotThrow(() => this.Create());
+            Assert.DoesNotThrow(() => this.CreateRepository());
         }
 
-        protected override IRepository Create()
+        protected override IRepository CreateRepository()
         {
             return new SingletonRepository();
         }

@@ -21,7 +21,7 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
             Assert.AreEqual(null, this.Settings.BackupSettings.TimeStampFormat);
         }
 
-        protected override IRepository Create()
+        protected override IRepository CreateRepository()
         {
             return new SingletonRepository(this.Directory);
         }

@@ -12,7 +12,7 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
             Assert.AreSame(NullBackuper.Default, this.Repository.Backuper);
         }
 
-        protected override IRepository Create()
+        protected override IRepository CreateRepository()
         {
             var settings = new RepositorySettings(
                 directory: this.Directory.FullName,

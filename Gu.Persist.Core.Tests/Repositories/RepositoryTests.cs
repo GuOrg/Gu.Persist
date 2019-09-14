@@ -40,7 +40,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void SetUp()
         {
             this.Directory.DeleteIfExists(recursive: true);
-            this.Repository = this.Create();
+            this.Repository = this.CreateRepository();
             this.Repository.ClearCache();
             this.NamedFiles = new Files(this.GetType().Name, this.Settings);
             this.TypeFiles = new Files(this.dummy.GetType().Name, this.Settings);
@@ -59,7 +59,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             this.Directory = directory;
 
             // Just a check to be sure test is not producing files outside %TEMP%
-            Assert.AreEqual(true, this.Create().Settings.Directory.StartsWith(Directories.TempDirectory.FullName));
+            Assert.AreEqual(true, this.CreateRepository().Settings.Directory.StartsWith(Directories.TempDirectory.FullName));
         }
 
         [TearDown]
@@ -1109,7 +1109,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         ////    Assert.AreEqual(_dummy.Value - 1, read.Value);
         ////}
 
-        protected abstract IRepository Create();
+        protected abstract IRepository CreateRepository();
 
         protected abstract void Save<T>(FileInfo file, T item);
 

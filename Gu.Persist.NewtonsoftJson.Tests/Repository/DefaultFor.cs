@@ -21,7 +21,7 @@
             System.IO.File.Delete(fileInfo.FullName);
         }
 
-        protected override IRepository Create()
+        protected override IRepository CreateRepository()
         {
             return new SingletonRepository(this.Directory);
         }

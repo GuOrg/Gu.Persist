@@ -6,7 +6,7 @@
 
     public class SaveNullDeletesFileCaching : JsonRepositoryTests
     {
-        protected override IRepository Create()
+        protected override IRepository CreateRepository()
         {
             var settings = new NewtonsoftJson.DataRepositorySettings(
                 directory: this.Directory.FullName,
