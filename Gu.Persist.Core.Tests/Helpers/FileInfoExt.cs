@@ -6,6 +6,11 @@
 
     public static class TestFileInfoExt
     {
+        public static FileInfo TempFile(this FileInfo file, IRepositorySettings settings)
+        {
+            return file.WithNewExtension(settings.TempExtension);
+        }
+
         public static void CreatePlaceHolder(this FileInfo file)
         {
             CreatePlaceHolder(file, file.FullName);

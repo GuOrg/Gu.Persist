@@ -712,182 +712,91 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void SaveLongListThenShortListFile()
+        public void SaveFileInfo()
         {
-            var list = new List<DummySerializable>
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetTestFileInfo();
+            var backupFile = repository.GetTestBackupFileInfo();
+            AssertFile.Exists(false, file);
+            this.Repository.Save(file, dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
             {
-                this.dummy,
-                new DummySerializable(2),
-            };
-            this.Repository.Save(this.NamedFiles.File, list);
-            AssertFile.Exists(true, this.NamedFiles.File);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(false, this.NamedFiles.Backup);
+                AssertFile.Exists(false, backupFile);
             }
 
-            var read = this.Read<List<DummySerializable>>(this.NamedFiles.File);
-            CollectionAssert.AreEqual(list, read);
-            Assert.AreNotSame(this.dummy, read);
-
-            list.RemoveAt(1);
-            this.Repository.Save(this.NamedFiles.File, list);
-            AssertFile.Exists(true, this.NamedFiles.File);
-            read = this.Read<List<DummySerializable>>(this.NamedFiles.File);
-            CollectionAssert.AreEqual(list, read);
-            Assert.AreNotSame(this.dummy, read);
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void DeleteType(bool deleteBackups)
-        {
-            if (this.Repository is IDataRepository dataRepository)
-            {
-                this.TypeFiles.File.CreatePlaceHolder();
-                this.TypeFiles.SoftDelete.CreatePlaceHolder();
-                if (this.IsBackingUp)
-                {
-                    this.TypeFiles.Backup.CreatePlaceHolder();
-                    AssertFile.Exists(true, this.TypeFiles.Backup);
-                }
-
-                AssertFile.Exists(true, this.TypeFiles.File);
-                AssertFile.Exists(true, this.TypeFiles.SoftDelete);
-
-                dataRepository.Delete<DummySerializable>(deleteBackups);
-                AssertFile.Exists(false, this.TypeFiles.File);
-                AssertFile.Exists(false, this.TypeFiles.SoftDelete);
-                if (this.IsBackingUp)
-                {
-                    AssertFile.Exists(!deleteBackups, this.TypeFiles.Backup);
-                }
-            }
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void DeleteName(bool deleteBackups)
-        {
-            if (this.Repository is IDataRepository dataRepository)
-            {
-                this.NamedFiles.File.CreatePlaceHolder();
-                this.NamedFiles.SoftDelete.CreatePlaceHolder();
-                if (this.IsBackingUp)
-                {
-                    this.NamedFiles.Backup.CreatePlaceHolder();
-                    AssertFile.Exists(true, this.NamedFiles.Backup);
-                }
-
-                AssertFile.Exists(true, this.NamedFiles.File);
-                AssertFile.Exists(true, this.NamedFiles.SoftDelete);
-
-                dataRepository.Delete(this.NamedFiles.File, deleteBackups);
-                AssertFile.Exists(false, this.NamedFiles.File);
-                AssertFile.Exists(false, this.NamedFiles.SoftDelete);
-                if (this.IsBackingUp)
-                {
-                    AssertFile.Exists(!deleteBackups, this.NamedFiles.Backup);
-                }
-            }
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
         }
 
         [Test]
-        public void DeleteBackupsGeneric()
+        public void SaveFullName()
         {
-            this.TypeFiles.SoftDelete.CreatePlaceHolder();
-            AssertFile.Exists(true, this.TypeFiles.SoftDelete);
-            if (this.IsBackingUp)
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetTestFileInfo();
+            var backupFile = repository.GetTestBackupFileInfo();
+            AssertFile.Exists(false, file);
+            this.Repository.Save(file.FullName, dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
             {
-                this.TypeFiles.Backup.CreatePlaceHolder();
-                AssertFile.Exists(true, this.TypeFiles.Backup);
+                AssertFile.Exists(false, backupFile);
             }
 
-            this.Repository.DeleteBackups<DummySerializable>();
-            AssertFile.Exists(false, this.TypeFiles.SoftDelete);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(false, this.TypeFiles.Backup);
-            }
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
         }
 
         [Test]
-        public void DeleteBackupsName()
+        public void SaveName()
         {
-            this.NamedFiles.SoftDelete.CreatePlaceHolder();
-            AssertFile.Exists(true, this.NamedFiles.SoftDelete);
-            if (this.IsBackingUp)
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetTestFileInfo();
+            var backupFile = repository.GetTestBackupFileInfo();
+            AssertFile.Exists(false, file);
+            this.Repository.Save(file.Name, dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
             {
-                this.NamedFiles.Backup.CreatePlaceHolder();
-                AssertFile.Exists(true, this.NamedFiles.Backup);
+                AssertFile.Exists(false, backupFile);
             }
 
-            this.Repository.DeleteBackups(this.NamedFiles.File);
-            AssertFile.Exists(false, this.NamedFiles.SoftDelete);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(false, this.NamedFiles.Backup);
-            }
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
         }
 
         [Test]
         public void SaveGeneric()
         {
-            AssertFile.Exists(false, this.TypeFiles.File);
-            this.Repository.Save(this.dummy);
-            AssertFile.Exists(true, this.TypeFiles.File);
-            AssertFile.Exists(false, this.TypeFiles.SoftDelete);
-            if (this.IsBackingUp)
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = repository.GetGenericTestFileInfo(dummy);
+            var backupFile = repository.GetGenericTestBackupFileInfo(dummy);
+            AssertFile.Exists(false, file);
+            this.Repository.Save(dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
             {
-                AssertFile.Exists(false, this.TypeFiles.Backup);
+                AssertFile.Exists(false, backupFile);
             }
 
-            var read = this.Read<DummySerializable>(this.TypeFiles.File);
-            Assert.AreEqual(this.dummy.Value, read.Value);
-            Assert.AreNotSame(this.dummy, read);
-        }
-
-        [Test]
-        public void SaveTypeTwice()
-        {
-            AssertFile.Exists(false, this.TypeFiles.File);
-            this.Repository.Save(this.dummy);
-            AssertFile.Exists(true, this.TypeFiles.File);
-            AssertFile.Exists(false, this.TypeFiles.SoftDelete);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(false, this.TypeFiles.Backup);
-            }
-
-            this.dummy.Value++;
-            this.Repository.Save(this.dummy);
-            AssertFile.Exists(true, this.TypeFiles.File);
-            AssertFile.Exists(false, this.TypeFiles.SoftDelete);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(true, this.TypeFiles.Backup);
-            }
-
-            var read = this.Read<DummySerializable>(this.TypeFiles.File);
-            Assert.AreEqual(this.dummy.Value, read.Value);
-            Assert.AreNotSame(this.dummy, read);
-        }
-
-        [Test]
-        public void SaveFileName()
-        {
-            AssertFile.Exists(false, this.NamedFiles.File);
-            this.Repository.Save(this.NamedFiles.File, this.dummy);
-            AssertFile.Exists(true, this.NamedFiles.File);
-            AssertFile.Exists(false, this.NamedFiles.SoftDelete);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(false, this.NamedFiles.Backup);
-            }
-
-            var read = this.Read<DummySerializable>(this.NamedFiles.File);
-            Assert.AreEqual(this.dummy.Value, read.Value);
-            Assert.AreNotSame(this.dummy, read);
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
         }
 
         [Test]
@@ -917,53 +826,29 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void SaveTypeNull()
+        public void SaveTypeTwice()
         {
+            AssertFile.Exists(false, this.TypeFiles.File);
             this.Repository.Save(this.dummy);
             AssertFile.Exists(true, this.TypeFiles.File);
+            AssertFile.Exists(false, this.TypeFiles.SoftDelete);
             if (this.IsBackingUp)
             {
                 AssertFile.Exists(false, this.TypeFiles.Backup);
             }
 
-            if ((this.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
-            {
-                this.Repository.Save<DummySerializable>(null);
-                AssertFile.Exists(false, this.TypeFiles.File);
-                if (this.IsBackingUp)
-                {
-                    AssertFile.Exists(true, this.TypeFiles.Backup);
-                }
-            }
-            else
-            {
-                _ = Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(null));
-            }
-        }
-
-        [Test]
-        public void SaveFileNameNull()
-        {
-            this.Repository.Save(this.NamedFiles.File, this.dummy);
-            AssertFile.Exists(true, this.NamedFiles.File);
+            this.dummy.Value++;
+            this.Repository.Save(this.dummy);
+            AssertFile.Exists(true, this.TypeFiles.File);
+            AssertFile.Exists(false, this.TypeFiles.SoftDelete);
             if (this.IsBackingUp)
             {
-                AssertFile.Exists(false, this.NamedFiles.Backup);
+                AssertFile.Exists(true, this.TypeFiles.Backup);
             }
 
-            if ((this.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
-            {
-                this.Repository.Save<DummySerializable>(this.NamedFiles.File, null);
-                AssertFile.Exists(false, this.NamedFiles.File);
-                if (this.IsBackingUp)
-                {
-                    AssertFile.Exists(true, this.NamedFiles.Backup);
-                }
-            }
-            else
-            {
-                _ = Assert.Throws<ArgumentNullException>(() => this.Repository.Save<DummySerializable>(this.NamedFiles.File, null));
-            }
+            var read = this.Read<DummySerializable>(this.TypeFiles.File);
+            Assert.AreEqual(this.dummy.Value, read.Value);
+            Assert.AreNotSame(this.dummy, read);
         }
 
         [Test]
@@ -1231,6 +1116,125 @@ namespace Gu.Persist.Core.Tests.Repositories
                     read = this.Read<DummySerializable>(this.NamedFiles.Backup);
                     Assert.AreEqual(this.dummy.Value - 1, read.Value);
                 }
+            }
+        }
+
+        [Test]
+        public void SaveLongListThenShortListFile()
+        {
+            var list = new List<DummySerializable>
+            {
+                this.dummy,
+                new DummySerializable(2),
+            };
+            this.Repository.Save(this.NamedFiles.File, list);
+            AssertFile.Exists(true, this.NamedFiles.File);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.NamedFiles.Backup);
+            }
+
+            var read = this.Read<List<DummySerializable>>(this.NamedFiles.File);
+            CollectionAssert.AreEqual(list, read);
+            Assert.AreNotSame(this.dummy, read);
+
+            list.RemoveAt(1);
+            this.Repository.Save(this.NamedFiles.File, list);
+            AssertFile.Exists(true, this.NamedFiles.File);
+            read = this.Read<List<DummySerializable>>(this.NamedFiles.File);
+            CollectionAssert.AreEqual(list, read);
+            Assert.AreNotSame(this.dummy, read);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void DeleteType(bool deleteBackups)
+        {
+            if (this.Repository is IDataRepository dataRepository)
+            {
+                this.TypeFiles.File.CreatePlaceHolder();
+                this.TypeFiles.SoftDelete.CreatePlaceHolder();
+                if (this.IsBackingUp)
+                {
+                    this.TypeFiles.Backup.CreatePlaceHolder();
+                    AssertFile.Exists(true, this.TypeFiles.Backup);
+                }
+
+                AssertFile.Exists(true, this.TypeFiles.File);
+                AssertFile.Exists(true, this.TypeFiles.SoftDelete);
+
+                dataRepository.Delete<DummySerializable>(deleteBackups);
+                AssertFile.Exists(false, this.TypeFiles.File);
+                AssertFile.Exists(false, this.TypeFiles.SoftDelete);
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(!deleteBackups, this.TypeFiles.Backup);
+                }
+            }
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void DeleteName(bool deleteBackups)
+        {
+            if (this.Repository is IDataRepository dataRepository)
+            {
+                this.NamedFiles.File.CreatePlaceHolder();
+                this.NamedFiles.SoftDelete.CreatePlaceHolder();
+                if (this.IsBackingUp)
+                {
+                    this.NamedFiles.Backup.CreatePlaceHolder();
+                    AssertFile.Exists(true, this.NamedFiles.Backup);
+                }
+
+                AssertFile.Exists(true, this.NamedFiles.File);
+                AssertFile.Exists(true, this.NamedFiles.SoftDelete);
+
+                dataRepository.Delete(this.NamedFiles.File, deleteBackups);
+                AssertFile.Exists(false, this.NamedFiles.File);
+                AssertFile.Exists(false, this.NamedFiles.SoftDelete);
+                if (this.IsBackingUp)
+                {
+                    AssertFile.Exists(!deleteBackups, this.NamedFiles.Backup);
+                }
+            }
+        }
+
+        [Test]
+        public void DeleteBackupsGeneric()
+        {
+            this.TypeFiles.SoftDelete.CreatePlaceHolder();
+            AssertFile.Exists(true, this.TypeFiles.SoftDelete);
+            if (this.IsBackingUp)
+            {
+                this.TypeFiles.Backup.CreatePlaceHolder();
+                AssertFile.Exists(true, this.TypeFiles.Backup);
+            }
+
+            this.Repository.DeleteBackups<DummySerializable>();
+            AssertFile.Exists(false, this.TypeFiles.SoftDelete);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.TypeFiles.Backup);
+            }
+        }
+
+        [Test]
+        public void DeleteBackupsName()
+        {
+            this.NamedFiles.SoftDelete.CreatePlaceHolder();
+            AssertFile.Exists(true, this.NamedFiles.SoftDelete);
+            if (this.IsBackingUp)
+            {
+                this.NamedFiles.Backup.CreatePlaceHolder();
+                AssertFile.Exists(true, this.NamedFiles.Backup);
+            }
+
+            this.Repository.DeleteBackups(this.NamedFiles.File);
+            AssertFile.Exists(false, this.NamedFiles.SoftDelete);
+            if (this.IsBackingUp)
+            {
+                AssertFile.Exists(false, this.NamedFiles.Backup);
             }
         }
 
