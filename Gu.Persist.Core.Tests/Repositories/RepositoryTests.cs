@@ -80,7 +80,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void ReadFileName()
+        public void ReadName()
         {
             var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
             var dummy = new DummySerializable(1);
@@ -92,7 +92,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void ReadFullFileName()
+        public void ReadFullName()
         {
             var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
             var dummy = new DummySerializable(1);
@@ -128,7 +128,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public async Task ReadAsyncFileName()
+        public async Task ReadAsyncName()
         {
             var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
             var dummy = new DummySerializable(1);
@@ -140,7 +140,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public async Task ReadAsyncFullFileName()
+        public async Task ReadAsyncFullName()
         {
             var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + this.Repository.Settings.Extension);
             var dummy = new DummySerializable(1);
