@@ -268,11 +268,14 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void ReadTypeCaches()
+        public void ReadFileInfoCaches()
         {
-            this.Save(this.TypeFiles.File, this.dummy);
-            var read1 = this.Repository.Read<DummySerializable>();
-            var read2 = this.Repository.Read<DummySerializable>();
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            this.Save(fileInfo, dummy);
+            var read1 = this.Repository.Read<DummySerializable>(fileInfo);
+            var read2 = this.Repository.Read<DummySerializable>(fileInfo);
             if (this.Repository is ISingletonRepository)
             {
                 Assert.AreSame(read1, read2);
@@ -284,11 +287,52 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void ReadNamedCaches()
+        public void ReadFullNameCaches()
         {
-            this.Save(this.NamedFiles.File, this.dummy);
-            var read1 = this.Repository.Read<DummySerializable>(this.NamedFiles.File);
-            var read2 = this.Repository.Read<DummySerializable>(this.NamedFiles.File);
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            this.Save(fileInfo, dummy);
+            var read1 = this.Repository.Read<DummySerializable>(fileInfo.FullName);
+            var read2 = this.Repository.Read<DummySerializable>(fileInfo.FullName);
+            if (this.Repository is ISingletonRepository)
+            {
+                Assert.AreSame(read1, read2);
+            }
+            else
+            {
+                Assert.AreNotSame(read1, read2);
+            }
+        }
+
+        [Test]
+        public void ReadNameCaches()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            this.Save(fileInfo, dummy);
+            var read1 = this.Repository.Read<DummySerializable>(fileInfo.Name);
+            var read2 = this.Repository.Read<DummySerializable>(fileInfo.Name);
+            if (this.Repository is ISingletonRepository)
+            {
+                Assert.AreSame(read1, read2);
+            }
+            else
+            {
+                Assert.AreNotSame(read1, read2);
+            }
+        }
+
+        [Test]
+        public void ReadGenericCaches()
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            this.Save(fileInfo, dummy);
+            var read1 = this.Repository.Read<DummySerializable>();
+            var read2 = this.Repository.Read<DummySerializable>();
             if (this.Repository is ISingletonRepository)
             {
                 Assert.AreSame(read1, read2);
