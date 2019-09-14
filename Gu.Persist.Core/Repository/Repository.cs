@@ -907,18 +907,18 @@ namespace Gu.Persist.Core
             }
 
             T item;
-            if (this.ExistsCore<T>())
+            if (file.Exists)
             {
-                item = this.ReadCore<T>();
+                item = this.ReadCore<T>(file);
             }
             else if (this.Backuper.TryRestore(file))
             {
-                item = this.ReadCore<T>();
+                item = this.ReadCore<T>(file);
             }
             else
             {
                 item = creator();
-                this.SaveCore(item);
+                this.SaveCore(file, item);
             }
 
             return item;

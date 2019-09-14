@@ -71,7 +71,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void ReadFileInfo()
         {
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             var dummy = new DummySerializable(1);
             this.Save(fileInfo, dummy);
             var read = repository.Read<DummySerializable>(fileInfo);
@@ -83,7 +83,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void ReadName()
         {
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             var dummy = new DummySerializable(1);
             this.Save(fileInfo, dummy);
             var read = repository.Read<DummySerializable>(fileInfo.Name);
@@ -95,7 +95,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void ReadFullName()
         {
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             var dummy = new DummySerializable(1);
             this.Save(fileInfo, dummy);
             var read = repository.Read<DummySerializable>(fileInfo.FullName);
@@ -107,8 +107,8 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void ReadGeneric()
         {
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
             var dummy = new DummySerializable(1);
+            var fileInfo = repository.GetGenericTestFileInfo(dummy);
             this.Save(fileInfo, dummy);
             var read = repository.Read<DummySerializable>();
             Assert.AreEqual(dummy.Value, read.Value);
@@ -119,7 +119,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public async Task ReadAsyncFileInfo()
         {
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             var dummy = new DummySerializable(1);
             this.Save(fileInfo, dummy);
             var read = await repository.ReadAsync<DummySerializable>(fileInfo).ConfigureAwait(false);
@@ -131,7 +131,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public async Task ReadAsyncName()
         {
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             var dummy = new DummySerializable(1);
             this.Save(fileInfo, dummy);
             var read = await repository.ReadAsync<DummySerializable>(fileInfo.Name).ConfigureAwait(false);
@@ -143,7 +143,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         public async Task ReadAsyncFullName()
         {
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory("Test" + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             var dummy = new DummySerializable(1);
             this.Save(fileInfo, dummy);
             var read = await repository.ReadAsync<DummySerializable>(fileInfo.FullName).ConfigureAwait(false);
@@ -155,8 +155,8 @@ namespace Gu.Persist.Core.Tests.Repositories
         public async Task ReadAsyncGeneric()
         {
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
             var dummy = new DummySerializable(1);
+            var fileInfo = repository.GetGenericTestFileInfo(dummy);
             this.Save(fileInfo, dummy);
             var read = await repository.ReadAsync<DummySerializable>().ConfigureAwait(false);
             Assert.AreEqual(dummy.Value, read.Value);
@@ -169,7 +169,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
 
             if (exists)
             {
@@ -195,7 +195,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
 
             if (exists)
             {
@@ -221,7 +221,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
 
             if (exists)
             {
@@ -247,7 +247,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetGenericTestFileInfo(dummy);
 
             if (exists)
             {
@@ -272,7 +272,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             this.Save(fileInfo, dummy);
             var read1 = repository.Read<DummySerializable>(fileInfo);
             var read2 = repository.Read<DummySerializable>(fileInfo);
@@ -291,7 +291,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             this.Save(fileInfo, dummy);
             var read1 = repository.Read<DummySerializable>(fileInfo.FullName);
             var read2 = repository.Read<DummySerializable>(fileInfo.FullName);
@@ -310,7 +310,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             this.Save(fileInfo, dummy);
             var read1 = repository.Read<DummySerializable>(fileInfo.Name);
             var read2 = repository.Read<DummySerializable>(fileInfo.Name);
@@ -329,7 +329,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetGenericTestFileInfo(dummy);
             this.Save(fileInfo, dummy);
             var read1 = repository.Read<DummySerializable>();
             var read2 = repository.Read<DummySerializable>();
@@ -348,7 +348,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             this.Save(fileInfo, dummy);
             var read1 = await repository.ReadAsync<DummySerializable>(fileInfo).ConfigureAwait(false);
             var read2 = await repository.ReadAsync<DummySerializable>(fileInfo).ConfigureAwait(false);
@@ -367,7 +367,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             this.Save(fileInfo, dummy);
             var read1 = await repository.ReadAsync<DummySerializable>(fileInfo.FullName).ConfigureAwait(false);
             var read2 = await repository.ReadAsync<DummySerializable>(fileInfo.FullName).ConfigureAwait(false);
@@ -386,7 +386,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             this.Save(fileInfo, dummy);
             var read1 = await repository.ReadAsync<DummySerializable>(fileInfo.Name).ConfigureAwait(false);
             var read2 = await repository.ReadAsync<DummySerializable>(fileInfo.Name).ConfigureAwait(false);
@@ -405,7 +405,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetGenericTestFileInfo(dummy);
             this.Save(fileInfo, dummy);
             var read1 = await repository.ReadAsync<DummySerializable>().ConfigureAwait(false);
             var read2 = await repository.ReadAsync<DummySerializable>().ConfigureAwait(false);
@@ -424,7 +424,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             AssertFile.Exists(false, fileInfo);
             repository.Save(fileInfo, dummy);
             AssertFile.Exists(true, fileInfo);
@@ -446,7 +446,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             AssertFile.Exists(false, fileInfo);
             repository.Save(fileInfo.FullName, dummy);
             AssertFile.Exists(true, fileInfo);
@@ -468,7 +468,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             AssertFile.Exists(false, fileInfo);
             repository.Save(fileInfo.Name, dummy);
             AssertFile.Exists(true, fileInfo);
@@ -490,7 +490,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetGenericTestFileInfo(dummy);
             AssertFile.Exists(false, fileInfo);
             repository.Save(dummy);
             AssertFile.Exists(true, fileInfo);
@@ -512,7 +512,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             AssertFile.Exists(false, fileInfo);
             await repository.SaveAsync(fileInfo, dummy).ConfigureAwait(false);
             AssertFile.Exists(true, fileInfo);
@@ -534,7 +534,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             AssertFile.Exists(false, fileInfo);
             await repository.SaveAsync(fileInfo.FullName, dummy).ConfigureAwait(false);
             AssertFile.Exists(true, fileInfo);
@@ -556,7 +556,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetTestFileInfo();
             AssertFile.Exists(false, fileInfo);
             await repository.SaveAsync(fileInfo.Name, dummy).ConfigureAwait(false);
             AssertFile.Exists(true, fileInfo);
@@ -578,7 +578,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + repository.Settings.Extension);
+            var fileInfo = repository.GetGenericTestFileInfo(dummy);
             AssertFile.Exists(false, fileInfo);
             await repository.SaveAsync(dummy).ConfigureAwait(false);
             AssertFile.Exists(true, fileInfo);

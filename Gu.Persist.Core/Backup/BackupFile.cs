@@ -55,8 +55,13 @@
             return allBackups.MaxBy(x => x.TimeStamp).File;
         }
 
-        internal static IList<BackupFile> GetAllBackupsFor(FileInfo file, IBackupSettings setting)
+        internal static List<BackupFile> GetAllBackupsFor(FileInfo file, IBackupSettings setting)
         {
+            if (!Directory.Exists(setting.Directory))
+            {
+                return new List<BackupFile>();
+            }
+
             var pattern = GetBackupFilePattern(file, setting);
             var backups = Directory.EnumerateFiles(setting.Directory, pattern)
                                    .Select(x => new BackupFile(new FileInfo(x), setting))

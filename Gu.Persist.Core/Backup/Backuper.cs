@@ -198,9 +198,9 @@
                 // this is not efficient but the number of backups should be low
                 while (allBackups.Count > this.Setting.NumberOfBackups)
                 {
-                    var backupToBurge = allBackups.MinBy(x => x.TimeStamp);
-                    backupToBurge.File.HardDelete();
-                    allBackups.Remove(backupToBurge);
+                    var backupToPurge = allBackups.MinBy(x => x.TimeStamp);
+                    backupToPurge.File.HardDelete();
+                    allBackups.Remove(backupToPurge);
                 }
             }
 
