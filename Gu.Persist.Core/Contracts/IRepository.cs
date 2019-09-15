@@ -82,6 +82,21 @@ namespace Gu.Persist.Core
         Task<T> ReadAsync<T>();
 
         /// <summary>
+        /// Reads from file for <typeparamref name="T"/>
+        /// If the file is missing an instance is created using <paramref name="creator"/>.
+        /// The created instance is then saved.
+        /// </summary>
+        /// <remarks>
+        /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
+        /// </remarks>
+        /// <typeparam name="T">The type to read from the file.</typeparam>
+        /// <param name="creator">
+        /// A <see cref="Func{TResult}"/> that is used for creating an instance if the file is missing.
+        /// </param>
+        /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
+        Task<T> ReadOrCreateAsync<T>(Func<T> creator);
+
+        /// <summary>
         /// Reads from file specified by <paramref name="fileName"/>.
         /// </summary>
         /// <remarks>
@@ -98,12 +113,44 @@ namespace Gu.Persist.Core
         Task<T> ReadAsync<T>(string fileName);
 
         /// <summary>
+        /// Reads from file specified by <paramref name="fileName"/>.
+        /// If the file is missing an instance is created using <paramref name="creator"/>.
+        /// The created instance is then saved.
+        /// </summary>
+        /// <remarks>
+        /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
+        /// </remarks>
+        /// <typeparam name="T">The type to read from the file.</typeparam>
+        /// <param name="fileName">
+        /// Filename can be either of:
+        /// C:\Temp\FileName.cfg
+        /// FileName.cfg
+        /// FileName.
+        /// </param>
+        /// <param name="creator">
+        /// A <see cref="Func{TResult}"/> that is used for creating an instance if the file is missing.
+        /// </param>
+        /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
+        Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator);
+
+        /// <summary>
         /// <see cref="IFileInfoAsyncRepository.ReadAsync{T}(FileInfo)"/>.
         /// </summary>
         /// <typeparam name="T">The type to read from the file.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
         Task<T> ReadAsync<T>(FileInfo file);
+
+        /// <summary>
+        /// Reads from file specified by <paramref name="file"/>.
+        /// If the file is missing an instance is created using <paramref name="creator"/>.
+        /// The created instance is then saved.
+        /// </summary>
+        /// <typeparam name="T">The type to read from the file.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="creator">The <see cref="Func{T}"/>.</param>
+        /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
+        Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator);
 
         /// <summary>
         /// Reads from file for <typeparamref name="T"/>.

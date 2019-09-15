@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.Core
 {
+    using System;
     using System.IO;
     using System.Threading.Tasks;
 
@@ -20,6 +21,17 @@
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
         Task<T> ReadAsync<T>(FileInfo file);
+
+        /// <summary>
+        /// Reads from file specified by <paramref name="file"/>.
+        /// If the file is missing an instance is created using <paramref name="creator"/>.
+        /// The created instance is then saved.
+        /// </summary>
+        /// <typeparam name="T">The type to read from the file.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="creator">The <see cref="Func{T}"/>.</param>
+        /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
+        Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator);
 
         /// <summary>
         /// Serialize <paramref name="item"/> and save to <paramref name="file"/>.

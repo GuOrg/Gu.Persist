@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.Core
 {
+    using System;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -21,6 +22,21 @@
         /// <typeparam name="T">The type to deserialize to.</typeparam>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
         Task<T> ReadAsync<T>();
+
+        /// <summary>
+        /// Reads from file for <typeparamref name="T"/>
+        /// If the file is missing an instance is created using <paramref name="creator"/>.
+        /// The created instance is then saved.
+        /// </summary>
+        /// <remarks>
+        /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
+        /// </remarks>
+        /// <typeparam name="T">The type to read from the file.</typeparam>
+        /// <param name="creator">
+        /// A <see cref="Func{TResult}"/> that is used for creating an instance if the file is missing.
+        /// </param>
+        /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
+        Task<T> ReadOrCreateAsync<T>(Func<T> creator);
 
         /// <summary>
         /// Saves to a file for <typeparamref name="T"/>.

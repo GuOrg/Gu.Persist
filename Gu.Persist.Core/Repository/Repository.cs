@@ -44,7 +44,7 @@ namespace Gu.Persist.Core
 
             // creating temporary backuper for TryRestore in ReadOrCreate
             this.Backuper = Backup.Backuper.Create(this.Settings.BackupSettings);
-            var readSettings = this.ReadOrCreateCore(() => this.Settings);
+            var readSettings = this.ReadOrCreateCore(this.GetFileInfoCore<TSetting>(), () => this.Settings);
             if (!ReferenceEquals(readSettings, this.Settings))
             {
                 this.Settings = readSettings;
@@ -80,7 +80,7 @@ namespace Gu.Persist.Core
                 this.Tracker = new DirtyTracker(this);
             }
 
-            this.Settings = this.ReadOrCreateCore(() => this.Settings);
+            this.Settings = this.ReadOrCreateCore(this.GetFileInfoCore<TSetting>(), () => this.Settings);
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(creator));
             }
 
-            return this.ReadOrCreateCore(creator);
+            return this.ReadOrCreateCore(this.GetFileInfoCore<T>(), creator);
         }
 
         /// <inheritdoc/>
@@ -345,7 +345,7 @@ namespace Gu.Persist.Core
             }
 
             var file = this.GetFileInfoCore(fileName);
-            return this.ReadOrCreate(file, creator);
+            return this.ReadOrCreateCore(file, creator);
         }
 
         /// <inheritdoc/>
@@ -362,6 +362,50 @@ namespace Gu.Persist.Core
             }
 
             return this.ReadOrCreateCore(file, creator);
+        }
+
+        /// <inheritdoc/>
+        public virtual Task<T> ReadOrCreateAsync<T>(Func<T> creator)
+        {
+            if (creator is null)
+            {
+                throw new ArgumentNullException(nameof(creator));
+            }
+
+            return this.ReadOrCreateCoreAsync(this.GetFileInfoCore<T>(), creator);
+        }
+
+        /// <inheritdoc/>
+        public virtual Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator)
+        {
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            if (creator is null)
+            {
+                throw new ArgumentNullException(nameof(creator));
+            }
+
+            var file = this.GetFileInfoCore(fileName);
+            return this.ReadOrCreateCoreAsync(file, creator);
+        }
+
+        /// <inheritdoc/>
+        public virtual Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator)
+        {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (creator is null)
+            {
+                throw new ArgumentNullException(nameof(creator));
+            }
+
+            return this.ReadOrCreateCoreAsync(file, creator);
         }
 
         /// <inheritdoc/>
@@ -869,24 +913,6 @@ namespace Gu.Persist.Core
         }
 
         /// <summary>
-        /// Read the file corresponding to <typeparamref name="T"/> return it's contents deserialized to an instance of <typeparamref name="T"/> if it exists.
-        /// If the file does not exist a new instance is created and saved, then this instance is returned.
-        /// </summary>
-        /// <typeparam name="T">The type to read and deserialize.</typeparam>
-        /// <param name="creator">The <see cref="Func{T}"/>.</param>
-        /// <returns>The deserialized instance.</returns>
-        protected T ReadOrCreateCore<T>(Func<T> creator)
-        {
-            if (creator is null)
-            {
-                throw new ArgumentNullException(nameof(creator));
-            }
-
-            var file = this.GetFileInfoCore<T>();
-            return this.ReadOrCreateCore(file, creator);
-        }
-
-        /// <summary>
         /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/> if it exists.
         /// If the file does not exist a new instance is created and saved, then this instance is returned.
         /// </summary>
@@ -919,6 +945,44 @@ namespace Gu.Persist.Core
             {
                 item = creator();
                 this.SaveCore(file, item);
+            }
+
+            return item;
+        }
+
+        /// <summary>
+        /// Read the file and return it's contents deserialized to an instance of <typeparamref name="T"/> if it exists.
+        /// If the file does not exist a new instance is created and saved, then this instance is returned.
+        /// </summary>
+        /// <typeparam name="T">The type to read and deserialize.</typeparam>
+        /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="creator">The <see cref="Func{T}"/>.</param>
+        /// <returns>The deserialized instance.</returns>
+        protected async Task<T> ReadOrCreateCoreAsync<T>(FileInfo file, Func<T> creator)
+        {
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (creator is null)
+            {
+                throw new ArgumentNullException(nameof(creator));
+            }
+
+            T item;
+            if (file.Exists)
+            {
+                item = await this.ReadAsync<T>(file).ConfigureAwait(false);
+            }
+            else if (this.Backuper.TryRestore(file))
+            {
+                item = this.ReadCore<T>(file);
+            }
+            else
+            {
+                item = creator();
+                await this.SaveAsync(file, item).ConfigureAwait(false);
             }
 
             return item;
