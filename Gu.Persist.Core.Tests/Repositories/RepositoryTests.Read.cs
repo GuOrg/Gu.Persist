@@ -1,105 +1,56 @@
 #pragma warning disable GU0009 // Name the boolean parameter.
 namespace Gu.Persist.Core.Tests.Repositories
 {
-    using System.Threading.Tasks;
+    using System;
+    using System.IO;
+    using System.Runtime.CompilerServices;
     using NUnit.Framework;
 
     public abstract partial class RepositoryTests
     {
-        [Test]
-        public void ReadFileInfo()
+        public static readonly ReadCase[] TestCases =
+        {
+            new ReadFileInfo(),
+            new ReadFullName(),
+            new ReadNameWithExtension(),
+            new ReadNameWithOutExtension(),
+            new ReadGeneric(),
+            new ReadAsyncFileInfo(),
+            new ReadAsyncFullName(),
+            new ReadAsyncNameWithExtension(),
+            new ReadAsyncNameWithOutExtension(),
+            new ReadAsyncGeneric(),
+        };
+
+        [TestCaseSource(nameof(TestCases))]
+        public void Read(ReadCase testCase)
         {
             var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
+            var file = testCase.File<DummySerializable>(repository);
             var dummy = new DummySerializable(1);
             this.Save(file, dummy);
-            var read = repository.Read<DummySerializable>(file);
+            var read = testCase.Read<DummySerializable>(repository, file);
             Assert.AreEqual(dummy.Value, read.Value);
             Assert.AreNotSame(dummy, read);
         }
 
-        [Test]
-        public void ReadName()
+        [TestCaseSource(nameof(TestCases))]
+        public void ReadCaches(ReadCase testCase)
         {
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
             var dummy = new DummySerializable(1);
-            this.Save(file, dummy);
-            var read = repository.Read<DummySerializable>(file.Name);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public void ReadFullName()
-        {
             var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var dummy = new DummySerializable(1);
+            var file = testCase.File<DummySerializable>(repository);
             this.Save(file, dummy);
-            var read = repository.Read<DummySerializable>(file.FullName);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public void ReadGeneric()
-        {
-            var repository = this.CreateRepository();
-            var dummy = new DummySerializable(1);
-            var file = repository.GetGenericTestFileInfo(dummy);
-            this.Save(file, dummy);
-            var read = repository.Read<DummySerializable>();
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public async Task ReadAsyncFileInfo()
-        {
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var dummy = new DummySerializable(1);
-            this.Save(file, dummy);
-            var read = await repository.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public async Task ReadAsyncName()
-        {
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var dummy = new DummySerializable(1);
-            this.Save(file, dummy);
-            var read = await repository.ReadAsync<DummySerializable>(file.Name).ConfigureAwait(false);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public async Task ReadAsyncFullName()
-        {
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var dummy = new DummySerializable(1);
-            this.Save(file, dummy);
-            var read = await repository.ReadAsync<DummySerializable>(file.FullName).ConfigureAwait(false);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public async Task ReadAsyncGeneric()
-        {
-            var repository = this.CreateRepository();
-            var dummy = new DummySerializable(1);
-            var file = repository.GetGenericTestFileInfo(dummy);
-            this.Save(file, dummy);
-            var read = await repository.ReadAsync<DummySerializable>().ConfigureAwait(false);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
+            var read1 = repository.Read<DummySerializable>(file);
+            var read2 = repository.Read<DummySerializable>(file);
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(read1, read2);
+            }
+            else
+            {
+                Assert.AreNotSame(read1, read2);
+            }
         }
 
         [TestCase(true)]
@@ -206,156 +157,87 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
         }
 
-        [Test]
-        public void ReadFileInfoCaches()
+        public abstract class ReadCase
         {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            this.Save(file, dummy);
-            var read1 = repository.Read<DummySerializable>(file);
-            var read2 = repository.Read<DummySerializable>(file);
-            if (repository is ISingletonRepository)
-            {
-                Assert.AreSame(read1, read2);
-            }
-            else
-            {
-                Assert.AreNotSame(read1, read2);
-            }
+            internal abstract T Read<T>(IRepository repository, FileInfo file);
+
+            internal abstract T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create);
+
+            internal virtual FileInfo File<T>(IRepository repository, [CallerMemberName] string name = null) => repository.GetFileInfo(name);
         }
 
-        [Test]
-        public void ReadFullNameCaches()
+        private class ReadFileInfo : ReadCase
         {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            this.Save(file, dummy);
-            var read1 = repository.Read<DummySerializable>(file.FullName);
-            var read2 = repository.Read<DummySerializable>(file.FullName);
-            if (repository is ISingletonRepository)
-            {
-                Assert.AreSame(read1, read2);
-            }
-            else
-            {
-                Assert.AreNotSame(read1, read2);
-            }
+            internal override T Read<T>(IRepository repository, FileInfo file) => repository.Read<T>(file);
+
+            internal override T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(file, create);
         }
 
-        [Test]
-        public void ReadNameCaches()
+        private class ReadFullName : ReadCase
         {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            this.Save(file, dummy);
-            var read1 = repository.Read<DummySerializable>(file.Name);
-            var read2 = repository.Read<DummySerializable>(file.Name);
-            if (repository is ISingletonRepository)
-            {
-                Assert.AreSame(read1, read2);
-            }
-            else
-            {
-                Assert.AreNotSame(read1, read2);
-            }
+            internal override T Read<T>(IRepository repository, FileInfo file) => repository.Read<T>(file.FullName);
+
+            internal override T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(file.FullName, create);
         }
 
-        [Test]
-        public void ReadGenericCaches()
+        private class ReadNameWithExtension : ReadCase
         {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetGenericTestFileInfo(dummy);
-            this.Save(file, dummy);
-            var read1 = repository.Read<DummySerializable>();
-            var read2 = repository.Read<DummySerializable>();
-            if (repository is ISingletonRepository)
-            {
-                Assert.AreSame(read1, read2);
-            }
-            else
-            {
-                Assert.AreNotSame(read1, read2);
-            }
+            internal override T Read<T>(IRepository repository, FileInfo file) => repository.Read<T>(file.Name);
+
+            internal override T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(file.Name, create);
         }
 
-        [Test]
-        public async Task ReadAsyncFileInfoCaches()
+        private class ReadNameWithOutExtension : ReadCase
         {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            this.Save(file, dummy);
-            var read1 = await repository.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
-            var read2 = await repository.ReadAsync<DummySerializable>(file).ConfigureAwait(false);
-            if (repository is ISingletonRepository)
-            {
-                Assert.AreSame(read1, read2);
-            }
-            else
-            {
-                Assert.AreNotSame(read1, read2);
-            }
+            internal override T Read<T>(IRepository repository, FileInfo file) => repository.Read<T>(Path.GetFileNameWithoutExtension(file.FullName));
+
+            internal override T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(Path.GetFileNameWithoutExtension(file.FullName), create);
         }
 
-        [Test]
-        public async Task ReadAsyncFullNameCaches()
+        private class ReadGeneric : ReadCase
         {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            this.Save(file, dummy);
-            var read1 = await repository.ReadAsync<DummySerializable>(file.FullName).ConfigureAwait(false);
-            var read2 = await repository.ReadAsync<DummySerializable>(file.FullName).ConfigureAwait(false);
-            if (repository is ISingletonRepository)
-            {
-                Assert.AreSame(read1, read2);
-            }
-            else
-            {
-                Assert.AreNotSame(read1, read2);
-            }
+            internal override T Read<T>(IRepository repository, FileInfo _) => repository.Read<T>();
+
+            internal override FileInfo File<T>(IRepository repository, string name = null) => repository.GetFileInfo(typeof(T).Name);
+
+            internal override T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(create);
         }
 
-        [Test]
-        public async Task ReadAsyncNameCaches()
+        private class ReadAsyncFileInfo : ReadCase
         {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            this.Save(file, dummy);
-            var read1 = await repository.ReadAsync<DummySerializable>(file.Name).ConfigureAwait(false);
-            var read2 = await repository.ReadAsync<DummySerializable>(file.Name).ConfigureAwait(false);
-            if (repository is ISingletonRepository)
-            {
-                Assert.AreSame(read1, read2);
-            }
-            else
-            {
-                Assert.AreNotSame(read1, read2);
-            }
+            internal override T Read<T>(IRepository repository, FileInfo file) => repository.ReadAsync<T>(file).Result;
+
+            internal override T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(file, create).Result;
         }
 
-        [Test]
-        public async Task ReadAsyncGenericCaches()
+        private class ReadAsyncFullName : ReadCase
         {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetGenericTestFileInfo(dummy);
-            this.Save(file, dummy);
-            var read1 = await repository.ReadAsync<DummySerializable>().ConfigureAwait(false);
-            var read2 = await repository.ReadAsync<DummySerializable>().ConfigureAwait(false);
-            if (repository is ISingletonRepository)
-            {
-                Assert.AreSame(read1, read2);
-            }
-            else
-            {
-                Assert.AreNotSame(read1, read2);
-            }
+            internal override T Read<T>(IRepository repository, FileInfo file) => repository.ReadAsync<T>(file.FullName).Result;
+
+            internal override T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(file.FullName, create).Result;
+        }
+
+        private class ReadAsyncNameWithExtension : ReadCase
+        {
+            internal override T Read<T>(IRepository repository, FileInfo file) => repository.ReadAsync<T>(file.Name).Result;
+
+            internal override T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(file.Name, create).Result;
+        }
+
+        private class ReadAsyncNameWithOutExtension : ReadCase
+        {
+            internal override T Read<T>(IRepository repository, FileInfo file) => repository.ReadAsync<T>(Path.GetFileNameWithoutExtension(file.FullName)).Result;
+
+            internal override T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(Path.GetFileNameWithoutExtension(file.FullName), create).Result;
+        }
+
+        private class ReadAsyncGeneric : ReadCase
+        {
+            internal override T Read<T>(IRepository repository, FileInfo _) => repository.ReadAsync<T>().Result;
+
+            internal override T ReadOrCreate<T>(IRepository repository, FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(create).Result;
+
+            internal override FileInfo File<T>(IRepository repository, string name = null) => repository.GetFileInfo(typeof(T).Name);
         }
     }
 }
