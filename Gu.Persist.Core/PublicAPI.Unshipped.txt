@@ -1,7 +1,17 @@
 ﻿Gu.Persist.Core.FileCache.Add<T>(string fullFileName, T value) -> void
 Gu.Persist.Core.FileCache.ContainsKey(string fullFileName) -> bool
+Gu.Persist.Core.IFileInfoAsyncRepository.ReadOrCreateAsync<T>(System.IO.FileInfo file, System.Func<T> creator) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IFileNameAsyncRepository.ReadOrCreateAsync<T>(string fileName, System.Func<T> creator) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IGenericAsyncRepository.ReadOrCreateAsync<T>(System.Func<T> creator) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IRepository.ReadOrCreateAsync<T>(System.Func<T> creator) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IRepository.ReadOrCreateAsync<T>(System.IO.FileInfo file, System.Func<T> creator) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IRepository.ReadOrCreateAsync<T>(string fileName, System.Func<T> creator) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.Repository<TSetting>.ReadOrCreateCoreAsync<T>(System.IO.FileInfo file, System.Func<T> creator) -> System.Threading.Tasks.Task<T>
 Gu.Persist.Core.TempFileSettings.Equals(Gu.Persist.Core.TempFileSettings other) -> bool
 override Gu.Persist.Core.TempFileSettings.Equals(object obj) -> bool
 override Gu.Persist.Core.TempFileSettings.GetHashCode() -> int
 static Gu.Persist.Core.TempFileSettings.operator !=(Gu.Persist.Core.TempFileSettings left, Gu.Persist.Core.TempFileSettings right) -> bool
 static Gu.Persist.Core.TempFileSettings.operator ==(Gu.Persist.Core.TempFileSettings left, Gu.Persist.Core.TempFileSettings right) -> bool
+virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreateAsync<T>(System.Func<T> creator) -> System.Threading.Tasks.Task<T>
+virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreateAsync<T>(System.IO.FileInfo file, System.Func<T> creator) -> System.Threading.Tasks.Task<T>
+virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreateAsync<T>(string fileName, System.Func<T> creator) -> System.Threading.Tasks.Task<T>
