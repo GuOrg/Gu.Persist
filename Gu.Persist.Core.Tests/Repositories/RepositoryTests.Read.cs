@@ -1,9 +1,6 @@
 #pragma warning disable GU0009 // Name the boolean parameter.
 namespace Gu.Persist.Core.Tests.Repositories
 {
-    using System;
-    using System.IO;
-    using System.Runtime.CompilerServices;
     using NUnit.Framework;
 
     public abstract partial class RepositoryTests
@@ -27,8 +24,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             var repository = this.CreateRepository();
             var file = testCase.File<DummySerializable>(repository);
             this.Save(file, dummy);
-            var read1 = repository.Read<DummySerializable>(file);
-            var read2 = repository.Read<DummySerializable>(file);
+            var read1 = testCase.Read<DummySerializable>(repository, file);
+            var read2 = testCase.Read<DummySerializable>(repository, file);
             if (repository is ISingletonRepository)
             {
                 Assert.AreSame(read1, read2);
@@ -59,6 +56,43 @@ namespace Gu.Persist.Core.Tests.Repositories
             var file = testCase.File<DummySerializable>(repository);
             var read = testCase.ReadOrCreate(repository, file, () => dummy);
             Assert.AreSame(dummy, read);
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void ReadOrCreateWhenFileExistsManagesSingleton(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            this.Save(file, dummy);
+            var read1 = testCase.ReadOrCreate<DummySerializable>(repository, file, () => throw new AssertionException("Should not get here."));
+            var read2 = testCase.ReadOrCreate<DummySerializable>(repository, file, () => throw new AssertionException("Should not get here."));
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(read1, read2);
+            }
+            else
+            {
+                Assert.AreNotSame(read1, read2);
+            }
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void ReadOrCreateWhenFileDoesNotExistsManagesSingleton(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            var read1 = testCase.ReadOrCreate<DummySerializable>(repository, file, () => dummy);
+            var read2 = testCase.ReadOrCreate<DummySerializable>(repository, file, () => dummy);
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(read1, read2);
+            }
+            else
+            {
+                Assert.AreNotSame(read1, read2);
+            }
         }
     }
 }
