@@ -1,6 +1,7 @@
 #pragma warning disable GU0009 // Name the boolean parameter.
 namespace Gu.Persist.Core.Tests.Repositories
 {
+    using System;
     using NUnit.Framework;
 
     public abstract partial class RepositoryTests
@@ -92,6 +93,77 @@ namespace Gu.Persist.Core.Tests.Repositories
             else
             {
                 Assert.AreNotSame(read1, read2);
+            }
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void IsNotDirtyAfterRead(TestCase testCase)
+        {
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            this.Save(file, new DummySerializable(1));
+            if (repository.Settings.IsTrackingDirty)
+            {
+                var read = testCase.Read<DummySerializable>(repository, file);
+                Assert.AreEqual(false, testCase.IsDirty(repository, file, read));
+
+                read.Value++;
+                Assert.AreEqual(true, testCase.IsDirty(repository, file, read));
+
+                testCase.Save(repository, file, read);
+                Assert.AreEqual(false, testCase.IsDirty(repository, file, read));
+            }
+            else
+            {
+                var exception = Assert.Throws<InvalidOperationException>(() => repository.IsDirty(new DummySerializable(1)));
+                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
+            }
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void IsNotDirtyAfterReadOrCreateWhenFileExists(TestCase testCase)
+        {
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            this.Save(file, new DummySerializable(1));
+            if (repository.Settings.IsTrackingDirty)
+            {
+                var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => throw new AssertionException("Should not get here."));
+                Assert.AreEqual(false, testCase.IsDirty(repository, file, read));
+
+                read.Value++;
+                Assert.AreEqual(true, testCase.IsDirty(repository, file, read));
+
+                testCase.Save(repository, file, read);
+                Assert.AreEqual(false, testCase.IsDirty(repository, file, read));
+            }
+            else
+            {
+                var exception = Assert.Throws<InvalidOperationException>(() => repository.IsDirty(new DummySerializable(1)));
+                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
+            }
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void IsNotDirtyAfterReadOrCreateWhenFileDoesNotExists(TestCase testCase)
+        {
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            if (repository.Settings.IsTrackingDirty)
+            {
+                var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => new DummySerializable(1));
+                Assert.AreEqual(false, testCase.IsDirty(repository, file, read));
+
+                read.Value++;
+                Assert.AreEqual(true, testCase.IsDirty(repository, file, read));
+
+                testCase.Save(repository, file, read);
+                Assert.AreEqual(false, testCase.IsDirty(repository, file, read));
+            }
+            else
+            {
+                var exception = Assert.Throws<InvalidOperationException>(() => repository.IsDirty(new DummySerializable(1)));
+                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
             }
         }
     }
