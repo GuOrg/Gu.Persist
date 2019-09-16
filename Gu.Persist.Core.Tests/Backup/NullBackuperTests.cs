@@ -11,23 +11,13 @@ namespace Gu.Persist.Core.Tests.Backup
     [NonParallelizable]
     public class NullBackuperTests : BackupTests
     {
-        private NullBackuper backuper;
-        private DummySerializable dummy;
-
-        [SetUp]
-        public override void SetUp()
-        {
-            this.backuper = NullBackuper.Default;
-            this.dummy = new DummySerializable(1);
-        }
-
         [Test]
         public void BackupWhenNotExists()
         {
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.Backup);
 
-            Assert.AreEqual(false, this.backuper.BeforeSave(this.File));
+            Assert.AreEqual(false, NullBackuper.Default.BeforeSave(this.File));
 
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.Backup);
@@ -36,14 +26,15 @@ namespace Gu.Persist.Core.Tests.Backup
         [Test]
         public void TryRestoreWhenHasSoftDelete()
         {
-            this.SoftDelete.Save(this.dummy);
+            var dummy = new DummySerializable(1);
+            this.SoftDelete.Save(dummy);
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(true, this.SoftDelete);
 
-            Assert.IsTrue(this.backuper.CanRestore(this.File));
-            Assert.IsTrue(this.backuper.TryRestore(this.File));
+            Assert.IsTrue(NullBackuper.Default.CanRestore(this.File));
+            Assert.IsTrue(NullBackuper.Default.TryRestore(this.File));
 
-            Assert.AreEqual(this.dummy, this.File.Read<DummySerializable>());
+            Assert.AreEqual(dummy, this.File.Read<DummySerializable>());
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(false, this.SoftDelete);
             AssertFile.Exists(false, this.Backup);
@@ -52,18 +43,19 @@ namespace Gu.Persist.Core.Tests.Backup
         [Test]
         public void TryRestoreWhenHasSoftDeleteAndBackup()
         {
-            this.Backup.Save(this.dummy);
-            this.dummy.Value++;
-            this.SoftDelete.Save(this.dummy);
+            var dummy = new DummySerializable(1);
+            this.Backup.Save(dummy);
+            dummy.Value++;
+            this.SoftDelete.Save(dummy);
 
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(true, this.SoftDelete);
             AssertFile.Exists(true, this.Backup);
 
-            Assert.IsTrue(this.backuper.CanRestore(this.File));
-            Assert.IsTrue(this.backuper.TryRestore(this.File));
+            Assert.IsTrue(NullBackuper.Default.CanRestore(this.File));
+            Assert.IsTrue(NullBackuper.Default.TryRestore(this.File));
 
-            Assert.AreEqual(this.dummy, this.File.Read<DummySerializable>());
+            Assert.AreEqual(dummy, this.File.Read<DummySerializable>());
             AssertFile.Exists(true, this.File);
             AssertFile.Exists(false, this.SoftDelete);
             AssertFile.Exists(true, this.Backup);
@@ -80,7 +72,7 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(true, this.SoftDelete);
             AssertFile.Exists(true, this.Backup);
 
-            var exception = Assert.Throws<InvalidOperationException>(() => this.backuper.TryRestore(this.File));
+            var exception = Assert.Throws<InvalidOperationException>(() => NullBackuper.Default.TryRestore(this.File));
             StringAssert.IsMatch(@"Expected file .+NullBackuperTests\\Meh.cfg to not exist.", exception.Message);
 
             AssertFile.Exists(true, this.File);
@@ -91,14 +83,15 @@ namespace Gu.Persist.Core.Tests.Backup
         [Test]
         public void TryRestoreWhenHasBackup()
         {
-            this.Backup.Save(this.dummy);
+            var dummy = new DummySerializable(1);
+            this.Backup.Save(dummy);
 
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.SoftDelete);
             AssertFile.Exists(true, this.Backup);
 
-            Assert.IsFalse(this.backuper.CanRestore(this.File));
-            Assert.IsFalse(this.backuper.TryRestore(this.File));
+            Assert.IsFalse(NullBackuper.Default.CanRestore(this.File));
+            Assert.IsFalse(NullBackuper.Default.TryRestore(this.File));
 
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.SoftDelete);
@@ -112,7 +105,7 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(false, this.SoftDelete);
             AssertFile.Exists(false, this.Backup);
 
-            Assert.IsFalse(this.backuper.TryRestore(this.File));
+            Assert.IsFalse(NullBackuper.Default.TryRestore(this.File));
 
             AssertFile.Exists(false, this.File);
             AssertFile.Exists(false, this.SoftDelete);
@@ -130,7 +123,7 @@ namespace Gu.Persist.Core.Tests.Backup
         {
             using (var lockedFile = this.LockedFile())
             {
-                this.backuper.AfterSave(lockedFile);
+                NullBackuper.Default.AfterSave(lockedFile);
             }
 
             AssertFile.Exists(false, this.BackupOneMinuteOld);
@@ -153,7 +146,7 @@ namespace Gu.Persist.Core.Tests.Backup
 
             using (var lockedFile = this.LockedFile())
             {
-                this.backuper.AfterSave(lockedFile);
+                NullBackuper.Default.AfterSave(lockedFile);
             }
 
             AssertFile.Exists(true, this.File);
@@ -173,7 +166,7 @@ namespace Gu.Persist.Core.Tests.Backup
             this.Backup.CreateFileOnDisk();
             using (var lockedFile = this.LockedFile())
             {
-                this.backuper.AfterSave(lockedFile);
+                NullBackuper.Default.AfterSave(lockedFile);
             }
 
             AssertFile.Exists(true, this.File);
@@ -194,7 +187,7 @@ namespace Gu.Persist.Core.Tests.Backup
             this.Backup.CreateFileOnDisk();
             using (var lockedFile = this.LockedFile())
             {
-                this.backuper.AfterSave(lockedFile);
+                NullBackuper.Default.AfterSave(lockedFile);
             }
 
             AssertFile.Exists(true, this.File);
