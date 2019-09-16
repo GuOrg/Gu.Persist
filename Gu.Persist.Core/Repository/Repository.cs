@@ -242,9 +242,29 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual T Read<T>()
+        public virtual T Read<T>(Migration migration = null)
         {
-            return this.ReadCore<T>();
+            if (migration is null)
+            {
+                return this.ReadCore<T>();
+            }
+
+            var streamRepo = (IGenericStreamRepository)this;
+            using (var stream = streamRepo.Read<T>())
+            {
+                if (migration.TryUpdate(stream, out var updatedStream))
+                {
+                    using (updatedStream)
+                    {
+                        var item = this.serialize.FromStream<T>(updatedStream, this.Settings);
+                        //// Save so we get a backup etc.
+                        this.Save(item);
+                        return item;
+                    }
+                }
+
+                return this.serialize.FromStream<T>(stream, this.Settings);
+            }
         }
 
         /// <inheritdoc/>

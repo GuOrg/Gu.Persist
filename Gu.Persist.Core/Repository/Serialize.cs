@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
 

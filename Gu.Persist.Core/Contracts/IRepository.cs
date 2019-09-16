@@ -159,8 +159,9 @@ namespace Gu.Persist.Core
         /// If caching is enabled the repository manages a singleton instance that is returned on future reads.
         /// </remarks>
         /// <typeparam name="T">The type to read from the file.</typeparam>
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        T Read<T>();
+        T Read<T>(Migration migration = null);
 
         /// <summary>
         /// Reads from file for <typeparamref name="T"/>
