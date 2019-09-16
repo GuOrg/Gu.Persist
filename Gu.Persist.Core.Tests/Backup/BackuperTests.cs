@@ -3,7 +3,7 @@ namespace Gu.Persist.Core.Tests.Backup
 {
     using System;
     using System.IO;
-
+    using System.Runtime.CompilerServices;
     using Gu.Persist.Core;
     using Gu.Persist.Core.Backup;
 
@@ -36,55 +36,79 @@ namespace Gu.Persist.Core.Tests.Backup
         [Test]
         public void BackupWhenNotExists()
         {
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, null, 1, 3));
-            AssertFile.Exists(false, this.File);
-            AssertFile.Exists(false, this.Backup);
+            var file = this.CreateFile();
+            var backup = this.CreateBackupFile();
+            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, null, 1, 3));
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(false, backup);
 
-            Assert.IsFalse(backuper.BeforeSave(this.File));
+            Assert.AreEqual(false, backuper.BeforeSave(file));
 
-            AssertFile.Exists(false, this.File);
-            AssertFile.Exists(false, this.Backup);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(false, backup);
+        }
+
+        [Test]
+        public void BackupWhenExists()
+        {
+            var file = this.CreateFile();
+            file.CreateFileOnDisk("abc");
+            var backup = this.CreateBackupFile();
+            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, null, 1, 3));
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, backup);
+
+            Assert.AreEqual(true, backuper.BeforeSave(file));
+
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, backup);
         }
 
         [Test]
         public void TryRestoreWhenHasSoftDelete()
         {
-            var dummy = new DummySerializable(-1);
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
-            this.SoftDelete.Save(dummy);
-            AssertFile.Exists(false, this.File);
-            AssertFile.Exists(true, this.SoftDelete);
+            var dummy = new DummySerializable(1);
+            var file = this.CreateFile();
+            var backup = this.CreateBackupFile();
+            var softDelete = file.GetSoftDeleteFileFor();
+            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            softDelete.Save(dummy);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, softDelete);
 
-            Assert.IsTrue(backuper.CanRestore(this.File));
-            Assert.IsTrue(backuper.TryRestore(this.File));
+            Assert.IsTrue(backuper.CanRestore(file));
+            Assert.IsTrue(backuper.TryRestore(file));
 
-            Assert.AreEqual(dummy, this.File.Read<DummySerializable>());
-            AssertFile.Exists(true, this.File);
-            AssertFile.Exists(false, this.SoftDelete);
-            AssertFile.Exists(false, this.Backup);
+            Assert.AreEqual(dummy, file.Read<DummySerializable>());
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, softDelete);
+            AssertFile.Exists(false, backup);
         }
 
         [Test]
         public void TryRestoreWhenHasSoftDeleteAndBackup()
         {
-            var dummy = new DummySerializable(-1);
-            this.Backup.Save(dummy);
+            var dummy = new DummySerializable(1);
+            var file = this.CreateFile();
+            var backup = this.CreateBackupFile();
+            var softDelete = file.GetSoftDeleteFileFor();
+            backup.Save(dummy);
             dummy.Value++;
-            this.SoftDelete.Save(dummy);
+            softDelete.Save(dummy);
 
-            AssertFile.Exists(false, this.File);
-            AssertFile.Exists(true, this.SoftDelete);
-            AssertFile.Exists(true, this.Backup);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, softDelete);
+            AssertFile.Exists(true, backup);
 
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
 
-            Assert.IsTrue(backuper.CanRestore(this.File));
-            Assert.IsTrue(backuper.TryRestore(this.File));
+            Assert.IsTrue(backuper.CanRestore(file));
+            Assert.IsTrue(backuper.TryRestore(file));
 
-            Assert.AreEqual(dummy, this.File.Read<DummySerializable>());
-            AssertFile.Exists(true, this.File);
-            AssertFile.Exists(false, this.SoftDelete);
-            AssertFile.Exists(true, this.Backup);
+            Assert.AreEqual(dummy, file.Read<DummySerializable>());
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, softDelete);
+            AssertFile.Exists(true, backup);
         }
 
         [Test]
@@ -259,5 +283,9 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         private LockedFile LockedFile() => Core.LockedFile.CreateIfExists(this.File, x => x.Open(FileMode.Open, FileAccess.Read, FileShare.Delete));
+
+        private FileInfo CreateFile([CallerMemberName] string name = null) => this.directory.CreateFileInfoInDirectory(name + ".cfg");
+
+        private FileInfo CreateBackupFile([CallerMemberName] string name = null) => this.directory.CreateFileInfoInDirectory(name + ".bak");
     }
 }
