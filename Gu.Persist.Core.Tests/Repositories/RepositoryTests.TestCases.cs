@@ -110,26 +110,28 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(Path.GetFileNameWithoutExtension(file.FullName), item).Wait();
         }
 
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
         private class Generic : TestCase
         {
             internal override T Read<T>(IRepository repository, System.IO.FileInfo _) => repository.Read<T>();
 
-            internal override System.IO.FileInfo File<T>(IRepository repository, string name = null) => repository.GetFileInfo(typeof(T).Name);
+            internal override System.IO.FileInfo File<T>(IRepository repository, string _ = null) => repository.GetFileInfo(typeof(T).Name);
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(create);
+            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create) => repository.ReadOrCreate<T>(create);
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(item);
+            internal override void Save<T>(IRepository repository, System.IO.FileInfo _, T item) => repository.Save(item);
         }
 
         private class GenericAsync : TestCase
         {
             internal override T Read<T>(IRepository repository, System.IO.FileInfo _) => repository.ReadAsync<T>().Result;
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(create).Result;
+            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create) => repository.ReadOrCreateAsync<T>(create).Result;
 
-            internal override System.IO.FileInfo File<T>(IRepository repository, string name = null) => repository.GetFileInfo(typeof(T).Name);
+            internal override System.IO.FileInfo File<T>(IRepository repository, string _ = null) => repository.GetFileInfo(typeof(T).Name);
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(item).Wait();
+            internal override void Save<T>(IRepository repository, System.IO.FileInfo _, T item) => repository.SaveAsync(item).Wait();
         }
+#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
     }
 }
