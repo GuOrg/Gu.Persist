@@ -171,237 +171,46 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             var read = this.Read<DummySerializable>(file);
             Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
         }
 
-        [Test]
-        public void SaveFileInfoWhenFileAndSoftDeleteExists()
+        [TestCaseSource(nameof(TestCases))]
+        public void SaveWhenFileAndSoftDeleteExists(TestCase testCase)
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
+            var file = testCase.File<DummySerializable>(repository);
             file.CreateFileOnDisk();
+            file.TempFile(repository.Settings).CreateFileOnDisk();
             file.GetSoftDeleteFileFor().CreateFileOnDisk();
-            this.Repository.Save(file, dummy);
-            AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
-            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            testCase.Save(repository, file, dummy);
             if (repository.Settings.BackupSettings != null)
             {
+                var backupFile = testCase.BackupFile<DummySerializable>(repository);
                 AssertFile.Exists(true, backupFile);
             }
 
             var read = this.Read<DummySerializable>(file);
             Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
         }
 
-        [Test]
-        public void SaveFullNameWhenFileAndSoftDeleteExists()
+        [TestCaseSource(nameof(TestCases))]
+        public void SaveLongListThenShortList(TestCase testCase)
         {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
-            file.CreateFileOnDisk();
-            file.GetSoftDeleteFileFor().CreateFileOnDisk();
-            this.Repository.Save(file.FullName, dummy);
-            AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
-            AssertFile.Exists(false, file.TempFile(repository.Settings));
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(true, backupFile);
-            }
-
-            var read = this.Read<DummySerializable>(file);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public void SaveNameWhenFileAndSoftDeleteExists()
-        {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
-            file.CreateFileOnDisk();
-            file.GetSoftDeleteFileFor().CreateFileOnDisk();
-            this.Repository.Save(file.Name, dummy);
-            AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
-            AssertFile.Exists(false, file.TempFile(repository.Settings));
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(true, backupFile);
-            }
-
-            var read = this.Read<DummySerializable>(file);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public void SaveGenericWhenFileAndSoftDeleteExists()
-        {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetGenericTestFileInfo(dummy);
-            var backupFile = repository.GetGenericTestBackupFileInfo(dummy);
-            file.CreateFileOnDisk();
-            file.GetSoftDeleteFileFor().CreateFileOnDisk();
-            this.Repository.Save(dummy);
-            AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
-            AssertFile.Exists(false, file.TempFile(repository.Settings));
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(true, backupFile);
-            }
-
-            var read = this.Read<DummySerializable>(file);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public void SaveFileInfoLongListThenShortList()
-        {
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
             var list = new List<DummySerializable>
             {
                 new DummySerializable(1),
                 new DummySerializable(2),
             };
-
-            repository.Save(file, list);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(false, backupFile);
-            }
-
-            var read = this.Read<List<DummySerializable>>(file);
-            CollectionAssert.AreEqual(list, read);
-            Assert.AreNotSame(list, read);
-
-            list.RemoveAt(1);
-            repository.Save(file, list);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(true, backupFile);
-            }
-
-            read = this.Read<List<DummySerializable>>(file);
-            CollectionAssert.AreEqual(list, read);
-            Assert.AreNotSame(list, read);
-        }
-
-        [Test]
-        public void SaveFullNameLongListThenShortList()
-        {
             var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
-
-            var list = new List<DummySerializable>
-            {
-                new DummySerializable(1),
-                new DummySerializable(2),
-            };
-
-            repository.Save(file.FullName, list);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(false, backupFile);
-            }
-
+            var file = testCase.File<List<DummySerializable>>(repository);
+            testCase.Save(repository, file, list);
             var read = this.Read<List<DummySerializable>>(file);
             CollectionAssert.AreEqual(list, read);
-            Assert.AreNotSame(list, read);
 
-            list.RemoveAt(1);
-            repository.Save(file.FullName, list);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(true, backupFile);
-            }
-
+            list.RemoveAt(0);
+            testCase.Save(repository, file, list);
             read = this.Read<List<DummySerializable>>(file);
             CollectionAssert.AreEqual(list, read);
-            Assert.AreNotSame(list, read);
-        }
-
-        [Test]
-        public void SaveNameLongListThenShortList()
-        {
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
-
-            var list = new List<DummySerializable>
-            {
-                new DummySerializable(1),
-                new DummySerializable(2),
-            };
-
-            repository.Save(file.Name, list);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(false, backupFile);
-            }
-
-            var read = this.Read<List<DummySerializable>>(file);
-            CollectionAssert.AreEqual(list, read);
-            Assert.AreNotSame(list, read);
-
-            list.RemoveAt(1);
-            repository.Save(file.Name, list);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(true, backupFile);
-            }
-
-            read = this.Read<List<DummySerializable>>(file);
-            CollectionAssert.AreEqual(list, read);
-            Assert.AreNotSame(list, read);
-        }
-
-        [Test]
-        public void SaveGenericLongListThenShortList()
-        {
-            var repository = this.CreateRepository();
-            var list = new List<DummySerializable>
-            {
-                new DummySerializable(1),
-                new DummySerializable(2),
-            };
-            var file = repository.GetGenericTestFileInfo(list);
-            var backupFile = repository.GetGenericTestBackupFileInfo(list);
-
-            repository.Save(list);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(false, backupFile);
-            }
-
-            var read = this.Read<List<DummySerializable>>(file);
-            CollectionAssert.AreEqual(list, read);
-            Assert.AreNotSame(list, read);
-
-            list.RemoveAt(1);
-            repository.Save(list);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(true, backupFile);
-            }
-
-            read = this.Read<List<DummySerializable>>(file);
-            CollectionAssert.AreEqual(list, read);
-            Assert.AreNotSame(list, read);
         }
     }
 }
