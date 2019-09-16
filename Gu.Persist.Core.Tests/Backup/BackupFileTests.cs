@@ -9,6 +9,7 @@
 
     using NUnit.Framework;
 
+    [NonParallelizable]
     public static class BackupFileTests
     {
         private static readonly DirectoryInfo Directory = Directories.TempDirectory

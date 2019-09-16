@@ -9,6 +9,7 @@ namespace Gu.Persist.Core.Tests.Backup
 
     using NUnit.Framework;
 
+    [NonParallelizable]
     public static class BackuperTests
     {
         private static readonly DirectoryInfo Directory = Directories.TempDirectory
