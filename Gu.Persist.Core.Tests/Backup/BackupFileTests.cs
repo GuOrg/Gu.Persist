@@ -3,88 +3,134 @@
     using System;
     using System.IO;
     using System.Linq;
-
+    using System.Runtime.CompilerServices;
     using Gu.Persist.Core;
     using Gu.Persist.Core.Backup;
 
     using NUnit.Framework;
 
-    // ReSharper disable once TestClassNameSuffixWarning
-    public class BackupFileTests : BackupTests
+    public static class BackupFileTests
     {
-        [Test]
-        public void GetAllBackupsForNoTimeStamp()
+        private static readonly DirectoryInfo Directory = Directories.TempDirectory
+                                                                     .CreateSubdirectory("Gu.Persist.Tests")
+                                                                     .CreateSubdirectory(typeof(BackupFileTests).FullName);
+
+        [SetUp]
+        public static void SetUp()
         {
-            this.File.CreateFileOnDisk();
-            this.Backup.CreateFileOnDisk();
-            var restores = BackupFile.GetAllBackupsFor(this.File, new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, null, 1, 1));
-            Assert.AreEqual(1, restores.Count);
-            Assert.AreEqual(this.Backup.FullName, restores[0].File.FullName);
+            Directory.Refresh();
+            Directory.CreateIfNotExists();
+        }
+
+        [TearDown]
+        public static void TearDown()
+        {
+            Directory.DeleteIfExists(true);
         }
 
         [Test]
-        public void GetAllBackupsFor()
+        public static void GetAllBackupsForNoTimeStamp()
         {
-            this.File.CreateFileOnDisk();
-            foreach (var backup in this.TimestampedBackups)
-            {
-                backup.CreateFileOnDisk();
-            }
+            var file = CreateFile();
+            var backup = CreateBackupFile();
+            file.CreateFileOnDisk();
+            backup.CreateFileOnDisk();
+            var restores = BackupFile.GetAllBackupsFor(file, new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, null, 1, 1));
+            Assert.AreEqual(1, restores.Count);
+            Assert.AreEqual(backup.FullName, restores[0].File.FullName);
+        }
 
-            var restores = BackupFile.GetAllBackupsFor(this.File, new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, 1));
-            var expected = this.TimestampedBackups.Select(x => x.FullName).OrderBy(x => x).ToArray();
-            var actual = restores.Select(x => x.File.FullName).OrderBy(x => x).ToArray();
+        [Test]
+        public static void GetAllBackupsFor()
+        {
+            var settings = new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, 1);
+            var file = CreateFile();
+            var backup = CreateBackupFile();
+            file.CreateFileOnDisk();
+            var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
+            backupOneMinuteOld.CreateFileOnDisk();
+            var backupOneHourOld = backup.WithTimeStamp(DateTime.Now.AddHours(-1), settings);
+            backupOneHourOld.CreateFileOnDisk();
+            var backupOneDayOld = backup.WithTimeStamp(DateTime.Now.AddDays(-1), settings);
+            backupOneDayOld.CreateFileOnDisk();
+            var backupOneMonthOld = backup.WithTimeStamp(DateTime.Now.AddMonths(-1), settings);
+            backupOneMonthOld.CreateFileOnDisk();
+            var backupOneYearOld = backup.WithTimeStamp(DateTime.Now.AddYears(-1), settings);
+            backupOneYearOld.CreateFileOnDisk();
+
+            var restores = BackupFile.GetAllBackupsFor(file, settings);
+            var expected = new[]
+            {
+                backupOneYearOld.Name,
+                backupOneMonthOld.Name,
+                backupOneDayOld.Name,
+                backupOneHourOld.Name,
+                backupOneMinuteOld.Name,
+            };
+            var actual = restores.Select(x => x.File.Name).ToArray();
             CollectionAssert.AreEqual(expected, actual);
         }
 
         [Test]
-        public void GetRestoreFileForNoTimeStamp()
+        public static void GetRestoreFileForNoTimeStamp()
         {
-            this.File.CreateFileOnDisk();
-            this.Backup.CreateFileOnDisk();
-            var restore = BackupFile.GetRestoreFileFor(this.File, Default.BackupSettings(this.Directory));
-            Assert.AreEqual(this.Backup.FullName, restore.FullName);
+            var file = CreateFile();
+            var backup = CreateBackupFile();
+            file.CreateFileOnDisk();
+            backup.CreateFileOnDisk();
+            var restore = BackupFile.GetRestoreFileFor(file, Default.BackupSettings(Directory));
+            Assert.AreEqual(backup.FullName, restore.FullName);
         }
 
         [Test]
-        public void GetRestoreFileFor()
+        public static void GetRestoreFileFor()
         {
-            this.File.CreateFileOnDisk();
-            foreach (var backup in this.TimestampedBackups)
-            {
-                backup.CreateFileOnDisk();
-            }
+            var settings = new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, 1);
+            var file = CreateFile();
+            var backup = CreateBackupFile();
+            file.CreateFileOnDisk();
+            var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
+            backupOneMinuteOld.CreateFileOnDisk();
+            backup.WithTimeStamp(DateTime.Now.AddHours(-1), settings).CreateFileOnDisk();
+            backup.WithTimeStamp(DateTime.Now.AddDays(-1), settings).CreateFileOnDisk();
+            backup.WithTimeStamp(DateTime.Now.AddMonths(-1), settings).CreateFileOnDisk();
+            backup.WithTimeStamp(DateTime.Now.AddYears(-1), settings).CreateFileOnDisk();
 
-            var backupSettings = new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, 1);
-            var restore = BackupFile.GetRestoreFileFor(this.File, backupSettings);
-            Assert.AreEqual(this.BackupOneMinuteOld.FullName, restore.FullName);
+            var restore = BackupFile.GetRestoreFileFor(file, settings);
+            Assert.AreEqual(backupOneMinuteOld.FullName, restore.FullName);
         }
 
         [Test]
-        public void CreateForNoTimestamp()
+        public static void CreateForNoTimestamp()
         {
-            this.File.CreateFileOnDisk();
-            var setting = new BackupSettings(this.File.DirectoryName, BackupSettings.DefaultExtension, null, 1, int.MaxValue);
-            var backup = BackupFile.CreateFor(this.File, setting);
-            StringAssert.IsMatch(@"BackupFileTests\\Meh\.bak", backup.FullName);
+            var file = CreateFile();
+            file.CreateFileOnDisk();
+            var setting = new BackupSettings(file.DirectoryName, BackupSettings.DefaultExtension, null, 1, int.MaxValue);
+            var backup = BackupFile.CreateFor(file, setting);
+            StringAssert.IsMatch(@"BackupFileTests\\CreateForNoTimestamp\.bak", backup.FullName);
         }
 
         [Test]
-        public void CreateFor()
+        public static void CreateFor()
         {
-            this.File.CreateFileOnDisk();
-            var backupSettings = new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, 1);
-            var backup = BackupFile.CreateFor(this.File, backupSettings);
-            StringAssert.IsMatch(@"BackupFileTests\\Meh\.\d\d\d\d_\d\d_\d\d_\d\d_\d\d_\d\d\.bak", backup.FullName);
+            var file = CreateFile();
+            file.CreateFileOnDisk();
+            var backupSettings = new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, 1);
+            var backup = BackupFile.CreateFor(file, backupSettings);
+            StringAssert.IsMatch(@"BackupFileTests\\CreateFor\.\d\d\d\d_\d\d_\d\d_\d\d_\d\d_\d\d\.bak", backup.FullName);
         }
 
         [TestCase(@"C:\Temp\Meh.2015_06_13_17_05_15.bak")]
-        public void GetTimeStamp(string fileName)
+        public static void GetTimeStamp(string fileName)
         {
             var file = new FileInfo(fileName);
-            var setting = new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, int.MaxValue);
+            var setting = new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 1, int.MaxValue);
             var timeStamp = file.GetTimeStamp(setting);
             Assert.AreEqual(new DateTime(2015, 06, 13, 17, 05, 15), timeStamp);
         }
+
+        private static FileInfo CreateFile([CallerMemberName] string name = null) => Directory.CreateFileInfoInDirectory(name + ".cfg");
+
+        private static FileInfo CreateBackupFile([CallerMemberName] string name = null) => Directory.CreateFileInfoInDirectory(name + ".bak");
     }
 }
