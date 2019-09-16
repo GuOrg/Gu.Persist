@@ -6,13 +6,17 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
     using Gu.Persist.NewtonsoftJson;
 
     using NUnit.Framework;
+    using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
 
     public class DefaultSingletonRepository : JsonRepositoryTests
     {
         [Test]
         public void SavesSettingsFile()
         {
-            AssertFile.Exists(true, this.RepoSettingFile);
+            var file = this.Directory.CreateFileInfoInDirectory(nameof(RepositorySettings) + ".cfg");
+            AssertFile.Exists(false, file);
+            _ = this.CreateRepository();
+            AssertFile.Exists(true, file);
         }
 
         protected override IRepository CreateRepository()

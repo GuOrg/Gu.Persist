@@ -12,8 +12,6 @@ namespace Gu.Persist.Core.Tests.Repositories
 
     public abstract partial class RepositoryTests
     {
-        private readonly DummySerializable dummy = new DummySerializable(1);
-
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         protected RepositoryTests()
         {
@@ -32,24 +30,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 #pragma warning restore CA2214 // Do not call overridable methods in constructors
         }
 
-        public RepositorySettings Settings => (RepositorySettings)Repository?.Settings;
-
-        public BackupSettings BackupSettings => this.Settings?.BackupSettings;
-
-        public IRepository Repository { get; private set; }
-
         public DirectoryInfo Directory { get; }
-
-        public System.IO.FileInfo RepoSettingFile { get; private set; }
-
-        [SetUp]
-        public void SetUp()
-        {
-            this.Directory.DeleteIfExists(recursive: true);
-            Repository = this.CreateRepository();
-            Repository.ClearCache();
-            this.RepoSettingFile = this.Directory.CreateFileInfoInDirectory(string.Concat(this.Settings.GetType().Name, this.Settings.Extension));
-        }
 
         [TearDown]
         public void TearDown()

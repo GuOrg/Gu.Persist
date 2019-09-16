@@ -8,9 +8,9 @@
     public class DataRepositoryNoBackup : JsonRepositoryTests
     {
         [Test]
-        public void BackuperIsNone()
+        public void BackuperIsNullBackuperDefault()
         {
-            Assert.AreSame(NullBackuper.Default, this.Repository.Backuper);
+            Assert.AreSame(NullBackuper.Default, this.CreateRepository().Backuper);
         }
 
         protected override IRepository CreateRepository()

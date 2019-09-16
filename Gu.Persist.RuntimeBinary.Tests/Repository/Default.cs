@@ -12,7 +12,10 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
         [Test]
         public void SavesSettingsFile()
         {
-            AssertFile.Exists(true, this.RepoSettingFile);
+            var file = this.Directory.CreateFileInfoInDirectory(nameof(RepositorySettings) + ".cfg");
+            AssertFile.Exists(false, file);
+            _ = this.CreateRepository();
+            AssertFile.Exists(true, file);
         }
 
         protected override IRepository CreateRepository()

@@ -7,9 +7,9 @@ namespace Gu.Persist.RuntimeBinary.Tests.Repository
     public class NoBackup : BinaryRepositoryTests
     {
         [Test]
-        public void BackuperIsNone()
+        public void BackuperIsNullBackuperDefault()
         {
-            Assert.AreSame(NullBackuper.Default, this.Repository.Backuper);
+            Assert.AreSame(NullBackuper.Default, this.CreateRepository().Backuper);
         }
 
         protected override IRepository CreateRepository()

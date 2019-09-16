@@ -10,12 +10,13 @@
         [Test]
         public void SaveAndCheckJson()
         {
+            var repository = this.CreateRepository();
             var fileInfo = this.Directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
             var value = new DummySerializable
             {
                 Value = 1,
             };
-            this.Repository.Save(fileInfo, value);
+            repository.Save(fileInfo, value);
             var json = System.IO.File.ReadAllText(fileInfo.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
             System.IO.File.Delete(fileInfo.FullName);

@@ -9,13 +9,14 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
         [Test]
         public void DefaultSettings()
         {
-            Assert.AreEqual(".cfg", this.Settings.Extension);
-            Assert.AreEqual(this.Directory.FullName, this.Settings.Directory);
-            Assert.AreEqual(false, this.Settings.IsTrackingDirty);
-            Assert.AreEqual(".bak", this.Settings.BackupSettings.Extension);
-            Assert.AreEqual(int.MaxValue, this.Settings.BackupSettings.MaxAgeInDays);
-            Assert.AreEqual(1, this.Settings.BackupSettings.NumberOfBackups);
-            Assert.AreEqual(null, this.Settings.BackupSettings.TimeStampFormat);
+            var settings = this.CreateRepository().Settings;
+            Assert.AreEqual(".cfg", settings.Extension);
+            Assert.AreEqual(this.Directory.FullName, settings.Directory);
+            Assert.AreEqual(false, settings.IsTrackingDirty);
+            Assert.AreEqual(".bak", settings.BackupSettings.Extension);
+            Assert.AreEqual(int.MaxValue, settings.BackupSettings.MaxAgeInDays);
+            Assert.AreEqual(1, settings.BackupSettings.NumberOfBackups);
+            Assert.AreEqual(null, settings.BackupSettings.TimeStampFormat);
         }
 
         protected override IRepository CreateRepository()

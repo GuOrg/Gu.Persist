@@ -11,7 +11,10 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
         [Test]
         public void SavesSettingsFile()
         {
-            AssertFile.Exists(true, this.RepoSettingFile);
+            var file = this.Directory.CreateFileInfoInDirectory(nameof(DataRepositorySettings) + ".cfg");
+            AssertFile.Exists(false, file);
+            _ = this.CreateRepository();
+            AssertFile.Exists(true, file);
         }
 
         protected override IRepository CreateRepository()

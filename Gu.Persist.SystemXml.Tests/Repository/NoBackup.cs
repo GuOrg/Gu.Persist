@@ -9,9 +9,9 @@ namespace Gu.Persist.SystemXml.Tests.Repository
     public class SingletonRepositoryNoBackup : XmlRepositoryTests
     {
         [Test]
-        public void BackuperIsNone()
+        public void BackuperIsNullBackuperDefault()
         {
-            Assert.AreSame(NullBackuper.Default, this.Repository.Backuper);
+            Assert.AreSame(NullBackuper.Default, this.CreateRepository().Backuper);
         }
 
         protected override IRepository CreateRepository()
