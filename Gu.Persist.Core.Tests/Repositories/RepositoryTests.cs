@@ -47,7 +47,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         public Files TypeFiles { get; private set; }
 
-        public FileInfo RepoSettingFile { get; private set; }
+        public System.IO.FileInfo RepoSettingFile { get; private set; }
 
         [SetUp]
         public void SetUp()
@@ -652,8 +652,8 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         protected abstract IRepository CreateRepository();
 
-        protected abstract void Save<T>(FileInfo file, T item);
+        protected abstract void Save<T>(System.IO.FileInfo file, T item);
 
-        protected abstract T Read<T>(FileInfo file);
+        protected abstract T Read<T>(System.IO.FileInfo file);
     }
 }
