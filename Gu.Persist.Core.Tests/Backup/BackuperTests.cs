@@ -21,14 +21,13 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [SetUp]
-        public override void SetUp()
+        public void SetUp()
         {
             this.directory.CreateIfNotExists();
-            base.SetUp();
         }
 
         [TearDown]
-        public new void TearDown()
+        public void TearDown()
         {
             //this.directory.Delete(true);
         }
@@ -201,7 +200,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var file = this.CreateFile();
             var backup = this.CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
-            this.SoftDelete.CreateFileOnDisk();
+            softDelete.CreateFileOnDisk();
             var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
             backupOneMinuteOld.CreateFileOnDisk();
             var backupOneHourOld = backup.WithTimeStamp(DateTime.Now.AddHours(-1), settings);
@@ -234,7 +233,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var file = this.CreateFile();
             var backup = this.CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
-            this.SoftDelete.CreateFileOnDisk();
+            softDelete.CreateFileOnDisk();
             var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
             backupOneMinuteOld.CreateFileOnDisk();
             var backupOneHourOld = backup.WithTimeStamp(DateTime.Now.AddHours(-1), settings);
