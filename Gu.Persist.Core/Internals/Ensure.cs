@@ -34,18 +34,6 @@
             }
         }
 
-        internal static void IsValidFileName(string s, string parameterName)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
-            if (!FileInfoExt.IsValidFileName(s))
-            {
-                var illegalCahrs = FileInfoExt.InvalidFileNameChars.Where(c => s.IndexOf(c) != -1).ToArray();
-                var illegals = string.Join(", ", illegalCahrs.Select(x => $"'{x}'"));
-                var message = $@"{s} is not a valid filename. Contains: {{{illegals}}}.";
-                IsValidFileName(s, parameterName, message);
-            }
-        }
-
         internal static void IsValidFileName(string s, string parameterName, string message)
         {
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");

@@ -138,7 +138,6 @@
         /// <inheritdoc/>
         public virtual void SaveAndClose<T>(string fileName, T item)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             this.EnsureCanSave(file, item);
             this.SaveAndCloseCore(file, item);

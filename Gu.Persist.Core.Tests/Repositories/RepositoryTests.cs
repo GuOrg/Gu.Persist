@@ -239,7 +239,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
 
             var exception = Assert.Throws<ArgumentException>(() => this.Repository.CanRename<DummySerializable>("NewName<>"));
-            Assert.AreEqual("newName\r\nParameter name: NewName<> is not a valid filename. Contains: {'<', '>'}.", exception.Message);
+            Assert.AreEqual("Illegal characters in path.", exception.Message);
         }
 
         [Test]

@@ -156,7 +156,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual FileInfo GetFileInfo(string fileName)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             return this.GetFileInfoCore(fileName);
         }
 
@@ -170,7 +169,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual void DeleteBackups(string fileName)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             this.DeleteBackups(file);
         }
@@ -195,7 +193,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual bool Exists(string fileName)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var fileInfo = this.GetFileInfoCore(fileName);
             return this.Exists(fileInfo);
         }
@@ -260,7 +257,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         Task<Stream> IFileNameAsyncStreamRepository.ReadAsync(string fileName)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             return file.ReadAsync();
         }
@@ -315,7 +311,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         Stream IFileNameStreamRepository.Read(string fileName)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             return file.OpenRead();
         }
@@ -523,7 +518,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         void IFileNameStreamRepository.Save(string fileName, Stream stream)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             this.EnsureCanSave(file, stream);
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
@@ -567,7 +561,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         Task IFileNameAsyncStreamRepository.SaveAsync(string fileName, Stream stream)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             this.EnsureCanSave(file, stream);
             var tempFile = file.WithNewExtension(this.Settings.TempExtension);
@@ -630,7 +623,6 @@ namespace Gu.Persist.Core
                 throw new InvalidOperationException("This repository is not tracking dirty.");
             }
 
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             return this.IsDirty(fileName, item, this.serialize.DefaultStructuralEqualityComparer<T>(this.Settings));
         }
 
@@ -642,7 +634,6 @@ namespace Gu.Persist.Core
                 throw new InvalidOperationException("This repository is not tracking dirty.");
             }
 
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var fileInfo = this.GetFileInfoCore(fileName);
             return this.IsDirty(fileInfo, item, comparer);
         }
@@ -687,7 +678,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public bool CanRename<T>(string newName)
         {
-            Ensure.IsValidFileName(newName, nameof(newName));
             var fileInfo = this.GetFileInfo<T>();
             return this.CanRename(fileInfo, newName);
         }
@@ -695,16 +685,14 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public void Rename<T>(string newName, bool overWrite)
         {
-            Ensure.IsValidFileName(newName, nameof(newName));
             var fileInfo = this.GetFileInfo<T>();
-            this.Rename(fileInfo, newName, overWrite);
+            var newFile = this.GetFileInfoCore(newName);
+            this.Rename(fileInfo, newFile, overWrite);
         }
 
         /// <inheritdoc/>
         public bool CanRename(string oldName, string newName)
         {
-            Ensure.IsValidFileName(oldName, nameof(oldName));
-            Ensure.IsValidFileName(newName, nameof(newName));
             var oldFile = this.GetFileInfoCore(oldName);
             var newFile = this.GetFileInfoCore(newName);
             return this.CanRename(oldFile, newFile);
@@ -713,8 +701,6 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public void Rename(string oldName, string newName, bool overWrite)
         {
-            Ensure.IsValidFileName(oldName, nameof(oldName));
-            Ensure.IsValidFileName(newName, nameof(newName));
             var oldFile = this.GetFileInfoCore(oldName);
             var newFile = this.GetFileInfoCore(newName);
             this.Rename(oldFile, newFile, overWrite);
@@ -728,7 +714,6 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(oldName));
             }
 
-            Ensure.IsValidFileName(newName, nameof(newName));
             var newFile = this.GetFileInfoCore(newName);
             return this.CanRename(oldName, newFile);
         }
@@ -747,7 +732,6 @@ namespace Gu.Persist.Core
             }
 
             Ensure.Exists(oldName, nameof(oldName));
-            Ensure.IsValidFileName(newName, nameof(newName));
             var newFile = this.GetFileInfoCore(newName);
             this.Rename(oldName, newFile, overWrite);
         }
