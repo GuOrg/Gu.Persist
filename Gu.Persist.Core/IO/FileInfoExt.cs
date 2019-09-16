@@ -62,7 +62,7 @@
             return directory.CreateFileInfoInDirectory(file.Name);
         }
 
-        internal static FileInfo GetSoftDeleteFileFor(this FileInfo file)
+        internal static FileInfo SoftDeleteFile(this FileInfo file)
         {
             return file.WithAppendedExtension(FileHelper.SoftDeleteExtension);
         }

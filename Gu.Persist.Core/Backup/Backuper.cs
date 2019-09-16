@@ -123,7 +123,7 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             if (softDelete.Exists)
             {
                 return true;
@@ -146,7 +146,7 @@
 
             try
             {
-                var softDelete = file.GetSoftDeleteFileFor();
+                var softDelete = file.SoftDeleteFile();
                 if (softDelete.Exists)
                 {
                     this.Restore(file, softDelete);
@@ -231,7 +231,7 @@
             }
 
             Ensure.NotNullOrEmpty(newName, nameof(newName));
-            var soft = file.GetSoftDeleteFileFor();
+            var soft = file.SoftDeleteFile();
             if (soft.Exists)
             {
                 if (!soft.CanRename(newName, this.Setting))
@@ -248,7 +248,7 @@
                     return false;
                 }
 
-                soft = backup.File.GetSoftDeleteFileFor();
+                soft = backup.File.SoftDeleteFile();
                 if (soft.Exists)
                 {
                     if (!soft.CanRename(newName, this.Setting))
@@ -286,7 +286,7 @@
 
             Ensure.NotNullOrEmpty(newName, nameof(newName));
             var pairs = new List<RenamePair>();
-            var soft = file.GetSoftDeleteFileFor();
+            var soft = file.SoftDeleteFile();
             if (soft.Exists)
             {
                 var withNewName = soft.WithNewName(newName, new TempFileSettings(file.DirectoryName, file.Extension));
@@ -298,7 +298,7 @@
             {
                 var withNewName = backup.File.WithNewName(newName, this.Setting);
                 pairs.Add(new RenamePair(backup.File, withNewName));
-                soft = backup.File.GetSoftDeleteFileFor();
+                soft = backup.File.SoftDeleteFile();
                 if (soft.Exists)
                 {
                     withNewName = soft.WithNewName(newName, this.Setting);
@@ -312,7 +312,7 @@
         /// <inheritdoc/>
         public void DeleteBackups(FileInfo file)
         {
-            var soft = file.GetSoftDeleteFileFor();
+            var soft = file.SoftDeleteFile();
             soft?.Delete();
 
             var allBackups = BackupFile.GetAllBackupsFor(file, this.Setting);

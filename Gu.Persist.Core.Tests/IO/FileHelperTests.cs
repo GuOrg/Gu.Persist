@@ -30,7 +30,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void HardDeleteWhenNoFile()
         {
             var file = this.CreateFileInfo();
-            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var softDeleteFile = file.SoftDeleteFile();
             var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
             backup.CreateFileOnDisk();
             file.HardDelete();
@@ -43,7 +43,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void HardDeleteWhenNoSoftFile()
         {
             var file = this.CreateFileInfo();
-            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var softDeleteFile = file.SoftDeleteFile();
             var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
             backup.CreateFileOnDisk();
             file.CreateFileOnDisk();
@@ -57,7 +57,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void HardDeleteWhenHasSoftFile()
         {
             var file = this.CreateFileInfo();
-            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var softDeleteFile = file.SoftDeleteFile();
             var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
             backup.CreateFileOnDisk();
             file.CreateFileOnDisk();
@@ -72,7 +72,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void HardDeleteWhenOnlySoftFile()
         {
             var file = this.CreateFileInfo();
-            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var softDeleteFile = file.SoftDeleteFile();
             var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
             backup.CreateFileOnDisk();
             softDeleteFile.CreateFileOnDisk();
@@ -86,7 +86,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void SoftDeleteWhenNoFile()
         {
             var file = this.CreateFileInfo();
-            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var softDeleteFile = file.SoftDeleteFile();
             var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
             backup.CreateFileOnDisk();
             var soft = file.SoftDelete();
@@ -100,7 +100,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void SoftDeleteWhenNoSoftFile()
         {
             var file = this.CreateFileInfo();
-            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var softDeleteFile = file.SoftDeleteFile();
             var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
             backup.CreateFileOnDisk();
             file.CreateFileOnDisk();
@@ -115,7 +115,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void SoftDeleteWhenHasSoftFile()
         {
             var file = this.CreateFileInfo();
-            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var softDeleteFile = file.SoftDeleteFile();
             var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
             backup.CreateFileOnDisk();
             file.WriteAllText("File");
@@ -187,7 +187,7 @@ namespace Gu.Persist.Core.Tests.IO
         {
             var file = this.CreateFileInfo();
             var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
-            var backupSoftDelete = backup.GetSoftDeleteFileFor();
+            var backupSoftDelete = backup.SoftDeleteFile();
             backup.CreateFileOnDisk();
             backupSoftDelete.WriteAllText("OldSoft");
             file.WriteAllText("File");
@@ -217,7 +217,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void RestoreWhenSoftDeleteFile()
         {
             var file = this.CreateFileInfo();
-            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var softDeleteFile = file.SoftDeleteFile();
             var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
             backup.CreateFileOnDisk();
             softDeleteFile.WriteAllText("Soft");
@@ -262,7 +262,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void SoftDeleteWhenOnlySoftFile()
         {
             var file = this.CreateFileInfo();
-            var softDeleteFile = file.GetSoftDeleteFileFor();
+            var softDeleteFile = file.SoftDeleteFile();
             var backup = file.WithNewExtension(BackupSettings.DefaultExtension);
             backup.CreateFileOnDisk();
             softDeleteFile.CreateFileOnDisk();

@@ -65,7 +65,7 @@ namespace Gu.Persist.Core
             this.lockedFile?.Dispose();
             this.lockedFile = LockedFile.Create(this.file, x => x.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Delete));
             this.lockedSoftDelete?.Dispose();
-            this.lockedSoftDelete = LockedFile.Create(this.file.GetSoftDeleteFileFor(), x => x.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Delete));
+            this.lockedSoftDelete = LockedFile.Create(this.file.SoftDeleteFile(), x => x.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Delete));
             this.backuper.BeforeSave(this.file);
             if (this.contents == null)
             {

@@ -78,7 +78,7 @@ namespace Gu.Persist.Core
 
         internal static void DeleteSoftDeleteFileFor(this FileInfo file)
         {
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             softDelete?.Delete();
         }
 

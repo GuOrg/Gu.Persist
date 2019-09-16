@@ -32,19 +32,13 @@ namespace Gu.Persist.Core.Tests.Repositories
 #pragma warning restore CA2214 // Do not call overridable methods in constructors
         }
 
-        public RepositorySettings Settings => (RepositorySettings)this.Repository?.Settings;
+        public RepositorySettings Settings => (RepositorySettings)Repository?.Settings;
 
         public BackupSettings BackupSettings => this.Settings?.BackupSettings;
-
-        public bool IsBackingUp => this.BackupSettings != null;
 
         public IRepository Repository { get; private set; }
 
         public DirectoryInfo Directory { get; }
-
-        public Files NamedFiles { get; private set; }
-
-        public Files TypeFiles { get; private set; }
 
         public System.IO.FileInfo RepoSettingFile { get; private set; }
 
@@ -52,10 +46,8 @@ namespace Gu.Persist.Core.Tests.Repositories
         public void SetUp()
         {
             this.Directory.DeleteIfExists(recursive: true);
-            this.Repository = this.CreateRepository();
-            this.Repository.ClearCache();
-            this.NamedFiles = new Files(this.GetType().Name, this.Settings);
-            this.TypeFiles = new Files(this.dummy.GetType().Name, this.Settings);
+            Repository = this.CreateRepository();
+            Repository.ClearCache();
             this.RepoSettingFile = this.Directory.CreateFileInfoInDirectory(string.Concat(this.Settings.GetType().Name, this.Settings.Extension));
         }
 
@@ -72,7 +64,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (this.CreateRepository() is IDataRepository dataRepository)
             {
                 var file = CreateTestFile(dataRepository.Settings);
-                var softDelete = file.GetSoftDeleteFileFor();
+                var softDelete = file.SoftDeleteFile();
                 file.CreateFileOnDisk();
                 softDelete.CreateFileOnDisk();
                 if (dataRepository.Settings.BackupSettings != null)
@@ -100,7 +92,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (this.CreateRepository() is IDataRepository dataRepository)
             {
                 var file = CreateTestFile(dataRepository.Settings);
-                var softDelete = file.GetSoftDeleteFileFor();
+                var softDelete = file.SoftDeleteFile();
                 file.CreateFileOnDisk();
                 softDelete.CreateFileOnDisk();
                 if (dataRepository.Settings.BackupSettings != null)
@@ -128,7 +120,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (this.CreateRepository() is IDataRepository dataRepository)
             {
                 var file = CreateTestFile(dataRepository.Settings);
-                var softDelete = file.GetSoftDeleteFileFor();
+                var softDelete = file.SoftDeleteFile();
                 file.CreateFileOnDisk();
                 softDelete.CreateFileOnDisk();
                 if (dataRepository.Settings.BackupSettings != null)
@@ -156,7 +148,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (this.CreateRepository() is IDataRepository dataRepository)
             {
                 var file = CreateTestFile(dataRepository.Settings, nameof(DummySerializable));
-                var softDelete = file.GetSoftDeleteFileFor();
+                var softDelete = file.SoftDeleteFile();
                 file.CreateFileOnDisk();
                 softDelete.CreateFileOnDisk();
                 if (dataRepository.Settings.BackupSettings != null)
@@ -237,6 +229,30 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TestCase(true, true)]
         [TestCase(false, true)]
         [TestCase(true, false)]
+        public void CanRenameFileInfoWouldOverwrite(bool fileNewNameExists, bool backupNewNameExists)
+        {
+            var repository = this.CreateRepository();
+            var file = CreateTestFile(repository.Settings);
+            file.CreateFileOnDisk();
+            if (fileNewNameExists)
+            {
+                file.WithNewName("NewName", repository.Settings).CreateFileOnDisk();
+                Assert.AreEqual(false, repository.CanRename(file, "NewName"));
+            }
+
+            if (backupNewNameExists &&
+                repository.Settings.BackupSettings != null)
+            {
+                var backup = BackupFile.CreateFor(file, repository.Settings.BackupSettings);
+                backup.CreateFileOnDisk();
+                BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings).CreateFileOnDisk();
+                Assert.AreEqual(false, repository.CanRename(file, "NewName"));
+            }
+        }
+
+        [TestCase(true, true)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
         public void CanRenameGenericWouldOverwrite(bool fileNewNameExists, bool backupNewNameExists)
         {
             var repository = this.CreateRepository();
@@ -258,27 +274,40 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
         }
 
+        [TestCase(true, false)]
         [TestCase(true, true)]
         [TestCase(false, true)]
-        [TestCase(true, false)]
-        public void CanRenameNameWouldOverwrite(bool fileNewNameExists, bool backupNewNameExists)
+        [TestCase(false, false)]
+        public void RenameFileInfo(bool hasBackup, bool hasSoft)
         {
             var repository = this.CreateRepository();
             var file = CreateTestFile(repository.Settings);
             file.CreateFileOnDisk();
-            if (fileNewNameExists)
-            {
-                file.WithNewName("NewName", repository.Settings).CreateFileOnDisk();
-                Assert.AreEqual(false, this.Repository.CanRename(file, "NewName"));
-            }
-
-            if (backupNewNameExists &&
+            if (hasBackup &&
                 repository.Settings.BackupSettings != null)
             {
-                var backup = BackupFile.CreateFor(file, repository.Settings.BackupSettings);
-                backup.CreateFileOnDisk();
-                BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings).CreateFileOnDisk();
-                Assert.AreEqual(false, repository.CanRename(file, "NewName"));
+                BackupFile.CreateFor(file, repository.Settings.BackupSettings).CreateFileOnDisk();
+            }
+
+            if (hasSoft)
+            {
+                file.SoftDeleteFile().CreateFileOnDisk();
+            }
+
+            repository.Rename(file, "NewName", false);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, file.WithNewName("NewName", repository.Settings));
+            if (hasBackup &&
+                repository.Settings.BackupSettings != null)
+            {
+                AssertFile.Exists(false, BackupFile.CreateFor(file, repository.Settings.BackupSettings));
+                AssertFile.Exists(true, BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings));
+            }
+
+            if (hasSoft)
+            {
+                AssertFile.Exists(false, file.SoftDeleteFile());
+                AssertFile.Exists(true, file.WithNewName("NewName", repository.Settings).SoftDeleteFile());
             }
         }
 
@@ -286,108 +315,36 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TestCase(true, true)]
         [TestCase(false, true)]
         [TestCase(false, false)]
-        public void RenameType(bool hasBackup, bool hasSoft)
+        public void RenameGeneric(bool hasBackup, bool hasSoft)
         {
-            this.TypeFiles.File.CreateFileOnDisk();
-            if (hasBackup && this.IsBackingUp)
+            var repository = this.CreateRepository();
+            var file = CreateTestFile(repository.Settings, nameof(DummySerializable));
+            file.CreateFileOnDisk();
+            if (hasBackup &&
+                repository.Settings.BackupSettings != null)
             {
-                this.TypeFiles.Backup.CreateFileOnDisk();
+                BackupFile.CreateFor(file, repository.Settings.BackupSettings).CreateFileOnDisk();
             }
 
             if (hasSoft)
             {
-                this.TypeFiles.SoftDelete.CreateFileOnDisk();
+                file.SoftDeleteFile().CreateFileOnDisk();
             }
 
-            this.Repository.Rename<DummySerializable>("NewName", false);
-            AssertFile.Exists(true, this.TypeFiles.WithNewName);
-            if (hasBackup && this.IsBackingUp)
+            repository.Rename<DummySerializable>("NewName", false);
+            AssertFile.Exists(false, file);
+            AssertFile.Exists(true, file.WithNewName("NewName", repository.Settings));
+            if (hasBackup &&
+                repository.Settings.BackupSettings != null)
             {
-                AssertFile.Exists(false, this.TypeFiles.Backup);
-                AssertFile.Exists(true, this.TypeFiles.BackupNewName);
-            }
-
-            if (hasSoft)
-            {
-                AssertFile.Exists(false, this.TypeFiles.SoftDelete);
-                AssertFile.Exists(true, this.TypeFiles.SoftDeleteNewName);
-            }
-        }
-
-        [TestCase(true, false)]
-        [TestCase(true, true)]
-        [TestCase(false, true)]
-        [TestCase(false, false)]
-        public void RenameFileName(bool hasBackup, bool hasSoft)
-        {
-            this.NamedFiles.File.CreateFileOnDisk();
-            if (hasBackup && this.IsBackingUp)
-            {
-                this.NamedFiles.Backup.CreateFileOnDisk();
+                AssertFile.Exists(false, BackupFile.CreateFor(file, repository.Settings.BackupSettings));
+                AssertFile.Exists(true, BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings));
             }
 
             if (hasSoft)
             {
-                this.NamedFiles.SoftDelete.CreateFileOnDisk();
-            }
-
-            this.Repository.Rename(this.NamedFiles.File, "NewName", false);
-            AssertFile.Exists(true, this.NamedFiles.WithNewName);
-            if (hasBackup && this.IsBackingUp)
-            {
-                AssertFile.Exists(false, this.NamedFiles.Backup);
-                AssertFile.Exists(true, this.NamedFiles.BackupNewName);
-            }
-
-            if (hasSoft)
-            {
-                AssertFile.Exists(false, this.NamedFiles.SoftDelete);
-                AssertFile.Exists(true, this.NamedFiles.SoftDeleteNewName);
-            }
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void RenameTypeOverwrite(bool overWrite)
-        {
-            this.TypeFiles.File.CreateFileOnDisk("a");
-            this.TypeFiles.SoftDelete.CreateFileOnDisk("c");
-
-            this.TypeFiles.WithNewName.CreateFileOnDisk("aa");
-            this.TypeFiles.SoftDeleteNewName.CreateFileOnDisk("cc");
-            if (this.IsBackingUp)
-            {
-                this.TypeFiles.Backup.CreateFileOnDisk("b");
-                this.TypeFiles.BackupNewName.CreateFileOnDisk("bb");
-            }
-
-            if (overWrite)
-            {
-                this.Repository.Rename<DummySerializable>("NewName", true);
-                AssertFile.Exists(false, this.TypeFiles.File);
-                AssertFile.Exists(false, this.TypeFiles.SoftDelete);
-
-                Assert.AreEqual("a", this.TypeFiles.WithNewName.ReadAllText());
-                Assert.AreEqual("c", this.TypeFiles.SoftDeleteNewName.ReadAllText());
-                if (this.IsBackingUp)
-                {
-                    AssertFile.Exists(false, this.TypeFiles.Backup);
-                    Assert.AreEqual("b", this.TypeFiles.BackupNewName.ReadAllText());
-                }
-            }
-            else
-            {
-                _ = Assert.Throws<InvalidOperationException>(() => this.Repository.Rename<DummySerializable>("NewName", false));
-                Assert.AreEqual("a", this.TypeFiles.File.ReadAllText());
-                Assert.AreEqual("c", this.TypeFiles.SoftDelete.ReadAllText());
-
-                Assert.AreEqual("aa", this.TypeFiles.WithNewName.ReadAllText());
-                Assert.AreEqual("cc", this.TypeFiles.SoftDeleteNewName.ReadAllText());
-                if (this.IsBackingUp)
-                {
-                    Assert.AreEqual("b", this.TypeFiles.Backup.ReadAllText());
-                    Assert.AreEqual("bb", this.TypeFiles.BackupNewName.ReadAllText());
-                }
+                AssertFile.Exists(false, file.SoftDeleteFile());
+                AssertFile.Exists(true, file.WithNewName("NewName", repository.Settings).SoftDeleteFile());
             }
         }
 
@@ -395,43 +352,94 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TestCase(false)]
         public void RenameFileNameOverwrite(bool overWrite)
         {
-            this.NamedFiles.File.CreateFileOnDisk("a");
-            this.NamedFiles.SoftDelete.CreateFileOnDisk("c");
+            var repository = this.CreateRepository();
+            var file = CreateTestFile(repository.Settings);
+            var softDelete = file.SoftDeleteFile();
+            file.CreateFileOnDisk("file");
+            softDelete.CreateFileOnDisk("file soft delete");
 
-            this.NamedFiles.WithNewName.CreateFileOnDisk("aa");
-            this.NamedFiles.SoftDeleteNewName.CreateFileOnDisk("cc");
-            if (this.IsBackingUp)
+            file.WithNewName("NewName", repository.Settings).CreateFileOnDisk("existing new name");
+            file.WithNewName("NewName", repository.Settings).SoftDeleteFile().CreateFileOnDisk("existing soft delete new name");
+            if (repository.Settings.BackupSettings != null)
             {
-                this.NamedFiles.Backup.CreateFileOnDisk("b");
-                this.NamedFiles.BackupNewName.CreateFileOnDisk("bb");
+                BackupFile.CreateFor(file, repository.Settings.BackupSettings).CreateFileOnDisk("backup");
+                BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings).CreateFileOnDisk("existing backup new name");
             }
 
             if (overWrite)
             {
-                this.Repository.Rename(this.NamedFiles.File, "NewName", true);
-                AssertFile.Exists(false, this.NamedFiles.File);
-                AssertFile.Exists(false, this.NamedFiles.SoftDelete);
+                repository.Rename(file, "NewName", true);
+                AssertFile.Exists(false, file);
+                AssertFile.Exists(false, softDelete);
 
-                Assert.AreEqual("a", this.NamedFiles.WithNewName.ReadAllText());
-                Assert.AreEqual("c", this.NamedFiles.SoftDeleteNewName.ReadAllText());
-                if (this.IsBackingUp)
+                Assert.AreEqual("file", file.WithNewName("NewName", repository.Settings).ReadAllText());
+                Assert.AreEqual("file soft delete", file.WithNewName("NewName", repository.Settings).SoftDeleteFile().ReadAllText());
+                if (repository.Settings.BackupSettings != null)
                 {
-                    AssertFile.Exists(false, this.NamedFiles.Backup);
-                    Assert.AreEqual("b", this.NamedFiles.BackupNewName.ReadAllText());
+                    AssertFile.Exists(false, BackupFile.CreateFor(file, repository.Settings.BackupSettings));
+                    Assert.AreEqual("backup", BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings).ReadAllText());
                 }
             }
             else
             {
-                _ = Assert.Throws<InvalidOperationException>(() => this.Repository.Rename(this.NamedFiles.File, "NewName", false));
-                Assert.AreEqual("a", this.NamedFiles.File.ReadAllText());
-                Assert.AreEqual("c", this.NamedFiles.SoftDelete.ReadAllText());
+                _ = Assert.Throws<InvalidOperationException>(() => repository.Rename(file, "NewName", false));
+                Assert.AreEqual("file", file.ReadAllText());
+                Assert.AreEqual("file soft delete", softDelete.ReadAllText());
 
-                Assert.AreEqual("aa", this.NamedFiles.WithNewName.ReadAllText());
-                Assert.AreEqual("cc", this.NamedFiles.SoftDeleteNewName.ReadAllText());
-                if (this.IsBackingUp)
+                Assert.AreEqual("existing new name", file.WithNewName("NewName", repository.Settings).ReadAllText());
+                Assert.AreEqual("existing soft delete new name", file.WithNewName("NewName", repository.Settings).SoftDeleteFile().ReadAllText());
+                if (repository.Settings.BackupSettings != null)
                 {
-                    Assert.AreEqual("b", this.NamedFiles.Backup.ReadAllText());
-                    Assert.AreEqual("bb", this.NamedFiles.BackupNewName.ReadAllText());
+                    Assert.AreEqual("backup", BackupFile.CreateFor(file, repository.Settings.BackupSettings).ReadAllText());
+                    Assert.AreEqual("existing backup new name", BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings).ReadAllText());
+                }
+            }
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void RenameGenericOverwrite(bool overWrite)
+        {
+            var repository = this.CreateRepository();
+            var file = CreateTestFile(repository.Settings, nameof(DummySerializable));
+            var softDelete = file.SoftDeleteFile();
+            file.CreateFileOnDisk("file");
+            softDelete.CreateFileOnDisk("file soft delete");
+
+            file.WithNewName("NewName", repository.Settings).CreateFileOnDisk("existing new name");
+            file.WithNewName("NewName", repository.Settings).SoftDeleteFile().CreateFileOnDisk("existing soft delete new name");
+            if (repository.Settings.BackupSettings != null)
+            {
+                BackupFile.CreateFor(file, repository.Settings.BackupSettings).CreateFileOnDisk("backup");
+                BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings).CreateFileOnDisk("existing backup new name");
+            }
+
+            if (overWrite)
+            {
+                repository.Rename<DummySerializable>("NewName", true);
+                AssertFile.Exists(false, file);
+                AssertFile.Exists(false, softDelete);
+
+                Assert.AreEqual("file", file.WithNewName("NewName", repository.Settings).ReadAllText());
+                Assert.AreEqual("file soft delete", file.WithNewName("NewName", repository.Settings).SoftDeleteFile().ReadAllText());
+                if (repository.Settings.BackupSettings != null)
+                {
+                    AssertFile.Exists(false, BackupFile.CreateFor(file, repository.Settings.BackupSettings));
+                    Assert.AreEqual("backup", BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings).ReadAllText());
+                }
+            }
+            else
+            {
+                _ = Assert.Throws<InvalidOperationException>(() => repository.Rename<DummySerializable>("NewName", false));
+                Assert.AreEqual("file", file.ReadAllText());
+                Assert.AreEqual("file soft delete", softDelete.ReadAllText());
+
+                Assert.AreEqual("existing new name", file.WithNewName("NewName", repository.Settings).ReadAllText());
+                Assert.AreEqual("existing soft delete new name", file.WithNewName("NewName", repository.Settings).SoftDeleteFile().ReadAllText());
+                if (repository.Settings.BackupSettings != null)
+                {
+                    Assert.AreEqual("backup", BackupFile.CreateFor(file, repository.Settings.BackupSettings).ReadAllText());
+                    Assert.AreEqual("existing backup new name", BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings).ReadAllText());
                 }
             }
         }

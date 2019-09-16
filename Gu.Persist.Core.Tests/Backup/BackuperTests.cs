@@ -66,7 +66,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var dummy = new DummySerializable(1);
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
             softDelete.Save(dummy);
             AssertFile.Exists(false, file);
@@ -87,7 +87,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var dummy = new DummySerializable(1);
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             backup.Save(dummy);
             dummy.Value++;
             softDelete.Save(dummy);
@@ -113,7 +113,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var dummy = new DummySerializable(-1);
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             file.WriteAllText("File");
             backup.Save(dummy);
 
@@ -137,7 +137,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var dummy = new DummySerializable(-1);
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             backup.Save(dummy);
 
             AssertFile.Exists(false, file);
@@ -159,7 +159,7 @@ namespace Gu.Persist.Core.Tests.Backup
         {
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             AssertFile.Exists(false, file);
             AssertFile.Exists(false, softDelete);
             AssertFile.Exists(false, backup);
@@ -196,7 +196,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var settings = new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             softDelete.CreateFileOnDisk();
             var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
             backupOneMinuteOld.CreateFileOnDisk();
@@ -229,7 +229,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var settings = new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, 2);
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             softDelete.CreateFileOnDisk();
             var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
             backupOneMinuteOld.CreateFileOnDisk();
@@ -262,7 +262,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var settings = new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue);
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             softDelete.CreateFileOnDisk();
             var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
             backupOneMinuteOld.CreateFileOnDisk();

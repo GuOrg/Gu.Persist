@@ -56,7 +56,7 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             if (softDelete.Exists)
             {
                 return true;
@@ -121,7 +121,7 @@
             }
 
             Ensure.NotNullOrEmpty(newName, nameof(newName));
-            var soft = file.GetSoftDeleteFileFor();
+            var soft = file.SoftDeleteFile();
             if (soft.Exists)
             {
                 var fileSettings = new FileSettings(file.DirectoryName, file.Extension);
@@ -158,7 +158,7 @@
             }
 
             Ensure.NotNullOrEmpty(newName, nameof(newName));
-            var soft = file.GetSoftDeleteFileFor();
+            var soft = file.SoftDeleteFile();
             if (soft.Exists)
             {
                 var withNewName = soft.WithNewName(newName, new TempFileSettings(file.DirectoryName, file.Extension));
@@ -171,7 +171,7 @@
         /// <inheritdoc/>
         public void DeleteBackups(FileInfo file)
         {
-            file.GetSoftDeleteFileFor()?.Delete();
+            file.SoftDeleteFile()?.Delete();
         }
 
         private static void Restore(FileInfo file, FileInfo backup)

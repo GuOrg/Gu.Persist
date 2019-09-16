@@ -48,7 +48,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var dummy = new DummySerializable(1);
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             softDelete.Save(dummy);
             AssertFile.Exists(false, file);
             AssertFile.Exists(true, softDelete);
@@ -68,7 +68,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var dummy = new DummySerializable(1);
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             backup.Save(dummy);
             dummy.Value++;
             softDelete.Save(dummy);
@@ -91,7 +91,7 @@ namespace Gu.Persist.Core.Tests.Backup
         {
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             file.WriteAllText("File");
             softDelete.CreateFileOnDisk();
             backup.CreateFileOnDisk();
@@ -113,7 +113,7 @@ namespace Gu.Persist.Core.Tests.Backup
         {
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             var dummy = new DummySerializable(1);
             backup.Save(dummy);
 
@@ -134,7 +134,7 @@ namespace Gu.Persist.Core.Tests.Backup
         {
             var file = CreateFile();
             var backup = CreateBackupFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             AssertFile.Exists(false, file);
             AssertFile.Exists(false, softDelete);
             AssertFile.Exists(false, backup);
@@ -156,7 +156,7 @@ namespace Gu.Persist.Core.Tests.Backup
         public static void AfterSaveWhenNoFiles()
         {
             var file = CreateFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             using (var lockedFile = LockedFile.CreateIfExists(file, x => x.Open(FileMode.Open, FileAccess.Read, FileShare.Delete)))
             {
                 NullBackuper.Default.AfterSave(lockedFile);
@@ -169,7 +169,7 @@ namespace Gu.Persist.Core.Tests.Backup
         public static void AfterSaveWhenHasSoftDelete()
         {
             var file = CreateFile();
-            var softDelete = file.GetSoftDeleteFileFor();
+            var softDelete = file.SoftDeleteFile();
             file.CreateFileOnDisk();
             softDelete.CreateFileOnDisk();
             using (var lockedFile = LockedFile.CreateIfExists(file, x => x.Open(FileMode.Open, FileAccess.Read, FileShare.Delete)))

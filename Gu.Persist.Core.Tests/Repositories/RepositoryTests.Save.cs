@@ -17,7 +17,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(false, file);
             testCase.Save(repository, file, dummy);
             AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.SoftDeleteFile());
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
@@ -39,7 +39,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(false, file);
             testCase.Save(repository, file, dummy);
             AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.SoftDeleteFile());
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
@@ -52,7 +52,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             testCase.Save(repository, file, dummy);
             AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.SoftDeleteFile());
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
@@ -74,7 +74,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(false, file);
             testCase.Save(repository, file, dummy);
             AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.SoftDeleteFile());
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
@@ -87,7 +87,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             testCase.Save(repository, file, dummy);
             AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.SoftDeleteFile());
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
@@ -100,7 +100,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             testCase.Save(repository, file, dummy);
             AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.SoftDeleteFile());
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
@@ -181,7 +181,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             var file = testCase.File<DummySerializable>(repository);
             file.CreateFileOnDisk();
             file.TempFile(repository.Settings).CreateFileOnDisk();
-            file.GetSoftDeleteFileFor().CreateFileOnDisk();
+            file.SoftDeleteFile().CreateFileOnDisk();
             testCase.Save(repository, file, dummy);
             if (repository.Settings.BackupSettings != null)
             {

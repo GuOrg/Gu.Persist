@@ -784,10 +784,10 @@ namespace Gu.Persist.Core
             }
 
             var pairs = new List<RenamePair> { new RenamePair(oldName, newName) };
-            var oldSoftDelete = oldName.GetSoftDeleteFileFor();
+            var oldSoftDelete = oldName.SoftDeleteFile();
             if (oldSoftDelete?.Exists == true)
             {
-                pairs.Add(new RenamePair(oldSoftDelete, newName.GetSoftDeleteFileFor()));
+                pairs.Add(new RenamePair(oldSoftDelete, newName.SoftDeleteFile()));
             }
 
             if (this.Backuper != null)
