@@ -3,7 +3,6 @@ namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using NUnit.Framework;
 
     public abstract partial class RepositoryTests
@@ -132,202 +131,41 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
         }
 
-        [Test]
-        public void SaveThenSaveNullFileInfo()
+        [TestCaseSource(nameof(TestCases))]
+        public void SaveThenSaveNull(TestCase testCase)
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
-            this.Repository.Save(file, dummy);
-            AssertFile.Exists(true, file);
-            if (repository.Settings.BackupSettings != null)
+            var file = testCase.File<DummySerializable>(repository);
+            testCase.Save(repository, file, dummy);
+            if (repository.Settings is IDataRepositorySettings dataRepositorySettings &&
+                dataRepositorySettings.SaveNullDeletesFile == true)
             {
-                AssertFile.Exists(false, backupFile);
-            }
-
-            if ((repository.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
-            {
-                repository.Save<DummySerializable>(file, null);
+                testCase.Save<DummySerializable>(repository, file, null);
                 AssertFile.Exists(false, file);
                 if (repository.Settings.BackupSettings != null)
                 {
+                    var backupFile = testCase.BackupFile<DummySerializable>(repository);
                     AssertFile.Exists(true, backupFile);
                 }
             }
             else
             {
-                _ = Assert.Throws<ArgumentNullException>(() => repository.Save<DummySerializable>(file, null));
+                _ = Assert.Throws<ArgumentNullException>(() => testCase.Save<DummySerializable>(repository, file, null));
             }
         }
 
-        [Test]
-        public void SaveThenSaveNullFullName()
+        [TestCaseSource(nameof(TestCases))]
+        public void SaveWhenTempFileExists(TestCase testCase)
         {
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
-            this.Repository.Save(file.FullName, dummy);
-            AssertFile.Exists(true, file);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(false, backupFile);
-            }
-
-            if ((repository.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
-            {
-                repository.Save<DummySerializable>(file.FullName, null);
-                AssertFile.Exists(false, file);
-                if (repository.Settings.BackupSettings != null)
-                {
-                    AssertFile.Exists(true, backupFile);
-                }
-            }
-            else
-            {
-                _ = Assert.Throws<ArgumentNullException>(() => repository.Save<DummySerializable>(file.FullName, null));
-            }
-        }
-
-        [Test]
-        public void SaveThenSaveNullName()
-        {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
-            this.Repository.Save(file.Name, dummy);
-            AssertFile.Exists(true, file);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(false, backupFile);
-            }
-
-            if ((repository.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
-            {
-                repository.Save<DummySerializable>(file.Name, null);
-                AssertFile.Exists(false, file);
-                if (repository.Settings.BackupSettings != null)
-                {
-                    AssertFile.Exists(true, backupFile);
-                }
-            }
-            else
-            {
-                _ = Assert.Throws<ArgumentNullException>(() => repository.Save<DummySerializable>(file.Name, null));
-            }
-        }
-
-        [Test]
-        public void SaveThenSaveNullGeneric()
-        {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetGenericTestFileInfo(dummy);
-            var backupFile = repository.GetGenericTestBackupFileInfo(dummy);
-            this.Repository.Save(dummy);
-            AssertFile.Exists(true, file);
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(false, backupFile);
-            }
-
-            if ((repository.Settings as IDataRepositorySettings)?.SaveNullDeletesFile == true)
-            {
-                repository.Save<DummySerializable>(null);
-                AssertFile.Exists(false, file);
-                if (repository.Settings.BackupSettings != null)
-                {
-                    AssertFile.Exists(true, backupFile);
-                }
-            }
-            else
-            {
-                _ = Assert.Throws<ArgumentNullException>(() => repository.Save<DummySerializable>(null));
-            }
-        }
-
-        [Test]
-        public void SaveFileInfoWhenTempFileExists()
-        {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
+            var file = testCase.File<DummySerializable>(repository);
             file.TempFile(repository.Settings).CreateFileOnDisk();
-            this.Repository.Save(file, dummy);
-            AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
-            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            testCase.Save(repository, file, dummy);
             if (repository.Settings.BackupSettings != null)
             {
-                AssertFile.Exists(false, backupFile);
-            }
-
-            var read = this.Read<DummySerializable>(file);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public void SaveFullNameWhenTempFileExists()
-        {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
-            file.TempFile(repository.Settings).CreateFileOnDisk();
-            this.Repository.Save(file.FullName, dummy);
-            AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
-            AssertFile.Exists(false, file.TempFile(repository.Settings));
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(false, backupFile);
-            }
-
-            var read = this.Read<DummySerializable>(file);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public void SaveNameWhenTempFileExists()
-        {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetTestFileInfo();
-            var backupFile = repository.GetTestBackupFileInfo();
-            file.TempFile(repository.Settings).CreateFileOnDisk();
-            this.Repository.Save(file.Name, dummy);
-            AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
-            AssertFile.Exists(false, file.TempFile(repository.Settings));
-            if (repository.Settings.BackupSettings != null)
-            {
-                AssertFile.Exists(false, backupFile);
-            }
-
-            var read = this.Read<DummySerializable>(file);
-            Assert.AreEqual(dummy.Value, read.Value);
-            Assert.AreNotSame(dummy, read);
-        }
-
-        [Test]
-        public void SaveGenericWhenTempFileExists()
-        {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = repository.GetGenericTestFileInfo(dummy);
-            var backupFile = repository.GetGenericTestBackupFileInfo(dummy);
-            file.TempFile(repository.Settings).CreateFileOnDisk();
-            this.Repository.Save(dummy);
-            AssertFile.Exists(true, file);
-            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
-            AssertFile.Exists(false, file.TempFile(repository.Settings));
-            if (repository.Settings.BackupSettings != null)
-            {
+                var backupFile = testCase.BackupFile<DummySerializable>(repository);
                 AssertFile.Exists(false, backupFile);
             }
 
