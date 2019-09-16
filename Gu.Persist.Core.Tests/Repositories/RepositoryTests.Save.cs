@@ -244,5 +244,31 @@ namespace Gu.Persist.Core.Tests.Repositories
                 Assert.AreNotSame(dummy, read);
             }
         }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void IsDirtyBeforeFirstSave(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            if (repository.Settings.IsTrackingDirty)
+            {
+                Assert.AreEqual(true, testCase.IsDirty(repository, file, dummy));
+
+                testCase.Save(repository, file, dummy);
+                Assert.AreEqual(false, testCase.IsDirty(repository, file, dummy));
+
+                dummy.Value++;
+                Assert.AreEqual(true, testCase.IsDirty(repository, file, dummy));
+
+                testCase.Save(repository, file, dummy);
+                Assert.AreEqual(false, testCase.IsDirty(repository, file, dummy));
+            }
+            else
+            {
+                var exception = Assert.Throws<InvalidOperationException>(() => repository.IsDirty(dummy));
+                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
+            }
+        }
     }
 }

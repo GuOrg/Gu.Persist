@@ -28,6 +28,8 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             internal abstract void Save<T>(IRepository repository, System.IO.FileInfo file, T item);
 
+            internal abstract bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item);
+
             internal virtual System.IO.FileInfo File<T>(IRepository repository, [CallerMemberName] string name = null) => repository.GetFileInfo(name);
 
             internal System.IO.FileInfo BackupFile<T>(IRepository repository, [CallerMemberName] string name = null)
@@ -45,6 +47,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(file, create);
 
             internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file, item);
+
+            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file, item);
         }
 
         private class FileInfoAsync : TestCase
@@ -54,6 +58,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(file, create).Result;
 
             internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file, item).Wait();
+
+            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file, item);
         }
 
         private class FullFileName : TestCase
@@ -63,6 +69,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(file.FullName, create);
 
             internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file.FullName, item);
+
+            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.FullName, item);
         }
 
         private class FullFileNameAsync : TestCase
@@ -72,6 +80,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(file.FullName, create).Result;
 
             internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file.FullName, item).Wait();
+
+            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.FullName, item);
         }
 
         private class FileNameWithExtension : TestCase
@@ -81,6 +91,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(file.Name, create);
 
             internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file.Name, item);
+
+            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.Name, item);
         }
 
         private class FileNameWithExtensionAsync : TestCase
@@ -90,6 +102,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(file.Name, create).Result;
 
             internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file.Name, item).Wait();
+
+            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.Name, item);
         }
 
         private class FileNameWithOutExtension : TestCase
@@ -99,6 +113,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(Path.GetFileNameWithoutExtension(file.FullName), create);
 
             internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(Path.GetFileNameWithoutExtension(file.FullName), item);
+
+            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(Path.GetFileNameWithoutExtension(file.FullName), item);
         }
 
         private class FileNameWithOutExtensionAsync : TestCase
@@ -108,6 +124,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(Path.GetFileNameWithoutExtension(file.FullName), create).Result;
 
             internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(Path.GetFileNameWithoutExtension(file.FullName), item).Wait();
+
+            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(Path.GetFileNameWithoutExtension(file.FullName), item);
         }
 
 #pragma warning disable SA1313 // Parameter names should begin with lower-case letter
@@ -120,6 +138,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create) => repository.ReadOrCreate<T>(create);
 
             internal override void Save<T>(IRepository repository, System.IO.FileInfo _, T item) => repository.Save(item);
+
+            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(item);
         }
 
         private class GenericAsync : TestCase
@@ -131,6 +151,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             internal override System.IO.FileInfo File<T>(IRepository repository, string _ = null) => repository.GetFileInfo(typeof(T).Name);
 
             internal override void Save<T>(IRepository repository, System.IO.FileInfo _, T item) => repository.SaveAsync(item).Wait();
+
+            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(item);
         }
 #pragma warning restore SA1313 // Parameter names should begin with lower-case letter
     }

@@ -178,46 +178,6 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void IsDirtyGeneric()
-        {
-            if (this.Settings.IsTrackingDirty)
-            {
-                Assert.IsTrue(this.Repository.IsDirty(this.dummy));
-
-                this.Repository.Save(this.dummy);
-                Assert.IsFalse(this.Repository.IsDirty(this.dummy));
-
-                this.dummy.Value++;
-                Assert.IsTrue(this.Repository.IsDirty(this.dummy));
-            }
-            else
-            {
-                var exception = Assert.Throws<InvalidOperationException>(() => this.Repository.IsDirty(this.dummy));
-                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
-            }
-        }
-
-        [Test]
-        public void IsDirtyFileName()
-        {
-            if (this.Settings.IsTrackingDirty)
-            {
-                Assert.IsTrue(this.Repository.IsDirty(this.NamedFiles.File, this.dummy));
-
-                this.Repository.Save(this.NamedFiles.File, this.dummy);
-                Assert.IsFalse(this.Repository.IsDirty(this.NamedFiles.File, this.dummy));
-
-                this.dummy.Value++;
-                Assert.IsTrue(this.Repository.IsDirty(this.NamedFiles.File, this.dummy));
-            }
-            else
-            {
-                var exception = Assert.Throws<InvalidOperationException>(() => this.Repository.IsDirty(this.NamedFiles.File, this.dummy));
-                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
-            }
-        }
-
-        [Test]
         public void CanRenameTypeHappyPath()
         {
             this.TypeFiles.File.CreateFileOnDisk();
