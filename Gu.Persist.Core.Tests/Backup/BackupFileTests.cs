@@ -25,7 +25,7 @@
         [TearDown]
         public static void TearDown()
         {
-            Directory.DeleteIfExists(true);
+            Directory.DeleteIfExists(recursive: true);
         }
 
         [Test]
