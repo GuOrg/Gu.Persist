@@ -16,7 +16,6 @@ group Analyzers
 
 group Test
   source http://www.nuget.org/api/v2/
+  nuget Microsoft.NET.Test.Sdk
   nuget NUnit
   nuget NUnit3TestAdapter
-  nuget Microsoft.NET.Test.Sdk
-  nuget Moq

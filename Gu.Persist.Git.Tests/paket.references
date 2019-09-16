@@ -1,16 +1,16 @@
 LibGit2Sharp
 Newtonsoft.Json
+
 group Analyzers
-AsyncUsageAnalyzers
-Gu.Analyzers
-IDisposableAnalyzers
-Microsoft.CodeAnalysis.FxCopAnalyzers
-ReflectionAnalyzers
-StyleCop.Analyzers
-JetBrains.Annotations
+  AsyncUsageAnalyzers
+  Gu.Analyzers
+  IDisposableAnalyzers
+  Microsoft.CodeAnalysis.FxCopAnalyzers
+  ReflectionAnalyzers
+  StyleCop.Analyzers
+  JetBrains.Annotations
 
 group Test
+  Microsoft.NET.Test.Sdk
   NUnit
   NUnit3TestAdapter
-  Microsoft.NET.Test.Sdk
-  Moq
