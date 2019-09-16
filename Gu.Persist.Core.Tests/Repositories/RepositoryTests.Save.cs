@@ -8,6 +8,28 @@ namespace Gu.Persist.Core.Tests.Repositories
 
     public abstract partial class RepositoryTests
     {
+        [TestCaseSource(nameof(TestCases))]
+        public void Save(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            var backupFile = testCase.BackupFile<DummySerializable>(repository);
+            AssertFile.Exists(false, file);
+            testCase.Save(repository, file, dummy);
+            AssertFile.Exists(true, file);
+            AssertFile.Exists(false, file.GetSoftDeleteFileFor());
+            AssertFile.Exists(false, file.TempFile(repository.Settings));
+            if (repository.Settings.BackupSettings != null)
+            {
+                AssertFile.Exists(false, backupFile);
+            }
+
+            var read = this.Read<DummySerializable>(file);
+            Assert.AreEqual(dummy.Value, read.Value);
+            Assert.AreNotSame(dummy, read);
+        }
+
         [Test]
         public void SaveFileInfo()
         {
