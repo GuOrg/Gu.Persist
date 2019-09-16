@@ -125,7 +125,7 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(false, softDelete);
             AssertFile.Exists(true, backup);
 
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
 
             var exception = Assert.Throws<InvalidOperationException>(() => backuper.TryRestore(file));
             StringAssert.IsMatch(@"Expected file .*BackuperTests\\TryRestoreWhenHasBackupAndOriginal.cfg to not exist.", exception.Message);
@@ -148,7 +148,7 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(false, softDelete);
             AssertFile.Exists(true, backup);
 
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
             Assert.IsTrue(backuper.CanRestore(file));
             Assert.IsTrue(backuper.TryRestore(file));
 
@@ -168,7 +168,7 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(false, softDelete);
             AssertFile.Exists(false, backup);
 
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
             Assert.IsFalse(backuper.TryRestore(file));
 
             AssertFile.Exists(false, file);
@@ -186,7 +186,7 @@ namespace Gu.Persist.Core.Tests.Backup
         public void AfterSaveWhenNoFiles()
         {
             var file = this.CreateFile();
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 2));
+            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 2));
 
             using (var lockedFile = Core.LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
@@ -197,7 +197,7 @@ namespace Gu.Persist.Core.Tests.Backup
         [Test]
         public void AfterSavePurgeNumberOfFiles()
         {
-            var settings = new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
+            var settings = new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
             var file = this.CreateFile();
             var backup = this.CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
@@ -230,7 +230,7 @@ namespace Gu.Persist.Core.Tests.Backup
         [Test]
         public void AfterSavePurgeOld()
         {
-            var settings = new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, 2);
+            var settings = new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, 2);
             var file = this.CreateFile();
             var backup = this.CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
@@ -266,7 +266,7 @@ namespace Gu.Persist.Core.Tests.Backup
             this.File.CreateFileOnDisk();
             this.SoftDelete.CreateFileOnDisk();
             this.Backup.CreateFileOnDisk();
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue));
+            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue));
             using (var lockedFile = this.LockedFile())
             {
                 backuper.AfterSave(lockedFile);
@@ -288,7 +288,7 @@ namespace Gu.Persist.Core.Tests.Backup
             this.SoftDelete.CreateFileOnDisk();
             this.File.CreateFileOnDisk();
             this.Backup.CreateFileOnDisk();
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue));
+            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue));
             using (var lockedFile = this.LockedFile())
             {
                 backuper.AfterSave(lockedFile);
