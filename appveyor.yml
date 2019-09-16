@@ -7,3 +7,8 @@ configuration: Release
 
 build:
   verbosity: minimal
+
+test:
+  assemblies:
+    - '**\*.tests.dll'
+  cmd nunit3-console --result=myresults.xml;format=AppVeyor
