@@ -2,6 +2,7 @@
 {
     using System.IO;
     using System.Text;
+    using System.Xml;
     using System.Xml.Serialization;
 
     using Gu.Persist.Core;
@@ -64,7 +65,7 @@
             var xml = sb.ToString();
 
             ////Console.Write(xml);
-            using (var reader = new StringReader(xml))
+            using (var reader = XmlReader.Create(new StringReader(xml)))
             {
                 var roundtripped = (RepositorySettings)serializer.Deserialize(reader);
                 AssertProperties(settings, roundtripped);
@@ -90,7 +91,7 @@
             var xml = sb.ToString();
 
             ////Console.Write(xml);
-            using (var reader = new StringReader(xml))
+            using (var reader = XmlReader.Create(new StringReader(xml)))
             {
                 var roundtripped = (RepositorySettings)serializer.Deserialize(reader);
                 AssertProperties(settings, roundtripped);

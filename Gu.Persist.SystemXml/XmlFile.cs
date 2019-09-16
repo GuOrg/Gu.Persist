@@ -4,6 +4,7 @@
     using System.Collections.Concurrent;
     using System.IO;
     using System.Threading.Tasks;
+    using System.Xml;
     using System.Xml.Serialization;
 
     using Gu.Persist.Core;
@@ -169,7 +170,7 @@
             Ensure.NotNull<object>(item, nameof(item));
             using (var stream = ToStream(item))
             {
-                await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
+                await file.SaveAsync(stream).ConfigureAwait(false);
             }
         }
 
@@ -184,8 +185,11 @@
             var serializer = Serializers.GetOrAdd(typeof(T), x => new XmlSerializer(typeof(T)));
             lock (serializer)
             {
-                var setting = (T)serializer.Deserialize(stream);
-                return setting;
+                using (var reader = XmlReader.Create(stream))
+                {
+                    var setting = (T)serializer.Deserialize(reader);
+                    return setting;
+                }
             }
         }
 

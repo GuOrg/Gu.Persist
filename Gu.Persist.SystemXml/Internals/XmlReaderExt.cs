@@ -8,6 +8,11 @@ namespace Gu.Persist.SystemXml
     {
         internal static BackupSettings ReadElementBackupSettings(this XmlReader reader, string elementName)
         {
+            while (reader.NodeType == XmlNodeType.Whitespace)
+            {
+                reader.Skip();
+            }
+
             if (reader.Name != elementName)
             {
                 return null;
@@ -26,6 +31,11 @@ namespace Gu.Persist.SystemXml
             var numberOfBackups = reader.ReadElementInt(nameof(BackupSettings.NumberOfBackups));
             var maxAgeInDays = reader.ReadElementInt(nameof(BackupSettings.MaxAgeInDays));
             reader.ReadEndElement();
+            while (reader.NodeType == XmlNodeType.Whitespace)
+            {
+                reader.Skip();
+            }
+
             return new BackupSettings(directory, extension, timeStampFormat, numberOfBackups, maxAgeInDays);
         }
 
