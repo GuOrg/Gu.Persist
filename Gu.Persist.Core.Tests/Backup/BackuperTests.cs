@@ -34,7 +34,7 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void BackupWhenNotExists()
+        public void BeforeSaveWhenFileDoesNotNotExists()
         {
             var file = this.CreateFile();
             var backup = this.CreateBackupFile();
@@ -49,7 +49,7 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void BackupWhenExists()
+        public void BeforeSaveWhenFileExists()
         {
             var file = this.CreateFile();
             file.CreateFileOnDisk("abc");
@@ -183,67 +183,81 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void PurgeWhenNoFiles()
+        public void AfterSaveWhenNoFiles()
         {
+            var file = this.CreateFile();
             var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 2));
 
-            using (var lockedFile = this.LockedFile())
+            using (var lockedFile = Core.LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
                 backuper.AfterSave(lockedFile);
             }
-
-            AssertFile.Exists(false, this.BackupOneMinuteOld);
-            AssertFile.Exists(false, this.BackupOneHourOld);
-            AssertFile.Exists(false, this.BackupOneDayOld);
-            AssertFile.Exists(false, this.BackupOneMonthOld);
-            AssertFile.Exists(false, this.BackupOneYearOld);
-            ////AssertFile.Exists(false, _softDelete);
         }
 
         [Test]
-        public void PurgeNumberOfFiles()
+        public void AfterSavePurgeNumberOfFiles()
         {
+            var settings = new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
+            var file = this.CreateFile();
+            var backup = this.CreateBackupFile();
+            var softDelete = file.GetSoftDeleteFileFor();
             this.SoftDelete.CreateFileOnDisk();
-            foreach (var backup in this.TimestampedBackups)
-            {
-                backup.CreateFileOnDisk();
-            }
+            var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
+            backupOneMinuteOld.CreateFileOnDisk();
+            var backupOneHourOld = backup.WithTimeStamp(DateTime.Now.AddHours(-1), settings);
+            backupOneHourOld.CreateFileOnDisk();
+            var backupOneDayOld = backup.WithTimeStamp(DateTime.Now.AddDays(-1), settings);
+            backupOneDayOld.CreateFileOnDisk();
+            var backupOneMonthOld = backup.WithTimeStamp(DateTime.Now.AddMonths(-1), settings);
+            backupOneMonthOld.CreateFileOnDisk();
+            var backupOneYearOld = backup.WithTimeStamp(DateTime.Now.AddYears(-1), settings);
+            backupOneYearOld.CreateFileOnDisk();
 
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue));
-            using (var lockedFile = this.LockedFile())
+            var backuper = Backuper.Create(settings);
+            using (var lockedFile = Core.LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
                 backuper.AfterSave(lockedFile);
             }
 
-            AssertFile.Exists(true, this.BackupOneMinuteOld);
-            AssertFile.Exists(true, this.BackupOneHourOld);
-            AssertFile.Exists(true, this.BackupOneDayOld);
-            AssertFile.Exists(false, this.BackupOneMonthOld);
-            AssertFile.Exists(false, this.BackupOneYearOld);
-            AssertFile.Exists(false, this.SoftDelete);
+            AssertFile.Exists(true, backupOneMinuteOld);
+            AssertFile.Exists(true, backupOneHourOld);
+            AssertFile.Exists(true, backupOneDayOld);
+            AssertFile.Exists(false, backupOneMonthOld);
+            AssertFile.Exists(false, backupOneYearOld);
+            AssertFile.Exists(false, softDelete);
         }
 
         [Test]
-        public void PurgeOld()
+        public void AfterSavePurgeOld()
         {
+            var settings = new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, 2);
+            var file = this.CreateFile();
+            var backup = this.CreateBackupFile();
+            var softDelete = file.GetSoftDeleteFileFor();
             this.SoftDelete.CreateFileOnDisk();
-            foreach (var backup in this.TimestampedBackups)
-            {
-                backup.CreateFileOnDisk();
-            }
+            var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
+            backupOneMinuteOld.CreateFileOnDisk();
+            var backupOneHourOld = backup.WithTimeStamp(DateTime.Now.AddHours(-1), settings);
+            backupOneHourOld.CreateFileOnDisk();
+            var backupOneDayOld = backup.WithTimeStamp(DateTime.Now.AddDays(-1), settings);
+            backupOneDayOld.CreateFileOnDisk();
+            var backupOneMonthOld = backup.WithTimeStamp(DateTime.Now.AddMonths(-1), settings);
+            backupOneMonthOld.CreateFileOnDisk();
+            var backupOneYearOld = backup.WithTimeStamp(DateTime.Now.AddYears(-1), settings);
+            backupOneYearOld.CreateFileOnDisk();
 
-            var backuper = Backuper.Create(new BackupSettings(this.Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, 2));
-            using (var lockedFile = this.LockedFile())
+            var backuper = Backuper.Create(settings);
+            using (var lockedFile = Core.LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
                 backuper.AfterSave(lockedFile);
             }
 
-            AssertFile.Exists(true, this.BackupOneMinuteOld);
-            AssertFile.Exists(true, this.BackupOneHourOld);
-            AssertFile.Exists(true, this.BackupOneDayOld);
-            AssertFile.Exists(false, this.BackupOneMonthOld);
-            AssertFile.Exists(false, this.BackupOneYearOld);
-            AssertFile.Exists(false, this.SoftDelete);
+            AssertFile.Exists(true, backupOneMinuteOld);
+            AssertFile.Exists(true, backupOneHourOld);
+            AssertFile.Exists(true, backupOneDayOld);
+            AssertFile.Exists(false, backupOneMonthOld);
+            AssertFile.Exists(false, backupOneYearOld);
+            AssertFile.Exists(false, softDelete);
         }
 
         [Test]
