@@ -1,19 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{1B4BA174-F17D-4532-9137-A83A9BBCFFDD}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
+		azure-pipelines.yml = azure-pipelines.yml
 		paket.dependencies = paket.dependencies
 		paket.lock = paket.lock
 		.paket\Readme.paket.md = .paket\Readme.paket.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Persist.RuntimeXml", "Gu.Persist.RuntimeXml\Gu.Persist.RuntimeXml.csproj", "{E2DE0B67-6A90-4CE9-8CF7-4118BBE9CF79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Persist.RuntimeXml", "Gu.Persist.RuntimeXml\Gu.Persist.RuntimeXml.csproj", "{E2DE0B67-6A90-4CE9-8CF7-4118BBE9CF79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Persist.SystemXml", "Gu.Persist.SystemXml\Gu.Persist.SystemXml.csproj", "{686E3D46-4655-4E16-92BA-156275FA1FF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Persist.SystemXml", "Gu.Persist.SystemXml\Gu.Persist.SystemXml.csproj", "{686E3D46-4655-4E16-92BA-156275FA1FF2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Persist.RuntimeXml.Tests", "Gu.Persist.RuntimeXml.Tests\Gu.Persist.RuntimeXml.Tests.csproj", "{AA049462-982F-44EF-91A4-E0BE4AA3CCDF}"
 EndProject
@@ -23,11 +24,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Persist.Core", "Gu.Persi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Persist.Core.Tests", "Gu.Persist.Core.Tests\Gu.Persist.Core.Tests.csproj", "{CB570B6E-5AA8-4FD5-ADF4-1A1F58A136BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Persist.RuntimeBinary", "Gu.Persist.RuntimeBinary\Gu.Persist.RuntimeBinary.csproj", "{12DC348E-F260-4F7C-8AC3-16D768D798B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Persist.RuntimeBinary", "Gu.Persist.RuntimeBinary\Gu.Persist.RuntimeBinary.csproj", "{12DC348E-F260-4F7C-8AC3-16D768D798B1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Persist.RuntimeBinary.Tests", "Gu.Persist.RuntimeBinary.Tests\Gu.Persist.RuntimeBinary.Tests.csproj", "{447F250E-6F7A-42F5-8E40-109DDE23F76B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Persist.NewtonsoftJson", "Gu.Persist.NewtonsoftJson\Gu.Persist.NewtonsoftJson.csproj", "{2710BB07-D45B-4F93-BB56-968F25D39C64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Persist.NewtonsoftJson", "Gu.Persist.NewtonsoftJson\Gu.Persist.NewtonsoftJson.csproj", "{2710BB07-D45B-4F93-BB56-968F25D39C64}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Persist.NewtonsoftJson.Tests", "Gu.Persist.NewtonsoftJson.Tests\Gu.Persist.NewtonsoftJson.Tests.csproj", "{EFF48C6B-4FB4-467D-A2E3-0EC8D7236D75}"
 EndProject
