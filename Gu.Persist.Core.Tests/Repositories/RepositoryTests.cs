@@ -5,7 +5,6 @@ namespace Gu.Persist.Core.Tests.Repositories
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Reflection;
-    using System.Threading.Tasks;
 
     using Gu.Persist.Core;
 
