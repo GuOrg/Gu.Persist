@@ -9,36 +9,31 @@ namespace Gu.Persist.Core.Tests.Backup
 
     using NUnit.Framework;
 
-    public class BackuperTests
+    public static class BackuperTests
     {
-        private readonly DirectoryInfo directory;
-
-        public BackuperTests()
-        {
-            this.directory = Directories.TempDirectory
-                                        .CreateSubdirectory("Gu.Persist.Tests")
-                                        .CreateSubdirectory(this.GetType().FullName);
-        }
+        private static readonly DirectoryInfo Directory = Directories.TempDirectory
+                                                                     .CreateSubdirectory("Gu.Persist.Tests")
+                                                                     .CreateSubdirectory(typeof(BackuperTests).FullName);
 
         [SetUp]
-        public void SetUp()
+        public static void SetUp()
         {
-            this.directory.Refresh();
-            this.directory.CreateIfNotExists();
+            Directory.Refresh();
+            Directory.CreateIfNotExists();
         }
 
         [TearDown]
-        public void TearDown()
+        public static void TearDown()
         {
-            this.directory.DeleteIfExists(true);
+            Directory.DeleteIfExists(true);
         }
 
         [Test]
-        public void BeforeSaveWhenFileDoesNotNotExists()
+        public static void BeforeSaveWhenFileDoesNotNotExists()
         {
-            var file = this.CreateFile();
-            var backup = this.CreateBackupFile();
-            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, null, 1, 3));
+            var file = CreateFile();
+            var backup = CreateBackupFile();
+            var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, null, 1, 3));
             AssertFile.Exists(false, file);
             AssertFile.Exists(false, backup);
 
@@ -49,12 +44,12 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void BeforeSaveWhenFileExists()
+        public static void BeforeSaveWhenFileExists()
         {
-            var file = this.CreateFile();
+            var file = CreateFile();
             file.CreateFileOnDisk("abc");
-            var backup = this.CreateBackupFile();
-            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, null, 1, 3));
+            var backup = CreateBackupFile();
+            var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, null, 1, 3));
             AssertFile.Exists(true, file);
             AssertFile.Exists(false, backup);
 
@@ -65,13 +60,13 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void TryRestoreWhenHasSoftDelete()
+        public static void TryRestoreWhenHasSoftDelete()
         {
             var dummy = new DummySerializable(1);
-            var file = this.CreateFile();
-            var backup = this.CreateBackupFile();
+            var file = CreateFile();
+            var backup = CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
-            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
             softDelete.Save(dummy);
             AssertFile.Exists(false, file);
             AssertFile.Exists(true, softDelete);
@@ -86,11 +81,11 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void TryRestoreWhenHasSoftDeleteAndBackup()
+        public static void TryRestoreWhenHasSoftDeleteAndBackup()
         {
             var dummy = new DummySerializable(1);
-            var file = this.CreateFile();
-            var backup = this.CreateBackupFile();
+            var file = CreateFile();
+            var backup = CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
             backup.Save(dummy);
             dummy.Value++;
@@ -100,7 +95,7 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(true, softDelete);
             AssertFile.Exists(true, backup);
 
-            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
 
             Assert.IsTrue(backuper.CanRestore(file));
             Assert.IsTrue(backuper.TryRestore(file));
@@ -112,11 +107,11 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void TryRestoreWhenHasBackupAndOriginal()
+        public static void TryRestoreWhenHasBackupAndOriginal()
         {
             var dummy = new DummySerializable(-1);
-            var file = this.CreateFile();
-            var backup = this.CreateBackupFile();
+            var file = CreateFile();
+            var backup = CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
             file.WriteAllText("File");
             backup.Save(dummy);
@@ -125,7 +120,7 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(false, softDelete);
             AssertFile.Exists(true, backup);
 
-            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
 
             var exception = Assert.Throws<InvalidOperationException>(() => backuper.TryRestore(file));
             StringAssert.IsMatch(@"Expected file .*BackuperTests\\TryRestoreWhenHasBackupAndOriginal.cfg to not exist.", exception.Message);
@@ -136,11 +131,11 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void TryRestoreWhenHasBackup()
+        public static void TryRestoreWhenHasBackup()
         {
             var dummy = new DummySerializable(-1);
-            var file = this.CreateFile();
-            var backup = this.CreateBackupFile();
+            var file = CreateFile();
+            var backup = CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
             backup.Save(dummy);
 
@@ -148,7 +143,7 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(false, softDelete);
             AssertFile.Exists(true, backup);
 
-            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
             Assert.IsTrue(backuper.CanRestore(file));
             Assert.IsTrue(backuper.TryRestore(file));
 
@@ -159,16 +154,16 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void TryRestoreWhenNoFiles()
+        public static void TryRestoreWhenNoFiles()
         {
-            var file = this.CreateFile();
-            var backup = this.CreateBackupFile();
+            var file = CreateFile();
+            var backup = CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
             AssertFile.Exists(false, file);
             AssertFile.Exists(false, softDelete);
             AssertFile.Exists(false, backup);
 
-            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
+            var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
             Assert.IsFalse(backuper.TryRestore(file));
 
             AssertFile.Exists(false, file);
@@ -177,16 +172,16 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void PurgeAll()
+        public static void PurgeAll()
         {
             Assert.Inconclusive("do we want this?");
         }
 
         [Test]
-        public void AfterSaveWhenNoFiles()
+        public static void AfterSaveWhenNoFiles()
         {
-            var file = this.CreateFile();
-            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 2));
+            var file = CreateFile();
+            var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 2));
 
             using (var lockedFile = Core.LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
@@ -195,11 +190,11 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void AfterSavePurgeNumberOfFiles()
+        public static void AfterSavePurgeNumberOfFiles()
         {
-            var settings = new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
-            var file = this.CreateFile();
-            var backup = this.CreateBackupFile();
+            var settings = new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
+            var file = CreateFile();
+            var backup = CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
             softDelete.CreateFileOnDisk();
             var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
@@ -228,11 +223,11 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void AfterSavePurgeOld()
+        public static void AfterSavePurgeOld()
         {
-            var settings = new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, 2);
-            var file = this.CreateFile();
-            var backup = this.CreateBackupFile();
+            var settings = new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, 2);
+            var file = CreateFile();
+            var backup = CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
             softDelete.CreateFileOnDisk();
             var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
@@ -261,11 +256,11 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void AfterSaveDeletesSoftDeletesWhenNoPurgeOfBackups()
+        public static void AfterSaveDeletesSoftDeletesWhenNoPurgeOfBackups()
         {
-            var settings = new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue);
-            var file = this.CreateFile();
-            var backup = this.CreateBackupFile();
+            var settings = new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue);
+            var file = CreateFile();
+            var backup = CreateBackupFile();
             var softDelete = file.GetSoftDeleteFileFor();
             softDelete.CreateFileOnDisk();
             var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
@@ -294,13 +289,13 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void Rename()
+        public static void Rename()
         {
             Assert.Inconclusive("Backups must be renamed when original file is renamed");
         }
 
-        private FileInfo CreateFile([CallerMemberName] string name = null) => this.directory.CreateFileInfoInDirectory(name + ".cfg");
+        private static FileInfo CreateFile([CallerMemberName] string name = null) => Directory.CreateFileInfoInDirectory(name + ".cfg");
 
-        private FileInfo CreateBackupFile([CallerMemberName] string name = null) => this.directory.CreateFileInfoInDirectory(name + ".bak");
+        private static FileInfo CreateBackupFile([CallerMemberName] string name = null) => Directory.CreateFileInfoInDirectory(name + ".bak");
     }
 }
