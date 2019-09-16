@@ -212,5 +212,37 @@ namespace Gu.Persist.Core.Tests.Repositories
             read = this.Read<List<DummySerializable>>(file);
             CollectionAssert.AreEqual(list, read);
         }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void SaveManagesSingleton(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            testCase.Save(repository, file, dummy);
+            var read = testCase.Read<DummySerializable>(repository, file);
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+
+            dummy.Value++;
+            testCase.Save(repository, file, dummy);
+            read = testCase.Read<DummySerializable>(repository, file);
+            if (repository is ISingletonRepository)
+            {
+                Assert.AreSame(dummy, read);
+            }
+            else
+            {
+                Assert.AreEqual(dummy.Value, read.Value);
+                Assert.AreNotSame(dummy, read);
+            }
+        }
     }
 }
