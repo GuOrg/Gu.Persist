@@ -5,9 +5,9 @@ namespace Gu.Persist.Core.Tests.Repositories
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Reflection;
-
+    using System.Runtime.CompilerServices;
     using Gu.Persist.Core;
-
+    using Gu.Persist.Core.Backup;
     using NUnit.Framework;
 
     public abstract partial class RepositoryTests
@@ -67,93 +67,113 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         [TestCase(true)]
         [TestCase(false)]
-        public void DeleteType(bool deleteBackups)
+        public void DeleteFileInfo(bool deleteBackups)
         {
             if (this.Repository is IDataRepository dataRepository)
             {
-                this.TypeFiles.File.CreateFileOnDisk();
-                this.TypeFiles.SoftDelete.CreateFileOnDisk();
-                if (this.IsBackingUp)
+                var file = CreateTestFile(dataRepository.Settings);
+                var softDelete = file.GetSoftDeleteFileFor();
+                file.CreateFileOnDisk();
+                softDelete.CreateFileOnDisk();
+                if (dataRepository.Settings.BackupSettings != null)
                 {
-                    this.TypeFiles.Backup.CreateFileOnDisk();
-                    AssertFile.Exists(true, this.TypeFiles.Backup);
+                    BackupFile.CreateFor(file, dataRepository.Settings.BackupSettings).CreateFileOnDisk();
                 }
 
-                AssertFile.Exists(true, this.TypeFiles.File);
-                AssertFile.Exists(true, this.TypeFiles.SoftDelete);
+                AssertFile.Exists(true, file);
+                AssertFile.Exists(true, softDelete);
 
-                dataRepository.Delete<DummySerializable>(deleteBackups);
-                AssertFile.Exists(false, this.TypeFiles.File);
-                AssertFile.Exists(false, this.TypeFiles.SoftDelete);
-                if (this.IsBackingUp)
+                dataRepository.Delete(file, deleteBackups);
+                AssertFile.Exists(false, file);
+                AssertFile.Exists(false, softDelete);
+                if (dataRepository.Settings.BackupSettings != null)
                 {
-                    AssertFile.Exists(!deleteBackups, this.TypeFiles.Backup);
+                    AssertFile.Exists(!deleteBackups, BackupFile.CreateFor(file, dataRepository.Settings.BackupSettings));
                 }
             }
         }
 
         [TestCase(true)]
         [TestCase(false)]
-        public void DeleteName(bool deleteBackups)
+        public void DeleteFullFileName(bool deleteBackups)
         {
             if (this.Repository is IDataRepository dataRepository)
             {
-                this.NamedFiles.File.CreateFileOnDisk();
-                this.NamedFiles.SoftDelete.CreateFileOnDisk();
-                if (this.IsBackingUp)
+                var file = CreateTestFile(dataRepository.Settings);
+                var softDelete = file.GetSoftDeleteFileFor();
+                file.CreateFileOnDisk();
+                softDelete.CreateFileOnDisk();
+                if (dataRepository.Settings.BackupSettings != null)
                 {
-                    this.NamedFiles.Backup.CreateFileOnDisk();
-                    AssertFile.Exists(true, this.NamedFiles.Backup);
+                    BackupFile.CreateFor(file, dataRepository.Settings.BackupSettings).CreateFileOnDisk();
                 }
 
-                AssertFile.Exists(true, this.NamedFiles.File);
-                AssertFile.Exists(true, this.NamedFiles.SoftDelete);
+                AssertFile.Exists(true, file);
+                AssertFile.Exists(true, softDelete);
 
-                dataRepository.Delete(this.NamedFiles.File, deleteBackups);
-                AssertFile.Exists(false, this.NamedFiles.File);
-                AssertFile.Exists(false, this.NamedFiles.SoftDelete);
-                if (this.IsBackingUp)
+                dataRepository.Delete(file.FullName, deleteBackups);
+                AssertFile.Exists(false, file);
+                AssertFile.Exists(false, softDelete);
+                if (dataRepository.Settings.BackupSettings != null)
                 {
-                    AssertFile.Exists(!deleteBackups, this.NamedFiles.Backup);
+                    AssertFile.Exists(!deleteBackups, BackupFile.CreateFor(file, dataRepository.Settings.BackupSettings));
                 }
             }
         }
 
-        [Test]
-        public void DeleteBackupsGeneric()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void DeleteFileName(bool deleteBackups)
         {
-            this.TypeFiles.SoftDelete.CreateFileOnDisk();
-            AssertFile.Exists(true, this.TypeFiles.SoftDelete);
-            if (this.IsBackingUp)
+            if (this.Repository is IDataRepository dataRepository)
             {
-                this.TypeFiles.Backup.CreateFileOnDisk();
-                AssertFile.Exists(true, this.TypeFiles.Backup);
-            }
+                var file = CreateTestFile(dataRepository.Settings);
+                var softDelete = file.GetSoftDeleteFileFor();
+                file.CreateFileOnDisk();
+                softDelete.CreateFileOnDisk();
+                if (dataRepository.Settings.BackupSettings != null)
+                {
+                    BackupFile.CreateFor(file, dataRepository.Settings.BackupSettings).CreateFileOnDisk();
+                }
 
-            this.Repository.DeleteBackups<DummySerializable>();
-            AssertFile.Exists(false, this.TypeFiles.SoftDelete);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(false, this.TypeFiles.Backup);
+                AssertFile.Exists(true, file);
+                AssertFile.Exists(true, softDelete);
+
+                dataRepository.Delete(file.Name, deleteBackups);
+                AssertFile.Exists(false, file);
+                AssertFile.Exists(false, softDelete);
+                if (dataRepository.Settings.BackupSettings != null)
+                {
+                    AssertFile.Exists(!deleteBackups, BackupFile.CreateFor(file, dataRepository.Settings.BackupSettings));
+                }
             }
         }
 
-        [Test]
-        public void DeleteBackupsName()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void DeleteGeneric(bool deleteBackups)
         {
-            this.NamedFiles.SoftDelete.CreateFileOnDisk();
-            AssertFile.Exists(true, this.NamedFiles.SoftDelete);
-            if (this.IsBackingUp)
+            if (this.Repository is IDataRepository dataRepository)
             {
-                this.NamedFiles.Backup.CreateFileOnDisk();
-                AssertFile.Exists(true, this.NamedFiles.Backup);
-            }
+                var file = CreateTestFile(dataRepository.Settings, nameof(DummySerializable));
+                var softDelete = file.GetSoftDeleteFileFor();
+                file.CreateFileOnDisk();
+                softDelete.CreateFileOnDisk();
+                if (dataRepository.Settings.BackupSettings != null)
+                {
+                    BackupFile.CreateFor(file, dataRepository.Settings.BackupSettings).CreateFileOnDisk();
+                }
 
-            this.Repository.DeleteBackups(this.NamedFiles.File);
-            AssertFile.Exists(false, this.NamedFiles.SoftDelete);
-            if (this.IsBackingUp)
-            {
-                AssertFile.Exists(false, this.NamedFiles.Backup);
+                AssertFile.Exists(true, file);
+                AssertFile.Exists(true, softDelete);
+
+                dataRepository.Delete<DummySerializable>(deleteBackups);
+                AssertFile.Exists(false, file);
+                AssertFile.Exists(false, softDelete);
+                if (dataRepository.Settings.BackupSettings != null)
+                {
+                    AssertFile.Exists(!deleteBackups, BackupFile.CreateFor(file, dataRepository.Settings.BackupSettings));
+                }
             }
         }
 
@@ -456,6 +476,8 @@ namespace Gu.Persist.Core.Tests.Repositories
         ////    var read = Read<DummySerializable>(_file);
         ////    Assert.AreEqual(_dummy.Value - 1, read.Value);
         ////}
+
+        protected static System.IO.FileInfo CreateTestFile(IRepositorySettings settings, [CallerMemberName] string name = null) => new System.IO.FileInfo(Path.Combine(settings.Directory, name + settings.Extension));
 
         protected abstract IRepository CreateRepository();
 

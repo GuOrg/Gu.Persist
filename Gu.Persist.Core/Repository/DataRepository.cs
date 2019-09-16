@@ -76,7 +76,6 @@
         /// <inheritdoc/>
         public virtual void Delete(string fileName, bool deleteBackups)
         {
-            Ensure.IsValidFileName(fileName, nameof(fileName));
             var file = this.GetFileInfoCore(fileName);
             this.Delete(file, deleteBackups);
         }
