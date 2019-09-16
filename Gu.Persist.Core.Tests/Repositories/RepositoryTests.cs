@@ -69,7 +69,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TestCase(false)]
         public void DeleteFileInfo(bool deleteBackups)
         {
-            if (this.Repository is IDataRepository dataRepository)
+            if (this.CreateRepository() is IDataRepository dataRepository)
             {
                 var file = CreateTestFile(dataRepository.Settings);
                 var softDelete = file.GetSoftDeleteFileFor();
@@ -97,7 +97,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TestCase(false)]
         public void DeleteFullFileName(bool deleteBackups)
         {
-            if (this.Repository is IDataRepository dataRepository)
+            if (this.CreateRepository() is IDataRepository dataRepository)
             {
                 var file = CreateTestFile(dataRepository.Settings);
                 var softDelete = file.GetSoftDeleteFileFor();
@@ -125,7 +125,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TestCase(false)]
         public void DeleteFileName(bool deleteBackups)
         {
-            if (this.Repository is IDataRepository dataRepository)
+            if (this.CreateRepository() is IDataRepository dataRepository)
             {
                 var file = CreateTestFile(dataRepository.Settings);
                 var softDelete = file.GetSoftDeleteFileFor();
@@ -153,7 +153,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TestCase(false)]
         public void DeleteGeneric(bool deleteBackups)
         {
-            if (this.Repository is IDataRepository dataRepository)
+            if (this.CreateRepository() is IDataRepository dataRepository)
             {
                 var file = CreateTestFile(dataRepository.Settings, nameof(DummySerializable));
                 var softDelete = file.GetSoftDeleteFileFor();
@@ -178,65 +178,83 @@ namespace Gu.Persist.Core.Tests.Repositories
         }
 
         [Test]
-        public void CanRenameTypeHappyPath()
+        public void CanRenameFileInfo()
         {
-            this.TypeFiles.File.CreateFileOnDisk();
-            if (this.IsBackingUp)
+            var repository = this.CreateRepository();
+            var file = CreateTestFile(repository.Settings);
+            file.CreateFileOnDisk();
+            if (repository.Settings.BackupSettings != null)
             {
-                this.TypeFiles.Backup.CreateFileOnDisk();
+                BackupFile.CreateFor(file, repository.Settings.BackupSettings).CreateFileOnDisk();
             }
 
-            Assert.IsTrue(this.Repository.CanRename<DummySerializable>("NewName"));
+            Assert.AreEqual(true, repository.CanRename(file, "NewName"));
         }
 
         [Test]
-        public void CanRenameTypeWhenIllegalName()
+        public void CanRenameFullFileName()
         {
-            this.TypeFiles.File.CreateFileOnDisk();
-            if (this.IsBackingUp)
+            var repository = this.CreateRepository();
+            var file = CreateTestFile(repository.Settings);
+            file.CreateFileOnDisk();
+            if (repository.Settings.BackupSettings != null)
             {
-                this.TypeFiles.Backup.CreateFileOnDisk();
+                BackupFile.CreateFor(file, repository.Settings.BackupSettings).CreateFileOnDisk();
             }
 
-            var exception = Assert.Throws<ArgumentException>(() => this.Repository.CanRename<DummySerializable>("NewName<>"));
+            Assert.AreEqual(true, repository.CanRename(file.FullName, "NewName"));
+        }
+
+        [Test]
+        public void CanRenameGeneric()
+        {
+            var repository = this.CreateRepository();
+            var file = CreateTestFile(repository.Settings, nameof(DummySerializable));
+            file.CreateFileOnDisk();
+            if (repository.Settings.BackupSettings != null)
+            {
+                BackupFile.CreateFor(file, repository.Settings.BackupSettings).CreateFileOnDisk();
+            }
+
+            Assert.AreEqual(true, repository.CanRename<DummySerializable>("NewName"));
+        }
+
+        [Test]
+        public void CanRenameGenericWhenIllegalName()
+        {
+            var repository = this.CreateRepository();
+            var file = CreateTestFile(repository.Settings, nameof(DummySerializable));
+            file.CreateFileOnDisk();
+            if (repository.Settings.BackupSettings != null)
+            {
+                BackupFile.CreateFor(file, repository.Settings.BackupSettings).CreateFileOnDisk();
+            }
+
+            var exception = Assert.Throws<ArgumentException>(() => repository.CanRename<DummySerializable>("NewName<>"));
             Assert.AreEqual("Illegal characters in path.", exception.Message);
-        }
-
-        [Test]
-        public void CanRenameFileNameHappyPath()
-        {
-            this.NamedFiles.File.CreateFileOnDisk();
-            if (this.IsBackingUp)
-            {
-                this.NamedFiles.Backup.CreateFileOnDisk();
-            }
-
-            Assert.IsTrue(this.Repository.CanRename(this.NamedFiles.File, "NewName"));
         }
 
         [TestCase(true, true)]
         [TestCase(false, true)]
         [TestCase(true, false)]
-        public void CanRenameTypeWouldOverwrite(bool fileNewNameExists, bool backupNewNameExists)
+        public void CanRenameGenericWouldOverwrite(bool fileNewNameExists, bool backupNewNameExists)
         {
-            this.TypeFiles.File.CreateFileOnDisk();
+            var repository = this.CreateRepository();
+            var file = CreateTestFile(repository.Settings, nameof(DummySerializable));
+            file.CreateFileOnDisk();
             if (fileNewNameExists)
             {
-                this.TypeFiles.WithNewName.CreateFileOnDisk();
-                Assert.AreEqual(false, this.Repository.CanRename<DummySerializable>("NewName"));
+                file.WithNewName("NewName", repository.Settings).CreateFileOnDisk();
+                Assert.AreEqual(false, repository.CanRename<DummySerializable>("NewName"));
             }
 
-            if (backupNewNameExists)
+            if (backupNewNameExists &&
+                repository.Settings.BackupSettings != null)
             {
-                if (!this.IsBackingUp)
-                {
-                    return;
-                }
-
-                this.TypeFiles.BackupNewName.CreateFileOnDisk();
-                this.TypeFiles.Backup.CreateFileOnDisk();
-                this.TypeFiles.BackupNewName.CreateFileOnDisk();
-                Assert.AreEqual(false, this.Repository.CanRename<DummySerializable>("NewName"));
+                var backup = BackupFile.CreateFor(file, repository.Settings.BackupSettings);
+                backup.CreateFileOnDisk();
+                BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings).CreateFileOnDisk();
+                Assert.AreEqual(false, repository.CanRename<DummySerializable>("NewName"));
             }
         }
 
@@ -245,24 +263,22 @@ namespace Gu.Persist.Core.Tests.Repositories
         [TestCase(true, false)]
         public void CanRenameNameWouldOverwrite(bool fileNewNameExists, bool backupNewNameExists)
         {
-            this.NamedFiles.File.CreateFileOnDisk();
+            var repository = this.CreateRepository();
+            var file = CreateTestFile(repository.Settings);
+            file.CreateFileOnDisk();
             if (fileNewNameExists)
             {
-                this.NamedFiles.WithNewName.CreateFileOnDisk();
-                Assert.AreEqual(false, this.Repository.CanRename(this.NamedFiles.File, "NewName"));
+                file.WithNewName("NewName", repository.Settings).CreateFileOnDisk();
+                Assert.AreEqual(false, this.Repository.CanRename(file, "NewName"));
             }
 
-            if (backupNewNameExists)
+            if (backupNewNameExists &&
+                repository.Settings.BackupSettings != null)
             {
-                if (!this.IsBackingUp)
-                {
-                    return;
-                }
-
-                this.NamedFiles.BackupNewName.CreateFileOnDisk();
-                this.NamedFiles.Backup.CreateFileOnDisk();
-                this.NamedFiles.BackupNewName.CreateFileOnDisk();
-                Assert.AreEqual(false, this.Repository.CanRename(this.NamedFiles.File, "NewName"));
+                var backup = BackupFile.CreateFor(file, repository.Settings.BackupSettings);
+                backup.CreateFileOnDisk();
+                BackupFile.CreateFor(file.WithNewName("NewName", repository.Settings), repository.Settings.BackupSettings).CreateFileOnDisk();
+                Assert.AreEqual(false, repository.CanRename(file, "NewName"));
             }
         }
 
