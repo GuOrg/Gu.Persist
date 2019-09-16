@@ -9,7 +9,7 @@ namespace Gu.Persist.Core.Tests.Backup
 
     using NUnit.Framework;
 
-    public class BackuperTests : BackupTests
+    public class BackuperTests
     {
         private readonly DirectoryInfo directory;
 
@@ -23,13 +23,14 @@ namespace Gu.Persist.Core.Tests.Backup
         [SetUp]
         public void SetUp()
         {
+            this.directory.Refresh();
             this.directory.CreateIfNotExists();
         }
 
         [TearDown]
         public void TearDown()
         {
-            //this.directory.Delete(true);
+            this.directory.DeleteIfExists(true);
         }
 
         [Test]
@@ -260,42 +261,36 @@ namespace Gu.Persist.Core.Tests.Backup
         }
 
         [Test]
-        public void PurgeDeletesSoftDeletesNoTimestamp()
+        public void AfterSaveDeletesSoftDeletesWhenNoPurgeOfBackups()
         {
-            this.File.CreateFileOnDisk();
-            this.SoftDelete.CreateFileOnDisk();
-            this.Backup.CreateFileOnDisk();
-            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue));
-            using (var lockedFile = this.LockedFile())
+            var settings = new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue);
+            var file = this.CreateFile();
+            var backup = this.CreateBackupFile();
+            var softDelete = file.GetSoftDeleteFileFor();
+            softDelete.CreateFileOnDisk();
+            var backupOneMinuteOld = backup.WithTimeStamp(DateTime.Now.AddMinutes(-1), settings);
+            backupOneMinuteOld.CreateFileOnDisk();
+            var backupOneHourOld = backup.WithTimeStamp(DateTime.Now.AddHours(-1), settings);
+            backupOneHourOld.CreateFileOnDisk();
+            var backupOneDayOld = backup.WithTimeStamp(DateTime.Now.AddDays(-1), settings);
+            backupOneDayOld.CreateFileOnDisk();
+            var backupOneMonthOld = backup.WithTimeStamp(DateTime.Now.AddMonths(-1), settings);
+            backupOneMonthOld.CreateFileOnDisk();
+            var backupOneYearOld = backup.WithTimeStamp(DateTime.Now.AddYears(-1), settings);
+            backupOneYearOld.CreateFileOnDisk();
+
+            var backuper = Backuper.Create(settings);
+            using (var lockedFile = Core.LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
                 backuper.AfterSave(lockedFile);
             }
 
-            AssertFile.Exists(true, this.File);
-            AssertFile.Exists(true, this.Backup);
-            AssertFile.Exists(false, this.SoftDelete);
-        }
-
-        [Test]
-        public void PurgeDeletesSoftDeletes()
-        {
-            foreach (var backup in this.TimestampedBackups)
-            {
-                backup.CreateFileOnDisk();
-            }
-
-            this.SoftDelete.CreateFileOnDisk();
-            this.File.CreateFileOnDisk();
-            this.Backup.CreateFileOnDisk();
-            var backuper = Backuper.Create(new BackupSettings(this.directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, int.MaxValue, int.MaxValue));
-            using (var lockedFile = this.LockedFile())
-            {
-                backuper.AfterSave(lockedFile);
-            }
-
-            AssertFile.Exists(true, this.File);
-            AssertFile.Exists(true, this.Backup);
-            AssertFile.Exists(false, this.SoftDelete);
+            AssertFile.Exists(true, backupOneMinuteOld);
+            AssertFile.Exists(true, backupOneHourOld);
+            AssertFile.Exists(true, backupOneDayOld);
+            AssertFile.Exists(true, backupOneMonthOld);
+            AssertFile.Exists(true, backupOneYearOld);
+            AssertFile.Exists(false, softDelete);
         }
 
         [Test]
@@ -303,8 +298,6 @@ namespace Gu.Persist.Core.Tests.Backup
         {
             Assert.Inconclusive("Backups must be renamed when original file is renamed");
         }
-
-        private LockedFile LockedFile() => Core.LockedFile.CreateIfExists(this.File, x => x.Open(FileMode.Open, FileAccess.Read, FileShare.Delete));
 
         private FileInfo CreateFile([CallerMemberName] string name = null) => this.directory.CreateFileInfoInDirectory(name + ".cfg");
 
