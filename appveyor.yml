@@ -11,4 +11,4 @@ build:
 test:
   assemblies:
     - '**\*.tests.dll'
-  cmd nunit3-console --result=myresults.xml;format=AppVeyor
+  cmd: nunit3-console --result=myresults.xml;format=AppVeyor
