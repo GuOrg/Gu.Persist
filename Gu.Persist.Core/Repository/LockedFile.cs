@@ -95,6 +95,7 @@
                 throw new ArgumentNullException(nameof(stream));
             }
 
+            file.Refresh();
             if (file.Exists)
             {
                 // we can never be sure that some process did not remove it after the exists check
