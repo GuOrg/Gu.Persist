@@ -256,6 +256,7 @@ namespace Gu.Persist.Core
                 {
                     using (updatedStream)
                     {
+                        stream.Dispose();
                         var item = this.serialize.FromStream<T>(updatedStream, this.Settings);
                         //// Save so we get a backup etc.
                         this.Save(item);
@@ -263,6 +264,7 @@ namespace Gu.Persist.Core
                     }
                 }
 
+                stream.Position = 0;
                 return this.serialize.FromStream<T>(stream, this.Settings);
             }
         }
