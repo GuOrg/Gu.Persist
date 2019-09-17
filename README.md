@@ -33,7 +33,7 @@ A small framework for reading and saving data.
 - Transactional atomic saves. Avoids corrupted data on application crash etc.
 - Repository bootstraps itself with settings file in directory.
 - SingletonRepository manages a singleton reference for each file.
-- Creates backups on save. Backuprules configurable via setting.
+- Creates backups on save. Backup rules configurable via setting.
     - Extension
     - Directory
     - Number of backups
@@ -84,7 +84,9 @@ Simple repository for reading & saving data.
 
 ### Migration.
 
-For managing versions of files on disk. Sample for json:
+For managing versions of files on disk.
+The migrations can also be used for switching from xml to json for example.
+Sample for json:
 
 ```cs
 var read = repository.Read<DummySerializable>(new JsonMigration(Version1To2, Version2To3));
