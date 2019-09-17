@@ -18,12 +18,13 @@ A small framework for reading and saving data.
 
 # Table of contents.
   - [Features](#features)
-  - [Save transaction.](#save-transaction)
   - [Repository](#repository)
     - [SingletonRepository](#singletonrepository)
     - [DataRepository](#datarepository)
     - [Interfaces](#interfaces)
       - [Members](#members)
+    - [Migration.](#migration)
+    - [Save transaction.](#save-transaction)
     - [Sample wrapper](#sample-wrapper)
     - [Sample using git for backups.](#sample-using-git-for-backups)
 
@@ -41,18 +42,6 @@ A small framework for reading and saving data.
 - T Clone<T>(T item); deep clone by serializing and then deserializing an instance.
 - bool IsDirty<T>(T item, IEqualityComparer<T> comparer); check if an instance is dirty after last save.
 - EqualityComparers that checks structural equality by serializing and comparing bytes. If performance is an issue overloads with IEqualityComparer<T> are exposed.
-
-## Save transaction.
-Happy path
-
-1. Lock `file` if exists.
-2. Lock `file.delete` if it exists.
-3. Create and lock `file.tmp` if it exists.
-4. Save to `file.tmp`
-5. Rename `file` to `file.backup if `creating backups.
-6. Rename `file.tmp`-> `file`
-
-On error everything is reset back to initial state.
 
 ## Repository
 
@@ -104,6 +93,51 @@ A number of interfaces exposing subsets of the functionality are provided.
 - ClearTrackerCache, clear the `IDirtyTracker`
 - RemoveFromDirtyTracker, remove an item from `IDirtyTracker`
 - DeleteBackups, delete backups for a file.
+
+### Migration.
+
+For managing versions of files on disk. Sample for json:
+
+```cs
+var read = repository.Read<DummySerializable>(new JsonMigration(Version1To2, Version2To3));
+
+JObject Version1To2(JObject jObject)
+{
+    if (jObject["Version"].Value<int>() == 1)
+    {
+        jObject["Version"] = 2;
+        jObject.RenameProperty("Typo", "Name");
+        return jObject;
+    }
+
+    return jObject;
+}
+
+JObject Version2To3(JObject jObject)
+{
+    if (jObject["Version"].Value<int>() == 2)
+    {
+        jObject["Version"] = 3;
+        jObject.Add("NewProperty", "default value");
+        return jObject;
+    }
+
+    return jObject;
+}
+```
+
+### Save transaction.
+
+Locks all files that will be part of the transaction. Uses atomic writes.
+
+1. Lock `file` if exists.
+2. Lock `file.delete` if it exists.
+3. Create and lock `file.tmp` if it exists.
+4. Save to `file.tmp`
+5. Rename `file` to `file.backup if `creating backups.
+6. Rename `file.tmp`-> `file`
+
+On error everything is reset back to initial state.
 
 ### Sample wrapper
 
