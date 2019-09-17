@@ -18,8 +18,7 @@
         [SetUp]
         public static void SetUp()
         {
-            Directory.Refresh();
-            Directory.CreateIfNotExists();
+            _ = Directory.CreateIfNotExists();
         }
 
         [TearDown]

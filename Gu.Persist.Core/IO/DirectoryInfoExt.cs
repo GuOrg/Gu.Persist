@@ -61,6 +61,7 @@
         /// </summary>
         internal static DirectoryInfo CreateIfNotExists(this DirectoryInfo directory)
         {
+            directory.Refresh();
             if (!directory.Exists)
             {
                 directory.Create();
