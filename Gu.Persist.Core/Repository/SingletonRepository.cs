@@ -96,7 +96,7 @@
         }
 
         /// <inheritdoc/>
-        public override async Task<T> ReadAsync<T>(FileInfo file)
+        public override async Task<T> ReadAsync<T>(FileInfo file, Migration migration = null)
         {
             // not checking exists, framework exception is more familiar.
             if (file is null)
@@ -112,7 +112,7 @@
             // can't await  inside the lock.
             // If there are many threads reading the same only the first is used
             // the other reads are wasted, can't think of anything better than this.
-            value = await base.ReadAsync<T>(file).ConfigureAwait(false);
+            value = await base.ReadAsync<T>(file, migration).ConfigureAwait(false);
 
             lock (this.gate)
             {
@@ -168,7 +168,7 @@
         }
 
         /// <inheritdoc/>
-        protected override T ReadCore<T>(FileInfo file)
+        protected override T ReadCore<T>(FileInfo file, Migration migration = null)
         {
             if (file is null)
             {
@@ -187,7 +187,7 @@
                     return value;
                 }
 
-                value = base.ReadCore<T>(file);
+                value = base.ReadCore<T>(file, migration);
                 this.fileCache.Add(file.FullName, value);
                 return value;
             }

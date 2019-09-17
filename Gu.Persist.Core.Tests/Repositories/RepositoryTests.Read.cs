@@ -2,6 +2,7 @@
 namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
+    using System.IO;
     using NUnit.Framework;
 
     public abstract partial class RepositoryTests
@@ -164,6 +165,90 @@ namespace Gu.Persist.Core.Tests.Repositories
             {
                 var exception = Assert.Throws<InvalidOperationException>(() => repository.IsDirty(new DummySerializable(1)));
                 Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
+            }
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void ReadWhenNoMigration(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            this.Save(file, dummy);
+            var read = testCase.Read<DummySerializable>(repository, file, new NoMigration());
+            Assert.AreEqual(1, read.Value);
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void ReadWhenIdentityMigration(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            this.Save(file, dummy);
+            var read = testCase.Read<DummySerializable>(repository, file, new IdentityMigration());
+            Assert.AreEqual(1, read.Value);
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void ReadOrCreateWhenNoMigrationWhenFileExists(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            this.Save(file, dummy);
+            var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => throw new AssertionException("Should not get here."), new NoMigration());
+            Assert.AreEqual(1, read.Value);
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void ReadOrCreateWhenIdentityMigrationWhenFileExists(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            this.Save(file, dummy);
+            var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => throw new AssertionException("Should not get here."), new IdentityMigration());
+            Assert.AreEqual(1, read.Value);
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void ReadOrCreateWhenNoMigrationWhenFileDoesNotExists(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => dummy, new NoMigration());
+            Assert.AreSame(dummy, read);
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void ReadOrCreateWhenIdentityMigrationWhenFileDoesNotExists(TestCase testCase)
+        {
+            var dummy = new DummySerializable(1);
+            var repository = this.CreateRepository();
+            var file = testCase.File<DummySerializable>(repository);
+            var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => dummy, new IdentityMigration());
+            Assert.AreSame(dummy, read);
+        }
+
+        private class NoMigration : Migration
+        {
+            public override bool TryUpdate(Stream stream, out Stream updated)
+            {
+                updated = null;
+                return false;
+            }
+        }
+
+        private class IdentityMigration : Migration
+        {
+            public override bool TryUpdate(Stream stream, out Stream updated)
+            {
+                updated = PooledMemoryStream.Borrow();
+                stream.CopyTo(updated);
+                updated.Position = 0;
+                return true;
             }
         }
     }

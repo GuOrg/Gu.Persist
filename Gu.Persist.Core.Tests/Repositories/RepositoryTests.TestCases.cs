@@ -22,17 +22,17 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         public abstract class TestCase
         {
-            internal abstract T Read<T>(IRepository repository, System.IO.FileInfo file);
+            public abstract T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null);
 
-            internal abstract T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create);
+            public abstract T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null);
 
-            internal abstract void Save<T>(IRepository repository, System.IO.FileInfo file, T item);
+            public abstract void Save<T>(IRepository repository, System.IO.FileInfo file, T item);
 
-            internal abstract bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item);
+            public abstract bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item);
 
-            internal virtual System.IO.FileInfo File<T>(IRepository repository, [CallerMemberName] string name = null) => repository.GetFileInfo(name);
+            public virtual System.IO.FileInfo File<T>(IRepository repository, [CallerMemberName] string name = null) => repository.GetFileInfo(name);
 
-            internal System.IO.FileInfo BackupFile<T>(IRepository repository, [CallerMemberName] string name = null)
+            public System.IO.FileInfo BackupFile<T>(IRepository repository, [CallerMemberName] string name = null)
             {
                 return repository.Settings.BackupSettings is IBackupSettings backupSettings
                     ? Core.Backup.BackupFile.CreateFor(this.File<T>(repository, name), backupSettings)
@@ -42,117 +42,117 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         private class FileInfo : TestCase
         {
-            internal override T Read<T>(IRepository repository, System.IO.FileInfo file) => repository.Read<T>(file);
+            public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.Read<T>(file, migration);
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(file, create);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate<T>(file, create, migration);
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file, item);
+            public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file, item);
 
-            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file, item);
+            public override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file, item);
         }
 
         private class FileInfoAsync : TestCase
         {
-            internal override T Read<T>(IRepository repository, System.IO.FileInfo file) => repository.ReadAsync<T>(file).Result;
+            public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.ReadAsync<T>(file, migration).Result;
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(file, create).Result;
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync<T>(file, create, migration).Result;
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file, item).Wait();
+            public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file, item).Wait();
 
-            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file, item);
+            public override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file, item);
         }
 
         private class FullFileName : TestCase
         {
-            internal override T Read<T>(IRepository repository, System.IO.FileInfo file) => repository.Read<T>(file.FullName);
+            public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.Read<T>(file.FullName, migration);
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(file.FullName, create);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate<T>(file.FullName, create, migration);
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file.FullName, item);
+            public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file.FullName, item);
 
-            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.FullName, item);
+            public override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.FullName, item);
         }
 
         private class FullFileNameAsync : TestCase
         {
-            internal override T Read<T>(IRepository repository, System.IO.FileInfo file) => repository.ReadAsync<T>(file.FullName).Result;
+            public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.ReadAsync<T>(file.FullName, migration).Result;
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(file.FullName, create).Result;
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync<T>(file.FullName, create, migration).Result;
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file.FullName, item).Wait();
+            public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file.FullName, item).Wait();
 
-            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.FullName, item);
+            public override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.FullName, item);
         }
 
         private class FileNameWithExtension : TestCase
         {
-            internal override T Read<T>(IRepository repository, System.IO.FileInfo file) => repository.Read<T>(file.Name);
+            public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.Read<T>(file.Name, migration);
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(file.Name, create);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate<T>(file.Name, create, migration);
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file.Name, item);
+            public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file.Name, item);
 
-            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.Name, item);
+            public override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.Name, item);
         }
 
         private class FileNameWithExtensionAsync : TestCase
         {
-            internal override T Read<T>(IRepository repository, System.IO.FileInfo file) => repository.ReadAsync<T>(file.Name).Result;
+            public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.ReadAsync<T>(file.Name, migration).Result;
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(file.Name, create).Result;
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync<T>(file.Name, create, migration).Result;
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file.Name, item).Wait();
+            public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file.Name, item).Wait();
 
-            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.Name, item);
+            public override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(file.Name, item);
         }
 
         private class FileNameWithOutExtension : TestCase
         {
-            internal override T Read<T>(IRepository repository, System.IO.FileInfo file) => repository.Read<T>(Path.GetFileNameWithoutExtension(file.FullName));
+            public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.Read<T>(Path.GetFileNameWithoutExtension(file.FullName), migration);
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreate<T>(Path.GetFileNameWithoutExtension(file.FullName), create);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate<T>(Path.GetFileNameWithoutExtension(file.FullName), create, migration);
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(Path.GetFileNameWithoutExtension(file.FullName), item);
+            public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(Path.GetFileNameWithoutExtension(file.FullName), item);
 
-            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(Path.GetFileNameWithoutExtension(file.FullName), item);
+            public override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(Path.GetFileNameWithoutExtension(file.FullName), item);
         }
 
         private class FileNameWithOutExtensionAsync : TestCase
         {
-            internal override T Read<T>(IRepository repository, System.IO.FileInfo file) => repository.ReadAsync<T>(Path.GetFileNameWithoutExtension(file.FullName)).Result;
+            public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.ReadAsync<T>(Path.GetFileNameWithoutExtension(file.FullName), migration).Result;
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create) => repository.ReadOrCreateAsync<T>(Path.GetFileNameWithoutExtension(file.FullName), create).Result;
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync<T>(Path.GetFileNameWithoutExtension(file.FullName), create, migration).Result;
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(Path.GetFileNameWithoutExtension(file.FullName), item).Wait();
+            public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(Path.GetFileNameWithoutExtension(file.FullName), item).Wait();
 
-            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(Path.GetFileNameWithoutExtension(file.FullName), item);
+            public override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(Path.GetFileNameWithoutExtension(file.FullName), item);
         }
 
 #pragma warning disable SA1313 // Parameter names should begin with lower-case letter
         private class Generic : TestCase
         {
-            internal override T Read<T>(IRepository repository, System.IO.FileInfo _) => repository.Read<T>();
+            public override System.IO.FileInfo File<T>(IRepository repository, string _ = null) => repository.GetFileInfo(typeof(T).Name);
 
-            internal override System.IO.FileInfo File<T>(IRepository repository, string _ = null) => repository.GetFileInfo(typeof(T).Name);
+            public override T Read<T>(IRepository repository, System.IO.FileInfo _, Migration migration = null) => repository.Read<T>(migration);
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create) => repository.ReadOrCreate<T>(create);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create, Migration migration = null) => repository.ReadOrCreate<T>(create, migration);
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo _, T item) => repository.Save(item);
+            public override void Save<T>(IRepository repository, System.IO.FileInfo _, T item) => repository.Save(item);
 
-            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(item);
+            public override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(item);
         }
 
         private class GenericAsync : TestCase
         {
-            internal override T Read<T>(IRepository repository, System.IO.FileInfo _) => repository.ReadAsync<T>().Result;
+            public override System.IO.FileInfo File<T>(IRepository repository, string _ = null) => repository.GetFileInfo(typeof(T).Name);
 
-            internal override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create) => repository.ReadOrCreateAsync<T>(create).Result;
+            public override T Read<T>(IRepository repository, System.IO.FileInfo _, Migration migration = null) => repository.ReadAsync<T>(migration).Result;
 
-            internal override System.IO.FileInfo File<T>(IRepository repository, string _ = null) => repository.GetFileInfo(typeof(T).Name);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync<T>(create, migration).Result;
 
-            internal override void Save<T>(IRepository repository, System.IO.FileInfo _, T item) => repository.SaveAsync(item).Wait();
+            public override void Save<T>(IRepository repository, System.IO.FileInfo _, T item) => repository.SaveAsync(item).Wait();
 
-            internal override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(item);
+            public override bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.IsDirty(item);
         }
 #pragma warning restore SA1313 // Parameter names should begin with lower-case letter
     }

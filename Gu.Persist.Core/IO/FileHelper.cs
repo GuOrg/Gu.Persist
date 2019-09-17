@@ -28,17 +28,6 @@ namespace Gu.Persist.Core
             }
         }
 
-        /// <summary>
-        /// Read the contents of <paramref name="file"/> and deserialize it into an instance of <typeparamref name="T"/>.
-        /// </summary>
-        internal static async Task<T> ReadAsync<T, TSettings>(this FileInfo file, TSettings setting, Serialize<TSettings> serialize)
-        {
-            using (var stream = await ReadAsync(file).ConfigureAwait(false))
-            {
-                return serialize.FromStream<T>(stream, setting);
-            }
-        }
-
         internal static Task<Stream> ReadAsync(this FileInfo file)
         {
             return ReadAsync(file.FullName);

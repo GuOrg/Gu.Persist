@@ -1,0 +1,65 @@
+﻿namespace Gu.Persist.NewtonsoftJson
+{
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Text;
+    using Gu.Persist.Core;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+
+    /// <summary>
+    /// For example when updating between versions.
+    /// </summary>
+    public class JsonMigration : Migration
+    {
+        private readonly IReadOnlyList<Func<JObject, JObject>> steps;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonMigration"/> class.
+        /// </summary>
+        /// <param name="steps">A sequence of transformations of the <see cref="JObject"/> read from the stream.</param>
+        public JsonMigration(IReadOnlyList<Func<JObject, JObject>> steps)
+        {
+            this.steps = steps;
+        }
+
+        /// <inheritdoc/>
+        public override bool TryUpdate(Stream stream, out Stream updated)
+        {
+            using (var reader = new JsonTextReader(new StreamReader(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true)))
+            {
+                var jObject = JObject.Load(reader);
+                jObject.PropertyChanged += JObjectOnPropertyChanged;
+                var changed = false;
+                var updatedJObject = jObject;
+                foreach (var step in this.steps)
+                {
+                    updatedJObject = step(updatedJObject);
+                }
+
+                if (jObject == updatedJObject &&
+                    !changed)
+                {
+                    updated = null;
+                    return false;
+                }
+
+                updated = PooledMemoryStream.Borrow();
+                using (var jsonWriter = new JsonTextWriter(new StreamWriter(updated, Encoding.UTF8, 1024, leaveOpen: true)))
+                {
+                    jObject.WriteTo(jsonWriter);
+                }
+
+                updated.Position = 0;
+                return true;
+
+                void JObjectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+                {
+                    changed = true;
+                }
+            }
+        }
+    }
+}

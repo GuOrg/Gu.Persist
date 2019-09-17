@@ -8,7 +8,7 @@
     {
         public static FileInfo TempFile(this FileInfo file, IRepositorySettings settings)
         {
-            return file.WithNewExtension(settings.TempExtension);
+            return file.WithAppendedExtension(settings.TempExtension);
         }
 
         public static void CreateFileOnDisk(this FileInfo file)
