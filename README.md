@@ -66,18 +66,6 @@ Manages singleton instances of things read or written to disk. This is useful fo
 
 Simple repository for reading & saving data.
 
-### Interfaces
-A number of interfaces exposing subsets of the functionality are provided.
-
-- `IAsyncFileNameRepository` 
-- `IAsyncFileInfoRepository`
-- `ICloner`
-- `IDirty`
-- `IStreamRepository`
-- `IGenericRepository`
-- `IGenericAsyncRepository`
-- A bunch of StreamRepositories for reading raw streams.
-
 #### Members
 
 - GetFileInfo, for getting the file the repository uses for reading & saving.
@@ -139,69 +127,81 @@ Locks all files that will be part of the transaction. Uses atomic writes.
 
 On error everything is reset back to initial state.
 
-### Sample wrapper
+### Samples
+
+### Sample for reading and saving settings using git for backups.
 
 ```C#
-public class MyRepository
-{
-    private readonly SingletonRepository repository;
-
-    public MyRepository()
-    {
-        // Uses %AppData%/ApplicationName.
-        // Initializes with  %AppData%/ApplicationName/RepositorySettings.cfg
-        this.repository = new SingletonRepository();
-    }
-
-    public MySetting ReadMySetting()
-    {
-        // Reads the contents of %AppData%/ApplicationName/MySetting.cfg
-        return this.repository.Read<MySetting>();
-    }
-
-    public void Save(MySetting setting)
-    {
-        // Saves to of %AppData%/ApplicationName/MySetting.cfg
-		// Creates a backup %AppData%/ApplicationName/MySetting.bak
-		// As we created a SingletonRepository in the ctor setting must be the same instance always.
-        this.repository.Save(setting);
-    }
-}
-```
-
-### Sample using git for backups.
-
-```C#
-public class MyRepository
+public class Settings
 {
     private static readonly DirectoryInfo Directory = new DirectoryInfo("./Settings");
-    private readonly SingletonRepository repository;
 
-    public MyRepository()
-    {
-        // Initializes with  ./Settings/RepositorySettings.cfg is present
-        // Creates a git repository for history.
-        this.repository = new SingletonRepository(
-                                CreateDefaultSettings,
-                                new GitBackuper(Directory.FullName));
-    }
+    // Initializes with  ./Settings/RepositorySettings.json is present
+    // Creates a git repository for history.
+    private readonly SingletonRepository repository = new SingletonRepository(
+        CreateDefaultSettings,
+        new GitBackuper(Directory.FullName));
 
-    public MySetting ReadMySetting()
+    public MySetting ReadFoo()
     {
-        // Reads the contents of ./Settings/MySetting.cfg
+        // Reads the contents of ./Settings/MySetting.json
+        // As we are using a SingletonRepository Read will always return the same instance.
         return this.repository.Read<MySetting>();
     }
 
     public void Save(MySetting setting)
     {
-        // Saves to of ./Settings/MySetting.cfg
+        // Saves to of ./Settings/MySetting.json
         // Commits changes to git repository.
         this.repository.Save(setting);
     }
 
     private static RepositorySettings CreateDefaultSettings()
     {
-        return new RepositorySettings(Directory.FullName, true, null, ".json", ".saving");
+        return new RepositorySettings(
+            directory: Directory.FullName,
+            jsonSerializerSettings: new JsonSerializerSettings { Formatting = Formatting.Indented },
+            isTrackingDirty: true,
+            backupSettings: null,
+            extension: ".json",
+            tempExtension: ".saving");
     }
 }
 ```
+
+### For reading and saving data
+
+```C#
+public class Data
+{
+    // Uses %AppData%/ApplicationName.
+    // Initializes with  %AppData%/ApplicationName/RepositorySettings.cfg
+    private readonly DataRepository repository = new DataRepository();
+
+    public MyData ReadFoo()
+    {
+        // Reads the contents of %AppData%/ApplicationName/MyData.cfg
+        // As we wrap a DataRepository Read will always return a new instance.
+        return this.repository.Read<MyData>();
+    }
+
+    public void Save(MyData data)
+    {
+        // Saves to of %AppData%/ApplicationName/MyData.cfg
+        // Creates a backup %AppData%/ApplicationName/MyData.bak
+        this.repository.Save(data);
+    }
+}
+```
+
+### Interfaces
+A number of interfaces exposing subsets of the functionality are provided.
+
+- `IAsyncFileNameRepository` 
+- `IAsyncFileInfoRepository`
+- `ICloner`
+- `IDirty`
+- `IStreamRepository`
+- `IGenericRepository`
+- `IGenericAsyncRepository`
+- A bunch of StreamRepositories for reading raw streams.
