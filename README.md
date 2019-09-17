@@ -16,6 +16,17 @@ A small framework for reading and saving data.
 - BinaryRepository is a baseclass for managing binary files.
 - JsonRepository is a baseclass for managing json files.
 
+# Table of contents.
+  - [Features](#features)
+  - [Save transaction.](#save-transaction)
+  - [Repository](#repository)
+    - [SingletonRepository](#singletonrepository)
+    - [DataRepository](#datarepository)
+    - [Interfaces](#interfaces)
+      - [Members](#members)
+    - [Sample wrapper](#sample-wrapper)
+    - [Sample using git for backups.](#sample-using-git-for-backups)
+
 ## Features
 
 - Transactional atomic saves. Avoids corrupted data on application crash etc.
