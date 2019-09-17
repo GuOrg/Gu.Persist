@@ -26,17 +26,6 @@
             }
         }
 
-        [TestCaseSource(nameof(TestCases))]
-        public void ReadWhenNoMigration(TestCase testCase)
-        {
-            var dummy = new DummySerializable(1);
-            var repository = this.CreateRepository();
-            var file = testCase.File<DummySerializable>(repository);
-            this.Save(file, dummy);
-            var read = testCase.Read<DummySerializable>(repository, file, new JsonMigration(new Func<JObject, JObject>[] { x => x }));
-            Assert.AreEqual(1, read.Value);
-        }
-
         protected override void Save<T>(FileInfo file, T item)
         {
             JsonFile.Save(file, item);
