@@ -19,7 +19,7 @@
         /// </remarks>
         /// <typeparam name="T">The type to deserialize to.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
-        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>   
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
         Task<T> ReadAsync<T>(FileInfo file, Migration migration = null);
 
@@ -31,7 +31,7 @@
         /// <typeparam name="T">The type to read from the file.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="creator">The <see cref="Func{T}"/>.</param>
-        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>   
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
         Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator, Migration migration = null);
 

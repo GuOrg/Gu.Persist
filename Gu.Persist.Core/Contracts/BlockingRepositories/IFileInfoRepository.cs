@@ -16,7 +16,7 @@
         /// </remarks>
         /// <typeparam name="T">The type to read from the file.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
-        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>   
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file.</returns>
         T Read<T>(FileInfo file, Migration migration = null);
 

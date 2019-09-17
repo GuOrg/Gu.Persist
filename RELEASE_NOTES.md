@@ -1,3 +1,10 @@
+#### 0.3.0
+* BREAKING: Added optional parameter Migration to read methods.
+* FEATURE: Migration support.
+* BUGFIX: ReadOrCreate when passing in FileInfo
+* BUGFIX: Read when passing in full path.
+
+
 #### 0.2.0.4
 * Sign the binaries.
 

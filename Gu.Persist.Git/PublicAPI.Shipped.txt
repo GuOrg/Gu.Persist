@@ -1,0 +1,12 @@
+﻿Gu.Persist.Git.GitBackuper
+Gu.Persist.Git.GitBackuper.AfterSave(Gu.Persist.Core.LockedFile file) -> void
+Gu.Persist.Git.GitBackuper.Backup(Gu.Persist.Core.LockedFile file) -> void
+Gu.Persist.Git.GitBackuper.Backup(System.IO.FileInfo file) -> void
+Gu.Persist.Git.GitBackuper.Backup(System.IO.FileInfo file, System.IO.FileInfo backup) -> void
+Gu.Persist.Git.GitBackuper.BeforeSave(System.IO.FileInfo file) -> bool
+Gu.Persist.Git.GitBackuper.CanRename(System.IO.FileInfo file, string newName) -> bool
+Gu.Persist.Git.GitBackuper.CanRestore(System.IO.FileInfo file) -> bool
+Gu.Persist.Git.GitBackuper.Directory.get -> string
+Gu.Persist.Git.GitBackuper.GetRenamePairs(System.IO.FileInfo file, string newName) -> System.Collections.Generic.IReadOnlyList<Gu.Persist.Core.RenamePair>
+Gu.Persist.Git.GitBackuper.GitBackuper(string directory) -> void
+Gu.Persist.Git.GitBackuper.TryRestore(System.IO.FileInfo file) -> bool

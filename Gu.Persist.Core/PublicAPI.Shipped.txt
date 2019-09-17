@@ -43,10 +43,10 @@ Gu.Persist.Core.DirtyTracker.RemoveFromCache(string fullFileName) -> void
 Gu.Persist.Core.DirtyTracker.Rename(string oldName, string newName, bool overWrite) -> void
 Gu.Persist.Core.DirtyTracker.Track<T>(string fullFileName, T item) -> void
 Gu.Persist.Core.FileCache
-Gu.Persist.Core.FileCache.Add<T>(string fullName, T value) -> void
+Gu.Persist.Core.FileCache.Add<T>(string fullFileName, T value) -> void
 Gu.Persist.Core.FileCache.ChangeKey(string from, string to, bool overWrite) -> void
 Gu.Persist.Core.FileCache.Clear() -> void
-Gu.Persist.Core.FileCache.ContainsKey(string fullName) -> bool
+Gu.Persist.Core.FileCache.ContainsKey(string fullFileName) -> bool
 Gu.Persist.Core.FileCache.FileCache() -> void
 Gu.Persist.Core.FileCache.TryGetValue<T>(string fullFileName, out T cached) -> bool
 Gu.Persist.Core.FileCache.TryRemove<T>(T item) -> void
@@ -108,27 +108,29 @@ Gu.Persist.Core.IDirtyTracker.RemoveFromCache(string fullFileName) -> void
 Gu.Persist.Core.IDirtyTracker.Rename(string oldName, string newName, bool overWrite) -> void
 Gu.Persist.Core.IDirtyTracker.Track<T>(string fullFileName, T item) -> void
 Gu.Persist.Core.IFileInfoAsyncRepository
-Gu.Persist.Core.IFileInfoAsyncRepository.ReadAsync<T>(System.IO.FileInfo file) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IFileInfoAsyncRepository.ReadAsync<T>(System.IO.FileInfo file, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IFileInfoAsyncRepository.ReadOrCreateAsync<T>(System.IO.FileInfo file, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
 Gu.Persist.Core.IFileInfoAsyncRepository.SaveAsync<T>(System.IO.FileInfo file, T item) -> System.Threading.Tasks.Task
 Gu.Persist.Core.IFileInfoAsyncStreamRepository
 Gu.Persist.Core.IFileInfoAsyncStreamRepository.ReadAsync(System.IO.FileInfo file) -> System.Threading.Tasks.Task<System.IO.Stream>
 Gu.Persist.Core.IFileInfoAsyncStreamRepository.SaveAsync(System.IO.FileInfo file, System.IO.FileInfo tempFile, System.IO.Stream stream) -> System.Threading.Tasks.Task
 Gu.Persist.Core.IFileInfoAsyncStreamRepository.SaveAsync(System.IO.FileInfo file, System.IO.Stream stream) -> System.Threading.Tasks.Task
 Gu.Persist.Core.IFileInfoRepository
-Gu.Persist.Core.IFileInfoRepository.Read<T>(System.IO.FileInfo file) -> T
+Gu.Persist.Core.IFileInfoRepository.Read<T>(System.IO.FileInfo file, Gu.Persist.Core.Migration migration = null) -> T
 Gu.Persist.Core.IFileInfoRepository.Save<T>(System.IO.FileInfo file, T item) -> void
 Gu.Persist.Core.IFileInfoStreamRepository
 Gu.Persist.Core.IFileInfoStreamRepository.Read(System.IO.FileInfo file) -> System.IO.Stream
 Gu.Persist.Core.IFileInfoStreamRepository.Save(System.IO.FileInfo file, System.IO.FileInfo tempFile, System.IO.Stream stream) -> void
 Gu.Persist.Core.IFileInfoStreamRepository.Save(System.IO.FileInfo file, System.IO.Stream stream) -> void
 Gu.Persist.Core.IFileNameAsyncRepository
-Gu.Persist.Core.IFileNameAsyncRepository.ReadAsync<T>(string fileName) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IFileNameAsyncRepository.ReadAsync<T>(string fileName, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IFileNameAsyncRepository.ReadOrCreateAsync<T>(string fileName, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
 Gu.Persist.Core.IFileNameAsyncRepository.SaveAsync<T>(string fileName, T item) -> System.Threading.Tasks.Task
 Gu.Persist.Core.IFileNameAsyncStreamRepository
 Gu.Persist.Core.IFileNameAsyncStreamRepository.ReadAsync(string fileName) -> System.Threading.Tasks.Task<System.IO.Stream>
 Gu.Persist.Core.IFileNameAsyncStreamRepository.SaveAsync(string fileName, System.IO.Stream stream) -> System.Threading.Tasks.Task
 Gu.Persist.Core.IFileNameRepository
-Gu.Persist.Core.IFileNameRepository.Read<T>(string fileName) -> T
+Gu.Persist.Core.IFileNameRepository.Read<T>(string fileName, Gu.Persist.Core.Migration migration = null) -> T
 Gu.Persist.Core.IFileNameRepository.Save<T>(string fileName, T item) -> void
 Gu.Persist.Core.IFileNameStreamRepository
 Gu.Persist.Core.IFileNameStreamRepository.Read(string fileName) -> System.IO.Stream
@@ -137,13 +139,14 @@ Gu.Persist.Core.IFileSettings
 Gu.Persist.Core.IFileSettings.Directory.get -> string
 Gu.Persist.Core.IFileSettings.Extension.get -> string
 Gu.Persist.Core.IGenericAsyncRepository
-Gu.Persist.Core.IGenericAsyncRepository.ReadAsync<T>() -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IGenericAsyncRepository.ReadAsync<T>(Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IGenericAsyncRepository.ReadOrCreateAsync<T>(System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
 Gu.Persist.Core.IGenericAsyncRepository.SaveAsync<T>(T item) -> System.Threading.Tasks.Task
 Gu.Persist.Core.IGenericAsyncStreamRepository
 Gu.Persist.Core.IGenericAsyncStreamRepository.ReadAsync<T>() -> System.Threading.Tasks.Task<System.IO.Stream>
 Gu.Persist.Core.IGenericAsyncStreamRepository.SaveAsync<T>(System.IO.Stream stream) -> System.Threading.Tasks.Task
 Gu.Persist.Core.IGenericRepository
-Gu.Persist.Core.IGenericRepository.Read<T>() -> T
+Gu.Persist.Core.IGenericRepository.Read<T>(Gu.Persist.Core.Migration migration = null) -> T
 Gu.Persist.Core.IGenericRepository.Save<T>(T item) -> void
 Gu.Persist.Core.IGenericStreamRepository
 Gu.Persist.Core.IGenericStreamRepository.Read<T>() -> System.IO.Stream
@@ -166,15 +169,18 @@ Gu.Persist.Core.IRepository.Exists(string fileName) -> bool
 Gu.Persist.Core.IRepository.Exists<T>() -> bool
 Gu.Persist.Core.IRepository.GetFileInfo(string fileName) -> System.IO.FileInfo
 Gu.Persist.Core.IRepository.GetFileInfo<T>() -> System.IO.FileInfo
-Gu.Persist.Core.IRepository.Read<T>() -> T
-Gu.Persist.Core.IRepository.Read<T>(System.IO.FileInfo file) -> T
-Gu.Persist.Core.IRepository.Read<T>(string fileName) -> T
-Gu.Persist.Core.IRepository.ReadAsync<T>() -> System.Threading.Tasks.Task<T>
-Gu.Persist.Core.IRepository.ReadAsync<T>(System.IO.FileInfo file) -> System.Threading.Tasks.Task<T>
-Gu.Persist.Core.IRepository.ReadAsync<T>(string fileName) -> System.Threading.Tasks.Task<T>
-Gu.Persist.Core.IRepository.ReadOrCreate<T>(System.Func<T> creator) -> T
-Gu.Persist.Core.IRepository.ReadOrCreate<T>(System.IO.FileInfo file, System.Func<T> creator) -> T
-Gu.Persist.Core.IRepository.ReadOrCreate<T>(string fileName, System.Func<T> creator) -> T
+Gu.Persist.Core.IRepository.Read<T>(Gu.Persist.Core.Migration migration = null) -> T
+Gu.Persist.Core.IRepository.Read<T>(System.IO.FileInfo file, Gu.Persist.Core.Migration migration = null) -> T
+Gu.Persist.Core.IRepository.Read<T>(string fileName, Gu.Persist.Core.Migration migration = null) -> T
+Gu.Persist.Core.IRepository.ReadAsync<T>(Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IRepository.ReadAsync<T>(System.IO.FileInfo file, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IRepository.ReadAsync<T>(string fileName, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IRepository.ReadOrCreate<T>(System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> T
+Gu.Persist.Core.IRepository.ReadOrCreate<T>(System.IO.FileInfo file, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> T
+Gu.Persist.Core.IRepository.ReadOrCreate<T>(string fileName, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> T
+Gu.Persist.Core.IRepository.ReadOrCreateAsync<T>(System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IRepository.ReadOrCreateAsync<T>(System.IO.FileInfo file, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+Gu.Persist.Core.IRepository.ReadOrCreateAsync<T>(string fileName, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
 Gu.Persist.Core.IRepository.RemoveFromDirtyTracker<T>(T item) -> void
 Gu.Persist.Core.IRepository.Rename(System.IO.FileInfo oldName, System.IO.FileInfo newName, bool overWrite) -> void
 Gu.Persist.Core.IRepository.Rename(System.IO.FileInfo oldName, string newName, bool overWrite) -> void
@@ -215,6 +221,8 @@ Gu.Persist.Core.LockedFile.Dispose() -> void
 Gu.Persist.Core.LockedFile.DisposeAndDeleteFile() -> void
 Gu.Persist.Core.LockedFile.File.get -> System.IO.FileInfo
 Gu.Persist.Core.LockedFile.Stream.get -> System.IO.Stream
+Gu.Persist.Core.Migration
+Gu.Persist.Core.Migration.Migration() -> void
 Gu.Persist.Core.RenamePair
 Gu.Persist.Core.RenamePair.RenamePair(System.IO.FileInfo current, System.IO.FileInfo renamed) -> void
 Gu.Persist.Core.RenamePair<T>
@@ -232,9 +240,9 @@ Gu.Persist.Core.Repository<TSetting>.ExistsCore(System.IO.FileInfo file) -> bool
 Gu.Persist.Core.Repository<TSetting>.ExistsCore<T>() -> bool
 Gu.Persist.Core.Repository<TSetting>.GetFileInfoCore(string fileName) -> System.IO.FileInfo
 Gu.Persist.Core.Repository<TSetting>.GetFileInfoCore<T>() -> System.IO.FileInfo
-Gu.Persist.Core.Repository<TSetting>.ReadCore<T>() -> T
-Gu.Persist.Core.Repository<TSetting>.ReadOrCreateCore<T>(System.Func<T> creator) -> T
-Gu.Persist.Core.Repository<TSetting>.ReadOrCreateCore<T>(System.IO.FileInfo file, System.Func<T> creator) -> T
+Gu.Persist.Core.Repository<TSetting>.ReadCore<T>(Gu.Persist.Core.Migration migration = null) -> T
+Gu.Persist.Core.Repository<TSetting>.ReadOrCreateCore<T>(System.IO.FileInfo file, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> T
+Gu.Persist.Core.Repository<TSetting>.ReadOrCreateCoreAsync<T>(System.IO.FileInfo file, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
 Gu.Persist.Core.Repository<TSetting>.RemoveFromDirtyTracker<T>(T item) -> void
 Gu.Persist.Core.Repository<TSetting>.Rename(System.IO.FileInfo oldName, string newName, bool overWrite) -> void
 Gu.Persist.Core.Repository<TSetting>.Rename(string oldName, string newName, bool overWrite) -> void
@@ -280,9 +288,10 @@ Gu.Persist.Core.SingletonRepository<TSetting>.SingletonRepository(TSetting setti
 Gu.Persist.Core.SingletonRepository<TSetting>.SingletonRepository(TSetting settings, Gu.Persist.Core.Serialize<TSetting> serialize) -> void
 Gu.Persist.Core.TempFileSettings
 Gu.Persist.Core.TempFileSettings.Directory.get -> string
+Gu.Persist.Core.TempFileSettings.Equals(Gu.Persist.Core.TempFileSettings other) -> bool
 Gu.Persist.Core.TempFileSettings.Extension.get -> string
 Gu.Persist.Core.TempFileSettings.TempFileSettings(string directory, string extension) -> void
-Gu.Persist.Core.WaitHandleExtensions
+abstract Gu.Persist.Core.Migration.TryUpdate(System.IO.Stream stream, out System.IO.Stream updated) -> bool
 abstract Gu.Persist.Core.Repository<TSetting>.EnsureCanSave<T>(System.IO.FileInfo file, T item) -> void
 abstract Gu.Persist.Core.Serialize<TSettings>.Clone<T>(T item, TSettings settings) -> T
 abstract Gu.Persist.Core.Serialize<TSettings>.DefaultStructuralEqualityComparer<T>(TSettings settings) -> System.Collections.Generic.IEqualityComparer<T>
@@ -301,9 +310,11 @@ override Gu.Persist.Core.SerializedEqualsComparer<T>.Equals(T x, T y) -> bool
 override Gu.Persist.Core.SerializedEqualsComparer<T>.GetHashCode(T obj) -> int
 override Gu.Persist.Core.SingletonRepository<TSetting>.CacheAndTrackCore<T>(System.IO.FileInfo file, T item) -> void
 override Gu.Persist.Core.SingletonRepository<TSetting>.EnsureCanSave<T>(System.IO.FileInfo file, T item) -> void
-override Gu.Persist.Core.SingletonRepository<TSetting>.ReadAsync<T>(System.IO.FileInfo file) -> System.Threading.Tasks.Task<T>
-override Gu.Persist.Core.SingletonRepository<TSetting>.ReadCore<T>(System.IO.FileInfo file) -> T
+override Gu.Persist.Core.SingletonRepository<TSetting>.ReadAsync<T>(System.IO.FileInfo file, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+override Gu.Persist.Core.SingletonRepository<TSetting>.ReadCore<T>(System.IO.FileInfo file, Gu.Persist.Core.Migration migration = null) -> T
 override Gu.Persist.Core.SingletonRepository<TSetting>.Rename(System.IO.FileInfo oldName, System.IO.FileInfo newName, bool overWrite) -> void
+override Gu.Persist.Core.TempFileSettings.Equals(object obj) -> bool
+override Gu.Persist.Core.TempFileSettings.GetHashCode() -> int
 static Gu.Persist.Core.Backup.Backuper.Create(Gu.Persist.Core.BackupSettings setting) -> Gu.Persist.Core.IBackuper
 static Gu.Persist.Core.BackupSettings.ValidateTimestampFormat(string format) -> void
 static Gu.Persist.Core.Default.BackupSettings(System.IO.DirectoryInfo directory) -> Gu.Persist.Core.BackupSettings
@@ -327,8 +338,8 @@ static Gu.Persist.Core.Directories.TempDirectory.get -> System.IO.DirectoryInfo
 static Gu.Persist.Core.LockedFile.Create(System.IO.FileInfo file, System.Func<System.IO.FileInfo, System.IO.Stream> stream) -> Gu.Persist.Core.LockedFile
 static Gu.Persist.Core.LockedFile.CreateAsync(System.IO.FileInfo file, System.TimeSpan timeout) -> System.Threading.Tasks.Task<Gu.Persist.Core.LockedFile>
 static Gu.Persist.Core.LockedFile.CreateIfExists(System.IO.FileInfo file, System.Func<System.IO.FileInfo, System.IO.Stream> stream) -> Gu.Persist.Core.LockedFile
-static Gu.Persist.Core.WaitHandleExtensions.AsTask(this System.Threading.WaitHandle handle) -> System.Threading.Tasks.Task
-static Gu.Persist.Core.WaitHandleExtensions.AsTask(this System.Threading.WaitHandle handle, System.TimeSpan timeout) -> System.Threading.Tasks.Task
+static Gu.Persist.Core.TempFileSettings.operator !=(Gu.Persist.Core.TempFileSettings left, Gu.Persist.Core.TempFileSettings right) -> bool
+static Gu.Persist.Core.TempFileSettings.operator ==(Gu.Persist.Core.TempFileSettings left, Gu.Persist.Core.TempFileSettings right) -> bool
 static readonly Gu.Persist.Core.Backup.NullBackuper.Default -> Gu.Persist.Core.Backup.NullBackuper
 static readonly Gu.Persist.Core.BackupSettings.DefaultExtension -> string
 static readonly Gu.Persist.Core.BackupSettings.DefaultTimeStampFormat -> string
@@ -362,16 +373,19 @@ virtual Gu.Persist.Core.Repository<TSetting>.IsDirty<T>(T item) -> bool
 virtual Gu.Persist.Core.Repository<TSetting>.IsDirty<T>(T item, System.Collections.Generic.IEqualityComparer<T> comparer) -> bool
 virtual Gu.Persist.Core.Repository<TSetting>.IsDirty<T>(string fileName, T item) -> bool
 virtual Gu.Persist.Core.Repository<TSetting>.IsDirty<T>(string fileName, T item, System.Collections.Generic.IEqualityComparer<T> comparer) -> bool
-virtual Gu.Persist.Core.Repository<TSetting>.Read<T>() -> T
-virtual Gu.Persist.Core.Repository<TSetting>.Read<T>(System.IO.FileInfo file) -> T
-virtual Gu.Persist.Core.Repository<TSetting>.Read<T>(string fileName) -> T
-virtual Gu.Persist.Core.Repository<TSetting>.ReadAsync<T>() -> System.Threading.Tasks.Task<T>
-virtual Gu.Persist.Core.Repository<TSetting>.ReadAsync<T>(System.IO.FileInfo file) -> System.Threading.Tasks.Task<T>
-virtual Gu.Persist.Core.Repository<TSetting>.ReadAsync<T>(string fileName) -> System.Threading.Tasks.Task<T>
-virtual Gu.Persist.Core.Repository<TSetting>.ReadCore<T>(System.IO.FileInfo file) -> T
-virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreate<T>(System.Func<T> creator) -> T
-virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreate<T>(System.IO.FileInfo file, System.Func<T> creator) -> T
-virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreate<T>(string fileName, System.Func<T> creator) -> T
+virtual Gu.Persist.Core.Repository<TSetting>.Read<T>(Gu.Persist.Core.Migration migration = null) -> T
+virtual Gu.Persist.Core.Repository<TSetting>.Read<T>(System.IO.FileInfo file, Gu.Persist.Core.Migration migration = null) -> T
+virtual Gu.Persist.Core.Repository<TSetting>.Read<T>(string fileName, Gu.Persist.Core.Migration migration = null) -> T
+virtual Gu.Persist.Core.Repository<TSetting>.ReadAsync<T>(Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+virtual Gu.Persist.Core.Repository<TSetting>.ReadAsync<T>(System.IO.FileInfo file, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+virtual Gu.Persist.Core.Repository<TSetting>.ReadAsync<T>(string fileName, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+virtual Gu.Persist.Core.Repository<TSetting>.ReadCore<T>(System.IO.FileInfo file, Gu.Persist.Core.Migration migration = null) -> T
+virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreate<T>(System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> T
+virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreate<T>(System.IO.FileInfo file, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> T
+virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreate<T>(string fileName, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> T
+virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreateAsync<T>(System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreateAsync<T>(System.IO.FileInfo file, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
+virtual Gu.Persist.Core.Repository<TSetting>.ReadOrCreateAsync<T>(string fileName, System.Func<T> creator, Gu.Persist.Core.Migration migration = null) -> System.Threading.Tasks.Task<T>
 virtual Gu.Persist.Core.Repository<TSetting>.Rename(System.IO.FileInfo oldName, System.IO.FileInfo newName, bool overWrite) -> void
 virtual Gu.Persist.Core.Repository<TSetting>.Save<T>(System.IO.FileInfo file, System.IO.FileInfo tempFile, T item) -> void
 virtual Gu.Persist.Core.Repository<TSetting>.Save<T>(System.IO.FileInfo file, T item) -> void
@@ -385,4 +399,3 @@ virtual Gu.Persist.Core.SingletonRepository<TSetting>.Cache<T>(System.IO.FileInf
 virtual Gu.Persist.Core.SingletonRepository<TSetting>.SaveAndClose<T>(System.IO.FileInfo file, T item) -> void
 virtual Gu.Persist.Core.SingletonRepository<TSetting>.SaveAndClose<T>(T item) -> void
 virtual Gu.Persist.Core.SingletonRepository<TSetting>.SaveAndClose<T>(string fileName, T item) -> void
-

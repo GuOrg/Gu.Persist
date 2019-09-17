@@ -890,6 +890,7 @@ namespace Gu.Persist.Core
         /// Read the file corresponding to <typeparamref name="T"/> and return it's contents deserialized to an instance of <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The type to read and deserialize.</typeparam>
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized instance.</returns>
         protected T ReadCore<T>(Migration migration = null)
         {
@@ -902,6 +903,7 @@ namespace Gu.Persist.Core
         /// </summary>
         /// <typeparam name="T">The type to read and deserialize.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized instance.</returns>
         protected virtual T ReadCore<T>(FileInfo file, Migration migration = null)
         {
@@ -947,6 +949,7 @@ namespace Gu.Persist.Core
         /// <typeparam name="T">The type to read and deserialize.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="creator">The <see cref="Func{T}"/>.</param>
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized instance.</returns>
         protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator, Migration migration = null)
         {
@@ -981,6 +984,7 @@ namespace Gu.Persist.Core
         /// <typeparam name="T">The type to read and deserialize.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="creator">The <see cref="Func{T}"/>.</param>
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized instance.</returns>
         protected async Task<T> ReadOrCreateCoreAsync<T>(FileInfo file, Func<T> creator, Migration migration = null)
         {

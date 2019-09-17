@@ -16,6 +16,8 @@ Gu.Persist.NewtonsoftJson.IJsonRepositorySetting.JsonSerializerSettings.get -> N
 Gu.Persist.NewtonsoftJson.JsonEqualsComparer<T>
 Gu.Persist.NewtonsoftJson.JsonEqualsComparer<T>.JsonEqualsComparer(Newtonsoft.Json.JsonSerializerSettings settings) -> void
 Gu.Persist.NewtonsoftJson.JsonFile
+Gu.Persist.NewtonsoftJson.JsonMigration
+Gu.Persist.NewtonsoftJson.JsonMigration.JsonMigration(params System.Func<Newtonsoft.Json.Linq.JObject, Newtonsoft.Json.Linq.JObject>[] steps) -> void
 Gu.Persist.NewtonsoftJson.RepositorySettings
 Gu.Persist.NewtonsoftJson.RepositorySettings.JsonSerializerSettings.get -> Newtonsoft.Json.JsonSerializerSettings
 Gu.Persist.NewtonsoftJson.RepositorySettings.RepositorySettings(string directory, Newtonsoft.Json.JsonSerializerSettings jsonSerializerSettings, bool isTrackingDirty, Gu.Persist.Core.BackupSettings backupSettings, string extension = ".cfg", string tempExtension = ".tmp") -> void
@@ -30,6 +32,7 @@ Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(System.Func<Gu
 Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.NewtonsoftJson.RepositorySettings> settingsCreator, Gu.Persist.Core.IBackuper backuper) -> void
 Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(System.IO.DirectoryInfo directory) -> void
 Gu.Persist.NewtonsoftJson.SingletonRepository.SingletonRepository(System.IO.DirectoryInfo directory, Newtonsoft.Json.JsonSerializerSettings jsonSettings) -> void
+override Gu.Persist.NewtonsoftJson.JsonMigration.TryUpdate(System.IO.Stream stream, out System.IO.Stream updated) -> bool
 static Gu.Persist.NewtonsoftJson.JsonFile.Clone<T>(T item) -> T
 static Gu.Persist.NewtonsoftJson.JsonFile.Clone<T>(T item, Newtonsoft.Json.JsonSerializerSettings settings) -> T
 static Gu.Persist.NewtonsoftJson.JsonFile.Read<T>(System.IO.FileInfo file) -> T

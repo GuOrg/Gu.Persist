@@ -23,7 +23,7 @@
         /// FileName.cfg
         /// FileName.
         /// </param>
-        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>   
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
         Task<T> ReadAsync<T>(string fileName, Migration migration = null);
 
@@ -45,7 +45,7 @@
         /// <param name="creator">
         /// A <see cref="Func{TResult}"/> that is used for creating an instance if the file is missing.
         /// </param>
-        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>   
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
         Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator, Migration migration = null);
 
