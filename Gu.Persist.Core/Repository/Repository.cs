@@ -251,7 +251,7 @@ namespace Gu.Persist.Core
             var file = this.GetFileInfo<T>();
             return this.ReadAsync<T>(file, migration);
         }
-  
+
         /// <inheritdoc/>
         Task<Stream> IFileInfoAsyncStreamRepository.ReadAsync(FileInfo file)
         {
@@ -965,10 +965,6 @@ namespace Gu.Persist.Core
             {
                 item = this.ReadCore<T>(file, migration);
             }
-            else if (this.Backuper.TryRestore(file))
-            {
-                item = this.ReadCore<T>(file, migration);
-            }
             else
             {
                 item = creator();
@@ -1000,10 +996,6 @@ namespace Gu.Persist.Core
 
             T item;
             if (file.Exists)
-            {
-                item = await this.ReadAsync<T>(file, migration).ConfigureAwait(false);
-            }
-            else if (this.Backuper.TryRestore(file))
             {
                 item = await this.ReadAsync<T>(file, migration).ConfigureAwait(false);
             }
