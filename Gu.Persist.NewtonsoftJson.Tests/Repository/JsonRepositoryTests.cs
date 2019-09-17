@@ -1,6 +1,5 @@
 ﻿namespace Gu.Persist.NewtonsoftJson.Tests.Repository
 {
-    using System;
     using System.IO;
     using Gu.Persist.Core.Tests;
     using Gu.Persist.Core.Tests.Repositories;
@@ -16,9 +15,10 @@
             var repository = this.CreateRepository();
             var file = testCase.File<DummySerializable>(repository);
             this.Save(file, dummy);
-            var read = testCase.Read<DummySerializable>(repository, file, new JsonMigration(new Func<JObject, JObject>[] { x => Migrate(x) }));
+            var read = testCase.Read<DummySerializable>(repository, file, new JsonMigration(x => Migrate(x)));
             Assert.AreEqual(2, read.Value);
             Assert.AreEqual(2, testCase.Read<DummySerializable>(repository, file).Value);
+
             JObject Migrate(JObject jObject)
             {
                 jObject["Value"] = 2;

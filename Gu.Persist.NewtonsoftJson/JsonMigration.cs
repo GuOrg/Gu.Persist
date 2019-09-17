@@ -20,7 +20,7 @@
         /// Initializes a new instance of the <see cref="JsonMigration"/> class.
         /// </summary>
         /// <param name="steps">A sequence of transformations of the <see cref="JObject"/> read from the stream.</param>
-        public JsonMigration(IReadOnlyList<Func<JObject, JObject>> steps)
+        public JsonMigration(params Func<JObject, JObject>[] steps)
         {
             this.steps = steps;
         }
