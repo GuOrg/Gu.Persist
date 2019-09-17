@@ -209,21 +209,21 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<T> ReadAsync<T>()
+        public virtual Task<T> ReadAsync<T>(Migration migration = null)
         {
             var file = this.GetFileInfo<T>();
-            return this.ReadAsync<T>(file);
+            return this.ReadAsync<T>(file, migration);
         }
 
         /// <inheritdoc/>
-        public virtual Task<T> ReadAsync<T>(string fileName)
+        public virtual Task<T> ReadAsync<T>(string fileName, Migration migration = null)
         {
             var fileInfo = this.GetFileInfoCore(fileName);
-            return this.ReadAsync<T>(fileInfo);
+            return this.ReadAsync<T>(fileInfo, migration);
         }
 
         /// <inheritdoc/>
-        public virtual async Task<T> ReadAsync<T>(FileInfo file)
+        public virtual async Task<T> ReadAsync<T>(FileInfo file, Migration migration = null)
         {
             // not checking exists, framework exception is more familiar.
             if (file is null)
@@ -231,26 +231,21 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(file));
             }
 
-            var value = await FileHelper.ReadAsync<T, TSetting>(file, this.Settings, this.serialize)
-                                        .ConfigureAwait(false);
-            if (this.Settings.IsTrackingDirty)
-            {
-                this.Tracker.Track(file.FullName, value);
-            }
-
-            return value;
-        }
-
-        /// <inheritdoc/>
-        public virtual T Read<T>(Migration migration = null)
-        {
             if (migration is null)
             {
-                return this.ReadCore<T>();
+                using (var stream = await file.ReadAsync().ConfigureAwait(false))
+                {
+                    var value = this.serialize.FromStream<T>(stream, this.Settings);
+                    if (this.Settings.IsTrackingDirty)
+                    {
+                        this.Tracker.Track(file.FullName, value);
+                    }
+
+                    return value;
+                }
             }
 
-            var streamRepo = (IGenericStreamRepository)this;
-            using (var stream = streamRepo.Read<T>())
+            using (var stream = await file.ReadAsync().ConfigureAwait(false))
             {
                 if (migration.TryUpdate(stream, out var updatedStream))
                 {
@@ -259,7 +254,7 @@ namespace Gu.Persist.Core
                         stream.Dispose();
                         var item = this.serialize.FromStream<T>(updatedStream, this.Settings);
                         //// Save so we get a backup etc.
-                        this.Save(item);
+                        this.Save(file, item);
                         return item;
                     }
                 }
@@ -267,6 +262,12 @@ namespace Gu.Persist.Core
                 stream.Position = 0;
                 return this.serialize.FromStream<T>(stream, this.Settings);
             }
+        }
+
+        /// <inheritdoc/>
+        public virtual T Read<T>(Migration migration = null)
+        {
+            return this.ReadCore<T>(this.GetFileInfo<T>(), migration);
         }
 
         /// <inheritdoc/>
@@ -295,21 +296,21 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual T Read<T>(string fileName)
+        public virtual T Read<T>(string fileName, Migration migration = null)
         {
             var file = this.GetFileInfoCore(fileName);
-            return this.Read<T>(file);
+            return this.ReadCore<T>(file, migration);
         }
 
         /// <inheritdoc/>
-        public virtual T Read<T>(FileInfo file)
+        public virtual T Read<T>(FileInfo file, Migration migration = null)
         {
             if (file is null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            return this.ReadCore<T>(file);
+            return this.ReadCore<T>(file, migration);
         }
 
         /// <inheritdoc/>
@@ -338,7 +339,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual T ReadOrCreate<T>(Func<T> creator)
+        public virtual T ReadOrCreate<T>(Func<T> creator, Migration migration = null)
         {
             if (creator is null)
             {
@@ -349,7 +350,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual T ReadOrCreate<T>(string fileName, Func<T> creator)
+        public virtual T ReadOrCreate<T>(string fileName, Func<T> creator, Migration migration = null)
         {
             if (fileName is null)
             {
@@ -366,7 +367,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual T ReadOrCreate<T>(FileInfo file, Func<T> creator)
+        public virtual T ReadOrCreate<T>(FileInfo file, Func<T> creator, Migration migration = null)
         {
             if (file is null)
             {
@@ -382,7 +383,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<T> ReadOrCreateAsync<T>(Func<T> creator)
+        public virtual Task<T> ReadOrCreateAsync<T>(Func<T> creator, Migration migration = null)
         {
             if (creator is null)
             {
@@ -393,7 +394,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator)
+        public virtual Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator, Migration migration = null)
         {
             if (fileName is null)
             {
@@ -410,7 +411,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator)
+        public virtual Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator, Migration migration = null)
         {
             if (file is null)
             {
@@ -422,7 +423,7 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(creator));
             }
 
-            return this.ReadOrCreateCoreAsync(file, creator);
+            return this.ReadOrCreateCoreAsync(file, creator, migration);
         }
 
         /// <inheritdoc/>
@@ -890,10 +891,10 @@ namespace Gu.Persist.Core
         /// </summary>
         /// <typeparam name="T">The type to read and deserialize.</typeparam>
         /// <returns>The deserialized instance.</returns>
-        protected T ReadCore<T>()
+        protected T ReadCore<T>(Migration migration = null)
         {
             var file = this.GetFileInfoCore<T>();
-            return this.ReadCore<T>(file);
+            return this.ReadCore<T>(file, migration);
         }
 
         /// <summary>
@@ -902,20 +903,41 @@ namespace Gu.Persist.Core
         /// <typeparam name="T">The type to read and deserialize.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <returns>The deserialized instance.</returns>
-        protected virtual T ReadCore<T>(FileInfo file)
+        protected virtual T ReadCore<T>(FileInfo file, Migration migration = null)
         {
             if (file is null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            var value = file.Read<T, TSetting>(this.Settings, this.serialize);
-            if (this.Settings.IsTrackingDirty)
+            if (migration is null)
             {
-                this.Tracker.Track(file.FullName, value);
+                var value = file.Read<T, TSetting>(this.Settings, this.serialize);
+                if (this.Settings.IsTrackingDirty)
+                {
+                    this.Tracker.Track(file.FullName, value);
+                }
+
+                return value;
             }
 
-            return value;
+            using (var stream = File.OpenRead(file.FullName))
+            {
+                if (migration.TryUpdate(stream, out var updatedStream))
+                {
+                    using (updatedStream)
+                    {
+                        stream.Dispose();
+                        var item = this.serialize.FromStream<T>(updatedStream, this.Settings);
+                        //// Save so we get a backup etc.
+                        this.Save(file, item);
+                        return item;
+                    }
+                }
+
+                stream.Position = 0;
+                return this.serialize.FromStream<T>(stream, this.Settings);
+            }
         }
 
         /// <summary>
@@ -926,7 +948,7 @@ namespace Gu.Persist.Core
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="creator">The <see cref="Func{T}"/>.</param>
         /// <returns>The deserialized instance.</returns>
-        protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator)
+        protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator, Migration migration = null)
         {
             if (file is null)
             {
@@ -941,11 +963,11 @@ namespace Gu.Persist.Core
             T item;
             if (file.Exists)
             {
-                item = this.ReadCore<T>(file);
+                item = this.ReadCore<T>(file, migration);
             }
             else if (this.Backuper.TryRestore(file))
             {
-                item = this.ReadCore<T>(file);
+                item = this.ReadCore<T>(file, migration);
             }
             else
             {
@@ -964,7 +986,7 @@ namespace Gu.Persist.Core
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="creator">The <see cref="Func{T}"/>.</param>
         /// <returns>The deserialized instance.</returns>
-        protected async Task<T> ReadOrCreateCoreAsync<T>(FileInfo file, Func<T> creator)
+        protected async Task<T> ReadOrCreateCoreAsync<T>(FileInfo file, Func<T> creator, Migration migration = null)
         {
             if (file is null)
             {
@@ -979,11 +1001,11 @@ namespace Gu.Persist.Core
             T item;
             if (file.Exists)
             {
-                item = await this.ReadAsync<T>(file).ConfigureAwait(false);
+                item = await this.ReadAsync<T>(file, migration).ConfigureAwait(false);
             }
             else if (this.Backuper.TryRestore(file))
             {
-                item = this.ReadCore<T>(file);
+                item = await this.ReadAsync<T>(file, migration).ConfigureAwait(false);
             }
             else
             {

@@ -20,8 +20,9 @@
         /// Also for <see cref="ISingletonRepository"/> a check is made to ensure that the same instance is saved.
         /// </remarks>
         /// <typeparam name="T">The type to deserialize to.</typeparam>
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>   
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        Task<T> ReadAsync<T>();
+        Task<T> ReadAsync<T>(Migration migration = null);
 
         /// <summary>
         /// Reads from file for <typeparamref name="T"/>
@@ -35,8 +36,9 @@
         /// <param name="creator">
         /// A <see cref="Func{TResult}"/> that is used for creating an instance if the file is missing.
         /// </param>
+        /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>   
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        Task<T> ReadOrCreateAsync<T>(Func<T> creator);
+        Task<T> ReadOrCreateAsync<T>(Func<T> creator, Migration migration = null);
 
         /// <summary>
         /// Saves to a file for <typeparamref name="T"/>.
