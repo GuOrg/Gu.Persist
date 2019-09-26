@@ -8,7 +8,7 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>0.3</Version>
+    <Version>0.3.1</Version>
     <Authors>Johan Larsson</Authors>
     <Description>Use a git repository for backups.</Description>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
