@@ -25,7 +25,7 @@
         /// <inheritdoc/>
         public override bool CanWrite => !this.disposed;
 
-        /// <inheritdoc/>
+        /// <see cref="MemoryStream.Length"/>
         public override long Length => this.inner.Length;
 
         /// <inheritdoc/>

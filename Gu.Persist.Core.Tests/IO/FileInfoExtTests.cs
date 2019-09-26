@@ -1,4 +1,5 @@
-﻿namespace Gu.Persist.Core.Tests.IO
+﻿// ReSharper disable AssignNullToNotNullAttribute
+namespace Gu.Persist.Core.Tests.IO
 {
     using System;
     using System.Globalization;

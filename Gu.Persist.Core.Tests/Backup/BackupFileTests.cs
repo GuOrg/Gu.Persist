@@ -1,4 +1,5 @@
-﻿namespace Gu.Persist.Core.Tests.Backup
+﻿// ReSharper disable AssignNullToNotNullAttribute
+namespace Gu.Persist.Core.Tests.Backup
 {
     using System;
     using System.IO;

@@ -139,7 +139,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             var file = testCase.File<DummySerializable>(repository);
             testCase.Save(repository, file, dummy);
             if (repository.Settings is IDataRepositorySettings dataRepositorySettings &&
-                dataRepositorySettings.SaveNullDeletesFile == true)
+                dataRepositorySettings.SaveNullDeletesFile)
             {
                 testCase.Save<DummySerializable>(repository, file, null);
                 AssertFile.Exists(false, file);

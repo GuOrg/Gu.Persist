@@ -44,7 +44,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.Read<T>(file, migration);
 
-            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate<T>(file, create, migration);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate(file, create, migration);
 
             public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file, item);
 
@@ -55,7 +55,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.ReadAsync<T>(file, migration).Result;
 
-            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync<T>(file, create, migration).Result;
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync(file, create, migration).Result;
 
             public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file, item).Wait();
 
@@ -66,7 +66,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.Read<T>(file.FullName, migration);
 
-            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate<T>(file.FullName, create, migration);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate(file.FullName, create, migration);
 
             public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file.FullName, item);
 
@@ -77,7 +77,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.ReadAsync<T>(file.FullName, migration).Result;
 
-            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync<T>(file.FullName, create, migration).Result;
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync(file.FullName, create, migration).Result;
 
             public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file.FullName, item).Wait();
 
@@ -88,7 +88,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.Read<T>(file.Name, migration);
 
-            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate<T>(file.Name, create, migration);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate(file.Name, create, migration);
 
             public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(file.Name, item);
 
@@ -99,7 +99,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.ReadAsync<T>(file.Name, migration).Result;
 
-            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync<T>(file.Name, create, migration).Result;
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync(file.Name, create, migration).Result;
 
             public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(file.Name, item).Wait();
 
@@ -110,7 +110,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.Read<T>(Path.GetFileNameWithoutExtension(file.FullName), migration);
 
-            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate<T>(Path.GetFileNameWithoutExtension(file.FullName), create, migration);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreate(Path.GetFileNameWithoutExtension(file.FullName), create, migration);
 
             public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.Save(Path.GetFileNameWithoutExtension(file.FullName), item);
 
@@ -121,7 +121,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             public override T Read<T>(IRepository repository, System.IO.FileInfo file, Migration migration = null) => repository.ReadAsync<T>(Path.GetFileNameWithoutExtension(file.FullName), migration).Result;
 
-            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync<T>(Path.GetFileNameWithoutExtension(file.FullName), create, migration).Result;
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo file, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync(Path.GetFileNameWithoutExtension(file.FullName), create, migration).Result;
 
             public override void Save<T>(IRepository repository, System.IO.FileInfo file, T item) => repository.SaveAsync(Path.GetFileNameWithoutExtension(file.FullName), item).Wait();
 
@@ -135,7 +135,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             public override T Read<T>(IRepository repository, System.IO.FileInfo _, Migration migration = null) => repository.Read<T>(migration);
 
-            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create, Migration migration = null) => repository.ReadOrCreate<T>(create, migration);
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create, Migration migration = null) => repository.ReadOrCreate(create, migration);
 
             public override void Save<T>(IRepository repository, System.IO.FileInfo _, T item) => repository.Save(item);
 
@@ -148,7 +148,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             public override T Read<T>(IRepository repository, System.IO.FileInfo _, Migration migration = null) => repository.ReadAsync<T>(migration).Result;
 
-            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync<T>(create, migration).Result;
+            public override T ReadOrCreate<T>(IRepository repository, System.IO.FileInfo _, Func<T> create, Migration migration = null) => repository.ReadOrCreateAsync(create, migration).Result;
 
             public override void Save<T>(IRepository repository, System.IO.FileInfo _, T item) => repository.SaveAsync(item).Wait();
 

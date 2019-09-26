@@ -1,4 +1,5 @@
-﻿#pragma warning disable GU0009 // Name the boolean parameter.
+﻿// ReSharper disable AssignNullToNotNullAttribute
+#pragma warning disable GU0009 // Name the boolean parameter.
 namespace Gu.Persist.Core.Tests.IO
 {
     using System.IO;

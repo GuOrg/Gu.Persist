@@ -85,8 +85,8 @@ namespace Gu.Persist.Core.Tests.Repositories
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
             var file = testCase.File<DummySerializable>(repository);
-            var read1 = testCase.ReadOrCreate<DummySerializable>(repository, file, () => dummy);
-            var read2 = testCase.ReadOrCreate<DummySerializable>(repository, file, () => dummy);
+            var read1 = testCase.ReadOrCreate(repository, file, () => dummy);
+            var read2 = testCase.ReadOrCreate(repository, file, () => dummy);
             if (repository is ISingletonRepository)
             {
                 Assert.AreSame(read1, read2);
@@ -152,7 +152,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             var file = testCase.File<DummySerializable>(repository);
             if (repository.Settings.IsTrackingDirty)
             {
-                var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => new DummySerializable(1));
+                var read = testCase.ReadOrCreate(repository, file, () => new DummySerializable(1));
                 Assert.AreEqual(false, testCase.IsDirty(repository, file, read));
 
                 read.Value++;
@@ -175,8 +175,10 @@ namespace Gu.Persist.Core.Tests.Repositories
             var repository = this.CreateRepository();
             var file = testCase.File<DummySerializable>(repository);
             this.Save(file, dummy);
-            var read = testCase.Read<DummySerializable>(repository, file, new NoMigration());
+            var migration = new NoMigration();
+            var read = testCase.Read<DummySerializable>(repository, file, migration);
             Assert.AreEqual(1, read.Value);
+            Assert.AreEqual(true, migration.WasCalled);
         }
 
         [TestCaseSource(nameof(TestCases))]
@@ -186,8 +188,10 @@ namespace Gu.Persist.Core.Tests.Repositories
             var repository = this.CreateRepository();
             var file = testCase.File<DummySerializable>(repository);
             this.Save(file, dummy);
-            var read = testCase.Read<DummySerializable>(repository, file, new IdentityMigration());
+            var migration = new IdentityMigration();
+            var read = testCase.Read<DummySerializable>(repository, file, migration);
             Assert.AreEqual(1, read.Value);
+            Assert.AreEqual(true, migration.WasCalled);
         }
 
         [TestCaseSource(nameof(TestCases))]
@@ -208,8 +212,10 @@ namespace Gu.Persist.Core.Tests.Repositories
             var repository = this.CreateRepository();
             var file = testCase.File<DummySerializable>(repository);
             this.Save(file, dummy);
-            var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => throw new AssertionException("Should not get here."), new IdentityMigration());
+            var migration = new IdentityMigration();
+            var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => throw new AssertionException("Should not get here."), migration);
             Assert.AreEqual(1, read.Value);
+            Assert.AreEqual(true, migration.WasCalled);
         }
 
         [TestCaseSource(nameof(TestCases))]
@@ -218,7 +224,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
             var file = testCase.File<DummySerializable>(repository);
-            var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => dummy, new NoMigration());
+            var read = testCase.ReadOrCreate(repository, file, () => dummy, new NoMigration());
             Assert.AreSame(dummy, read);
         }
 
@@ -228,14 +234,17 @@ namespace Gu.Persist.Core.Tests.Repositories
             var dummy = new DummySerializable(1);
             var repository = this.CreateRepository();
             var file = testCase.File<DummySerializable>(repository);
-            var read = testCase.ReadOrCreate<DummySerializable>(repository, file, () => dummy, new IdentityMigration());
+            var read = testCase.ReadOrCreate(repository, file, () => dummy, new IdentityMigration());
             Assert.AreSame(dummy, read);
         }
 
         private class NoMigration : Migration
         {
+            internal bool WasCalled;
+
             public override bool TryUpdate(Stream stream, out Stream updated)
             {
+                this.WasCalled = true;
                 updated = null;
                 return false;
             }
@@ -243,8 +252,11 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         private class IdentityMigration : Migration
         {
+            internal bool WasCalled;
+
             public override bool TryUpdate(Stream stream, out Stream updated)
             {
+                this.WasCalled = true;
                 updated = PooledMemoryStream.Borrow();
                 stream.CopyTo(updated);
                 updated.Position = 0;

@@ -290,7 +290,7 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(creator));
             }
 
-            return this.ReadOrCreateCore(file, creator);
+            return this.ReadOrCreateCore(file, creator, migration);
         }
 
         /// <inheritdoc/>
@@ -307,7 +307,7 @@ namespace Gu.Persist.Core
             }
 
             var file = this.GetFileInfoCore(fileName);
-            return this.ReadOrCreateCore(file, creator);
+            return this.ReadOrCreateCore(file, creator, migration);
         }
 
         /// <inheritdoc/>
@@ -318,7 +318,7 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(creator));
             }
 
-            return this.ReadOrCreateCore(this.GetFileInfoCore<T>(), creator);
+            return this.ReadOrCreateCore(this.GetFileInfoCore<T>(), creator, migration);
         }
 
         /// <inheritdoc/>
@@ -351,7 +351,7 @@ namespace Gu.Persist.Core
             }
 
             var file = this.GetFileInfoCore(fileName);
-            return this.ReadOrCreateCoreAsync(file, creator);
+            return this.ReadOrCreateCoreAsync(file, creator, migration);
         }
 
         /// <inheritdoc/>
@@ -362,7 +362,7 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(creator));
             }
 
-            return this.ReadOrCreateCoreAsync(this.GetFileInfoCore<T>(), creator);
+            return this.ReadOrCreateCoreAsync(this.GetFileInfoCore<T>(), creator, migration);
         }
 
         /// <inheritdoc/>
@@ -482,7 +482,7 @@ namespace Gu.Persist.Core
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IFileInfoAsyncRepository.SaveAsync(FileInfo, T)" />
         public virtual Task SaveAsync<T>(FileInfo file, T item)
         {
             if (file is null)

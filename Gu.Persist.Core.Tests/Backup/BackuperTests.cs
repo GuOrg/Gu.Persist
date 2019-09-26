@@ -1,4 +1,5 @@
-﻿#pragma warning disable GU0009 // Name the boolean parameter.
+﻿// ReSharper disable AssignNullToNotNullAttribute
+#pragma warning disable GU0009 // Name the boolean parameter.
 namespace Gu.Persist.Core.Tests.Backup
 {
     using System;
@@ -182,7 +183,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var file = CreateFile();
             var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 2));
 
-            using (var lockedFile = Core.LockedFile.CreateIfExists(file, x => x.OpenRead()))
+            using (var lockedFile = LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
                 backuper.AfterSave(lockedFile);
             }
@@ -208,7 +209,7 @@ namespace Gu.Persist.Core.Tests.Backup
             backupOneYearOld.CreateFileOnDisk();
 
             var backuper = Backuper.Create(settings);
-            using (var lockedFile = Core.LockedFile.CreateIfExists(file, x => x.OpenRead()))
+            using (var lockedFile = LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
                 backuper.AfterSave(lockedFile);
             }
@@ -241,7 +242,7 @@ namespace Gu.Persist.Core.Tests.Backup
             backupOneYearOld.CreateFileOnDisk();
 
             var backuper = Backuper.Create(settings);
-            using (var lockedFile = Core.LockedFile.CreateIfExists(file, x => x.OpenRead()))
+            using (var lockedFile = LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
                 backuper.AfterSave(lockedFile);
             }
@@ -274,7 +275,7 @@ namespace Gu.Persist.Core.Tests.Backup
             backupOneYearOld.CreateFileOnDisk();
 
             var backuper = Backuper.Create(settings);
-            using (var lockedFile = Core.LockedFile.CreateIfExists(file, x => x.OpenRead()))
+            using (var lockedFile = LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
                 backuper.AfterSave(lockedFile);
             }
