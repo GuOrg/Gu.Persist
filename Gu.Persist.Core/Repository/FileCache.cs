@@ -43,7 +43,7 @@
         public void Add<T>(string fullFileName, T value)
         {
             Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
-            if (value == null)
+            if (value is null)
             {
                 return;
             }

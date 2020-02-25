@@ -6,26 +6,25 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
 
+    [Obsolete]
     internal static class Ensure
     {
-        [JetBrains.Annotations.ContractAnnotation("halt <= value:null")]
         internal static void NotNull<T>(T value, string parameterName, [CallerMemberName] string caller = null)
             where T : class
         {
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
-            if (value == null)
+            if (value is null)
             {
                 var message = $"Expected parameter {parameterName} in member {caller} to not be null";
                 throw new ArgumentNullException(parameterName, message);
             }
         }
 
-        [JetBrains.Annotations.ContractAnnotation("halt <= text:null")]
         internal static void NotNullOrEmpty(string text, string paramName, string message = null)
         {
             if (string.IsNullOrEmpty(text))
             {
-                if (message == null)
+                if (message is null)
                 {
                     throw new ArgumentNullException(paramName);
                 }
@@ -50,7 +49,7 @@
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (!string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase))
             {
-                if (message == null)
+                if (message is null)
                 {
                     throw new ArgumentException($"Expected extension: {extension}, was: {file.Extension}.", parameterName);
                 }
@@ -64,7 +63,7 @@
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase))
             {
-                if (message == null)
+                if (message is null)
                 {
                     throw new ArgumentException($"Expected extension to not be {extension}.", parameterName);
                 }
@@ -78,7 +77,7 @@
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (extensions.Any(x => string.Equals(file.Extension, x, StringComparison.OrdinalIgnoreCase)))
             {
-                if (message == null)
+                if (message is null)
                 {
                     throw new ArgumentException($"Expected not be any of {{{string.Join(", ", extensions)}}}, was: {file.Extension}.", parameterName);
                 }
@@ -92,7 +91,7 @@
             file.Refresh();
             if (!file.Exists)
             {
-                if (message == null)
+                if (message is null)
                 {
                     throw new FileNotFoundException($"Expected file {file.FullName} to exist.");
                 }
@@ -106,7 +105,7 @@
             file.Refresh();
             if (file.Exists)
             {
-                if (message == null)
+                if (message is null)
                 {
                     throw new InvalidOperationException($"Expected file {file.FullName} to not exist.");
                 }

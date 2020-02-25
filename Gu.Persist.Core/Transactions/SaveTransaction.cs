@@ -67,7 +67,7 @@ namespace Gu.Persist.Core
             this.lockedSoftDelete?.Dispose();
             this.lockedSoftDelete = LockedFile.Create(this.file.SoftDeleteFile(), x => x.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Delete));
             _ = this.backuper.BeforeSave(this.file);
-            if (this.contents == null)
+            if (this.contents is null)
             {
                 return;
             }

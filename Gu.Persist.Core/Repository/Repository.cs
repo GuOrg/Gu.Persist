@@ -106,7 +106,7 @@ namespace Gu.Persist.Core
         /// <param name="settings">The <typeparamref name="TSetting"/>.</param>
         protected Repository(TSetting settings, IBackuper backuper, Serialize<TSetting> serialize)
         {
-            if (settings == null)
+            if (settings is null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
@@ -828,7 +828,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public virtual T Clone<T>(T item)
         {
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -846,7 +846,7 @@ namespace Gu.Persist.Core
         public void RemoveFromDirtyTracker<T>(T item)
         {
             var tracker = this.Tracker;
-            if (tracker == null)
+            if (tracker is null)
             {
                 return;
             }

@@ -139,7 +139,7 @@
 
         internal static DateTime GetTimeStamp(this FileInfo file, IBackupSettings setting)
         {
-            if (setting.TimeStampFormat == null)
+            if (setting.TimeStampFormat is null)
             {
                 return file.CreationTime;
             }
@@ -171,7 +171,7 @@
 
         internal static FileInfo WithRemovedTimeStamp(this FileInfo file, IBackupSettings setting)
         {
-            if (setting.TimeStampFormat == null)
+            if (setting.TimeStampFormat is null)
             {
                 return file;
             }

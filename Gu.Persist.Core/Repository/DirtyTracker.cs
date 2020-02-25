@@ -26,7 +26,7 @@
         public void Track<T>(string fullFileName, T item)
         {
             Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
-            var clone = item == null
+            var clone = item is null
                             ? (object)null
                             : this.cloner.Clone(item);
             lock (this.gate)

@@ -12,12 +12,12 @@
         /// <inheritdoc />
         public override bool Equals(T x, T y)
         {
-            if (x == null && y == null)
+            if (x is null && y is null)
             {
                 return true;
             }
 
-            if (x == null || y == null)
+            if (x is null || y is null)
             {
                 return false;
             }
@@ -47,7 +47,7 @@
         /// <inheritdoc />
         public override int GetHashCode(T obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 throw new ArgumentNullException(nameof(obj));
             }

@@ -65,7 +65,7 @@
                 return false;
             }
 
-            if (this.Setting == null)
+            if (this.Setting is null)
             {
                 var softDelete = file.SoftDelete();
                 return softDelete != null;

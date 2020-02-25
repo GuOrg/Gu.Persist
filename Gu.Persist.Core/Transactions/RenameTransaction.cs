@@ -73,12 +73,12 @@ namespace Gu.Persist.Core
 
             public bool Equals(RenamePair x, RenamePair y)
             {
-                if (x == null && y == null)
+                if (x is null && y is null)
                 {
                     return true;
                 }
 
-                if (x == null || y == null)
+                if (x is null || y is null)
                 {
                     return false;
                 }

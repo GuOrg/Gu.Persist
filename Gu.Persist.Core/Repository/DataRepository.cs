@@ -99,7 +99,7 @@
         /// <inheritdoc/>
         protected override void EnsureCanSave<T>(FileInfo file, T item)
         {
-            if (!this.Settings.SaveNullDeletesFile && item == null)
+            if (!this.Settings.SaveNullDeletesFile && item is null)
             {
                 throw new ArgumentNullException($"Cannot save null when Settings.SaveNullDeletesFile is false.");
             }

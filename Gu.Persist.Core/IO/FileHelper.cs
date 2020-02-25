@@ -123,7 +123,7 @@ namespace Gu.Persist.Core
 
         internal static void Backup(FileInfo file, FileInfo backup)
         {
-            if (backup == null)
+            if (backup is null)
             {
                 return;
             }
@@ -141,7 +141,7 @@ namespace Gu.Persist.Core
 
         internal static void Restore(this FileInfo file, FileInfo backup)
         {
-            if (backup == null)
+            if (backup is null)
             {
                 return;
             }

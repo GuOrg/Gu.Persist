@@ -3,7 +3,6 @@
     using System;
     using System.IO;
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// A repository that manages a singleton instance for files.
@@ -216,14 +215,14 @@
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="item">The item.</param>
-        protected void CacheCore<T>(FileInfo file, [NotNull] T item)
+        protected void CacheCore<T>(FileInfo file, T item)
         {
             if (file is null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }

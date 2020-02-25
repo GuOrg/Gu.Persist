@@ -85,7 +85,7 @@
         /// <returns>A <see cref="LockedFile"/>.</returns>
         public static LockedFile CreateIfExists(FileInfo file, Func<FileInfo, Stream> stream)
         {
-            if (file == null)
+            if (file is null)
             {
                 return null;
             }

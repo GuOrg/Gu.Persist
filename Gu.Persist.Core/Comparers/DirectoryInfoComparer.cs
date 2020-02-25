@@ -21,12 +21,12 @@
         /// <inheritdoc/>
         public override bool Equals(DirectoryInfo x, DirectoryInfo y)
         {
-            if (x == null && y == null)
+            if (x is null && y is null)
             {
                 return true;
             }
 
-            if (x == null || y == null)
+            if (x is null || y is null)
             {
                 return false;
             }

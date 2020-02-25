@@ -1,8 +1,8 @@
 NUGET
   remote: http://www.nuget.org/api/v2
-    LibGit2Sharp (0.26.1)
-      LibGit2Sharp.NativeBinaries (2.0.289) - restriction: || (>= net46) (>= netstandard2.0)
-    LibGit2Sharp.NativeBinaries (2.0.289) - restriction: || (>= net46) (>= netstandard2.0)
+    LibGit2Sharp (0.26.2)
+      LibGit2Sharp.NativeBinaries (2.0.306) - restriction: || (>= net46) (>= netstandard2.0)
+    LibGit2Sharp.NativeBinaries (2.0.306) - restriction: || (>= net46) (>= netstandard2.0)
     Microsoft.CSharp (4.6) - restriction: || (&& (< net20) (>= netstandard1.0) (< netstandard1.3)) (&& (< net20) (>= netstandard1.3) (< netstandard2.0))
       NETStandard.Library (>= 1.6.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< netstandard2.0) (< win8) (< wpa81) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
       System.Dynamic.Runtime (>= 4.3) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.3) (< netstandard2.0) (< win8) (< wpa81) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (>= netstandard1.0) (< netstandard1.3) (< win8) (< wp8) (< wpa81))
