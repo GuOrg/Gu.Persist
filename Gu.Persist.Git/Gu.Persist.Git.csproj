@@ -6,17 +6,28 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
-  
-  <PropertyGroup>
-    <Version>0.3.1</Version>
-    <Authors>Johan Larsson</Authors>
-    <Description>Use a git repository for backups.</Description>
-    <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
-  </PropertyGroup>
 
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Gu.Persist.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.3.1</Version>
+    <Authors>Johan Larsson</Authors>
+    <Description>Use a git repository for backups.</Description>
+    <PackageReleaseNotes>
+      0.3.1
+      BREAKING: Added optional parameter Migration to read methods.
+      FEATURE: Migration support.
+      BUGFIX: ReadOrCreate when passing in FileInfo
+      BUGFIX: Read when passing in full path.
+    </PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/GuOrg/Gu.Persist</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GuOrg/Gu.Persist</RepositoryUrl>
+    <PackageTags>xml json git save settings</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +39,15 @@
   <ItemGroup>
     <ProjectReference Include="..\Gu.Persist.Core\Gu.Persist.Core.csproj" />
   </ItemGroup>
-  
-  <Import Project="..\.paket\Paket.Restore.targets" />
+
+  <ItemGroup>
+    <PackageReference Include="Gu.Analyzers" Version="1.6.7-dev" PrivateAssets="all" />
+    <PackageReference Include="IDisposableAnalyzers" Version="3.3.0" PrivateAssets="all" />
+    <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="2.9.8" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="PropertyChangedAnalyzers" Version="3.2.0" PrivateAssets="all" />
+    <PackageReference Include="ReflectionAnalyzers" Version="0.1.21-dev" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.113" PrivateAssets="all" />
+  </ItemGroup>
 </Project>
