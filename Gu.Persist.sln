@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{1B4BA174-F17D-4532-9137-A83A9BBCFFDD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{1B4BA174-F17D-4532-9137-A83A9BBCFFDD}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
 		azure-pipelines.yml = azure-pipelines.yml
-		paket.dependencies = paket.dependencies
-		paket.lock = paket.lock
-		.paket\Readme.paket.md = .paket\Readme.paket.md
 		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
@@ -45,7 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{8E6D19DD
 		RELEASE_NOTES.md = RELEASE_NOTES.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gu.Persist.Demo", "Gu.Persist.Demo\Gu.Persist.Demo.csproj", "{963F1418-ED9B-47C6-92B3-363C3720BEC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gu.Persist.Demo", "Gu.Persist.Demo\Gu.Persist.Demo.csproj", "{963F1418-ED9B-47C6-92B3-363C3720BEC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
