@@ -120,7 +120,11 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            Ensure.NotNullOrEmpty(newName, nameof(newName));
+            if (string.IsNullOrEmpty(newName))
+            {
+                throw new ArgumentNullException(nameof(newName));
+            }
+
             var soft = file.SoftDeleteFile();
             if (soft.Exists)
             {
@@ -142,7 +146,11 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            Ensure.NotNullOrEmpty(newName, nameof(newName));
+            if (string.IsNullOrEmpty(newName))
+            {
+                throw new ArgumentNullException(nameof(newName));
+            }
+
             using var transaction = new RenameTransaction(this.GetRenamePairs(file, newName));
             transaction.Commit(overWrite);
         }
@@ -155,7 +163,11 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            Ensure.NotNullOrEmpty(newName, nameof(newName));
+            if (string.IsNullOrEmpty(newName))
+            {
+                throw new ArgumentNullException(nameof(newName));
+            }
+
             var soft = file.SoftDeleteFile();
             if (soft.Exists)
             {

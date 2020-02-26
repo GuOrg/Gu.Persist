@@ -1,5 +1,6 @@
 ﻿namespace Gu.Persist.Core
 {
+    using System;
     using System.IO;
 
     internal static class DirectoryInfoExt
@@ -51,7 +52,11 @@
         /// <returns>A FileInfo in the directory.</returns>
         internal static FileInfo CreateFileInfoInDirectory(this DirectoryInfo directory, string fileName)
         {
-            Ensure.NotNullOrEmpty(fileName, nameof(fileName));
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             var path = Path.Combine(directory.FullName, fileName);
             return new FileInfo(path);
         }

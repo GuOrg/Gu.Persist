@@ -42,7 +42,11 @@
         /// <param name="value">The value.</param>
         public void Add<T>(string fullFileName, T value)
         {
-            Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
+            if (string.IsNullOrEmpty(fullFileName))
+            {
+                throw new ArgumentNullException(nameof(fullFileName));
+            }
+
             if (value is null)
             {
                 return;
@@ -61,7 +65,10 @@
         /// <returns>True if a cached value was found.</returns>
         public bool ContainsKey(string fullFileName)
         {
-            Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
+            if (string.IsNullOrEmpty(fullFileName))
+            {
+                throw new ArgumentNullException(nameof(fullFileName));
+            }
 
             lock (this.gate)
             {

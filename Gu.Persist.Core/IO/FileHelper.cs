@@ -153,7 +153,11 @@ namespace Gu.Persist.Core
 
         internal static FileInfo CreateFileInfo(DirectoryInfo directory, string fileName, string extension)
         {
-            Ensure.NotNullOrEmpty(fileName, nameof(fileName));
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             if (extension != null)
             {
                 if (!extension.StartsWith(".", StringComparison.Ordinal))

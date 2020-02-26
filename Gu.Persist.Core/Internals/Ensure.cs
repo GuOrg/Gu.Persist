@@ -7,20 +7,6 @@
 
     internal static class Ensure
     {
-        [Obsolete]
-        internal static void NotNullOrEmpty(string text, string paramName, string message = null)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                if (message is null)
-                {
-                    throw new ArgumentNullException(paramName);
-                }
-
-                throw new ArgumentNullException(paramName, message);
-            }
-        }
-
         internal static void ExtensionIsNot(FileInfo file, string extension, string parameterName, string message = null)
         {
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");

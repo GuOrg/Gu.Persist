@@ -74,14 +74,22 @@
 
         internal static FileInfo WithAppendedExtension(this FileInfo file, string extension)
         {
-            Ensure.NotNullOrEmpty(extension, nameof(extension));
+            if (string.IsNullOrEmpty(extension))
+            {
+                throw new ArgumentNullException(nameof(extension));
+            }
+
             extension = FileHelper.PrependDotIfMissing(extension);
             return new FileInfo(string.Concat(file.FullName, extension));
         }
 
         internal static FileInfo WithRemovedExtension(this FileInfo file, string extension)
         {
-            Ensure.NotNullOrEmpty(extension, nameof(extension));
+            if (string.IsNullOrEmpty(extension))
+            {
+                throw new ArgumentNullException(nameof(extension));
+            }
+
             var ext = Path.GetExtension(file.FullName);
             extension = FileHelper.PrependDotIfMissing(extension);
             if (ext != extension)

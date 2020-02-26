@@ -25,7 +25,11 @@
         /// <inheritdoc/>
         public void Track<T>(string fullFileName, T item)
         {
-            Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
+            if (string.IsNullOrEmpty(fullFileName))
+            {
+                throw new ArgumentNullException(nameof(fullFileName));
+            }
+
             var clone = item is null
                             ? (object)null
                             : this.cloner.Clone(item);
@@ -38,8 +42,16 @@
         /// <inheritdoc/>
         public void Rename(string oldName, string newName, bool overWrite)
         {
-            Ensure.NotNullOrEmpty(oldName, nameof(oldName));
-            Ensure.NotNullOrEmpty(newName, nameof(newName));
+            if (string.IsNullOrEmpty(oldName))
+            {
+                throw new ArgumentNullException(nameof(oldName));
+            }
+
+            if (string.IsNullOrEmpty(newName))
+            {
+                throw new ArgumentNullException(nameof(newName));
+            }
+
             lock (this.gate)
             {
                 this.clones.ChangeKey(oldName, newName, overWrite);
@@ -79,8 +91,12 @@
         /// <returns>True if <paramref name="item"/> has changed since last save.</returns>
         public bool IsDirty<T>(string fullFileName, T item, IEqualityComparer<T> comparer)
         {
-            Ensure.NotNullOrEmpty(fullFileName, nameof(fullFileName));
-            comparer = comparer ?? EqualityComparer<T>.Default;
+            if (string.IsNullOrEmpty(fullFileName))
+            {
+                throw new ArgumentNullException(nameof(fullFileName));
+            }
+
+            comparer ??= EqualityComparer<T>.Default;
             object clone;
             lock (this.gate)
             {
