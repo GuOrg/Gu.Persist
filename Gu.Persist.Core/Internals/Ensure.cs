@@ -7,7 +7,7 @@
 
     internal static class Ensure
     {
-        internal static void ExtensionIsNot(FileInfo file, string extension, string parameterName, string message = null)
+        internal static void ExtensionIsNot(FileInfo file, string extension, string parameterName, string? message = null)
         {
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (string.Equals(file.Extension, extension, StringComparison.OrdinalIgnoreCase))
@@ -21,7 +21,7 @@
             }
         }
 
-        internal static void ExtensionIsNotAnyOf(FileInfo file, string[] extensions, string parameterName, string message = null)
+        internal static void ExtensionIsNotAnyOf(FileInfo file, string[] extensions, string parameterName, string? message = null)
         {
             Debug.Assert(!string.IsNullOrEmpty(parameterName), "parameter name is missing");
             if (extensions.Any(x => string.Equals(file.Extension, x, StringComparison.OrdinalIgnoreCase)))
@@ -35,7 +35,7 @@
             }
         }
 
-        internal static void Exists(FileInfo file, string message = null)
+        internal static void Exists(FileInfo file, string? message = null)
         {
             file.Refresh();
             if (!file.Exists)
@@ -49,7 +49,7 @@
             }
         }
 
-        internal static void DoesNotExist(FileInfo file, string message = null)
+        internal static void DoesNotExist(FileInfo file, string? message = null)
         {
             file.Refresh();
             if (file.Exists)

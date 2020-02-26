@@ -22,7 +22,7 @@
         /// <typeparam name="T">The type to deserialize to.</typeparam>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        Task<T> ReadAsync<T>(Migration migration = null);
+        Task<T> ReadAsync<T>(Migration? migration = null);
 
         /// <summary>
         /// Reads from file for <typeparamref name="T"/>
@@ -38,7 +38,7 @@
         /// </param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        Task<T> ReadOrCreateAsync<T>(Func<T> creator, Migration migration = null);
+        Task<T> ReadOrCreateAsync<T>(Func<T> creator, Migration? migration = null);
 
         /// <summary>
         /// Saves to a file for <typeparamref name="T"/>.

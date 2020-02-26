@@ -18,7 +18,7 @@
         /// <typeparam name="T">The type to read from the file.</typeparam>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file.</returns>
-        T Read<T>(Migration migration = null);
+        T Read<T>(Migration? migration = null);
 
         /// <summary>
         /// Serializes <paramref name="item"/> and saves to a file for <typeparamref name="T"/>.

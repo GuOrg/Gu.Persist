@@ -18,7 +18,7 @@
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file.</returns>
-        T Read<T>(FileInfo file, Migration migration = null);
+        T Read<T>(FileInfo file, Migration? migration = null);
 
         /// <summary>
         /// Serialize <paramref name="item"/> and save to <paramref name="file"/>.
