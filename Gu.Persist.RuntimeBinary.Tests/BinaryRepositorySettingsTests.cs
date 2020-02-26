@@ -51,13 +51,11 @@
                 extension: ".abc",
                 tempExtension: ".cde");
             var serializer = new BinaryFormatter();
-            using (Stream stream = PooledMemoryStream.Borrow())
-            {
-                serializer.Serialize(stream, settings);
-                stream.Position = 0;
-                var roundtripped = (RepositorySettings)serializer.Deserialize(stream);
-                AssertProperties(settings, roundtripped);
-            }
+            using Stream stream = PooledMemoryStream.Borrow();
+            serializer.Serialize(stream, settings);
+            stream.Position = 0;
+            var roundtripped = (RepositorySettings)serializer.Deserialize(stream);
+            AssertProperties(settings, roundtripped);
         }
 
         [Test]
@@ -70,13 +68,11 @@
                 extension: ".abc",
                 tempExtension: ".def");
             var serializer = new BinaryFormatter();
-            using (Stream stream = PooledMemoryStream.Borrow())
-            {
-                serializer.Serialize(stream, settings);
-                stream.Position = 0;
-                var roundtripped = (RepositorySettings)serializer.Deserialize(stream);
-                AssertProperties(settings, roundtripped);
-            }
+            using Stream stream = PooledMemoryStream.Borrow();
+            serializer.Serialize(stream, settings);
+            stream.Position = 0;
+            var roundtripped = (RepositorySettings)serializer.Deserialize(stream);
+            AssertProperties(settings, roundtripped);
         }
 
         private static void AssertProperties(object expected, object actual)
@@ -86,7 +82,7 @@
                 return;
             }
 
-            if (expected == null || actual == null)
+            if (expected is null || actual is null)
             {
                 throw new AssertionException("Assert failed");
             }

@@ -31,13 +31,11 @@ namespace Gu.Persist.Git
 
         internal static FileStatus GetStatus(FileInfo file)
         {
-            using (var repository = new Repository(file.DirectoryName))
-            {
-                Commands.Stage(repository, file.FullName);
-                var status = repository.RetrieveStatus(file.FullName);
-                Commands.Unstage(repository, file.FullName);
-                return status;
-            }
+            using var repository = new Repository(file.DirectoryName);
+            Commands.Stage(repository, file.FullName);
+            var status = repository.RetrieveStatus(file.FullName);
+            Commands.Unstage(repository, file.FullName);
+            return status;
         }
 
         internal static bool StageAndCommit(FileInfo file, bool allowEmptyCommit)
@@ -47,44 +45,40 @@ namespace Gu.Persist.Git
                 return false;
             }
 
-            using (var repository = new Repository(file.DirectoryName))
-            {
-                Commands.Stage(repository, file.FullName, StageOptionsIncludeIgnored);
-                var status = repository.RetrieveStatus(file.FullName);
+            using var repository = new Repository(file.DirectoryName);
+            Commands.Stage(repository, file.FullName, StageOptionsIncludeIgnored);
+            var status = repository.RetrieveStatus(file.FullName);
 
-                switch (status)
-                {
-                    case FileStatus.Nonexistent:
-                    case FileStatus.Unaltered:
-                        return false;
-                    case FileStatus.NewInIndex:
-                    case FileStatus.ModifiedInIndex:
-                    case FileStatus.DeletedFromIndex:
-                    case FileStatus.RenamedInIndex:
-                    case FileStatus.TypeChangeInIndex:
-                    case FileStatus.NewInWorkdir:
-                    case FileStatus.ModifiedInWorkdir:
-                    case FileStatus.DeletedFromWorkdir:
-                    case FileStatus.TypeChangeInWorkdir:
-                    case FileStatus.RenamedInWorkdir:
-                        var commitOptions = allowEmptyCommit ? AllowEmptyCommit : NonEmptyCommitOnly;
-                        repository.Commit($"Create backup for {file.Name}", Signature, Signature, commitOptions);
-                        return true;
-                    case FileStatus.Unreadable:
-                    case FileStatus.Ignored:
-                        throw new InvalidOperationException($"FileStatus: {status}");
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(file), status, "Unknown status.");
-                }
+            switch (status)
+            {
+                case FileStatus.Nonexistent:
+                case FileStatus.Unaltered:
+                    return false;
+                case FileStatus.NewInIndex:
+                case FileStatus.ModifiedInIndex:
+                case FileStatus.DeletedFromIndex:
+                case FileStatus.RenamedInIndex:
+                case FileStatus.TypeChangeInIndex:
+                case FileStatus.NewInWorkdir:
+                case FileStatus.ModifiedInWorkdir:
+                case FileStatus.DeletedFromWorkdir:
+                case FileStatus.TypeChangeInWorkdir:
+                case FileStatus.RenamedInWorkdir:
+                    var commitOptions = allowEmptyCommit ? AllowEmptyCommit : NonEmptyCommitOnly;
+                    repository.Commit($"Create backup for {file.Name}", Signature, Signature, commitOptions);
+                    return true;
+                case FileStatus.Unreadable:
+                case FileStatus.Ignored:
+                    throw new InvalidOperationException($"FileStatus: {status}");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(file), status, "Unknown status.");
             }
         }
 
         internal static void Revert(FileInfo file)
         {
-            using (var repository = new Repository(file.DirectoryName))
-            {
-                repository.CheckoutPaths(repository.Head.FriendlyName, new[] { file.FullName }, ForceCheckoutOptions);
-            }
+            using var repository = new Repository(file.DirectoryName);
+            repository.CheckoutPaths(repository.Head.FriendlyName, new[] { file.FullName }, ForceCheckoutOptions);
         }
     }
 }

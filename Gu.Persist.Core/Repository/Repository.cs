@@ -207,16 +207,14 @@ namespace Gu.Persist.Core
 
             if (migration is null)
             {
-                using (var stream = await file.ReadAsync().ConfigureAwait(false))
+                using var stream = await file.ReadAsync().ConfigureAwait(false);
+                var value = this.serialize.FromStream<T>(stream, this.Settings);
+                if (this.Settings.IsTrackingDirty)
                 {
-                    var value = this.serialize.FromStream<T>(stream, this.Settings);
-                    if (this.Settings.IsTrackingDirty)
-                    {
-                        this.Tracker.Track(file.FullName, value);
-                    }
-
-                    return value;
+                    this.Tracker.Track(file.FullName, value);
                 }
+
+                return value;
             }
 
             using (var stream = await file.ReadAsync().ConfigureAwait(false))
@@ -473,13 +471,11 @@ namespace Gu.Persist.Core
 
             this.EnsureCanSave(file, item);
             this.CacheAndTrackCore(file, item);
-            using (var stream = item != null
+            using var stream = item != null
                 ? this.serialize.ToStream(item, this.Settings)
-                : null)
-            {
-                await this.SaveStreamCoreAsync(file, tempFile, stream)
-                          .ConfigureAwait(false);
-            }
+                : null;
+            await this.SaveStreamCoreAsync(file, tempFile, stream)
+.ConfigureAwait(false);
         }
 
         /// <inheritdoc cref="IFileInfoAsyncRepository.SaveAsync(FileInfo, T)" />
@@ -819,10 +815,8 @@ namespace Gu.Persist.Core
                 pairs.AddRange(this.Backuper.GetRenamePairs(oldName, fileNameWithoutExtension));
             }
 
-            using (var transaction = new RenameTransaction(pairs))
-            {
-                transaction.Commit(overWrite);
-            }
+            using var transaction = new RenameTransaction(pairs);
+            transaction.Commit(overWrite);
         }
 
         /// <inheritdoc/>
@@ -923,23 +917,21 @@ namespace Gu.Persist.Core
                 return value;
             }
 
-            using (var stream = File.OpenRead(file.FullName))
+            using var stream = File.OpenRead(file.FullName);
+            if (migration.TryUpdate(stream, out var updatedStream))
             {
-                if (migration.TryUpdate(stream, out var updatedStream))
+                using (updatedStream)
                 {
-                    using (updatedStream)
-                    {
-                        stream.Dispose();
-                        var item = this.serialize.FromStream<T>(updatedStream, this.Settings);
-                        //// Save so we get a backup etc.
-                        this.Save(file, item);
-                        return item;
-                    }
+                    stream.Dispose();
+                    var item = this.serialize.FromStream<T>(updatedStream, this.Settings);
+                    //// Save so we get a backup etc.
+                    this.Save(file, item);
+                    return item;
                 }
-
-                stream.Position = 0;
-                return this.serialize.FromStream<T>(stream, this.Settings);
             }
+
+            stream.Position = 0;
+            return this.serialize.FromStream<T>(stream, this.Settings);
         }
 
         /// <summary>
@@ -1059,10 +1051,8 @@ namespace Gu.Persist.Core
         protected void SaveCore<T>(FileInfo file, FileInfo tempFile, T item)
         {
             this.CacheAndTrackCore(file, item);
-            using (var transaction = new SaveTransaction(file, tempFile, item, this.Backuper))
-            {
-                transaction.Commit(this.serialize, this.Settings);
-            }
+            using var transaction = new SaveTransaction(file, tempFile, item, this.Backuper);
+            transaction.Commit(this.serialize, this.Settings);
         }
 
         /// <summary>
@@ -1080,10 +1070,8 @@ namespace Gu.Persist.Core
         /// <param name="stream">The <see cref="Stream"/>.</param>
         protected void SaveStreamCore(FileInfo file, FileInfo tempFile, Stream stream)
         {
-            using (var transaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
-            {
-                transaction.Commit(this.serialize, this.Settings);
-            }
+            using var transaction = new SaveTransaction(file, tempFile, stream, this.Backuper);
+            transaction.Commit(this.serialize, this.Settings);
         }
 
         /// <summary>
@@ -1102,11 +1090,9 @@ namespace Gu.Persist.Core
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         protected async Task SaveStreamCoreAsync(FileInfo file, FileInfo tempFile, Stream stream)
         {
-            using (var saveTransaction = new SaveTransaction(file, tempFile, stream, this.Backuper))
-            {
-                await saveTransaction.CommitAsync()
-                                     .ConfigureAwait(false);
-            }
+            using var saveTransaction = new SaveTransaction(file, tempFile, stream, this.Backuper);
+            await saveTransaction.CommitAsync()
+.ConfigureAwait(false);
         }
 
         /// <summary>

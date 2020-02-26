@@ -68,11 +68,9 @@
             var xml = sb.ToString();
 
             ////Console.Write(xml);
-            using (var reader = XmlReader.Create(new StringReader(xml)))
-            {
-                var roundtripped = (DataRepositorySettings)serializer.Deserialize(reader);
-                AssertProperties(settings, roundtripped);
-            }
+            using var reader = XmlReader.Create(new StringReader(xml));
+            var roundtripped = (DataRepositorySettings)serializer.Deserialize(reader);
+            AssertProperties(settings, roundtripped);
         }
 
         [Test]
@@ -94,11 +92,9 @@
 
             var xml = sb.ToString();
             ////Console.Write(xml);
-            using (var reader = XmlReader.Create(new StringReader(xml)))
-            {
-                var roundtripped = (DataRepositorySettings)serializer.Deserialize(reader);
-                AssertProperties(settings, roundtripped);
-            }
+            using var reader = XmlReader.Create(new StringReader(xml));
+            var roundtripped = (DataRepositorySettings)serializer.Deserialize(reader);
+            AssertProperties(settings, roundtripped);
         }
 
         private static void AssertProperties(object expected, object actual)
@@ -108,7 +104,7 @@
                 return;
             }
 
-            if (expected == null || actual == null)
+            if (expected is null || actual is null)
             {
                 throw new AssertionException("Assert failed");
             }

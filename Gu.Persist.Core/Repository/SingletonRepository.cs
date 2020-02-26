@@ -260,7 +260,7 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException($"{this.GetType().Name} cannot save null.");
             }

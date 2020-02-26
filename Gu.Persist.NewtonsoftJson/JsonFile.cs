@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
 
     using Gu.Persist.Core;
-    using JetBrains.Annotations;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -25,17 +24,15 @@
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="item">The <typeparamref name="T"/>.</param>
         /// <returns>The deep clone.</returns>
-        public static T Clone<T>([NotNull] T item)
+        public static T Clone<T>(T item)
         {
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            using (var stream = ToStream(item))
-            {
-                return FromStream<T>(stream);
-            }
+            using var stream = ToStream(item);
+            return FromStream<T>(stream);
         }
 
         /// <summary>
@@ -45,22 +42,20 @@
         /// <param name="item">The <typeparamref name="T"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deep clone.</returns>
-        public static T Clone<T>([NotNull] T item, JsonSerializerSettings settings)
+        public static T Clone<T>(T item, JsonSerializerSettings settings)
         {
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            if (settings == null)
+            if (settings is null)
             {
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            using (var stream = ToStream(item, settings))
-            {
-                return FromStream<T>(stream, settings);
-            }
+            using var stream = ToStream(item, settings);
+            return FromStream<T>(stream, settings);
         }
 
         /// <summary>
@@ -76,10 +71,8 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            using (var stream = File.OpenRead(fileName))
-            {
-                return FromStream<T>(stream);
-            }
+            using var stream = File.OpenRead(fileName);
+            return FromStream<T>(stream);
         }
 
         /// <summary>
@@ -95,10 +88,8 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            using (var stream = File.OpenRead(file.FullName))
-            {
-                return FromStream<T>(stream);
-            }
+            using var stream = File.OpenRead(file.FullName);
+            return FromStream<T>(stream);
         }
 
         /// <summary>
@@ -115,10 +106,8 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            using (var stream = File.OpenRead(fileName))
-            {
-                return FromStream<T>(stream, settings);
-            }
+            using var stream = File.OpenRead(fileName);
+            return FromStream<T>(stream, settings);
         }
 
         /// <summary>
@@ -151,10 +140,8 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
-            {
-                return FromStream<T>(stream);
-            }
+            using var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false);
+            return FromStream<T>(stream);
         }
 
         /// <summary>
@@ -171,10 +158,8 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
-            {
-                return FromStream<T>(stream, settings);
-            }
+            using var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false);
+            return FromStream<T>(stream, settings);
         }
 
         /// <summary>
@@ -216,14 +201,14 @@
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="fileName">The file name.</param>
         /// <param name="item">The <typeparamref name="T"/>.</param>
-        public static void Save<T>(string fileName, [NotNull] T item)
+        public static void Save<T>(string fileName, T item)
         {
             if (fileName is null)
             {
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -244,7 +229,7 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -266,7 +251,7 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -288,7 +273,7 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -296,10 +281,8 @@
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(file.OpenCreate(), DefaultEncoding, bufferSize: 1024, leaveOpen: false)))
-            {
-                serializer.Serialize(writer, item);
-            }
+            using var writer = new JsonTextWriter(new StreamWriter(file.OpenCreate(), DefaultEncoding, bufferSize: 1024, leaveOpen: false));
+            serializer.Serialize(writer, item);
         }
 
         /// <summary>
@@ -316,7 +299,7 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -338,15 +321,13 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            using (var stream = ToStream(item))
-            {
-                await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
-            }
+            using var stream = ToStream(item);
+            await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -364,7 +345,7 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -387,15 +368,13 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            using (var stream = ToStream(item, settings))
-            {
-                await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
-            }
+            using var stream = ToStream(item, settings);
+            await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -421,11 +400,9 @@
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
-            using (var reader = new StreamReader(stream, DefaultEncoding, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true))
-            using (var jsonTextReader = new JsonTextReader(reader))
-            {
-                return serializer.Deserialize<T>(jsonTextReader);
-            }
+            using var reader = new StreamReader(stream, DefaultEncoding, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true);
+            using var jsonTextReader = new JsonTextReader(reader);
+            return serializer.Deserialize<T>(jsonTextReader);
         }
 
         /// <summary>

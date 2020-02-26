@@ -29,10 +29,8 @@ namespace Gu.Persist.NewtonsoftJson
             var serializer = settings != null
                 ? JsonSerializer.Create(settings.JsonSerializerSettings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(stream, JsonFile.DefaultEncoding, bufferSize: 1024, leaveOpen: true)))
-            {
-                serializer.Serialize(writer, item);
-            }
+            using var writer = new JsonTextWriter(new StreamWriter(stream, JsonFile.DefaultEncoding, bufferSize: 1024, leaveOpen: true));
+            serializer.Serialize(writer, item);
         }
 
         /// <inheritdoc/>
@@ -50,7 +48,7 @@ namespace Gu.Persist.NewtonsoftJson
         /// <inheritdoc/>
         public override IEqualityComparer<T> DefaultStructuralEqualityComparer<T>(TSetting setting)
         {
-            return setting.JsonSerializerSettings == null
+            return setting.JsonSerializerSettings is null
                        ? JsonEqualsComparer<T>.Default
                        : new JsonEqualsComparer<T>(setting.JsonSerializerSettings);
         }

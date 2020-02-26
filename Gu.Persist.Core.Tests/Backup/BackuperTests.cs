@@ -183,10 +183,8 @@ namespace Gu.Persist.Core.Tests.Backup
             var file = CreateFile();
             var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 2));
 
-            using (var lockedFile = LockedFile.CreateIfExists(file, x => x.OpenRead()))
-            {
-                backuper.AfterSave(lockedFile);
-            }
+            using var lockedFile = LockedFile.CreateIfExists(file, x => x.OpenRead());
+            backuper.AfterSave(lockedFile);
         }
 
         [Test]

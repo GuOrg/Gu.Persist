@@ -8,7 +8,6 @@
     using System.Xml.Serialization;
 
     using Gu.Persist.Core;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Helper methods for serializing and deserializing xml.
@@ -26,10 +25,8 @@
         public static T Clone<T>(T item)
         {
             Ensure.NotNull<object>(item, nameof(item));
-            using (var stream = ToStream(item))
-            {
-                return FromStream<T>(stream);
-            }
+            using var stream = ToStream(item);
+            return FromStream<T>(stream);
         }
 
         /// <summary>
@@ -41,10 +38,8 @@
         public static T Read<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            using (var stream = File.OpenRead(fileName))
-            {
-                return FromStream<T>(stream);
-            }
+            using var stream = File.OpenRead(fileName);
+            return FromStream<T>(stream);
         }
 
         /// <summary>
@@ -72,10 +67,8 @@
         public static async Task<T> ReadAsync<T>(string fileName)
         {
             Ensure.NotNull(fileName, nameof(fileName));
-            using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
-            {
-                return FromStream<T>(stream);
-            }
+            using var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false);
+            return FromStream<T>(stream);
         }
 
         /// <summary>
@@ -100,14 +93,14 @@
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="fileName">The file name.</param>
         /// <param name="item">The <typeparamref name="T"/>.</param>
-        public static void Save<T>(string fileName, [NotNull] T item)
+        public static void Save<T>(string fileName, T item)
         {
             if (fileName is null)
             {
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -128,18 +121,16 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
             var serializer = Serializers.GetOrAdd(item.GetType(), x => new XmlSerializer(item.GetType()));
-            using (var stream = file.OpenCreate())
+            using var stream = file.OpenCreate();
+            lock (serializer)
             {
-                lock (serializer)
-                {
-                    serializer.Serialize(stream, item);
-                }
+                serializer.Serialize(stream, item);
             }
         }
 
@@ -168,10 +159,8 @@
         {
             Ensure.NotNull(file, nameof(file));
             Ensure.NotNull<object>(item, nameof(item));
-            using (var stream = ToStream(item))
-            {
-                await file.SaveAsync(stream).ConfigureAwait(false);
-            }
+            using var stream = ToStream(item);
+            await file.SaveAsync(stream).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -185,11 +174,9 @@
             var serializer = Serializers.GetOrAdd(typeof(T), x => new XmlSerializer(typeof(T)));
             lock (serializer)
             {
-                using (var reader = XmlReader.Create(stream))
-                {
-                    var setting = (T)serializer.Deserialize(reader);
-                    return setting;
-                }
+                using var reader = XmlReader.Create(stream);
+                var setting = (T)serializer.Deserialize(reader);
+                return setting;
             }
         }
 

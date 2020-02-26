@@ -48,13 +48,11 @@
                 extension: ".cde",
                 tempExtension: ".fgh");
             var serializer = new DataContractSerializer(settings.GetType());
-            using (Stream stream = PooledMemoryStream.Borrow())
-            {
-                serializer.WriteObject(stream, settings);
-                stream.Position = 0;
-                var roundtripped = (RepositorySettings)serializer.ReadObject(stream);
-                AssertProperties(settings, roundtripped);
-            }
+            using Stream stream = PooledMemoryStream.Borrow();
+            serializer.WriteObject(stream, settings);
+            stream.Position = 0;
+            var roundtripped = (RepositorySettings)serializer.ReadObject(stream);
+            AssertProperties(settings, roundtripped);
         }
 
         [Test]
@@ -67,13 +65,11 @@
                 extension: ".cde",
                 tempExtension: ".fgh");
             var serializer = new DataContractSerializer(settings.GetType());
-            using (Stream stream = PooledMemoryStream.Borrow())
-            {
-                serializer.WriteObject(stream, settings);
-                stream.Position = 0;
-                var roundtripped = (RepositorySettings)serializer.ReadObject(stream);
-                AssertProperties(settings, roundtripped);
-            }
+            using Stream stream = PooledMemoryStream.Borrow();
+            serializer.WriteObject(stream, settings);
+            stream.Position = 0;
+            var roundtripped = (RepositorySettings)serializer.ReadObject(stream);
+            AssertProperties(settings, roundtripped);
         }
 
         private static void AssertProperties(object expected, object actual)
@@ -83,7 +79,7 @@
                 return;
             }
 
-            if (expected == null || actual == null)
+            if (expected is null || actual is null)
             {
                 throw new AssertionException("Assert failed");
             }

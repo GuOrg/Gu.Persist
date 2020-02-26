@@ -68,7 +68,7 @@
                 return;
             }
 
-            if (expected == null || actual == null)
+            if (expected is null || actual is null)
             {
                 Assert.AreEqual(expected, actual);
             }

@@ -52,19 +52,17 @@
                 throw new ArgumentNullException(nameof(obj));
             }
 
-            using (var stream = this.GetStream(obj))
+            using var stream = this.GetStream(obj);
+            var bytes = stream.GetBuffer();
+            unchecked
             {
-                var bytes = stream.GetBuffer();
-                unchecked
+                var hash = 17;
+                for (var i = 0; i < stream.Length; i++)
                 {
-                    var hash = 17;
-                    for (var i = 0; i < stream.Length; i++)
-                    {
-                        hash = (hash * 31) + bytes[i];
-                    }
-
-                    return hash;
+                    hash = (hash * 31) + bytes[i];
                 }
+
+                return hash;
             }
         }
 

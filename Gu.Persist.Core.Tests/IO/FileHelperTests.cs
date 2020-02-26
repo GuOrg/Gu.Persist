@@ -297,26 +297,22 @@ namespace Gu.Persist.Core.Tests.IO
             var fileInfo = this.directory.CreateFileInfoInDirectory("SaveAsyncTest.cfg");
             using (var stream = PooledMemoryStream.Borrow())
             {
-                using (var writer = new StreamWriter(stream))
-                {
-                    writer.Write("1 2");
-                    writer.Flush();
-                    stream.Position = 0;
-                    await FileHelper.SaveAsync(fileInfo, stream).ConfigureAwait(false);
-                }
+                using var writer = new StreamWriter(stream);
+                writer.Write("1 2");
+                writer.Flush();
+                stream.Position = 0;
+                await FileHelper.SaveAsync(fileInfo, stream).ConfigureAwait(false);
             }
 
             var text = File.ReadAllText(fileInfo.FullName);
             Assert.AreEqual("1 2", text);
             using (var stream = PooledMemoryStream.Borrow())
             {
-                using (var writer = new StreamWriter(stream))
-                {
-                    writer.Write("3");
-                    writer.Flush();
-                    stream.Position = 0;
-                    await FileHelper.SaveAsync(fileInfo, stream).ConfigureAwait(false);
-                }
+                using var writer = new StreamWriter(stream);
+                writer.Write("3");
+                writer.Flush();
+                stream.Position = 0;
+                await FileHelper.SaveAsync(fileInfo, stream).ConfigureAwait(false);
             }
 
             text = File.ReadAllText(fileInfo.FullName);

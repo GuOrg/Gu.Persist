@@ -270,10 +270,8 @@
             }
 
             Ensure.NotNullOrEmpty(newName, nameof(newName));
-            using (var transaction = new RenameTransaction(this.GetRenamePairs(file, newName)))
-            {
-                transaction.Commit(overWrite);
-            }
+            using var transaction = new RenameTransaction(this.GetRenamePairs(file, newName));
+            transaction.Commit(overWrite);
         }
 
         /// <inheritdoc />

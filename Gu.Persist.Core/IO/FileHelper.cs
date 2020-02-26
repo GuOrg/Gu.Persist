@@ -22,10 +22,8 @@ namespace Gu.Persist.Core
         /// <param name="serialize">Deserializer.</param>
         internal static T Read<T, TSettings>(this FileInfo file, TSettings setting, Serialize<TSettings> serialize)
         {
-            using (var stream = File.OpenRead(file.FullName))
-            {
-                return serialize.FromStream<T>(stream, setting);
-            }
+            using var stream = File.OpenRead(file.FullName);
+            return serialize.FromStream<T>(stream, setting);
         }
 
         internal static Task<Stream> ReadAsync(this FileInfo file)
@@ -52,11 +50,9 @@ namespace Gu.Persist.Core
         /// </summary>
         internal static async Task SaveAsync(this FileInfo file, Stream stream)
         {
-            using (var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                await stream.CopyToAsync(fileStream)
-                            .ConfigureAwait(false);
-            }
+            using var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None);
+            await stream.CopyToAsync(fileStream)
+.ConfigureAwait(false);
         }
 
         internal static void HardDelete(this FileInfo file)

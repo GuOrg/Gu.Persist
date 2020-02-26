@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
 
     using Gu.Persist.Core;
-    using JetBrains.Annotations;
 
     /// <summary>
     /// Helper methods for reading  json.
@@ -19,17 +18,15 @@
         /// <typeparam name="T">The type of <paramref name="item"/>.</typeparam>
         /// <param name="item">The <typeparamref name="T"/>.</param>
         /// <returns>The deep clone.</returns>
-        public static T Clone<T>([NotNull] T item)
+        public static T Clone<T>(T item)
         {
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            using (var stream = ToStream(item))
-            {
-                return FromStream<T>(stream);
-            }
+            using var stream = ToStream(item);
+            return FromStream<T>(stream);
         }
 
         /// <summary>
@@ -45,10 +42,8 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            using (var stream = File.OpenRead(fileName))
-            {
-                return FromStream<T>(stream);
-            }
+            using var stream = File.OpenRead(fileName);
+            return FromStream<T>(stream);
         }
 
         /// <summary>
@@ -80,10 +75,8 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            using (var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false))
-            {
-                return FromStream<T>(stream);
-            }
+            using var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false);
+            return FromStream<T>(stream);
         }
 
         /// <summary>
@@ -115,7 +108,7 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -136,17 +129,15 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
             var formatter = new BinaryFormatter();
 
-            using (var stream = file.OpenCreate())
-            {
-                formatter.Serialize(stream, item);
-            }
+            using var stream = file.OpenCreate();
+            formatter.Serialize(stream, item);
         }
 
         /// <summary>
@@ -163,7 +154,7 @@
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -185,15 +176,13 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            using (var stream = ToStream(item))
-            {
-                await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
-            }
+            using var stream = ToStream(item);
+            await FileHelper.SaveAsync(file, stream).ConfigureAwait(false);
         }
 
         /// <summary>

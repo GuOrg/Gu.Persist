@@ -51,28 +51,26 @@
         /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty.</exception>
         internal static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
         {
-            using (var sourceIterator = source.GetEnumerator())
+            using var sourceIterator = source.GetEnumerator();
+            if (!sourceIterator.MoveNext())
             {
-                if (!sourceIterator.MoveNext())
-                {
-                    throw new InvalidOperationException("Sequence was empty");
-                }
-
-                var min = sourceIterator.Current;
-                var minKey = selector(min);
-                while (sourceIterator.MoveNext())
-                {
-                    var candidate = sourceIterator.Current;
-                    var candidateProjected = selector(candidate);
-                    if (comparer.Compare(candidateProjected, minKey) < 0)
-                    {
-                        min = candidate;
-                        minKey = candidateProjected;
-                    }
-                }
-
-                return min;
+                throw new InvalidOperationException("Sequence was empty");
             }
+
+            var min = sourceIterator.Current;
+            var minKey = selector(min);
+            while (sourceIterator.MoveNext())
+            {
+                var candidate = sourceIterator.Current;
+                var candidateProjected = selector(candidate);
+                if (comparer.Compare(candidateProjected, minKey) < 0)
+                {
+                    min = candidate;
+                    minKey = candidateProjected;
+                }
+            }
+
+            return min;
         }
 
         /// <summary>
@@ -119,28 +117,26 @@
         /// <exception cref="InvalidOperationException"><paramref name="source"/> is empty.</exception>
         internal static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
         {
-            using (var sourceIterator = source.GetEnumerator())
+            using var sourceIterator = source.GetEnumerator();
+            if (!sourceIterator.MoveNext())
             {
-                if (!sourceIterator.MoveNext())
-                {
-                    throw new InvalidOperationException("Sequence was empty");
-                }
-
-                var max = sourceIterator.Current;
-                var maxKey = selector(max);
-                while (sourceIterator.MoveNext())
-                {
-                    var candidate = sourceIterator.Current;
-                    var candidateProjected = selector(candidate);
-                    if (comparer.Compare(candidateProjected, maxKey) > 0)
-                    {
-                        max = candidate;
-                        maxKey = candidateProjected;
-                    }
-                }
-
-                return max;
+                throw new InvalidOperationException("Sequence was empty");
             }
+
+            var max = sourceIterator.Current;
+            var maxKey = selector(max);
+            while (sourceIterator.MoveNext())
+            {
+                var candidate = sourceIterator.Current;
+                var candidateProjected = selector(candidate);
+                if (comparer.Compare(candidateProjected, maxKey) > 0)
+                {
+                    max = candidate;
+                    maxKey = candidateProjected;
+                }
+            }
+
+            return max;
         }
     }
 }

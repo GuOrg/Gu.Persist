@@ -8,7 +8,7 @@
     {
         public static FileCache GetCache(this ISingletonRepository repo)
         {
-            if (repo == null)
+            if (repo is null)
             {
                 return null;
             }

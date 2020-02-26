@@ -28,37 +28,35 @@
         /// <inheritdoc/>
         public override bool TryUpdate(Stream stream, out Stream updated)
         {
-            using (var reader = new JsonTextReader(new StreamReader(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true)))
+            using var reader = new JsonTextReader(new StreamReader(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true));
+            var jObject = JObject.Load(reader);
+            jObject.PropertyChanged += JObjectOnPropertyChanged;
+            var changed = false;
+            var updatedJObject = jObject;
+            foreach (var step in this.steps)
             {
-                var jObject = JObject.Load(reader);
-                jObject.PropertyChanged += JObjectOnPropertyChanged;
-                var changed = false;
-                var updatedJObject = jObject;
-                foreach (var step in this.steps)
-                {
-                    updatedJObject = step(updatedJObject);
-                }
+                updatedJObject = step(updatedJObject);
+            }
 
-                if (jObject == updatedJObject &&
-                    !changed)
-                {
-                    updated = null;
-                    return false;
-                }
+            if (jObject == updatedJObject &&
+                !changed)
+            {
+                updated = null;
+                return false;
+            }
 
-                updated = PooledMemoryStream.Borrow();
-                using (var jsonWriter = new JsonTextWriter(new StreamWriter(updated, Encoding.UTF8, 1024, leaveOpen: true)))
-                {
-                    jObject.WriteTo(jsonWriter);
-                }
+            updated = PooledMemoryStream.Borrow();
+            using (var jsonWriter = new JsonTextWriter(new StreamWriter(updated, Encoding.UTF8, 1024, leaveOpen: true)))
+            {
+                jObject.WriteTo(jsonWriter);
+            }
 
-                updated.Position = 0;
-                return true;
+            updated.Position = 0;
+            return true;
 
-                void JObjectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-                {
-                    changed = true;
-                }
+            void JObjectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+            {
+                changed = true;
             }
         }
     }
