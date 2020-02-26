@@ -21,7 +21,7 @@
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
-        Task<T> ReadAsync<T>(FileInfo file, Migration migration = null);
+        Task<T> ReadAsync<T>(FileInfo file, Migration? migration = null);
 
         /// <summary>
         /// Reads from file specified by <paramref name="file"/>.
@@ -33,7 +33,7 @@
         /// <param name="creator">The <see cref="Func{T}"/>.</param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
-        Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator, Migration migration = null);
+        Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator, Migration? migration = null);
 
         /// <summary>
         /// Serialize <paramref name="item"/> and save to <paramref name="file"/>.

@@ -25,7 +25,7 @@
         /// </param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        Task<T> ReadAsync<T>(string fileName, Migration migration = null);
+        Task<T> ReadAsync<T>(string fileName, Migration? migration = null);
 
         /// <summary>
         /// Reads from file specified by <paramref name="fileName"/>.
@@ -47,7 +47,7 @@
         /// </param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator, Migration migration = null);
+        Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator, Migration? migration = null);
 
         /// <summary>
         /// Serialize <paramref name="item"/> and save to <paramref name="fileName"/>.
