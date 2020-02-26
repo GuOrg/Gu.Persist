@@ -3,8 +3,6 @@ namespace Gu.Persist.Demo
     using System;
     using System.Windows.Input;
 
-    using Gu.Persist.Core;
-
     public class RelayCommand : ICommand
     {
         private readonly Action<object> execute;
@@ -17,9 +15,7 @@ namespace Gu.Persist.Demo
 
         public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            Ensure.NotNull(execute, nameof(execute));
-
-            this.execute = execute;
+            this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
             this.canExecute = canExecute ?? (_ => true);
         }
 

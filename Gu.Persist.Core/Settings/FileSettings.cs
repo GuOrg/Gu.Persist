@@ -15,7 +15,11 @@
         /// <param name="extension">The extensions.</param>
         public FileSettings(string directory, string extension)
         {
-            Ensure.NotNull(extension, nameof(extension));
+            if (extension is null)
+            {
+                throw new ArgumentNullException(nameof(extension));
+            }
+
             this.Directory = directory ?? throw new ArgumentNullException(nameof(directory));
             this.Extension = FileHelper.PrependDotIfMissing(extension);
         }

@@ -24,7 +24,11 @@
         /// <returns>The deep clone.</returns>
         public static T Clone<T>(T item)
         {
-            Ensure.NotNull<object>(item, nameof(item));
+            if (item is null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             using var stream = ToStream(item);
             return FromStream<T>(stream);
         }
@@ -37,7 +41,11 @@
         /// <returns>The deserialized content.</returns>
         public static T Read<T>(string fileName)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             using var stream = File.OpenRead(fileName);
             return FromStream<T>(stream);
         }
@@ -66,7 +74,11 @@
         /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
         public static async Task<T> ReadAsync<T>(string fileName)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             using var stream = await FileHelper.ReadAsync(fileName).ConfigureAwait(false);
             return FromStream<T>(stream);
         }
@@ -143,8 +155,16 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
         public static Task SaveAsync<T>(string fileName, T item)
         {
-            Ensure.NotNull(fileName, nameof(fileName));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (fileName is null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            if (item is null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             return SaveAsync(new FileInfo(fileName), item);
         }
 
@@ -157,8 +177,16 @@
         /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
         public static async Task SaveAsync<T>(FileInfo file, T item)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNull<object>(item, nameof(item));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (item is null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             using var stream = ToStream(item);
             await file.SaveAsync(stream).ConfigureAwait(false);
         }

@@ -146,8 +146,16 @@
         /// <inheritdoc/>
         public IReadOnlyList<RenamePair> GetRenamePairs(FileInfo file, string newName)
         {
-            Ensure.NotNull(file, nameof(file));
-            Ensure.NotNullOrEmpty(newName, nameof(newName));
+            if (file is null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            if (string.IsNullOrEmpty(newName))
+            {
+                throw new ArgumentNullException(nameof(newName));
+            }
+
             return RenamePair.EmptyArray;
         }
 

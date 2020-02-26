@@ -29,12 +29,23 @@
             string tempExtension = ".tmp")
             : base(directory, extension)
         {
-            Ensure.NotNullOrEmpty(extension, nameof(extension));
-            Ensure.NotNullOrEmpty(tempExtension, nameof(tempExtension));
-            Ensure.NotNull(directory, nameof(directory));
+            if (string.IsNullOrEmpty(directory))
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
+            if (string.IsNullOrEmpty(extension))
+            {
+                throw new ArgumentNullException(nameof(extension));
+            }
+
+            if (string.IsNullOrEmpty(tempExtension))
+            {
+                throw new ArgumentNullException(nameof(tempExtension));
+            }
 
             this.IsTrackingDirty = isTrackingDirty;
-            this.BackupSettings = backupSettings;
+            this.BackupSettings = backupSettings ?? throw new ArgumentNullException(nameof(backupSettings));
             this.TempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
 

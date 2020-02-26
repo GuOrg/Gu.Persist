@@ -1,5 +1,6 @@
 namespace Gu.Persist.SystemXml
 {
+    using System;
     using System.Reflection;
     using System.Xml;
     using System.Xml.Schema;
@@ -88,7 +89,11 @@ namespace Gu.Persist.SystemXml
                             .GetField($"<{propertyName}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance) ??
                         typeof(FileSettings)
                             .GetField($"<{propertyName}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-            Ensure.NotNull(field, nameof(field));
+            if (field is null)
+            {
+                throw new InvalidOperationException("Could not find backing field for " + propertyName);
+            }
+
             field.SetValue(this, value);
         }
     }
