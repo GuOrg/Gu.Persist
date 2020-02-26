@@ -36,7 +36,7 @@ namespace Gu.Persist.Core
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
-        T Read<T>(FileInfo file, Migration migration = null);
+        T Read<T>(FileInfo file, Migration? migration = null);
 
         /// <summary>
         /// Reads from file specified by <paramref name="fileName"/>.
@@ -53,7 +53,7 @@ namespace Gu.Persist.Core
         /// </param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        T Read<T>(string fileName, Migration migration = null);
+        T Read<T>(string fileName, Migration? migration = null);
 
         /// <summary>
         /// Reads from file for <typeparamref name="T"/>.
@@ -64,7 +64,7 @@ namespace Gu.Persist.Core
         /// <typeparam name="T">The type to read from the file.</typeparam>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        T Read<T>(Migration migration = null);
+        T Read<T>(Migration? migration = null);
 
         /// <summary>
         /// Reads from file. The filename is <typeparamref name="T"/>.Name.
@@ -75,7 +75,7 @@ namespace Gu.Persist.Core
         /// <typeparam name="T">The type to read from the file.</typeparam>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        Task<T> ReadAsync<T>(Migration migration = null);
+        Task<T> ReadAsync<T>(Migration? migration = null);
 
         /// <summary>
         /// Reads from file specified by <paramref name="fileName"/>.
@@ -92,7 +92,7 @@ namespace Gu.Persist.Core
         /// </param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        Task<T> ReadAsync<T>(string fileName, Migration migration = null);
+        Task<T> ReadAsync<T>(string fileName, Migration? migration = null);
 
         /// <summary>
         /// <see cref="IFileInfoAsyncRepository.ReadAsync{T}(FileInfo, Migration)"/>.
@@ -101,7 +101,7 @@ namespace Gu.Persist.Core
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
-        Task<T> ReadAsync<T>(FileInfo file, Migration migration = null);
+        Task<T> ReadAsync<T>(FileInfo file, Migration? migration = null);
 
         /// <summary>
         /// Reads from file specified by <paramref name="file"/>.
@@ -113,7 +113,7 @@ namespace Gu.Persist.Core
         /// <param name="creator">The <see cref="Func{T}"/>.</param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
-        T ReadOrCreate<T>(FileInfo file, Func<T> creator, Migration migration = null);
+        T ReadOrCreate<T>(FileInfo file, Func<T> creator, Migration? migration = null);
 
         /// <summary>
         /// Reads from file specified by <paramref name="fileName"/>.
@@ -135,7 +135,7 @@ namespace Gu.Persist.Core
         /// </param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        T ReadOrCreate<T>(string fileName, Func<T> creator, Migration migration = null);
+        T ReadOrCreate<T>(string fileName, Func<T> creator, Migration? migration = null);
 
         /// <summary>
         /// Reads from file for <typeparamref name="T"/>
@@ -151,7 +151,7 @@ namespace Gu.Persist.Core
         /// </param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        T ReadOrCreate<T>(Func<T> creator, Migration migration = null);
+        T ReadOrCreate<T>(Func<T> creator, Migration? migration = null);
 
         /// <summary>
         /// Reads from file specified by <paramref name="file"/>.
@@ -163,7 +163,7 @@ namespace Gu.Persist.Core
         /// <param name="creator">The <see cref="Func{T}"/>.</param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of <paramref name="file"/>.</returns>
-        Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator, Migration migration = null);
+        Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator, Migration? migration = null);
 
         /// <summary>
         /// Reads from file specified by <paramref name="fileName"/>.
@@ -185,7 +185,7 @@ namespace Gu.Persist.Core
         /// </param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator, Migration migration = null);
+        Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator, Migration? migration = null);
 
         /// <summary>
         /// Reads from file for <typeparamref name="T"/>
@@ -201,7 +201,7 @@ namespace Gu.Persist.Core
         /// </param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized contents of the file corresponding to <typeparamref name="T"/>.</returns>
-        Task<T> ReadOrCreateAsync<T>(Func<T> creator, Migration migration = null);
+        Task<T> ReadOrCreateAsync<T>(Func<T> creator, Migration? migration = null);
 
         /// <summary>
         /// 1) Creates backup if specified in settings.

@@ -148,7 +148,7 @@ namespace Gu.Persist.Core
         public IBackuper Backuper { get; }
 
         /// <inheritdoc/>
-        public virtual T Read<T>(FileInfo file, Migration migration = null)
+        public virtual T Read<T>(FileInfo file, Migration? migration = null)
         {
             if (file is null)
             {
@@ -159,14 +159,14 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual T Read<T>(string fileName, Migration migration = null)
+        public virtual T Read<T>(string fileName, Migration? migration = null)
         {
             var file = this.GetFileInfoCore(fileName);
             return this.ReadCore<T>(file, migration);
         }
 
         /// <inheritdoc/>
-        public virtual T Read<T>(Migration migration = null)
+        public virtual T Read<T>(Migration? migration = null)
         {
             return this.ReadCore<T>(this.GetFileInfo<T>(), migration);
         }
@@ -197,7 +197,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual async Task<T> ReadAsync<T>(FileInfo file, Migration migration = null)
+        public virtual async Task<T> ReadAsync<T>(FileInfo file, Migration? migration = null)
         {
             // not checking exists, framework exception is more familiar.
             if (file is null)
@@ -237,14 +237,14 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<T> ReadAsync<T>(string fileName, Migration migration = null)
+        public virtual Task<T> ReadAsync<T>(string fileName, Migration? migration = null)
         {
             var fileInfo = this.GetFileInfoCore(fileName);
             return this.ReadAsync<T>(fileInfo, migration);
         }
 
         /// <inheritdoc/>
-        public virtual Task<T> ReadAsync<T>(Migration migration = null)
+        public virtual Task<T> ReadAsync<T>(Migration? migration = null)
         {
             var file = this.GetFileInfo<T>();
             return this.ReadAsync<T>(file, migration);
@@ -276,7 +276,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual T ReadOrCreate<T>(FileInfo file, Func<T> creator, Migration migration = null)
+        public virtual T ReadOrCreate<T>(FileInfo file, Func<T> creator, Migration? migration = null)
         {
             if (file is null)
             {
@@ -292,7 +292,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual T ReadOrCreate<T>(string fileName, Func<T> creator, Migration migration = null)
+        public virtual T ReadOrCreate<T>(string fileName, Func<T> creator, Migration? migration = null)
         {
             if (fileName is null)
             {
@@ -309,7 +309,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual T ReadOrCreate<T>(Func<T> creator, Migration migration = null)
+        public virtual T ReadOrCreate<T>(Func<T> creator, Migration? migration = null)
         {
             if (creator is null)
             {
@@ -320,7 +320,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator, Migration migration = null)
+        public virtual Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator, Migration? migration = null)
         {
             if (file is null)
             {
@@ -336,7 +336,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator, Migration migration = null)
+        public virtual Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator, Migration? migration = null)
         {
             if (fileName is null)
             {
@@ -353,7 +353,7 @@ namespace Gu.Persist.Core
         }
 
         /// <inheritdoc/>
-        public virtual Task<T> ReadOrCreateAsync<T>(Func<T> creator, Migration migration = null)
+        public virtual Task<T> ReadOrCreateAsync<T>(Func<T> creator, Migration? migration = null)
         {
             if (creator is null)
             {
@@ -886,7 +886,7 @@ namespace Gu.Persist.Core
         /// <typeparam name="T">The type to read and deserialize.</typeparam>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized instance.</returns>
-        protected T ReadCore<T>(Migration migration = null)
+        protected T ReadCore<T>(Migration? migration = null)
         {
             var file = this.GetFileInfoCore<T>();
             return this.ReadCore<T>(file, migration);
@@ -899,7 +899,7 @@ namespace Gu.Persist.Core
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized instance.</returns>
-        protected virtual T ReadCore<T>(FileInfo file, Migration migration = null)
+        protected virtual T ReadCore<T>(FileInfo file, Migration? migration = null)
         {
             if (file is null)
             {
@@ -943,7 +943,7 @@ namespace Gu.Persist.Core
         /// <param name="creator">The <see cref="Func{T}"/>.</param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized instance.</returns>
-        protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator, Migration migration = null)
+        protected T ReadOrCreateCore<T>(FileInfo file, Func<T> creator, Migration? migration = null)
         {
             if (file is null)
             {
@@ -978,7 +978,7 @@ namespace Gu.Persist.Core
         /// <param name="creator">The <see cref="Func{T}"/>.</param>
         /// <param name="migration">An optional <see cref="Migration"/> for updating the contents of the file.</param>
         /// <returns>The deserialized instance.</returns>
-        protected async Task<T> ReadOrCreateCoreAsync<T>(FileInfo file, Func<T> creator, Migration migration = null)
+        protected async Task<T> ReadOrCreateCoreAsync<T>(FileInfo file, Func<T> creator, Migration? migration = null)
         {
             if (file is null)
             {
