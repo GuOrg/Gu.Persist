@@ -10,6 +10,7 @@
             TKey fromKey,
             TKey toKey,
             bool overWrite)
+            where TKey: notnull
         {
             if (dictionary.TryRemove(fromKey, out var value))
             {

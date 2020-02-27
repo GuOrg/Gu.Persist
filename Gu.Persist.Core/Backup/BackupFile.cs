@@ -44,7 +44,7 @@
             return $"File: {this.File}, TimeStamp: {this.TimeStamp}";
         }
 
-        internal static FileInfo GetRestoreFileFor(FileInfo file, IBackupSettings setting)
+        internal static FileInfo? GetRestoreFileFor(FileInfo file, IBackupSettings setting)
         {
             var allBackups = GetAllBackupsFor(file, setting);
             if (!allBackups.Any())

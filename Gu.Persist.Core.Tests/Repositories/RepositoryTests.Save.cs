@@ -166,7 +166,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (repository.Settings.BackupSettings != null)
             {
                 var backupFile = testCase.BackupFile<DummySerializable>(repository);
-                AssertFile.Exists(false, backupFile);
+                AssertFile.Exists(false, backupFile!);
             }
 
             var read = this.Read<DummySerializable>(file);
@@ -186,7 +186,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (repository.Settings.BackupSettings != null)
             {
                 var backupFile = testCase.BackupFile<DummySerializable>(repository);
-                AssertFile.Exists(true, backupFile);
+                AssertFile.Exists(true, backupFile!);
             }
 
             var read = this.Read<DummySerializable>(file);
