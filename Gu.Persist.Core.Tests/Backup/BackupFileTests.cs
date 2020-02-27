@@ -79,7 +79,7 @@ namespace Gu.Persist.Core.Tests.Backup
             file.CreateFileOnDisk();
             backup.CreateFileOnDisk();
             var restore = BackupFile.GetRestoreFileFor(file, Default.BackupSettings(Directory));
-            Assert.AreEqual(backup.FullName, restore.FullName);
+            Assert.AreEqual(backup.FullName, restore!.FullName);
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace Gu.Persist.Core.Tests.Backup
             backup.WithTimeStamp(DateTime.Now.AddYears(-1), settings).CreateFileOnDisk();
 
             var restore = BackupFile.GetRestoreFileFor(file, settings);
-            Assert.AreEqual(backupOneMinuteOld.FullName, restore.FullName);
+            Assert.AreEqual(backupOneMinuteOld.FullName, restore!.FullName);
         }
 
         [Test]
