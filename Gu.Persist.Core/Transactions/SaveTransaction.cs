@@ -13,9 +13,9 @@ namespace Gu.Persist.Core
         private readonly FileInfo tempFile;
         private readonly object contents;
         private readonly IBackuper backuper;
-        private LockedFile lockedFile;
-        private LockedFile lockedSoftDelete;
-        private LockedFile lockedTempFile;
+        private LockedFile? lockedFile;
+        private LockedFile? lockedSoftDelete;
+        private LockedFile? lockedTempFile;
         private bool fileExistedBefore;
 
         internal SaveTransaction(FileInfo file, FileInfo tempFile, object contents, IBackuper backuper)

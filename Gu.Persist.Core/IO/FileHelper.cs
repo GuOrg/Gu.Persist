@@ -67,7 +67,7 @@ namespace Gu.Persist.Core
             softDelete?.Delete();
         }
 
-        internal static FileInfo SoftDelete(this FileInfo file)
+        internal static FileInfo? SoftDelete(this FileInfo file)
         {
             file.Refresh();
             if (!file.Exists)
@@ -151,7 +151,7 @@ namespace Gu.Persist.Core
             _ = Kernel32.MoveFileEx(backup.FullName, file.FullName, MoveFileFlags.REPLACE_EXISTING);
         }
 
-        internal static FileInfo CreateFileInfo(DirectoryInfo directory, string fileName, string extension)
+        internal static FileInfo CreateFileInfo(DirectoryInfo? directory, string fileName, string extension)
         {
             if (string.IsNullOrEmpty(fileName))
             {
@@ -182,6 +182,11 @@ namespace Gu.Persist.Core
             if (Path.IsPathRooted(fileName))
             {
                 return new FileInfo(fileName);
+            }
+
+            if (directory is null)
+            {
+                throw new ArgumentNullException("directory cannot be null when file name is not rooted.", nameof(directory));
             }
 
             var fullFileName = Path.Combine(directory.FullName, fileName);

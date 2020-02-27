@@ -11,7 +11,7 @@
     [DebuggerDisplay("{File.Name}")]
     public sealed class LockedFile : IDisposable
     {
-        private LockedFile(FileInfo file, Stream stream)
+        private LockedFile(FileInfo file, Stream? stream)
         {
             this.File = file;
             this.Stream = stream;
@@ -26,7 +26,7 @@
         /// Gets the stream locking the <see cref="File"/>
         /// Can be null if file does not exits.
         /// </summary>
-        public Stream Stream { get; }
+        public Stream? Stream { get; }
 
         /// <summary>
         /// Create a locked file.
