@@ -319,7 +319,7 @@ namespace Gu.Persist.Core.Tests.IO
             Assert.AreEqual("3", text);
         }
 
-        private FileInfo CreateFileInfo([CallerMemberName] string name = null) =>
+        private FileInfo CreateFileInfo([CallerMemberName] string? name = null) =>
             this.directory.CreateFileInfoInDirectory(name + ".cfg");
     }
 }

@@ -2,6 +2,7 @@
 namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using NUnit.Framework;
 
@@ -242,7 +243,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             internal bool WasCalled;
 
-            public override bool TryUpdate(Stream stream, out Stream updated)
+            public override bool TryUpdate(Stream stream, [NotNullWhen(true)] out Stream? updated)
             {
                 this.WasCalled = true;
                 updated = null;

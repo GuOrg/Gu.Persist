@@ -186,7 +186,7 @@ namespace Gu.Persist.Core
 
             if (directory is null)
             {
-                throw new ArgumentNullException("directory cannot be null when file name is not rooted.", nameof(directory));
+                throw new ArgumentNullException(nameof(directory), "directory cannot be null when file name is not rooted.");
             }
 
             var fullFileName = Path.Combine(directory.FullName, fileName);

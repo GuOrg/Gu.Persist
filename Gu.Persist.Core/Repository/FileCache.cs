@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     /// <summary>
@@ -19,7 +20,7 @@
         /// <param name="fullFileName">The file name.</param>
         /// <param name="cached">The cahced instance.</param>
         /// <returns>True if a cached instance for a <paramref name="fullFileName"/> exists.</returns>
-        public bool TryGetValue<T>(string fullFileName, out T cached)
+        public bool TryGetValue<T>(string fullFileName, [MaybeNullWhen(false)] out T cached)
         {
             lock (this.gate)
             {
@@ -30,7 +31,7 @@
                 }
             }
 
-            cached = default;
+            cached = default!;
             return false;
         }
 

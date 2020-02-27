@@ -95,7 +95,7 @@
         }
 
         /// <inheritdoc/>
-        public override async Task<T> ReadAsync<T>(FileInfo file, Migration migration = null)
+        public override async Task<T> ReadAsync<T>(FileInfo file, Migration? migration = null)
         {
             // not checking exists, framework exception is more familiar.
             if (file is null)
@@ -167,7 +167,7 @@
         }
 
         /// <inheritdoc/>
-        protected override T ReadCore<T>(FileInfo file, Migration migration = null)
+        protected override T ReadCore<T>(FileInfo file, Migration? migration = null)
         {
             if (file is null)
             {

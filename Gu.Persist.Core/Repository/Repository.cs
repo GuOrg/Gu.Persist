@@ -474,11 +474,10 @@ namespace Gu.Persist.Core
             using var stream = item != null
                 ? this.serialize.ToStream(item, this.Settings)
                 : null;
-            await this.SaveStreamCoreAsync(file, tempFile, stream)
-.ConfigureAwait(false);
+            await this.SaveStreamCoreAsync(file, tempFile, stream).ConfigureAwait(false);
         }
 
-        /// <inheritdoc cref="IFileInfoAsyncRepository.SaveAsync(FileInfo, T)" />
+        /// <inheritdoc cref="IFileInfoAsyncRepository.SaveAsync{T}(FileInfo, T)" />
         public virtual Task SaveAsync<T>(FileInfo file, T item)
         {
             if (file is null)

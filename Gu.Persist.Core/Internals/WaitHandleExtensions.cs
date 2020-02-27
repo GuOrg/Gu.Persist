@@ -30,7 +30,7 @@ namespace Gu.Persist.Core
                 handle,
                 (state, timedOut) =>
                     {
-                        var localTcs = (TaskCompletionSource<object?>)state;
+                        var localTcs = (TaskCompletionSource<object?>)state!;
                         if (timedOut)
                         {
                             _ = localTcs.TrySetCanceled();
@@ -43,7 +43,7 @@ namespace Gu.Persist.Core
                 tcs,
                 timeout,
                 executeOnlyOnce: true);
-            _ = tcs.Task.ContinueWith((_, state) => ((RegisteredWaitHandle)state).Unregister(null), registration, TaskScheduler.Default);
+            _ = tcs.Task.ContinueWith((_, state) => ((RegisteredWaitHandle)state!).Unregister(null), registration, TaskScheduler.Default);
             return tcs.Task;
         }
     }

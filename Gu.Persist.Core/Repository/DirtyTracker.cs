@@ -31,7 +31,7 @@
             }
 
             var clone = item is null
-                            ? (object)null
+                            ? (object?)null
                             : this.cloner.Clone(item);
             lock (this.gate)
             {
