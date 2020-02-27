@@ -9,7 +9,7 @@ namespace Gu.Persist.Core
         /// Gets the settings specifying how backups are handled.
         /// If null no backups are made.
         /// </summary>
-        BackupSettings BackupSettings { get; }
+        BackupSettings? BackupSettings { get; }
 
         /// <summary>
         /// Gets the file extension used when saving files.

@@ -24,7 +24,7 @@
         public RepositorySettings(
             string directory,
             bool isTrackingDirty,
-            BackupSettings backupSettings,
+            BackupSettings? backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
             : base(directory, extension)
@@ -52,7 +52,7 @@
         /// <summary>
         /// Gets the <see cref="BackupSettings"/>.
         /// </summary>
-        public BackupSettings BackupSettings { get; }
+        public BackupSettings? BackupSettings { get; }
 
         /// <summary>
         /// Gets the file extension used when saving files.
