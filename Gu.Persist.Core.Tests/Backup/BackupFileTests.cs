@@ -129,8 +129,8 @@ namespace Gu.Persist.Core.Tests.Backup
             Assert.AreEqual(new DateTime(2015, 06, 13, 17, 05, 15), timeStamp);
         }
 
-        private static FileInfo CreateFile([CallerMemberName] string name = null) => Directory.CreateFileInfoInDirectory(name + ".cfg");
+        private static FileInfo CreateFile([CallerMemberName] string? name = null) => Directory.CreateFileInfoInDirectory(name + ".cfg");
 
-        private static FileInfo CreateBackupFile([CallerMemberName] string name = null) => Directory.CreateFileInfoInDirectory(name + ".bak");
+        private static FileInfo CreateBackupFile([CallerMemberName] string? name = null) => Directory.CreateFileInfoInDirectory(name + ".bak");
     }
 }

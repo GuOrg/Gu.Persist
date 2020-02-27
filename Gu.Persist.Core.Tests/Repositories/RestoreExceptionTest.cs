@@ -17,7 +17,7 @@
             var roundtripped = (RestoreException)binaryFormatter.Deserialize(steram);
             Assert.AreEqual("Save failed", roundtripped.SaveException.Message);
             Assert.NotNull(roundtripped.InnerException);
-            Assert.AreEqual("Restore failed", roundtripped.InnerException.Message);
+            Assert.AreEqual("Restore failed", roundtripped.InnerException?.Message);
         }
     }
 }

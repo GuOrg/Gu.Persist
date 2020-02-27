@@ -25,12 +25,12 @@ namespace Gu.Persist.Core
         /// </summary>
         internal static Task AsTask(this WaitHandle handle, TimeSpan timeout)
         {
-            var tcs = new TaskCompletionSource<object>();
+            var tcs = new TaskCompletionSource<object?>();
             var registration = ThreadPool.RegisterWaitForSingleObject(
                 handle,
                 (state, timedOut) =>
                     {
-                        var localTcs = (TaskCompletionSource<object>)state;
+                        var localTcs = (TaskCompletionSource<object?>)state;
                         if (timedOut)
                         {
                             _ = localTcs.TrySetCanceled();

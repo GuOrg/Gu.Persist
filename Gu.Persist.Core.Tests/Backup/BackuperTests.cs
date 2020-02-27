@@ -292,8 +292,8 @@ namespace Gu.Persist.Core.Tests.Backup
             Assert.Inconclusive("Backups must be renamed when original file is renamed");
         }
 
-        private static FileInfo CreateFile([CallerMemberName] string name = null) => Directory.CreateFileInfoInDirectory(name + ".cfg");
+        private static FileInfo CreateFile([CallerMemberName] string? name = null) => Directory.CreateFileInfoInDirectory(name + ".cfg");
 
-        private static FileInfo CreateBackupFile([CallerMemberName] string name = null) => Directory.CreateFileInfoInDirectory(name + ".bak");
+        private static FileInfo CreateBackupFile([CallerMemberName] string? name = null) => Directory.CreateFileInfoInDirectory(name + ".bak");
     }
 }

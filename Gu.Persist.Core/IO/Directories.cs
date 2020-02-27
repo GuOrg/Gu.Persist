@@ -98,7 +98,7 @@ namespace Gu.Persist.Core
                 directory = directory.Parent;
             }
 
-            return directory;
+            return directory!;
         }
     }
 }
