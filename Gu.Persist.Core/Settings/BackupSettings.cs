@@ -28,7 +28,7 @@
         public BackupSettings(
             string directory,
             string extension,
-            string timeStampFormat,
+            string? timeStampFormat,
             int numberOfBackups,
             int maxAgeInDays)
             : base(directory, extension)
@@ -68,7 +68,7 @@
         /// Valid formats can be roundtripped using <see cref="DateTime.ToString(string)"/> and <see cref="DateTime.Parse(string)"/>.
         /// </summary>
         /// <param name="format">The format string.</param>
-        public static void ValidateTimestampFormat(string format)
+        public static void ValidateTimestampFormat(string? format)
         {
             if (!string.IsNullOrEmpty(format))
             {

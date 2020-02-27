@@ -28,8 +28,7 @@
         /// <inheritdoc/>
         public override bool TryUpdate(Stream stream, out Stream updated)
         {
-            using var reader = new JsonTextReader(new StreamReader(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true));
-            var jObject = JObject.Load(reader);
+            var jObject = Load();
             jObject.PropertyChanged += JObjectOnPropertyChanged;
             var changed = false;
             var updatedJObject = jObject;
@@ -46,8 +45,9 @@
             }
 
             updated = PooledMemoryStream.Borrow();
-            using (var jsonWriter = new JsonTextWriter(new StreamWriter(updated, Encoding.UTF8, 1024, leaveOpen: true)))
+            using (var streamWriter = new StreamWriter(updated, Encoding.UTF8, 1024, leaveOpen: true))
             {
+                using var jsonWriter = new JsonTextWriter(streamWriter);
                 jObject.WriteTo(jsonWriter);
             }
 
@@ -57,6 +57,13 @@
             void JObjectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
             {
                 changed = true;
+            }
+
+            JObject Load()
+            {
+                using var streamReader = new StreamReader(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true);
+                using var reader = new JsonTextReader(streamReader);
+                return JObject.Load(reader);
             }
         }
     }

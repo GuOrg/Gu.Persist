@@ -430,8 +430,9 @@
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
                 : JsonSerializer.Create();
-            using (var writer = new JsonTextWriter(new StreamWriter(stream, DefaultEncoding, bufferSize: 1024, leaveOpen: true)))
+            using (var streamWriter = new StreamWriter(stream, DefaultEncoding, bufferSize: 1024, leaveOpen: true))
             {
+                using var writer = new JsonTextWriter(streamWriter);
                 serializer.Serialize(writer, item);
             }
 

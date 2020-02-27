@@ -21,7 +21,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
-                AssertFile.Exists(false, backupFile);
+                AssertFile.Exists(false, backupFile!);
             }
 
             var read = this.Read<DummySerializable>(file);
@@ -43,7 +43,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
-                AssertFile.Exists(false, backupFile);
+                AssertFile.Exists(false, backupFile!);
             }
 
             var read = this.Read<DummySerializable>(file);
@@ -56,7 +56,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
-                AssertFile.Exists(true, backupFile);
+                AssertFile.Exists(true, backupFile!);
             }
 
             read = this.Read<DummySerializable>(file);
@@ -78,7 +78,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
-                AssertFile.Exists(false, backupFile);
+                AssertFile.Exists(false, backupFile!);
             }
 
             var read = this.Read<DummySerializable>(file);
@@ -91,7 +91,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
-                AssertFile.Exists(true, backupFile);
+                AssertFile.Exists(true, backupFile!);
             }
 
             read = this.Read<DummySerializable>(file);
@@ -104,7 +104,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             AssertFile.Exists(false, file.TempFile(repository.Settings));
             if (repository.Settings.BackupSettings != null)
             {
-                AssertFile.Exists(true, backupFile);
+                AssertFile.Exists(true, backupFile!);
             }
 
             read = this.Read<DummySerializable>(file);
@@ -141,17 +141,17 @@ namespace Gu.Persist.Core.Tests.Repositories
             if (repository.Settings is IDataRepositorySettings dataRepositorySettings &&
                 dataRepositorySettings.SaveNullDeletesFile)
             {
-                testCase.Save<DummySerializable>(repository, file, null);
+                testCase.Save<DummySerializable?>(repository, file, null);
                 AssertFile.Exists(false, file);
                 if (repository.Settings.BackupSettings != null)
                 {
                     var backupFile = testCase.BackupFile<DummySerializable>(repository);
-                    AssertFile.Exists(true, backupFile);
+                    AssertFile.Exists(true, backupFile!);
                 }
             }
             else
             {
-                _ = Assert.Throws<ArgumentNullException>(() => testCase.Save<DummySerializable>(repository, file, null));
+                _ = Assert.Throws<ArgumentNullException>(() => testCase.Save<DummySerializable?>(repository, file, null));
             }
         }
 
