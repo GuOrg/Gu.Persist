@@ -45,7 +45,7 @@
             }
 
             this.IsTrackingDirty = isTrackingDirty;
-            this.BackupSettings = backupSettings ?? throw new ArgumentNullException(nameof(backupSettings));
+            this.BackupSettings = backupSettings;
             this.TempExtension = FileHelper.PrependDotIfMissing(tempExtension);
         }
 
