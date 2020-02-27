@@ -10,7 +10,7 @@
         /// This must be a valid format string for <see cref="System.DateTime"/>
         /// Default is yyyy_MM_dd_HH_mm_ss.
         /// </summary>
-        string TimeStampFormat { get; }
+        string? TimeStampFormat { get; }
 
         /////// <summary>
         /////// Gets if backup files shall be hidden

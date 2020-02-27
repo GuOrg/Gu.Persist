@@ -51,7 +51,7 @@
         /// <summary>
         /// Gets the format of the timestamp suffix. Example 'yyyy_MM_dd_HH_mm_ss'.
         /// </summary>
-        public string TimeStampFormat { get; }
+        public string? TimeStampFormat { get; }
 
         /// <summary>
         /// Gets the number of backups to keep.
