@@ -837,7 +837,12 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public void ClearTrackerCache()
         {
-            this.Tracker.ClearCache();
+            if (this.Tracker is { } tracker)
+            {
+                tracker.ClearCache();
+            }
+
+            throw new InvalidOperationException("This repository has no dirty tracker.");
         }
 
         /// <inheritdoc/>
@@ -913,9 +918,9 @@ namespace Gu.Persist.Core
             if (migration is null)
             {
                 var value = file.Read<T, TSetting>(this.Settings, this.serialize);
-                if (this.Settings.IsTrackingDirty)
+                if (this.Tracker is { } tracker)
                 {
-                    this.Tracker.Track(file.FullName, value);
+                    tracker.Track(file.FullName, value);
                 }
 
                 return value;
@@ -1139,9 +1144,9 @@ namespace Gu.Persist.Core
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (this.Settings.IsTrackingDirty)
+            if (this.Tracker is { } tracker)
             {
-                this.Tracker.Track(file.FullName, item);
+                tracker.Track(file.FullName, item);
             }
         }
 
