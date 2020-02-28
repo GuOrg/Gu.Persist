@@ -10,7 +10,7 @@
     public sealed class DirtyTracker : IDirtyTracker
     {
         private readonly ICloner cloner;
-        private readonly ConcurrentDictionary<string, object> clones = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, object?> clones = new ConcurrentDictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
         private readonly object gate = new object();
 
         /// <summary>

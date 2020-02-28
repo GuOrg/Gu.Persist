@@ -158,7 +158,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var softDelete = file.SoftDeleteFile();
             using (var lockedFile = LockedFile.CreateIfExists(file, x => x.Open(FileMode.Open, FileAccess.Read, FileShare.Delete)))
             {
-                NullBackuper.Default.AfterSave(lockedFile);
+                NullBackuper.Default.AfterSave(lockedFile!);
             }
 
             AssertFile.Exists(false, softDelete);
@@ -173,7 +173,7 @@ namespace Gu.Persist.Core.Tests.Backup
             softDelete.CreateFileOnDisk();
             using (var lockedFile = LockedFile.CreateIfExists(file, x => x.Open(FileMode.Open, FileAccess.Read, FileShare.Delete)))
             {
-                NullBackuper.Default.AfterSave(lockedFile);
+                NullBackuper.Default.AfterSave(lockedFile!);
             }
 
             AssertFile.Exists(true, file);

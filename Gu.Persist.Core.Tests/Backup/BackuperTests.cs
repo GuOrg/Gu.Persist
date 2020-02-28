@@ -184,7 +184,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 2));
 
             using var lockedFile = LockedFile.CreateIfExists(file, x => x.OpenRead());
-            backuper.AfterSave(lockedFile);
+            backuper.AfterSave(lockedFile!);
         }
 
         [Test]
@@ -209,7 +209,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var backuper = Backuper.Create(settings);
             using (var lockedFile = LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
-                backuper.AfterSave(lockedFile);
+                backuper.AfterSave(lockedFile!);
             }
 
             AssertFile.Exists(true, backupOneMinuteOld);
@@ -242,7 +242,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var backuper = Backuper.Create(settings);
             using (var lockedFile = LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
-                backuper.AfterSave(lockedFile);
+                backuper.AfterSave(lockedFile!);
             }
 
             AssertFile.Exists(true, backupOneMinuteOld);
@@ -275,7 +275,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var backuper = Backuper.Create(settings);
             using (var lockedFile = LockedFile.CreateIfExists(file, x => x.OpenRead()))
             {
-                backuper.AfterSave(lockedFile);
+                backuper.AfterSave(lockedFile!);
             }
 
             AssertFile.Exists(true, backupOneMinuteOld);

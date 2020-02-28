@@ -21,7 +21,7 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             // Default directory is created in %APPDATA%/AppName
             // overriding it here in tests.
-            typeof(Directories).GetField("default", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly).SetValue(null, directory);
+            typeof(Directories).GetField("default", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly)!.SetValue(null, directory);
             this.Directory = directory;
 
             // Just a check to be sure test is not producing files outside %TEMP%
