@@ -209,9 +209,9 @@ namespace Gu.Persist.Core
             {
                 using var stream = await file.ReadAsync().ConfigureAwait(false);
                 var value = this.serialize.FromStream<T>(stream, this.Settings);
-                if (this.Settings.IsTrackingDirty)
+                if (this.Tracker is { } tracker)
                 {
-                    this.Tracker.Track(file.FullName, value);
+                    tracker.Track(file.FullName, value);
                 }
 
                 return value;
@@ -690,7 +690,12 @@ namespace Gu.Persist.Core
                 throw new InvalidOperationException("Cannot check IsDirty if not Setting.IsTrackingDirty");
             }
 
-            return this.Tracker.IsDirty(file.FullName, item, comparer);
+            if (this.Tracker is { } tracker)
+            {
+                return tracker.IsDirty(file.FullName, item, comparer);
+            }
+
+            throw new InvalidOperationException("This repository has no dirty tracker.");
         }
 
         /// <inheritdoc/>
