@@ -37,9 +37,10 @@ namespace Gu.Persist.Core
         internal void Commit<TSetting>(Serialize<TSetting> serialize, TSetting setting)
         {
             this.BeforeCopy();
-            if (this.contents != null)
+            if (this.contents != null &&
+                this.lockedTempFile?.Stream is { } stream)
             {
-                serialize.ToStream(this.contents, this.lockedTempFile.Stream, setting);
+                serialize.ToStream(this.contents, stream, setting);
             }
 
             this.AfterCopy();
@@ -48,9 +49,10 @@ namespace Gu.Persist.Core
         internal async Task CommitAsync()
         {
             this.BeforeCopy();
-            if (this.contents != null)
+            if (this.contents != null &&
+                this.lockedTempFile?.Stream is { } stream)
             {
-                await ((Stream)this.contents).CopyToAsync(this.lockedTempFile.Stream)
+                await ((Stream)this.contents).CopyToAsync(stream)
                                              .ConfigureAwait(false);
             }
 

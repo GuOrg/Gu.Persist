@@ -9,8 +9,8 @@ namespace Gu.Persist.Core
     /// </summary>
     public static class Directories
     {
-        private static DirectoryInfo @default;
-        private static DirectoryInfo defaultBackup;
+        private static DirectoryInfo? @default;
+        private static DirectoryInfo? defaultBackup;
 
         /// <summary>
         /// Gets the <see cref="Environment.CurrentDirectory"/>.

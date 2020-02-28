@@ -97,7 +97,7 @@
             }
 
             comparer ??= EqualityComparer<T>.Default;
-            object clone;
+            object? clone;
             lock (this.gate)
             {
                 _ = this.clones.TryGetValue(fullFileName, out clone);

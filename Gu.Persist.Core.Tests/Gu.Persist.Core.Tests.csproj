@@ -12,6 +12,10 @@
     <AssemblyOriginatorKeyFile>..\Gu.Persist.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
+  <PropertyGroup>
+     <GenerateNullableAttributes>false</GenerateNullableAttributes> 
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Gu.Persist.Core\Gu.Persist.Core.csproj" />
   </ItemGroup>

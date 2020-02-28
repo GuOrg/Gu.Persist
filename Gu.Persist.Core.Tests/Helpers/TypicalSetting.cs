@@ -8,7 +8,7 @@
     {
         private List<DummySerializable> dummies = new List<DummySerializable>();
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
 #pragma warning disable CA2227 // Collection properties should be read only
         public List<DummySerializable> Dummies
