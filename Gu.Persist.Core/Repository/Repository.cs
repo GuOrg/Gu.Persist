@@ -142,7 +142,7 @@ namespace Gu.Persist.Core
         IRepositorySettings IRepositoryWithSettings.Settings => this.Settings;
 
         /// <inheritdoc/>
-        public IDirtyTracker Tracker { get; }
+        public IDirtyTracker? Tracker { get; }
 
         /// <inheritdoc/>
         public IBackuper Backuper { get; }

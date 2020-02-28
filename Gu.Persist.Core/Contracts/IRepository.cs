@@ -14,7 +14,7 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Gets the <see cref="IDirtyTracker"/> that tracks if the file is dirty i.e. has changes since last save.
         /// </summary>
-        IDirtyTracker Tracker { get; }
+        IDirtyTracker? Tracker { get; }
 
         /// <summary>
         /// Gets the <see cref="IBackuper"/> that handles backup files.
