@@ -30,7 +30,9 @@ namespace Gu.Persist.Core.Tests.Repositories
 
             public abstract bool IsDirty<T>(IRepository repository, System.IO.FileInfo file, T item);
 
-            public virtual System.IO.FileInfo File<T>(IRepository repository, [CallerMemberName] string? name = null) => repository.GetFileInfo(name);
+            public virtual System.IO.FileInfo File<T>(IRepository repository, [CallerMemberName] string? name = null) => name is null
+                ? repository.GetFileInfo<T>()
+                : repository.GetFileInfo(name);
 
             public System.IO.FileInfo? BackupFile<T>(IRepository repository, [CallerMemberName] string? name = null)
             {
