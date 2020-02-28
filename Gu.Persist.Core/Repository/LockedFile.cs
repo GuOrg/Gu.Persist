@@ -83,7 +83,7 @@
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="stream">Specifies how the file should be locked.</param>
         /// <returns>A <see cref="LockedFile"/>.</returns>
-        public static LockedFile CreateIfExists(FileInfo file, Func<FileInfo, Stream> stream)
+        public static LockedFile? CreateIfExists(FileInfo file, Func<FileInfo, Stream> stream)
         {
             if (file is null)
             {

@@ -265,7 +265,7 @@
                 throw new ArgumentNullException($"{this.GetType().Name} cannot save null.");
             }
 
-            if (this.fileCache.TryGetValue(file.FullName, out object cached))
+            if (this.fileCache.TryGetValue(file.FullName, out object? cached))
             {
                 if (!ReferenceEquals(item, cached))
                 {

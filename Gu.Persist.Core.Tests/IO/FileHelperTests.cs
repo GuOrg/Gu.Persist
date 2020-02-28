@@ -105,7 +105,7 @@ namespace Gu.Persist.Core.Tests.IO
             backup.CreateFileOnDisk();
             file.CreateFileOnDisk();
             var soft = file.SoftDelete();
-            Assert.AreEqual(soft.FullName, softDeleteFile.FullName);
+            Assert.AreEqual(soft!.FullName, softDeleteFile.FullName);
             AssertFile.Exists(false, file);
             AssertFile.Exists(true, softDeleteFile);
             AssertFile.Exists(true, backup);
@@ -121,7 +121,7 @@ namespace Gu.Persist.Core.Tests.IO
             file.WriteAllText("File");
             softDeleteFile.WriteAllText("Soft");
             var soft = file.SoftDelete();
-            Assert.AreEqual(soft.FullName, softDeleteFile.FullName);
+            Assert.AreEqual(soft!.FullName, softDeleteFile.FullName);
             AssertFile.Exists(false, file);
             AssertFile.Exists(true, softDeleteFile);
             Assert.AreEqual("File", softDeleteFile.ReadAllText());

@@ -86,7 +86,6 @@
             if (disposing)
             {
                 this.inner.SetLength(0);
-
                 Pool.Enqueue(this.inner);
             }
 

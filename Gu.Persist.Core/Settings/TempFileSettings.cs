@@ -51,8 +51,8 @@
                                                       string.Equals(this.Extension, other.Extension, StringComparison.Ordinal);
 
         /// <inheritdoc/>
-        public override bool Equals(object obj) => obj is TempFileSettings other &&
-                                                   this.Equals(other);
+        public override bool Equals(object? obj) => obj is TempFileSettings other &&
+                                                    this.Equals(other);
 
         /// <inheritdoc/>
         public override int GetHashCode()
