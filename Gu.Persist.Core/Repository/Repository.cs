@@ -147,7 +147,7 @@ namespace Gu.Persist.Core
         /// <inheritdoc/>
         public IBackuper Backuper { get; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual T Read<T>(FileInfo file, Migration? migration = null)
         {
             if (file is null)
@@ -158,14 +158,14 @@ namespace Gu.Persist.Core
             return this.ReadCore<T>(file, migration);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual T Read<T>(string fileName, Migration? migration = null)
         {
             var file = this.GetFileInfoCore(fileName);
             return this.ReadCore<T>(file, migration);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual T Read<T>(Migration? migration = null)
         {
             return this.ReadCore<T>(this.GetFileInfo<T>(), migration);
@@ -196,7 +196,7 @@ namespace Gu.Persist.Core
             return file.OpenRead();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual async Task<T> ReadAsync<T>(FileInfo file, Migration? migration = null)
         {
             // not checking exists, framework exception is more familiar.
@@ -236,14 +236,14 @@ namespace Gu.Persist.Core
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual Task<T> ReadAsync<T>(string fileName, Migration? migration = null)
         {
             var fileInfo = this.GetFileInfoCore(fileName);
             return this.ReadAsync<T>(fileInfo, migration);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual Task<T> ReadAsync<T>(Migration? migration = null)
         {
             var file = this.GetFileInfo<T>();
@@ -319,7 +319,7 @@ namespace Gu.Persist.Core
             return this.ReadOrCreateCore(this.GetFileInfoCore<T>(), creator, migration);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual Task<T> ReadOrCreateAsync<T>(FileInfo file, Func<T> creator, Migration? migration = null)
         {
             if (file is null)
@@ -335,7 +335,7 @@ namespace Gu.Persist.Core
             return this.ReadOrCreateCoreAsync(file, creator, migration);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual Task<T> ReadOrCreateAsync<T>(string fileName, Func<T> creator, Migration? migration = null)
         {
             if (fileName is null)
@@ -352,7 +352,7 @@ namespace Gu.Persist.Core
             return this.ReadOrCreateCoreAsync(file, creator, migration);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual Task<T> ReadOrCreateAsync<T>(Func<T> creator, Migration? migration = null)
         {
             if (creator is null)
@@ -380,7 +380,7 @@ namespace Gu.Persist.Core
             this.SaveCore(file, tempFile, item);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual void Save<T>(FileInfo file, T item)
         {
             if (file is null)
@@ -392,7 +392,7 @@ namespace Gu.Persist.Core
             this.SaveCore(file, item);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual void Save<T>(string fileName, T item)
         {
             if (fileName is null)
@@ -405,7 +405,7 @@ namespace Gu.Persist.Core
             this.SaveCore(file, item);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual void Save<T>(T item)
         {
             var file = this.GetFileInfo<T>();
@@ -490,7 +490,7 @@ namespace Gu.Persist.Core
             return this.SaveAsync(file, tempFile, item);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual Task SaveAsync<T>(string fileName, T item)
         {
             var file = this.GetFileInfoCore(fileName);
@@ -498,7 +498,7 @@ namespace Gu.Persist.Core
             return this.SaveAsync(file, item);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual Task SaveAsync<T>(T item)
         {
             var file = this.GetFileInfo<T>();
@@ -549,13 +549,13 @@ namespace Gu.Persist.Core
             return this.SaveStreamCoreAsync(file, tempFile, stream);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual FileInfo GetFileInfo(string fileName)
         {
             return this.GetFileInfoCore(fileName);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual FileInfo GetFileInfo<T>()
         {
             return this.GetFileInfoCore<T>();
@@ -586,7 +586,7 @@ namespace Gu.Persist.Core
             this.DeleteBackups(file);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual bool Exists(FileInfo file)
         {
             if (file is null)
@@ -597,14 +597,14 @@ namespace Gu.Persist.Core
             return this.ExistsCore(file);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual bool Exists(string fileName)
         {
             var fileInfo = this.GetFileInfoCore(fileName);
             return this.Exists(fileInfo);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="IRepository" />
         public virtual bool Exists<T>()
         {
             return this.ExistsCore<T>();
