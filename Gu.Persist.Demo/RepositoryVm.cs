@@ -14,12 +14,12 @@
         private RepositoryVm()
         {
             this.Repository = CreateJsonRepositoryWithGitBackuper();
-            this.ManualSaveSetting = this.Repository.ReadOrCreate(() => (ManualSaveSetting)Activator.CreateInstance(typeof(ManualSaveSetting), nonPublic: true));
-            this.AutoSaveSetting = this.Repository.ReadOrCreate(() => (AutoSaveSetting)Activator.CreateInstance(typeof(AutoSaveSetting), nonPublic: true));
+            this.ManualSaveSetting = this.Repository.ReadOrCreate(() => (ManualSaveSetting)Activator.CreateInstance(typeof(ManualSaveSetting), nonPublic: true)!);
+            this.AutoSaveSetting = this.Repository.ReadOrCreate(() => (AutoSaveSetting)Activator.CreateInstance(typeof(AutoSaveSetting), nonPublic: true)!);
             this.AutoSaveSetting.PropertyChanged += (o, e) => this.Save((AutoSaveSetting)o);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public static RepositoryVm Instance { get; } = new RepositoryVm();
 
@@ -38,7 +38,7 @@
         }
 
         // ReSharper disable once UnusedMember.Global
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
