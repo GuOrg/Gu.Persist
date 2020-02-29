@@ -51,8 +51,7 @@ namespace Gu.Persist.Core
         internal static async Task SaveAsync(this FileInfo file, Stream stream)
         {
             using var fileStream = file.Open(FileMode.Create, FileAccess.Write, FileShare.None);
-            await stream.CopyToAsync(fileStream)
-.ConfigureAwait(false);
+            await stream.CopyToAsync(fileStream).ConfigureAwait(false);
         }
 
         internal static void HardDelete(this FileInfo file)

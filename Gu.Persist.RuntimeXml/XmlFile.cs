@@ -209,7 +209,7 @@ namespace Gu.Persist.RuntimeXml
 
         internal static DataContractSerializer SerializerFor<T>(T item)
         {
-            return Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
+            return Serializers.GetOrAdd(item?.GetType() ?? typeof(T), x => new DataContractSerializer(x));
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace Gu.Persist.RuntimeXml
         internal static PooledMemoryStream ToStream<T>(T item)
         {
             var ms = PooledMemoryStream.Borrow();
-            var serializer = Serializers.GetOrAdd(item.GetType(), x => new DataContractSerializer(item.GetType()));
+            var serializer = Serializers.GetOrAdd(item?.GetType() ?? typeof(T), x => new DataContractSerializer(x));
             lock (serializer)
             {
                 serializer.WriteObject(ms, item);
