@@ -21,11 +21,15 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.3.1</Version>
+    <Version>0.3.2</Version>
     <Authors>Johan Larsson</Authors>
     <Description>Manages saving and reading files.</Description>
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageReleaseNotes>
+      0.3.2
+      FEATURE: TargetFrameworks net45;netstandard2.0
+      FEATURE: Nullable enable
+      BUGFIX: Migration when nested property.
       0.3.1
       BREAKING: Added optional parameter Migration to read methods.
       FEATURE: Migration support.

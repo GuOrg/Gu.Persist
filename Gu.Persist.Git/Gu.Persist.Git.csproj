@@ -25,10 +25,14 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.3.1</Version>
+    <Version>0.3.2</Version>
     <Authors>Johan Larsson</Authors>
     <Description>Use a git repository for backups.</Description>
     <PackageReleaseNotes>
+      0.3.2
+      FEATURE: TargetFrameworks net45;netstandard2.0
+      FEATURE: Nullable enable
+      BUGFIX: Migration when nested property.
       0.3.1
       BREAKING: Added optional parameter Migration to read methods.
       FEATURE: Migration support.
