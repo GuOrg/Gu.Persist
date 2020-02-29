@@ -12,11 +12,11 @@
         private static readonly DirectoryInfo Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\");
         private static readonly DirectoryInfo BackupDirectory = new DirectoryInfo(@"C:\Temp\Gu.Persist\Backup\");
         private static readonly BackupSettings BackupSettings = new BackupSettings(
-                                                                    BackupDirectory.FullName,
-                                                                    ".abc",
-                                                                    BackupSettings.DefaultTimeStampFormat,
-                                                                    1,
-                                                                    2);
+            BackupDirectory.FullName,
+            ".abc",
+            BackupSettings.DefaultTimeStampFormat,
+            1,
+            2);
 
         private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(
             directory: Directory.FullName,
@@ -78,7 +78,7 @@
             AssertProperties(settings, roundtripped);
         }
 
-        private static void AssertProperties(object expected, object actual)
+        private static void AssertProperties(object? expected, object? actual)
         {
             if (ReferenceEquals(expected, actual))
             {
