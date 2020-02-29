@@ -26,7 +26,7 @@ namespace Gu.Persist.SystemXml
             string directory,
             bool isTrackingDirty,
             bool saveNullDeletesFile,
-            BackupSettings backupSettings,
+            BackupSettings? backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
             : base(directory, isTrackingDirty, saveNullDeletesFile, backupSettings, extension, tempExtension)
@@ -48,17 +48,14 @@ namespace Gu.Persist.SystemXml
         }
 
         /// <inheritdoc/>
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
+        public XmlSchema? GetSchema() => null;
 
         /// <inheritdoc/>
         public void ReadXml(XmlReader reader)
         {
             if (reader is null)
             {
-                throw new System.ArgumentNullException(nameof(reader));
+                throw new ArgumentNullException(nameof(reader));
             }
 
             reader.ReadStartElement();
@@ -76,7 +73,7 @@ namespace Gu.Persist.SystemXml
         {
             if (writer is null)
             {
-                throw new System.ArgumentNullException(nameof(writer));
+                throw new ArgumentNullException(nameof(writer));
             }
 
             writer.WriteElementString(nameof(this.Directory), this.Directory);
@@ -90,24 +87,22 @@ namespace Gu.Persist.SystemXml
             }
         }
 
-        private static FieldInfo GetBackingField<T>(string propertyName)
-        {
-            return typeof(T).GetField(
-                $"<{propertyName}>k__BackingField",
-                BindingFlags.NonPublic | BindingFlags.Instance);
-        }
-
         private void SetPrivate<T>(string propertyName, T value)
         {
-            var field = GetBackingField<Core.DataRepositorySettings>(propertyName) ??
-                        GetBackingField<Core.RepositorySettings>(propertyName) ??
-                        GetBackingField<FileSettings>(propertyName);
+            var field = GetBackingField(typeof(Core.DataRepositorySettings), propertyName) ??
+                        GetBackingField(typeof(Core.RepositorySettings), propertyName) ??
+                        GetBackingField(typeof(FileSettings), propertyName);
             if (field is null)
             {
                 throw new InvalidOperationException("Could not find backing field for " + propertyName);
             }
 
             field.SetValue(this, value);
+
+            static FieldInfo? GetBackingField(Type type, string propertyName)
+            {
+                return type.GetField($"<{propertyName}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+            }
         }
     }
 }

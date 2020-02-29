@@ -6,7 +6,7 @@ namespace Gu.Persist.SystemXml
 
     internal static class XmlReaderExt
     {
-        internal static BackupSettings ReadElementBackupSettings(this XmlReader reader, string elementName)
+        internal static BackupSettings? ReadElementBackupSettings(this XmlReader reader, string elementName)
         {
             while (reader.NodeType == XmlNodeType.Whitespace)
             {

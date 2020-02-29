@@ -199,7 +199,7 @@
         /// <returns>The deserialized contents.</returns>
         internal static T FromStream<T>(Stream stream)
         {
-            var serializer = Serializers.GetOrAdd(typeof(T), x => new XmlSerializer(typeof(T)));
+            var serializer = Serializers.GetOrAdd(typeof(T), x => new XmlSerializer(x));
             lock (serializer)
             {
                 using var reader = XmlReader.Create(stream);
@@ -217,7 +217,7 @@
         internal static PooledMemoryStream ToStream<T>(T item)
         {
             var ms = PooledMemoryStream.Borrow();
-            var serializer = Serializers.GetOrAdd(item.GetType(), x => new XmlSerializer(item.GetType()));
+            var serializer = Serializers.GetOrAdd(item?.GetType() ?? typeof(T), x => new XmlSerializer(x));
             lock (serializer)
             {
                 serializer.Serialize(ms, item);
@@ -230,7 +230,7 @@
 
         internal static XmlSerializer SerializerFor(object item)
         {
-            return Serializers.GetOrAdd(item.GetType(), x => new XmlSerializer(item.GetType()));
+            return Serializers.GetOrAdd(item.GetType(), x => new XmlSerializer(x));
         }
     }
 }

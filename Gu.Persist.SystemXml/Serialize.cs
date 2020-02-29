@@ -18,13 +18,16 @@
         /// <inheritdoc/>
         public override void ToStream<T>(T item, Stream stream, TSetting settings)
         {
-            if (item is Stream source)
+            switch (item)
             {
-                source.CopyTo(stream);
-                return;
+                case null:
+                    return;
+                case Stream source:
+                    source.CopyTo(stream);
+                    return;
             }
 
-            var serializer = XmlFile.SerializerFor(item);
+            var serializer = XmlFile.SerializerFor(item!);
             lock (serializer)
             {
                 serializer.Serialize(stream, item);

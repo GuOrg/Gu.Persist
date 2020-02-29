@@ -18,48 +18,38 @@
             new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000),
         };
 
-        private TypicalSetting setting1;
-        private TypicalSetting setting2;
-
-        [SetUp]
-        public void SetUp()
-        {
-            this.setting1 = new TypicalSetting
-            {
-                Name = "Johan Larsson",
-                Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
-                Value1 = 1.2,
-                Value2 = 2,
-                Value3 = 3,
-                Value4 = 4,
-                Value5 = 5,
-            };
-            this.setting2 = new TypicalSetting
-            {
-                Name = "Johan Larsson",
-                Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
-                Value1 = 1.2,
-                Value2 = 2,
-                Value3 = 3,
-                Value4 = 4,
-                Value5 = 5,
-            };
-        }
-
         [TestCaseSource(nameof(ComparerSource))]
         [SuppressMessage("ReSharper", "UnusedVariable")]
         public void XmlEquals(ComparerData data)
         {
+            var setting1 = new TypicalSetting
+            {
+                Name = "Johan Larsson",
+                Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
+                Value1 = 1.2,
+                Value2 = 2,
+                Value3 = 3,
+                Value4 = 4,
+                Value5 = 5,
+            };
+
+            var setting2 = new TypicalSetting
+            {
+                Name = "Johan Larsson",
+                Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
+                Value1 = 1.2,
+                Value2 = 2,
+                Value3 = 3,
+                Value4 = 4,
+                Value5 = 5,
+            };
+
             var comparer = XmlEqualsComparer<TypicalSetting>.Default;
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            var warmup = comparer.Equals(this.setting1, this.setting2);
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+            var warmup = comparer.Equals(setting1, setting2);
             var sw = Stopwatch.StartNew();
             for (var i = 0; i < data.Times; i++)
             {
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-                var result = comparer.Equals(this.setting1, this.setting2);
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+                var result = comparer.Equals(setting1, setting2);
             }
 
             sw.Stop();
@@ -75,16 +65,34 @@
         [SuppressMessage("ReSharper", "UnusedVariable")]
         public void GetHashCode(ComparerData data)
         {
+            var setting1 = new TypicalSetting
+            {
+                Name = "Johan Larsson",
+                Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
+                Value1 = 1.2,
+                Value2 = 2,
+                Value3 = 3,
+                Value4 = 4,
+                Value5 = 5,
+            };
+
+            var setting2 = new TypicalSetting
+            {
+                Name = "Johan Larsson",
+                Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
+                Value1 = 1.2,
+                Value2 = 2,
+                Value3 = 3,
+                Value4 = 4,
+                Value5 = 5,
+            };
+
             var comparer = XmlEqualsComparer<TypicalSetting>.Default;
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            var warmup = comparer.GetHashCode(this.setting1);
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+            var warmup = comparer.GetHashCode(setting1);
             var sw = Stopwatch.StartNew();
             for (var i = 0; i < data.Times; i++)
             {
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-                var result = comparer.GetHashCode(this.setting1);
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+                var result = comparer.GetHashCode(setting1);
             }
 
             sw.Stop();

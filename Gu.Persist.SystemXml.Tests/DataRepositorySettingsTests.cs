@@ -14,13 +14,12 @@
 
     public class DataRepositorySettingsTests
     {
-        private static readonly BackupSettings BackupSettings =
-            new BackupSettings(
-                @"C:\Temp\Gu.Persist\Backup",
-                ".abc",
-                BackupSettings.DefaultTimeStampFormat,
-                1,
-                2);
+        private static readonly BackupSettings BackupSettings = new BackupSettings(
+            @"C:\Temp\Gu.Persist\Backup",
+            ".abc",
+            BackupSettings.DefaultTimeStampFormat,
+            1,
+            2);
 
         private static readonly DirectoryInfo Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\");
 
@@ -99,7 +98,7 @@
             AssertProperties(settings, roundtripped);
         }
 
-        private static void AssertProperties(object expected, object actual)
+        private static void AssertProperties(object? expected, object? actual)
         {
             if (ReferenceEquals(expected, actual))
             {

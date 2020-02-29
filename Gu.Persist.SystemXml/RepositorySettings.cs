@@ -22,7 +22,7 @@ namespace Gu.Persist.SystemXml
         public RepositorySettings(
             string directory,
             bool isTrackingDirty,
-            BackupSettings backupSettings,
+            BackupSettings? backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
             : base(directory, isTrackingDirty, backupSettings, extension, tempExtension)
@@ -43,17 +43,14 @@ namespace Gu.Persist.SystemXml
         }
 
         /// <inheritdoc/>
-        public XmlSchema GetSchema()
-        {
-            return null;
-        }
+        public XmlSchema? GetSchema() => null;
 
         /// <inheritdoc/>
         public void ReadXml(XmlReader reader)
         {
             if (reader is null)
             {
-                throw new System.ArgumentNullException(nameof(reader));
+                throw new ArgumentNullException(nameof(reader));
             }
 
             reader.ReadStartElement();
@@ -70,7 +67,7 @@ namespace Gu.Persist.SystemXml
         {
             if (writer is null)
             {
-                throw new System.ArgumentNullException(nameof(writer));
+                throw new ArgumentNullException(nameof(writer));
             }
 
             writer.WriteElementString(nameof(this.Directory), this.Directory);

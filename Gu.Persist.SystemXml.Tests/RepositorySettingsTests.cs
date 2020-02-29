@@ -96,7 +96,7 @@
             AssertProperties(settings, roundtripped);
         }
 
-        private static void AssertProperties(object expected, object actual)
+        private static void AssertProperties(object? expected, object? actual)
         {
             if (ReferenceEquals(expected, actual))
             {
