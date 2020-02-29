@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Text;
@@ -30,16 +29,15 @@
         public override bool TryUpdate(Stream stream, [NotNullWhen(true)] out Stream? updated)
         {
             var jObject = Load();
-            jObject.PropertyChanged += JObjectOnPropertyChanged;
-            var changed = false;
+            var hash = JsonEqualsComparer<JObject>.Default.GetHashCode(jObject);
             var updatedJObject = jObject;
             foreach (var step in this.steps)
             {
                 updatedJObject = step(updatedJObject);
             }
 
-            if (jObject == updatedJObject &&
-                !changed)
+            if (ReferenceEquals(jObject, updatedJObject) &&
+                hash == JsonEqualsComparer<JObject>.Default.GetHashCode(updatedJObject))
             {
                 updated = null;
                 return false;
@@ -54,11 +52,6 @@
 
             updated.Position = 0;
             return true;
-
-            void JObjectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-            {
-                changed = true;
-            }
 
             JObject Load()
             {
