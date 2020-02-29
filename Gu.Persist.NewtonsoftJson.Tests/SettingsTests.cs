@@ -159,7 +159,7 @@
             }
 
             // ReSharper disable once PossibleNullReferenceException
-            foreach (var propertyInfo in expected.GetType().GetProperties())
+            foreach (var propertyInfo in expected!.GetType().GetProperties())
             {
                 var expectedValue = propertyInfo.GetValue(expected);
                 var actualValue = propertyInfo.GetValue(actual);

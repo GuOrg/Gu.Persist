@@ -25,7 +25,7 @@ namespace Gu.Persist.NewtonsoftJson
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
             bool saveNullDeletesFile,
-            BackupSettings backupSettings,
+            BackupSettings? backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
             : base(directory, isTrackingDirty, saveNullDeletesFile, backupSettings, extension, tempExtension)

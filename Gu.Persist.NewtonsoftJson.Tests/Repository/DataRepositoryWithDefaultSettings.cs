@@ -13,7 +13,7 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
             Assert.AreEqual(".cfg", settings.Extension);
             Assert.AreEqual(this.Directory.FullName, settings.Directory);
             Assert.AreEqual(false, settings.IsTrackingDirty);
-            Assert.AreEqual(".bak", settings.BackupSettings.Extension);
+            Assert.AreEqual(".bak", settings.BackupSettings!.Extension);
             Assert.AreEqual(int.MaxValue, settings.BackupSettings.MaxAgeInDays);
             Assert.AreEqual(1, settings.BackupSettings.NumberOfBackups);
             Assert.AreEqual(null, settings.BackupSettings.TimeStampFormat);

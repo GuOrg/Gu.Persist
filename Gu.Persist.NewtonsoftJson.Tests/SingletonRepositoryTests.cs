@@ -43,20 +43,20 @@
         {
             var backupSettings = new BackupSettings(BackupDir.FullName, ".abc", BackupSettings.DefaultTimeStampFormat, 2, 3);
             var repositorySettings = new Core.RepositorySettings(
-                                         directory: Directory.FullName,
-                                         isTrackingDirty: false,
-                                         backupSettings: backupSettings,
-                                         extension: ".cde",
-                                         tempExtension: ".fgh");
+                directory: Directory.FullName,
+                isTrackingDirty: false,
+                backupSettings: backupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             var created = new SingletonRepository(repositorySettings, RepositorySettings.CreateDefaultJsonSettings());
 
             var jsonRepositorySettings = new RepositorySettings(
-                                             directory: Directory.FullName,
-                                             jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
-                                             isTrackingDirty: false,
-                                             backupSettings: backupSettings,
-                                             extension: ".cde",
-                                             tempExtension: ".fgh");
+                directory: Directory.FullName,
+                jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
+                isTrackingDirty: false,
+                backupSettings: backupSettings,
+                extension: ".cde",
+                tempExtension: ".fgh");
             AssertProperties(jsonRepositorySettings, created.Settings);
             Assert.IsTrue(JsonEqualsComparer<RepositorySettings>.Default.Equals(jsonRepositorySettings, created.Settings));
         }
@@ -74,7 +74,7 @@
             }
 
             // ReSharper disable once PossibleNullReferenceException
-            foreach (var propertyInfo in expected.GetType().GetProperties())
+            foreach (var propertyInfo in expected!.GetType().GetProperties())
             {
                 var expectedValue = propertyInfo.GetValue(expected);
                 var actualValue = propertyInfo.GetValue(actual);

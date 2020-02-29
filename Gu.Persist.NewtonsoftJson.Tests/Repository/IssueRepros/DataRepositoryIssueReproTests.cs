@@ -104,14 +104,14 @@
 
         public class DummyWith<T>
         {
-            public T Data { get; set; }
+            public T Data { get; set; } = default!;
         }
 
         internal class ReadOnlyObservableCollectionConverter<T> : JsonConverter
         {
             public override bool CanWrite { get; } = false;
 
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
             {
                 throw new NotSupportedException();
             }
@@ -121,7 +121,7 @@
                 return objectType == typeof(ReadOnlyObservableCollection<T>);
             }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
             {
                 var list = serializer.Deserialize<List<T>>(reader);
                 return new ReadOnlyObservableCollection<T>(new ObservableCollection<T>(list));

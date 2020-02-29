@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Text;
     using Gu.Persist.Core;
@@ -26,7 +27,7 @@
         }
 
         /// <inheritdoc/>
-        public override bool TryUpdate(Stream stream, out Stream updated)
+        public override bool TryUpdate(Stream stream, [NotNullWhen(true)] out Stream? updated)
         {
             var jObject = Load();
             jObject.PropertyChanged += JObjectOnPropertyChanged;

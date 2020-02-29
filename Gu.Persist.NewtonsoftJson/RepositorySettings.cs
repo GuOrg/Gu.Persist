@@ -23,7 +23,7 @@ namespace Gu.Persist.NewtonsoftJson
             string directory,
             JsonSerializerSettings jsonSerializerSettings,
             bool isTrackingDirty,
-            BackupSettings backupSettings,
+            BackupSettings? backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
             : base(
@@ -48,12 +48,12 @@ namespace Gu.Persist.NewtonsoftJson
         public static JsonSerializerSettings CreateDefaultJsonSettings()
         {
             return new JsonSerializerSettings
-                       {
-                           MissingMemberHandling = MissingMemberHandling.Error,
-                           Formatting = Formatting.Indented,
-                           Culture = CultureInfo.InvariantCulture,
-                           FloatFormatHandling = FloatFormatHandling.DefaultValue,
-                       };
+            {
+                MissingMemberHandling = MissingMemberHandling.Error,
+                Formatting = Formatting.Indented,
+                Culture = CultureInfo.InvariantCulture,
+                FloatFormatHandling = FloatFormatHandling.DefaultValue,
+            };
         }
     }
 }

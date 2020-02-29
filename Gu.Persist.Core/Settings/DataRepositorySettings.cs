@@ -21,7 +21,7 @@
             string directory,
             bool isTrackingDirty,
             bool saveNullDeletesFile,
-            BackupSettings backupSettings,
+            BackupSettings? backupSettings,
             string extension = ".cfg",
             string tempExtension = ".tmp")
             : base(directory, isTrackingDirty, backupSettings, extension, tempExtension)

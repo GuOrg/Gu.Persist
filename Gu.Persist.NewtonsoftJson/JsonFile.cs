@@ -42,7 +42,7 @@
         /// <param name="item">The <typeparamref name="T"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deep clone.</returns>
-        public static T Clone<T>(T item, JsonSerializerSettings settings)
+        public static T Clone<T>(T item, JsonSerializerSettings? settings)
         {
             if (item is null)
             {
@@ -99,7 +99,7 @@
         /// <param name="fileName">The full name of the file.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deserialized content.</returns>
-        public static T Read<T>(string fileName, JsonSerializerSettings settings)
+        public static T Read<T>(string fileName, JsonSerializerSettings? settings)
         {
             if (fileName is null)
             {
@@ -117,7 +117,7 @@
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deserialized content.</returns>
-        public static T Read<T>(FileInfo file, JsonSerializerSettings settings)
+        public static T Read<T>(FileInfo file, JsonSerializerSettings? settings)
         {
             if (file is null)
             {
@@ -151,7 +151,7 @@
         /// <param name="fileName">The name of the file.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
-        public static async Task<T> ReadAsync<T>(string fileName, JsonSerializerSettings settings)
+        public static async Task<T> ReadAsync<T>(string fileName, JsonSerializerSettings? settings)
         {
             if (fileName is null)
             {
@@ -185,7 +185,7 @@
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>A <see cref="Task"/> with the deserialized content of the file.</returns>
-        public static Task<T> ReadAsync<T>(FileInfo file, JsonSerializerSettings settings)
+        public static Task<T> ReadAsync<T>(FileInfo file, JsonSerializerSettings? settings)
         {
             if (file is null)
             {
@@ -266,7 +266,7 @@
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="item">The instance to serialize.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
-        public static void Save<T>(FileInfo file, T item, JsonSerializerSettings settings)
+        public static void Save<T>(FileInfo file, T item, JsonSerializerSettings? settings)
         {
             if (file is null)
             {
@@ -339,7 +339,7 @@
         /// <param name="item">The instance to serialize.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
-        public static Task SaveAsync<T>(string fileName, T item, JsonSerializerSettings settings)
+        public static Task SaveAsync<T>(string fileName, T item, JsonSerializerSettings? settings)
         {
             if (fileName is null)
             {
@@ -362,7 +362,7 @@
         /// <param name="item">The instance to serialize.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
-        public static async Task SaveAsync<T>(FileInfo file, T item, JsonSerializerSettings settings)
+        public static async Task SaveAsync<T>(FileInfo file, T item, JsonSerializerSettings? settings)
         {
             if (file is null)
             {
@@ -396,7 +396,7 @@
         /// <param name="stream">The <see cref="Stream"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deserialized contents.</returns>
-        internal static T FromStream<T>(Stream stream, JsonSerializerSettings settings)
+        internal static T FromStream<T>(Stream stream, JsonSerializerSettings? settings)
         {
             var serializer = settings != null
                 ? JsonSerializer.Create(settings)
@@ -424,7 +424,7 @@
         /// <param name="item">The instance to serialize.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The <see cref="PooledMemoryStream"/>.</returns>
-        internal static PooledMemoryStream ToStream<T>(T item, JsonSerializerSettings settings)
+        internal static PooledMemoryStream ToStream<T>(T item, JsonSerializerSettings? settings)
         {
             var stream = PooledMemoryStream.Borrow();
             var serializer = settings != null
