@@ -17,9 +17,9 @@
     {
         private readonly DirectoryInfo directory;
 
-        private DummySerializable dummy;
-        private SingletonRepository repository;
-        private LockedFile lockFile;
+        private DummySerializable? dummy;
+        private SingletonRepository? repository;
+        private LockedFile? lockFile;
         private bool disposed;
 
         public GitBackuperTests()
@@ -92,7 +92,7 @@
                 Assert.AreEqual(0, git.Commits.Count());
             }
 
-            this.repository.Save(this.dummy);
+            this.repository!.Save(this.dummy);
 
             using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
@@ -117,7 +117,7 @@
             }
 
             var fileInfo = this.directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
-            var readOrCreate = this.repository.ReadOrCreate(fileInfo, () => this.dummy);
+            var readOrCreate = this.repository!.ReadOrCreate(fileInfo, () => this.dummy);
             Assert.AreSame(readOrCreate, this.dummy);
             using (var git = new LibGit2Sharp.Repository(this.directory.FullName))
             {
@@ -129,12 +129,12 @@
         public void Restore()
         {
             var file = this.directory.CreateFileInfoInDirectory(nameof(DummySerializable) + ".cfg");
-            Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));
-            this.repository.Save(file, this.dummy);
+            Assert.AreEqual(false, this.repository!.Backuper.CanRestore(file));
+            this.repository!.Save(file, this.dummy);
             var json = File.ReadAllText(file.FullName);
             Assert.AreEqual("{\r\n  \"Value\": 1\r\n}", json);
-            Assert.AreEqual(false, this.repository.Backuper.CanRestore(file));
-            this.dummy.Value++;
+            Assert.AreEqual(false, this.repository!.Backuper.CanRestore(file));
+            this.dummy!.Value++;
             JsonFile.Save(file, this.dummy);
             json = File.ReadAllText(file.FullName);
             Assert.AreEqual("{\"Value\":2}", json);
@@ -149,7 +149,7 @@
         public void TouchDirectoryProp()
         {
             // just so it is not flagged as unused member
-            Assert.AreEqual(this.directory.FullName, ((GitBackuper)this.repository.Backuper).Directory);
+            Assert.AreEqual(this.directory.FullName, ((GitBackuper)this.repository!.Backuper).Directory);
         }
 
         public void Dispose()
@@ -178,9 +178,9 @@
         /// <param name="directory">The name of the directory to remove.</param>
         private static void DeleteRepositoryDirectory(string directory)
         {
-            foreach (var subdirectory in Directory.EnumerateDirectories(directory))
+            foreach (var subDirectory in Directory.EnumerateDirectories(directory))
             {
-                DeleteRepositoryDirectory(subdirectory);
+                DeleteRepositoryDirectory(subDirectory);
             }
 
             foreach (var fileName in Directory.EnumerateFiles(directory))

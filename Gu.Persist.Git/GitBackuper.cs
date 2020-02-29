@@ -20,7 +20,7 @@
         /// <param name="directory">The directory path.</param>
         public GitBackuper(string directory)
         {
-            this.Directory = directory;
+            this.Directory = directory ?? throw new ArgumentNullException(nameof(directory));
             var directoryInfo = new DirectoryInfo(directory);
             Git.InitRepository(directoryInfo.FullName);
         }
