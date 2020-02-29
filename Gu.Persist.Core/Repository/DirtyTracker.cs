@@ -103,7 +103,7 @@
                 _ = this.clones.TryGetValue(fullFileName, out clone);
             }
 
-            return !comparer.Equals((T)clone, item);
+            return !comparer.Equals((T)clone!, item);
         }
     }
 }

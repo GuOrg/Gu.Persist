@@ -1097,11 +1097,10 @@ namespace Gu.Persist.Core
         /// <param name="tempFile">The temporary file to save to.</param>
         /// <param name="stream">The <see cref="Stream"/>.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        protected async Task SaveStreamCoreAsync(FileInfo file, FileInfo tempFile, Stream stream)
+        protected async Task SaveStreamCoreAsync(FileInfo file, FileInfo tempFile, Stream? stream)
         {
             using var saveTransaction = new SaveTransaction(file, tempFile, stream, this.Backuper);
-            await saveTransaction.CommitAsync()
-.ConfigureAwait(false);
+            await saveTransaction.CommitAsync().ConfigureAwait(false);
         }
 
         /// <summary>

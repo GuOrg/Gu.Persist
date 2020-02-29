@@ -11,14 +11,14 @@ namespace Gu.Persist.Core
     {
         private readonly FileInfo file;
         private readonly FileInfo tempFile;
-        private readonly object contents;
+        private readonly object? contents;
         private readonly IBackuper backuper;
         private LockedFile? lockedFile;
         private LockedFile? lockedSoftDelete;
         private LockedFile? lockedTempFile;
         private bool fileExistedBefore;
 
-        internal SaveTransaction(FileInfo file, FileInfo tempFile, object contents, IBackuper backuper)
+        internal SaveTransaction(FileInfo file, FileInfo tempFile, object? contents, IBackuper backuper)
         {
             this.file = file;
             this.tempFile = tempFile;
@@ -82,19 +82,19 @@ namespace Gu.Persist.Core
         {
             if (this.fileExistedBefore)
             {
-                this.backuper.Backup(this.lockedFile);
+                this.backuper.Backup(this.lockedFile!);
             }
 
             try
             {
-                this.lockedFile.DisposeAndDeleteFile();
+                this.lockedFile!.DisposeAndDeleteFile();
                 if (this.contents != null)
                 {
                     _ = Kernel32.MoveFileEx(this.tempFile.FullName, this.file.FullName, MoveFileFlags.REPLACE_EXISTING);
-                    this.lockedTempFile.Dispose();
+                    this.lockedTempFile!.Dispose();
                 }
 
-                this.lockedSoftDelete.DisposeAndDeleteFile();
+                this.lockedSoftDelete!.DisposeAndDeleteFile();
             }
             catch (Exception exception)
             {
