@@ -25,7 +25,7 @@
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.3.2</Version>
+    <Version>0.3.2.1</Version>
     <Authors>Johan Larsson</Authors>
     <Description>Use a git repository for backups.</Description>
     <PackageReleaseNotes>
