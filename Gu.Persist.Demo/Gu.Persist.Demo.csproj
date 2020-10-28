@@ -28,7 +28,7 @@
     <PackageReference Include="IDisposableAnalyzers" Version="3.4.3" PrivateAssets="all" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="2.9.8" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02" PrivateAssets="all" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="PropertyChangedAnalyzers" Version="3.2.1" PrivateAssets="all" />
     <PackageReference Include="ReflectionAnalyzers" Version="0.1.22-dev" PrivateAssets="all" />
@@ -39,7 +39,7 @@
   
   <ItemGroup>
     <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[3.1.0]" />
-    <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.154" PrivateAssets="all" />
+    <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.160" PrivateAssets="all" />
   </ItemGroup>
   
 </Project>
