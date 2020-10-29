@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Gu.Persist.Core.Tests;
     using Gu.Persist.SystemXml;
@@ -19,7 +18,6 @@
         };
 
         [TestCaseSource(nameof(ComparerSource))]
-        [SuppressMessage("ReSharper", "UnusedVariable")]
         public void XmlEquals(ComparerData data)
         {
             var setting1 = new TypicalSetting
@@ -62,21 +60,9 @@
         }
 
         [TestCaseSource(nameof(ComparerSource))]
-        [SuppressMessage("ReSharper", "UnusedVariable")]
         public void GetHashCode(ComparerData data)
         {
             var setting1 = new TypicalSetting
-            {
-                Name = "Johan Larsson",
-                Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
-                Value1 = 1.2,
-                Value2 = 2,
-                Value3 = 3,
-                Value4 = 4,
-                Value5 = 5,
-            };
-
-            var setting2 = new TypicalSetting
             {
                 Name = "Johan Larsson",
                 Dummies = Enumerable.Range(0, 1).Select(x => new DummySerializable(x)).ToList(),
@@ -106,8 +92,10 @@
 
         public class ComparerData
         {
+#pragma warning disable SA1401 // Fields should be private
             public readonly IEqualityComparer<TypicalSetting> Comparer;
             public readonly int Times;
+#pragma warning restore SA1401 // Fields should be private
 
             public ComparerData(IEqualityComparer<TypicalSetting> comparer, int times)
             {

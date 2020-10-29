@@ -34,7 +34,7 @@ namespace Gu.Persist.NewtonsoftJson
         }
 
         /// <summary>
-        /// The settings controlling json serialization.
+        /// Gets the settings controlling JSON serialization.
         /// </summary>
         public JsonSerializerSettings JsonSerializerSettings { get; }
     }

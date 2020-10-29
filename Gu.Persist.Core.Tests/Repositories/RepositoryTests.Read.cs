@@ -241,7 +241,9 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         private class NoMigration : Migration
         {
+#pragma warning disable SA1401 // Fields should be private
             internal bool WasCalled;
+#pragma warning restore SA1401 // Fields should be private
 
             public override bool TryUpdate(Stream stream, [NotNullWhen(true)] out Stream? updated)
             {
@@ -253,7 +255,9 @@ namespace Gu.Persist.Core.Tests.Repositories
 
         private class IdentityMigration : Migration
         {
+#pragma warning disable SA1401 // Fields should be private
             internal bool WasCalled;
+#pragma warning restore SA1401 // Fields should be private
 
             public override bool TryUpdate(Stream stream, out Stream updated)
             {

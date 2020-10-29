@@ -8,7 +8,7 @@ namespace Gu.Persist.NewtonsoftJson
     public interface IJsonRepositorySetting
     {
         /// <summary>
-        /// Get the settings controlling serialization of JSON.
+        /// Gets get the settings controlling serialization of JSON.
         /// </summary>
         JsonSerializerSettings JsonSerializerSettings { get; }
     }

@@ -3,7 +3,6 @@
 namespace Gu.Persist.Core.Tests.Repositories
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Reflection;
     using System.Runtime.CompilerServices;
@@ -13,7 +12,6 @@ namespace Gu.Persist.Core.Tests.Repositories
 
     public abstract partial class RepositoryTests
     {
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         protected RepositoryTests()
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
