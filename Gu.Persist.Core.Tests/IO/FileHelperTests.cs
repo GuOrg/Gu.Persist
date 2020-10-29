@@ -4,11 +4,13 @@ namespace Gu.Persist.Core.Tests.IO
 {
     using System.IO;
     using System.Runtime.CompilerServices;
+    using System.Threading;
     using System.Threading.Tasks;
     using Gu.Persist.Core;
 
     using NUnit.Framework;
 
+    [Apartment(ApartmentState.STA)]
     public class FileHelperTests
     {
         private readonly DirectoryInfo directory;
