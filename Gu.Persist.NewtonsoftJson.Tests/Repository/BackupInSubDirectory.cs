@@ -6,7 +6,7 @@ namespace Gu.Persist.NewtonsoftJson.Tests.Repository
 
     using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
 
-    public class BackupInSubDirrectory : JsonRepositoryTests
+    public class BackupInSubDirectory : JsonRepositoryTests
     {
         protected override IRepository CreateRepository()
         {
