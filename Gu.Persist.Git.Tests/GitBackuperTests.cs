@@ -149,7 +149,14 @@
                 DeleteRepositoryDirectory(subDirectory);
             }
 
-            System.IO.Directory.Delete(directory, recursive: true);
+            try
+            {
+                System.IO.Directory.Delete(directory, recursive: true);
+            }
+            catch
+            {
+                // flaky on appveyor
+            }
         }
     }
 }

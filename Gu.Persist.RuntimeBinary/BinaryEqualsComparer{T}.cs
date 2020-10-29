@@ -6,7 +6,7 @@
     public class BinaryEqualsComparer<T> : SerializedEqualsComparer<T>
     {
         /// <summary> The default instance. </summary>
-        public new static readonly BinaryEqualsComparer<T> Default = new BinaryEqualsComparer<T>();
+        public static new readonly BinaryEqualsComparer<T> Default = new BinaryEqualsComparer<T>();
 
         /// <inheritdoc/>
         protected override IPooledStream GetStream(T item)

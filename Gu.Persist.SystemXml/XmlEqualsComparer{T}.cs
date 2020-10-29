@@ -8,7 +8,7 @@
         /// <summary>
         /// The default instance.
         /// </summary>
-        public new static readonly XmlEqualsComparer<T> Default = new XmlEqualsComparer<T>();
+        public static new readonly XmlEqualsComparer<T> Default = new XmlEqualsComparer<T>();
 
         /// <inheritdoc/>
         protected override IPooledStream GetStream(T item)
