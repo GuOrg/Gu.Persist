@@ -138,25 +138,18 @@
         /// <param name="directory">The name of the directory to remove.</param>
         private static void DeleteRepositoryDirectory(string directory)
         {
-            foreach (var fileName in System.IO.Directory.EnumerateFiles(directory))
+            foreach (var fileName in System.IO.Directory.GetFiles(directory))
             {
                 File.SetAttributes(fileName, FileAttributes.Normal);
                 File.Delete(fileName);
             }
 
-            foreach (var subDirectory in System.IO.Directory.EnumerateDirectories(directory))
+            foreach (var subDirectory in System.IO.Directory.GetDirectories(directory))
             {
                 DeleteRepositoryDirectory(subDirectory);
             }
 
-            try
-            {
-                System.IO.Directory.Delete(directory, recursive: true);
-            }
-            catch
-            {
-                // flaky on appveyor
-            }
+            System.IO.Directory.Delete(directory, recursive: true);
         }
     }
 }
