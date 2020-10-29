@@ -8,7 +8,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/347rs0n3van46k50/branch/master?svg=true)](https://ci.appveyor.com/project/JohanLarsson/gu-persist/branch/master)
 [![Build Status](https://dev.azure.com/guorg/Gu.Persist/_apis/build/status/GuOrg.Gu.Persist?branchName=master)](https://dev.azure.com/guorg/Gu.Persist/_build/latest?definitionId=4&branchName=master)
 
-A small framework for reading and saving data.
+Library for reading and saving settings and data.
 
 - XmlRepository is a baseclass for managing xml files.
 - BinaryRepository is a baseclass for managing binary files.
