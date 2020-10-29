@@ -149,10 +149,24 @@
                 {
                     Attributes = FileAttributes.Normal,
                 };
-                fileInfo.Delete();
+                try
+                {
+                    fileInfo.Delete();
+                }
+                catch
+                {
+                    // flaky on AppVeyor
+                }
             }
 
-            System.IO.Directory.Delete(directory, recursive: true);
+            try
+            {
+                System.IO.Directory.Delete(directory, recursive: true);
+            }
+            catch
+            {
+                // flaky on AppVeyor
+            }
         }
     }
 }
