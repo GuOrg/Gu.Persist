@@ -5,7 +5,7 @@
     using System.Runtime.CompilerServices;
 
     [Serializable]
-    public class DummySerializable : INotifyPropertyChanged, IEquatable<DummySerializable>
+    public sealed class DummySerializable : INotifyPropertyChanged, IEquatable<DummySerializable>
     {
         private int value;
 
@@ -46,7 +46,7 @@
             return !Equals(left, right);
         }
 
-        public bool Equals(DummySerializable other)
+        public bool Equals(DummySerializable? other)
         {
             if (other is null)
             {
@@ -87,7 +87,7 @@
             return this.value;
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

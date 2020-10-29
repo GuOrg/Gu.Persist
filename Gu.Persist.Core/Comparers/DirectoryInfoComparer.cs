@@ -19,7 +19,7 @@
         }
 
         /// <inheritdoc/>
-        public override bool Equals(DirectoryInfo x, DirectoryInfo y)
+        public override bool Equals(DirectoryInfo? x, DirectoryInfo? y)
         {
             if (x is null && y is null)
             {

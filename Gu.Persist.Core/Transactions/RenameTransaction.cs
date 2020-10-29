@@ -61,7 +61,7 @@ namespace Gu.Persist.Core
             }
         }
 
-        private class RenamePairComparer : IEqualityComparer<RenamePair>
+        private sealed class RenamePairComparer : IEqualityComparer<RenamePair>
         {
             internal static readonly RenamePairComparer Default = new RenamePairComparer();
 
@@ -71,7 +71,7 @@ namespace Gu.Persist.Core
             {
             }
 
-            public bool Equals(RenamePair x, RenamePair y)
+            public bool Equals(RenamePair? x, RenamePair? y)
             {
                 if (x is null && y is null)
                 {
