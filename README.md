@@ -5,9 +5,7 @@
 [![NuGet](https://img.shields.io/nuget/v/Gu.Persist.RuntimeBinary.svg)](https://www.nuget.org/packages/Gu.Persist.RuntimeBinary/)
 [![NuGet](https://img.shields.io/nuget/v/Gu.Persist.RuntimeXml.svg)](https://www.nuget.org/packages/Gu.Persist.RuntimeXml/)
 [![NuGet](https://img.shields.io/nuget/v/Gu.Persist.Git.svg)](https://www.nuget.org/packages/Gu.Persist.Git/)
-<!---
 [![Build status](https://ci.appveyor.com/api/projects/status/347rs0n3van46k50/branch/master?svg=true)](https://ci.appveyor.com/project/JohanLarsson/gu-persist/branch/master)
--->
 [![Build Status](https://dev.azure.com/guorg/Gu.Persist/_apis/build/status/GuOrg.Gu.Persist?branchName=master)](https://dev.azure.com/guorg/Gu.Persist/_build/latest?definitionId=4&branchName=master)
 
 A small framework for reading and saving data.
