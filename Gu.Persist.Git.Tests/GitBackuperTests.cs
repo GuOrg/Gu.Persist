@@ -51,27 +51,14 @@
         public async Task OneTimeSetup()
         {
             var lockFileInfo = Directories.TempDirectory.CreateFileInfoInDirectory("test.lock");
-            try
-            {
-                lockFileInfo.Delete();
-            }
-#pragma warning disable CA1031 // Do not catch general exception types
-            catch
-#pragma warning restore CA1031 // Do not catch general exception types
-            {
-                // this could happen if the previous run was stopped in the debugger.
-            }
-
-            // using this because AppVeyor uses two workers for running the tests.
-            this.lockFile?.Dispose();
+            this.lockFile?.DisposeAndDeleteFile();
             this.lockFile = await LockedFile.CreateAsync(lockFileInfo, TimeSpan.FromSeconds(60))
                                             .ConfigureAwait(false);
         }
 
         [TearDown]
-        public async Task TearDown()
+        public void TearDown()
         {
-            await Task.Delay(1000).ConfigureAwait(false);
             DeleteRepositoryDirectory(this.directory.FullName);
         }
 
