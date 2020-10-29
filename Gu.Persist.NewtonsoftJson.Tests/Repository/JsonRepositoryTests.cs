@@ -20,7 +20,7 @@
             Assert.AreEqual(2, read.Value);
             Assert.AreEqual(2, testCase.Read<DummySerializable>(repository, file).Value);
 
-            JObject Migrate(JObject jObject)
+            static JObject Migrate(JObject jObject)
             {
                 jObject["Value"] = 2;
                 return jObject;
@@ -38,7 +38,7 @@
             Assert.AreEqual(2, read.Value);
             Assert.AreEqual(2, testCase.Read<DummySerializable>(repository, file).Value);
 
-            JObject Migrate(JObject jObject)
+            static JObject Migrate(JObject jObject)
             {
                 if (jObject.TryGetValue("Old", StringComparison.Ordinal, out _))
                 {
@@ -61,7 +61,7 @@
             Assert.AreEqual(2, read.Value);
             Assert.AreEqual(2, testCase.Read<DummySerializable>(repository, file).Value);
 
-            JObject Migrate(JObject jObject)
+            static JObject Migrate(JObject jObject)
             {
                 if (jObject.TryGetValue("Old", StringComparison.Ordinal, out _))
                 {
