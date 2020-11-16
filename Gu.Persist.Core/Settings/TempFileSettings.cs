@@ -5,7 +5,7 @@
     /// <summary>
     /// Setting for temp files.
     /// </summary>
-    public struct TempFileSettings : IFileSettings, IEquatable<TempFileSettings>
+    public readonly struct TempFileSettings : IFileSettings, IEquatable<TempFileSettings>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TempFileSettings"/> struct.

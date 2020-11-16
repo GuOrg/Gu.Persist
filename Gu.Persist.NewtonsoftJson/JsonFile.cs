@@ -1,6 +1,7 @@
 ﻿namespace Gu.Persist.NewtonsoftJson
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
@@ -396,6 +397,7 @@
         /// <param name="stream">The <see cref="Stream"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deserialized contents.</returns>
+        [return: MaybeNull]
         internal static T FromStream<T>(Stream stream, JsonSerializerSettings? settings)
         {
             var serializer = settings != null
