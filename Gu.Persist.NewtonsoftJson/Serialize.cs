@@ -2,7 +2,9 @@
 namespace Gu.Persist.NewtonsoftJson
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
+
     using Newtonsoft.Json;
 
     /// <inheritdoc/>
@@ -35,12 +37,14 @@ namespace Gu.Persist.NewtonsoftJson
         }
 
         /// <inheritdoc/>
+        [return: MaybeNull]
         public override T FromStream<T>(Stream stream, TSetting setting)
         {
             return JsonFile.FromStream<T>(stream, setting.JsonSerializerSettings);
         }
 
         /// <inheritdoc/>
+        [return: MaybeNull]
         public override T Clone<T>(T item, TSetting setting)
         {
             return JsonFile.Clone(item, setting.JsonSerializerSettings);

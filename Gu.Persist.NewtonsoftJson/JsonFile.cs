@@ -43,6 +43,7 @@
         /// <param name="item">The <typeparamref name="T"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deep clone.</returns>
+        [return: MaybeNull]
         public static T Clone<T>(T item, JsonSerializerSettings? settings)
         {
             if (item is null)
@@ -65,6 +66,7 @@
         /// <typeparam name="T">The type to deserialize the contents of the file to.</typeparam>
         /// <param name="fileName">The full name of the file.</param>
         /// <returns>The deserialized content.</returns>
+        [return: MaybeNull]
         public static T Read<T>(string fileName)
         {
             if (fileName is null)
@@ -82,6 +84,7 @@
         /// <typeparam name="T">The type to deserialize the contents of the file to.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <returns>The deserialized content.</returns>
+        [return: MaybeNull]
         public static T Read<T>(FileInfo file)
         {
             if (file is null)
@@ -100,6 +103,7 @@
         /// <param name="fileName">The full name of the file.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deserialized content.</returns>
+        [return: MaybeNull]
         public static T Read<T>(string fileName, JsonSerializerSettings? settings)
         {
             if (fileName is null)
@@ -118,6 +122,7 @@
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deserialized content.</returns>
+        [return: MaybeNull]
         public static T Read<T>(FileInfo file, JsonSerializerSettings? settings)
         {
             if (file is null)
@@ -385,6 +390,7 @@
         /// <typeparam name="T">The type to deserialize the contents to.</typeparam>
         /// <param name="stream">The <see cref="Stream"/>.</param>
         /// <returns>The deserialized contents.</returns>
+        [return: MaybeNull]
         internal static T FromStream<T>(Stream stream)
         {
             return FromStream<T>(stream, null);

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// A base class for comparers using serialization.
@@ -10,7 +11,7 @@
     public abstract class SerializedEqualsComparer<T> : EqualityComparer<T>
     {
         /// <inheritdoc />
-        public override bool Equals(T x, T y)
+        public override bool Equals([AllowNull] T x, [AllowNull] T y)
         {
             if (x is null && y is null)
             {
@@ -22,22 +23,20 @@
                 return false;
             }
 
-            using (var xStream = this.GetStream(x))
-            using (var yStream = this.GetStream(y))
+            using var xStream = this.GetStream(x);
+            using var yStream = this.GetStream(y);
+            if (xStream.Length != yStream.Length)
             {
-                if (xStream.Length != yStream.Length)
+                return false;
+            }
+
+            var xBytes = xStream.GetBuffer();
+            var yBytes = yStream.GetBuffer();
+            for (var i = 0; i < xStream.Length; i++)
+            {
+                if (xBytes[i] != yBytes[i])
                 {
                     return false;
-                }
-
-                var xBytes = xStream.GetBuffer();
-                var yBytes = yStream.GetBuffer();
-                for (var i = 0; i < xStream.Length; i++)
-                {
-                    if (xBytes[i] != yBytes[i])
-                    {
-                        return false;
-                    }
                 }
             }
 
