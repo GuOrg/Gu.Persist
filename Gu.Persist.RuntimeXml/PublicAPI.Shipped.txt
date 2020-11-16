@@ -1,26 +1,27 @@
-﻿Gu.Persist.RuntimeXml.DataRepository
+﻿#nullable enable
+Gu.Persist.RuntimeXml.DataRepository
 Gu.Persist.RuntimeXml.DataRepository.DataRepository() -> void
-Gu.Persist.RuntimeXml.DataRepository.DataRepository(Gu.Persist.Core.DataRepositorySettings settings) -> void
-Gu.Persist.RuntimeXml.DataRepository.DataRepository(System.Func<Gu.Persist.Core.DataRepositorySettings> settingsCreator) -> void
-Gu.Persist.RuntimeXml.DataRepository.DataRepository(System.Func<Gu.Persist.Core.DataRepositorySettings> settingsCreator, Gu.Persist.Core.IBackuper backuper) -> void
-Gu.Persist.RuntimeXml.DataRepository.DataRepository(System.IO.DirectoryInfo directory) -> void
+Gu.Persist.RuntimeXml.DataRepository.DataRepository(Gu.Persist.Core.DataRepositorySettings! settings) -> void
+Gu.Persist.RuntimeXml.DataRepository.DataRepository(System.Func<Gu.Persist.Core.DataRepositorySettings!>! settingsCreator) -> void
+Gu.Persist.RuntimeXml.DataRepository.DataRepository(System.Func<Gu.Persist.Core.DataRepositorySettings!>! settingsCreator, Gu.Persist.Core.IBackuper! backuper) -> void
+Gu.Persist.RuntimeXml.DataRepository.DataRepository(System.IO.DirectoryInfo! directory) -> void
 Gu.Persist.RuntimeXml.SingletonRepository
 Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository() -> void
-Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository(Gu.Persist.Core.RepositorySettings settings) -> void
-Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository(Gu.Persist.Core.RepositorySettings settings, Gu.Persist.Core.IBackuper backuper) -> void
-Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.Core.RepositorySettings> settingsCreator) -> void
-Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.Core.RepositorySettings> settingsCreator, Gu.Persist.Core.IBackuper backuper) -> void
-Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository(System.IO.DirectoryInfo directory) -> void
+Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository(Gu.Persist.Core.RepositorySettings! settings) -> void
+Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository(Gu.Persist.Core.RepositorySettings! settings, Gu.Persist.Core.IBackuper! backuper) -> void
+Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.Core.RepositorySettings!>! settingsCreator) -> void
+Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.Core.RepositorySettings!>! settingsCreator, Gu.Persist.Core.IBackuper! backuper) -> void
+Gu.Persist.RuntimeXml.SingletonRepository.SingletonRepository(System.IO.DirectoryInfo! directory) -> void
 Gu.Persist.RuntimeXml.XmlEqualsComparer<T>
 Gu.Persist.RuntimeXml.XmlEqualsComparer<T>.XmlEqualsComparer() -> void
 Gu.Persist.RuntimeXml.XmlFile
 static Gu.Persist.RuntimeXml.XmlFile.Clone<T>(T item) -> T
-static Gu.Persist.RuntimeXml.XmlFile.Read<T>(System.IO.FileInfo file) -> T
-static Gu.Persist.RuntimeXml.XmlFile.Read<T>(string fileName) -> T
-static Gu.Persist.RuntimeXml.XmlFile.ReadAsync<T>(System.IO.FileInfo file) -> System.Threading.Tasks.Task<T>
-static Gu.Persist.RuntimeXml.XmlFile.ReadAsync<T>(string fileName) -> System.Threading.Tasks.Task<T>
-static Gu.Persist.RuntimeXml.XmlFile.Save<T>(System.IO.FileInfo file, T item) -> void
-static Gu.Persist.RuntimeXml.XmlFile.Save<T>(string fileName, T item) -> void
-static Gu.Persist.RuntimeXml.XmlFile.SaveAsync<T>(System.IO.FileInfo file, T item) -> System.Threading.Tasks.Task
-static Gu.Persist.RuntimeXml.XmlFile.SaveAsync<T>(string fileName, T item) -> System.Threading.Tasks.Task
-static readonly Gu.Persist.RuntimeXml.XmlEqualsComparer<T>.Default -> Gu.Persist.RuntimeXml.XmlEqualsComparer<T>
+static Gu.Persist.RuntimeXml.XmlFile.Read<T>(System.IO.FileInfo! file) -> T
+static Gu.Persist.RuntimeXml.XmlFile.Read<T>(string! fileName) -> T
+static Gu.Persist.RuntimeXml.XmlFile.ReadAsync<T>(System.IO.FileInfo! file) -> System.Threading.Tasks.Task<T>!
+static Gu.Persist.RuntimeXml.XmlFile.ReadAsync<T>(string! fileName) -> System.Threading.Tasks.Task<T>!
+static Gu.Persist.RuntimeXml.XmlFile.Save<T>(System.IO.FileInfo! file, T item) -> void
+static Gu.Persist.RuntimeXml.XmlFile.Save<T>(string! fileName, T item) -> void
+static Gu.Persist.RuntimeXml.XmlFile.SaveAsync<T>(System.IO.FileInfo! file, T item) -> System.Threading.Tasks.Task!
+static Gu.Persist.RuntimeXml.XmlFile.SaveAsync<T>(string! fileName, T item) -> System.Threading.Tasks.Task!
+static readonly Gu.Persist.RuntimeXml.XmlEqualsComparer<T>.Default -> Gu.Persist.RuntimeXml.XmlEqualsComparer<T>!
