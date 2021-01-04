@@ -3,7 +3,7 @@
     using Gu.Persist.Core;
 
     /// <inheritdoc/>
-    public class BinaryEqualsComparer<T> : SerializedEqualsComparer<T>
+    public sealed class BinaryEqualsComparer<T> : SerializedEqualsComparer<T>
     {
         /// <summary> The default instance. </summary>
         public static new readonly BinaryEqualsComparer<T> Default = new BinaryEqualsComparer<T>();

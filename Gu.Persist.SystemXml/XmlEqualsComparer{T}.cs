@@ -3,7 +3,7 @@
     using Gu.Persist.Core;
 
     /// <inheritdoc/>
-    public class XmlEqualsComparer<T> : SerializedEqualsComparer<T>
+    public sealed class XmlEqualsComparer<T> : SerializedEqualsComparer<T>
     {
         /// <summary>
         /// The default instance.

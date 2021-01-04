@@ -9,7 +9,7 @@
     using Gu.Persist.NewtonsoftJson;
     using RepositorySettings = Gu.Persist.NewtonsoftJson.RepositorySettings;
 
-    public class RepositoryVm : INotifyPropertyChanged
+    public sealed class RepositoryVm : INotifyPropertyChanged
     {
         private RepositoryVm()
         {
@@ -37,8 +37,7 @@
             this.Log.Add($"Saved: {typeof(T).Name}");
         }
 
-        // ReSharper disable once UnusedMember.Global
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
