@@ -1,5 +1,4 @@
-﻿#pragma warning disable SA1600 // Elements must be documented
-namespace Gu.Persist.NewtonsoftJson
+﻿namespace Gu.Persist.NewtonsoftJson
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;

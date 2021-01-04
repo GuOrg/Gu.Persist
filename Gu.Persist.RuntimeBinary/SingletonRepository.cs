@@ -1,4 +1,3 @@
-#pragma warning disable 1573
 namespace Gu.Persist.RuntimeBinary
 {
     using System;

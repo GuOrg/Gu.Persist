@@ -1,5 +1,3 @@
-#pragma warning disable 1573
-#pragma warning disable SA1600
 namespace Gu.Persist.Core
 {
     using System;

@@ -1,5 +1,4 @@
-﻿#pragma warning disable 1573
-namespace Gu.Persist.Core
+﻿namespace Gu.Persist.Core
 {
     using System;
     using System.Collections.Generic;

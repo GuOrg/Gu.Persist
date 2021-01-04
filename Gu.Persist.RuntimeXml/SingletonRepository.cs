@@ -1,5 +1,4 @@
-﻿#pragma warning disable 1573
-namespace Gu.Persist.RuntimeXml
+﻿namespace Gu.Persist.RuntimeXml
 {
     using System;
     using System.IO;

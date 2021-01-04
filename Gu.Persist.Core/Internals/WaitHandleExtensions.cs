@@ -1,5 +1,4 @@
 ﻿// ReSharper disable UnusedMember.Global
-#pragma warning disable UseAsyncSuffix // Use Async suffix
 namespace Gu.Persist.Core
 {
     using System;

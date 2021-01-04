@@ -1,6 +1,4 @@
-﻿#pragma warning disable 1573
-
-namespace Gu.Persist.Core
+﻿namespace Gu.Persist.Core
 {
     /// <summary>
     /// A <see cref="Repository{TSetting}"/> with API using file names.
