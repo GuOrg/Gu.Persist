@@ -1,5 +1,4 @@
-﻿#pragma warning disable SA1600 // Elements must be documented
-namespace Gu.Persist.Core
+﻿namespace Gu.Persist.Core
 {
     using System;
     using System.IO;

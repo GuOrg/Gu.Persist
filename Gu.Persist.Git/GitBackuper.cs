@@ -79,7 +79,11 @@
             }
 
             var status = Git.GetStatus(file);
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable IDE0066 // Convert switch statement to expression
             switch (status)
+#pragma warning restore IDE0066 // Convert switch statement to expression
+#pragma warning restore IDE0079 // Remove unnecessary suppression
             {
                 case FileStatus.NewInIndex:
                 case FileStatus.ModifiedInIndex:
