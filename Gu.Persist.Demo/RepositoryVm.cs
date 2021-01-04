@@ -49,10 +49,5 @@
             var gitBackuper = new GitBackuper(settings.Directory);
             return new SingletonRepository(settings, gitBackuper);
         }
-
-        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
