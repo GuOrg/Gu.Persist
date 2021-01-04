@@ -109,7 +109,7 @@
 
         internal class ReadOnlyObservableCollectionConverter<T> : JsonConverter
         {
-            public override bool CanWrite { get; } = false;
+            public override bool CanWrite { get; }
 
             public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
             {
