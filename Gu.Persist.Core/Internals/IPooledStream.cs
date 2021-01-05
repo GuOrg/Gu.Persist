@@ -5,7 +5,9 @@
     /// <summary>
     /// A pooled stream.
     /// </summary>
+#pragma warning disable CA1711 // Identifiers should not have incorrect suffix
     public interface IPooledStream : IDisposable
+#pragma warning restore CA1711 // Identifiers should not have incorrect suffix
     {
         /// <summary>
         /// Gets the <see cref="System.IO.MemoryStream.Length"/>.

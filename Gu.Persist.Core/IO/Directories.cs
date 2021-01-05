@@ -80,12 +80,12 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Gets %AppData%\ApplicationName.
         /// </summary>
-        public static DirectoryInfo Default => @default ?? (@default = ApplicationData.CreateSubdirectory(AppDirectory().Name));
+        public static DirectoryInfo Default => @default ??= ApplicationData.CreateSubdirectory(AppDirectory().Name);
 
         /// <summary>
         /// Gets %AppData%\ApplicationName\Backup.
         /// </summary>
-        public static DirectoryInfo DefaultBackup => defaultBackup ?? (defaultBackup = Default.CreateSubdirectory("Backup"));
+        public static DirectoryInfo DefaultBackup => defaultBackup ??= Default.CreateSubdirectory("Backup");
 
         internal static DirectoryInfo AppDirectory()
         {
