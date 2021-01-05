@@ -9,7 +9,9 @@
         {
             var formatter = new BinaryFormatter();
             using var stream = File.OpenRead(file.FullName);
+#pragma warning disable CA2300, CA2301 // Do not use insecure deserializer BinaryFormatter
             return (T)formatter.Deserialize(stream);
+#pragma warning restore CA2300, CA2301 // Do not use insecure deserializer BinaryFormatter
         }
 
         public static void Save<T>(this FileInfo file, T o)
