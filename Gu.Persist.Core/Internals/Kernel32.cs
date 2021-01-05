@@ -15,6 +15,7 @@
         /// <param name="dwFlags">The <see cref="MoveFileFlags"/>.</param>
         /// <returns>True if the function succeeds.</returns>
         [return: MarshalAs(UnmanagedType.Bool)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         internal static extern bool MoveFileEx(string lpExistingFileName, string lpNewFileName, MoveFileFlags dwFlags);
     }
