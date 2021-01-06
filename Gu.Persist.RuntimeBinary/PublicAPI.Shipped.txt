@@ -14,7 +14,6 @@ Gu.Persist.RuntimeBinary.SingletonRepository.SingletonRepository(Gu.Persist.Core
 Gu.Persist.RuntimeBinary.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.Core.RepositorySettings!>! settingsCreator) -> void
 Gu.Persist.RuntimeBinary.SingletonRepository.SingletonRepository(System.Func<Gu.Persist.Core.RepositorySettings!>! settingsCreator, Gu.Persist.Core.IBackuper! backuper) -> void
 Gu.Persist.RuntimeBinary.SingletonRepository.SingletonRepository(System.IO.DirectoryInfo! directory) -> void
-override Gu.Persist.RuntimeBinary.BinaryEqualsComparer<T>.GetStream(T item) -> Gu.Persist.Core.IPooledStream!
 static Gu.Persist.RuntimeBinary.BinaryFile.Clone<T>(T item) -> T
 static Gu.Persist.RuntimeBinary.BinaryFile.Read<T>(System.IO.FileInfo! file) -> T
 static Gu.Persist.RuntimeBinary.BinaryFile.Read<T>(string! fileName) -> T

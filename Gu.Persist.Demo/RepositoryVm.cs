@@ -3,7 +3,6 @@
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Runtime.CompilerServices;
     using Gu.Persist.Core;
     using Gu.Persist.Git;
     using Gu.Persist.NewtonsoftJson;
@@ -19,7 +18,9 @@
             this.AutoSaveSetting.PropertyChanged += (o, e) => this.Save((AutoSaveSetting)o);
         }
 
+#pragma warning disable CS0067
         public event PropertyChangedEventHandler? PropertyChanged;
+#pragma warning restore CS0067
 
         public static RepositoryVm Instance { get; } = new RepositoryVm();
 

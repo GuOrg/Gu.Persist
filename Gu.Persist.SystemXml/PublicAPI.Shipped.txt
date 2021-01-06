@@ -28,7 +28,6 @@ Gu.Persist.SystemXml.SingletonRepository.SingletonRepository(System.IO.Directory
 Gu.Persist.SystemXml.XmlEqualsComparer<T>
 Gu.Persist.SystemXml.XmlEqualsComparer<T>.XmlEqualsComparer() -> void
 Gu.Persist.SystemXml.XmlFile
-override Gu.Persist.SystemXml.XmlEqualsComparer<T>.GetStream(T item) -> Gu.Persist.Core.IPooledStream!
 static Gu.Persist.SystemXml.XmlFile.Clone<T>(T item) -> T
 static Gu.Persist.SystemXml.XmlFile.Read<T>(System.IO.FileInfo! file) -> T
 static Gu.Persist.SystemXml.XmlFile.Read<T>(string! fileName) -> T
