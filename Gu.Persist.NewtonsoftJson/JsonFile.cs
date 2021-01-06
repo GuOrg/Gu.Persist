@@ -1,7 +1,6 @@
 ﻿namespace Gu.Persist.NewtonsoftJson
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
@@ -33,7 +32,7 @@
             }
 
             using var stream = ToStream(item);
-            return FromStream<T>(stream);
+            return FromStream<T>(stream)!;
         }
 
         /// <summary>
@@ -43,7 +42,6 @@
         /// <param name="item">The <typeparamref name="T"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deep clone.</returns>
-        [return: MaybeNull]
         public static T Clone<T>(T item, JsonSerializerSettings? settings)
         {
             if (item is null)
@@ -57,7 +55,7 @@
             }
 
             using var stream = ToStream(item, settings);
-            return FromStream<T>(stream, settings);
+            return FromStream<T>(stream, settings)!;
         }
 
         /// <summary>
@@ -66,7 +64,6 @@
         /// <typeparam name="T">The type to deserialize the contents of the file to.</typeparam>
         /// <param name="fileName">The full name of the file.</param>
         /// <returns>The deserialized content.</returns>
-        [return: MaybeNull]
         public static T Read<T>(string fileName)
         {
             if (fileName is null)
@@ -84,7 +81,6 @@
         /// <typeparam name="T">The type to deserialize the contents of the file to.</typeparam>
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <returns>The deserialized content.</returns>
-        [return: MaybeNull]
         public static T Read<T>(FileInfo file)
         {
             if (file is null)
@@ -103,7 +99,6 @@
         /// <param name="fileName">The full name of the file.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deserialized content.</returns>
-        [return: MaybeNull]
         public static T Read<T>(string fileName, JsonSerializerSettings? settings)
         {
             if (fileName is null)
@@ -122,7 +117,6 @@
         /// <param name="file">The <see cref="FileInfo"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deserialized content.</returns>
-        [return: MaybeNull]
         public static T Read<T>(FileInfo file, JsonSerializerSettings? settings)
         {
             if (file is null)
@@ -390,7 +384,6 @@
         /// <typeparam name="T">The type to deserialize the contents to.</typeparam>
         /// <param name="stream">The <see cref="Stream"/>.</param>
         /// <returns>The deserialized contents.</returns>
-        [return: MaybeNull]
         internal static T FromStream<T>(Stream stream)
         {
             return FromStream<T>(stream, null);
@@ -403,7 +396,6 @@
         /// <param name="stream">The <see cref="Stream"/>.</param>
         /// <param name="settings">The <see cref="JsonSerializerSettings"/>.</param>
         /// <returns>The deserialized contents.</returns>
-        [return: MaybeNull]
         internal static T FromStream<T>(Stream stream, JsonSerializerSettings? settings)
         {
             var serializer = settings != null
@@ -411,7 +403,7 @@
                 : JsonSerializer.Create();
             using var reader = new StreamReader(stream, DefaultEncoding, detectEncodingFromByteOrderMarks: true, bufferSize: 1024, leaveOpen: true);
             using var jsonTextReader = new JsonTextReader(reader);
-            return serializer.Deserialize<T>(jsonTextReader);
+            return serializer.Deserialize<T>(jsonTextReader) ?? throw new InvalidOperationException("The content of the stream deserialized to null.");
         }
 
         /// <summary>
