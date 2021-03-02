@@ -203,7 +203,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             }
 
             var exception = Assert.Throws<ArgumentException>(() => repository.CanRename<DummySerializable>("NewName<>"));
-            Assert.AreEqual("Illegal characters in path.", exception.Message);
+            Assert.AreEqual("Illegal characters in path.", exception!.Message);
         }
 
         [TestCase(true, true)]

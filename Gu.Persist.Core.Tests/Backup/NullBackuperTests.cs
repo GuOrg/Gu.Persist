@@ -100,7 +100,7 @@ namespace Gu.Persist.Core.Tests.Backup
             AssertFile.Exists(true, backup);
 
             var exception = Assert.Throws<InvalidOperationException>(() => NullBackuper.Default.TryRestore(file));
-            StringAssert.IsMatch(@"Expected file .+NullBackuperTests\\TryRestoreWhenHasBackupAndOriginal.cfg to not exist.", exception.Message);
+            StringAssert.IsMatch(@"Expected file .+NullBackuperTests\\TryRestoreWhenHasBackupAndOriginal.cfg to not exist.", exception!.Message);
 
             AssertFile.Exists(true, file);
             AssertFile.Exists(true, softDelete);

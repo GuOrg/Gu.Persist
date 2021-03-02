@@ -117,7 +117,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             else
             {
                 var exception = Assert.Throws<InvalidOperationException>(() => repository.IsDirty(new DummySerializable(1)));
-                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
+                Assert.AreEqual("This repository is not tracking dirty.", exception!.Message);
             }
         }
 
@@ -141,7 +141,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             else
             {
                 var exception = Assert.Throws<InvalidOperationException>(() => repository.IsDirty(new DummySerializable(1)));
-                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
+                Assert.AreEqual("This repository is not tracking dirty.", exception!.Message);
             }
         }
 
@@ -164,7 +164,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             else
             {
                 var exception = Assert.Throws<InvalidOperationException>(() => repository.IsDirty(new DummySerializable(1)));
-                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
+                Assert.AreEqual("This repository is not tracking dirty.", exception!.Message);
             }
         }
 

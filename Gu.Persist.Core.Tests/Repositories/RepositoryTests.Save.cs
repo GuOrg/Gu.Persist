@@ -266,7 +266,7 @@ namespace Gu.Persist.Core.Tests.Repositories
             else
             {
                 var exception = Assert.Throws<InvalidOperationException>(() => repository.IsDirty(dummy));
-                Assert.AreEqual("This repository is not tracking dirty.", exception.Message);
+                Assert.AreEqual("This repository is not tracking dirty.", exception!.Message);
             }
         }
     }

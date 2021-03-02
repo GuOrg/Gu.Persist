@@ -123,7 +123,7 @@ namespace Gu.Persist.Core.Tests.Backup
             var backuper = Backuper.Create(new BackupSettings(Directory.FullName, BackupSettings.DefaultExtension, BackupSettings.DefaultTimeStampFormat, 2, 3));
 
             var exception = Assert.Throws<InvalidOperationException>(() => backuper.TryRestore(file));
-            StringAssert.IsMatch(@"Expected file .*BackuperTests\\TryRestoreWhenHasBackupAndOriginal.cfg to not exist.", exception.Message);
+            StringAssert.IsMatch(@"Expected file .*BackuperTests\\TryRestoreWhenHasBackupAndOriginal.cfg to not exist.", exception!.Message);
 
             AssertFile.Exists(true, file);
             AssertFile.Exists(false, softDelete);
