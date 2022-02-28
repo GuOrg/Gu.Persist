@@ -8,7 +8,7 @@
 
     public class MyRepository
     {
-        private static readonly DirectoryInfo Directory = new DirectoryInfo("./Settings");
+        private static readonly DirectoryInfo Directory = new("./Settings");
         private readonly SingletonRepository repository;
 
         public MyRepository()
