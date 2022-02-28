@@ -12,7 +12,7 @@
         /// <summary>
         /// The default instance.
         /// </summary>
-        public static readonly NullBackuper Default = new NullBackuper();
+        public static readonly NullBackuper Default = new();
 
         private NullBackuper()
         {

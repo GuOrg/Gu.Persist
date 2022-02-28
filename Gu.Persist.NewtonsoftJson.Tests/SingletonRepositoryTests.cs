@@ -12,8 +12,8 @@
 
     public class SingletonRepositoryTests
     {
-        private static readonly DirectoryInfo Directory = new DirectoryInfo($@"C:\Temp\Gu.Persist\");
-        private static readonly DirectoryInfo BackupDir = new DirectoryInfo($@"C:\Temp\Gu.Persist\Backup");
+        private static readonly DirectoryInfo Directory = new($@"C:\Temp\Gu.Persist\");
+        private static readonly DirectoryInfo BackupDir = new($@"C:\Temp\Gu.Persist\Backup");
 
         [Test]
         public void CreateFromRepositorySettings()

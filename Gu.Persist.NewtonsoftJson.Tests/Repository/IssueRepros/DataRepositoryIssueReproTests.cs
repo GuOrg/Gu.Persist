@@ -16,7 +16,7 @@
 
     public class DataRepositoryIssueReproTests
     {
-        public DirectoryInfo TargetDirectory => new DirectoryInfo(@"C:\Temp\Gu.Persist\" + this.GetType().FullName);
+        public DirectoryInfo TargetDirectory => new(@"C:\Temp\Gu.Persist\" + this.GetType().FullName);
 
         [TearDown]
         public void TearDown()

@@ -13,7 +13,7 @@ namespace Gu.Persist.RuntimeXml
     /// </summary>
     public static class XmlFile
     {
-        private static readonly ConcurrentDictionary<Type, DataContractSerializer> Serializers = new ConcurrentDictionary<Type, DataContractSerializer>();
+        private static readonly ConcurrentDictionary<Type, DataContractSerializer> Serializers = new();
 
         /// <summary>
         /// Serializes to <see cref="MemoryStream"/>, then returns the deserialized object.

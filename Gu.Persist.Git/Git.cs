@@ -7,11 +7,11 @@
 
     internal static class Git
     {
-        private static readonly CommitOptions AllowEmptyCommit = new CommitOptions { AllowEmptyCommit = false };
-        private static readonly CommitOptions NonEmptyCommitOnly = new CommitOptions { AllowEmptyCommit = false };
-        private static readonly CheckoutOptions ForceCheckoutOptions = new CheckoutOptions { CheckoutModifiers = CheckoutModifiers.Force };
-        private static readonly Signature Signature = new Signature(new Identity("Gu.Persist.Git", "Gu.Persist.Git@github.com"), DateTimeOffset.UtcNow);
-        private static readonly StageOptions StageOptionsIncludeIgnored = new StageOptions { IncludeIgnored = true };
+        private static readonly CommitOptions AllowEmptyCommit = new() { AllowEmptyCommit = false };
+        private static readonly CommitOptions NonEmptyCommitOnly = new() { AllowEmptyCommit = false };
+        private static readonly CheckoutOptions ForceCheckoutOptions = new() { CheckoutModifiers = CheckoutModifiers.Force };
+        private static readonly Signature Signature = new(new Identity("Gu.Persist.Git", "Gu.Persist.Git@github.com"), DateTimeOffset.UtcNow);
+        private static readonly StageOptions StageOptionsIncludeIgnored = new() { IncludeIgnored = true };
 
         internal static void InitRepository(string directory)
         {

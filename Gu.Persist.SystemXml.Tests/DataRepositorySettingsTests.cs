@@ -14,16 +14,16 @@
 
     public class DataRepositorySettingsTests
     {
-        private static readonly BackupSettings BackupSettings = new BackupSettings(
+        private static readonly BackupSettings BackupSettings = new(
             @"C:\Temp\Gu.Persist\Backup",
             ".abc",
             BackupSettings.DefaultTimeStampFormat,
             1,
             2);
 
-        private static readonly DirectoryInfo Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\");
+        private static readonly DirectoryInfo Directory = new(@"C:\Temp\Gu.Persist\");
 
-        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(
+        private static readonly DataRepositorySettings DataRepositorySettings = new(
             directory: Directory.FullName,
             isTrackingDirty: false,
             saveNullDeletesFile: false,

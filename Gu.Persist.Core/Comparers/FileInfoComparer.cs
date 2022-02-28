@@ -10,7 +10,7 @@
         /// <summary>
         /// The default instance.
         /// </summary>
-        public static new readonly FileInfoComparer Default = new FileInfoComparer();
+        public static new readonly FileInfoComparer Default = new();
 
         /// <inheritdoc/>
         public override bool Equals(FileInfo? x, FileInfo? y)

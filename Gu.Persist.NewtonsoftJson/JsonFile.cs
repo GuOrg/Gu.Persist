@@ -16,7 +16,7 @@
         /// <summary>
         /// Returns the default encoding UTF8.
         /// </summary>
-        public static readonly UTF8Encoding DefaultEncoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
+        public static readonly UTF8Encoding DefaultEncoding = new(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
 
         /// <summary>
         /// Serializes to MemoryStream, then returns the deserialized object.

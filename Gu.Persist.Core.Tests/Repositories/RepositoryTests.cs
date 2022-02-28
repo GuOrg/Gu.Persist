@@ -441,7 +441,7 @@ namespace Gu.Persist.Core.Tests.Repositories
         ////    Assert.AreEqual(_dummy.Value - 1, read.Value);
         ////}
 
-        protected static System.IO.FileInfo CreateTestFile(IRepositorySettings settings, [CallerMemberName] string? name = null) => new System.IO.FileInfo(Path.Combine(settings.Directory, name + settings.Extension));
+        protected static System.IO.FileInfo CreateTestFile(IRepositorySettings settings, [CallerMemberName] string? name = null) => new(Path.Combine(settings.Directory, name + settings.Extension));
 
         protected abstract IRepository CreateRepository();
 

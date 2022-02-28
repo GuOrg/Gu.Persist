@@ -15,67 +15,67 @@ namespace Gu.Persist.Core
         /// <summary>
         /// Gets the <see cref="Environment.CurrentDirectory"/>.
         /// </summary>
-        public static DirectoryInfo CurrentDirectory => new DirectoryInfo(Environment.CurrentDirectory);
+        public static DirectoryInfo CurrentDirectory => new(Environment.CurrentDirectory);
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).
         /// </summary>
-        public static DirectoryInfo ApplicationData => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+        public static DirectoryInfo ApplicationData => new(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).
         /// </summary>
-        public static DirectoryInfo LocalApplicationData => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+        public static DirectoryInfo LocalApplicationData => new(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData).
         /// </summary>
-        public static DirectoryInfo CommonApplicationData => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
+        public static DirectoryInfo CommonApplicationData => new(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).
         /// </summary>
-        public static DirectoryInfo MyDocuments => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+        public static DirectoryInfo MyDocuments => new(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments).
         /// </summary>
-        public static DirectoryInfo CommonDocuments => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
+        public static DirectoryInfo CommonDocuments => new(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments));
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles).
         /// </summary>
-        public static DirectoryInfo ProgramFiles => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
+        public static DirectoryInfo ProgramFiles => new(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).
         /// </summary>
-        public static DirectoryInfo ProgramFilesX86 => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
+        public static DirectoryInfo ProgramFilesX86 => new(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86));
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles).
         /// </summary>
-        public static DirectoryInfo CommonProgramFiles => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles));
+        public static DirectoryInfo CommonProgramFiles => new(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles));
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86).
         /// </summary>
-        public static DirectoryInfo CommonProgramFilesX86 => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86));
+        public static DirectoryInfo CommonProgramFilesX86 => new(Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86));
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.Desktop).
         /// </summary>
-        public static DirectoryInfo Desktop => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+        public static DirectoryInfo Desktop => new(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
 
         /// <summary>
         /// Gets Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory).
         /// </summary>
-        public static DirectoryInfo DesktopDirectory => new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
+        public static DirectoryInfo DesktopDirectory => new(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
 
         /// <summary>
         /// Gets Path.GetTempPath().
         /// </summary>
-        public static DirectoryInfo TempDirectory => new DirectoryInfo(Path.GetTempPath());
+        public static DirectoryInfo TempDirectory => new(Path.GetTempPath());
 
         /// <summary>
         /// Gets %AppData%\ApplicationName.

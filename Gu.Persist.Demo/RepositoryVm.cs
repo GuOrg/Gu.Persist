@@ -22,7 +22,7 @@
         public event PropertyChangedEventHandler? PropertyChanged;
 #pragma warning restore CS0067
 
-        public static RepositoryVm Instance { get; } = new RepositoryVm();
+        public static RepositoryVm Instance { get; } = new();
 
         public IRepository Repository { get; }
 

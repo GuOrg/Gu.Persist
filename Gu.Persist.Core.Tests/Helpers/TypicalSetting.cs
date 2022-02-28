@@ -6,7 +6,7 @@
     [Serializable]
     public class TypicalSetting
     {
-        private List<DummySerializable> dummies = new List<DummySerializable>();
+        private List<DummySerializable> dummies = new();
 
         public string? Name { get; set; }
 

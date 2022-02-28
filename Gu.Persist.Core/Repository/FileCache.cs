@@ -10,8 +10,8 @@
     /// </summary>
     public sealed class FileCache
     {
-        private readonly ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-        private readonly object gate = new object();
+        private readonly ConcurrentDictionary<string, object> cache = new(StringComparer.OrdinalIgnoreCase);
+        private readonly object gate = new();
 
         /// <summary>
         /// Get the cached instance for a <paramref name="fullFileName"/> if it exists.

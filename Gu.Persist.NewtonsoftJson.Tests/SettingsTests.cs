@@ -12,10 +12,10 @@
 
     public class SettingsTests
     {
-        private static readonly DirectoryInfo Directory = new DirectoryInfo($@"C:\Temp\Gu.Persist\");
-        private static readonly DirectoryInfo BackupDir = new DirectoryInfo($@"C:\Temp\Gu.Persist\Backup");
+        private static readonly DirectoryInfo Directory = new($@"C:\Temp\Gu.Persist\");
+        private static readonly DirectoryInfo BackupDir = new($@"C:\Temp\Gu.Persist\Backup");
 
-        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(
+        private static readonly DataRepositorySettings DataRepositorySettings = new(
             directory: Directory.FullName,
             jsonSerializerSettings: RepositorySettings.CreateDefaultJsonSettings(),
             isTrackingDirty: false,

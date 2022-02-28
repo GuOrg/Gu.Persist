@@ -15,7 +15,7 @@
 
     public static class GitBackuperTests
     {
-        private static readonly DirectoryInfo Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\" + nameof(GitBackuperTests));
+        private static readonly DirectoryInfo Directory = new(@"C:\Temp\Gu.Persist\" + nameof(GitBackuperTests));
         private static DummySerializable? dummy;
         private static SingletonRepository? repository;
         private static LockedFile? lockFile;

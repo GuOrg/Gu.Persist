@@ -11,7 +11,7 @@
         internal static readonly char[] InvalidFileNameChars = Path.GetInvalidFileNameChars();
         //// ReSharper disable once UnusedMember.Global
         internal static readonly char[] InvalidPathChars = Path.GetInvalidPathChars();
-        private static readonly ConcurrentDictionary<string, string> TimeStampPatternMap = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> TimeStampPatternMap = new();
 
         /// <summary>
         /// Opens a file stram that creates a file if not exists.

@@ -8,17 +8,17 @@
 
     public class BinaryRepositorySettingsTests
     {
-        private static readonly DirectoryInfo Directory = new DirectoryInfo(@"C:\Temp\Gu.Persist\");
-        private static readonly DirectoryInfo BackupDirectory = new DirectoryInfo(@"C:\Temp\Gu.Persist\Backup\");
+        private static readonly DirectoryInfo Directory = new(@"C:\Temp\Gu.Persist\");
+        private static readonly DirectoryInfo BackupDirectory = new(@"C:\Temp\Gu.Persist\Backup\");
 
-        private static readonly BackupSettings BackupSettings = new BackupSettings(
+        private static readonly BackupSettings BackupSettings = new(
             directory: BackupDirectory.FullName,
             extension: ".abc",
             timeStampFormat: BackupSettings.DefaultTimeStampFormat,
             numberOfBackups: 1,
             maxAgeInDays: 2);
 
-        private static readonly DataRepositorySettings DataRepositorySettings = new DataRepositorySettings(
+        private static readonly DataRepositorySettings DataRepositorySettings = new(
             directory: Directory.FullName,
             isTrackingDirty: false,
             saveNullDeletesFile: false,

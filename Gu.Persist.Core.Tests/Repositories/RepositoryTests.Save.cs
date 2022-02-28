@@ -197,8 +197,8 @@ namespace Gu.Persist.Core.Tests.Repositories
         {
             var list = new List<DummySerializable>
             {
-                new DummySerializable(1),
-                new DummySerializable(2),
+                new(1),
+                new(2),
             };
             var repository = this.CreateRepository();
             var file = testCase.File<List<DummySerializable>>(repository);

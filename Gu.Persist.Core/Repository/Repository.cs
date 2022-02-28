@@ -805,7 +805,7 @@
                 throw new ArgumentNullException(nameof(newName));
             }
 
-            var pairs = new List<RenamePair> { new RenamePair(oldName, newName) };
+            var pairs = new List<RenamePair> { new(oldName, newName) };
             var oldSoftDelete = oldName.SoftDeleteFile();
             if (oldSoftDelete?.Exists == true)
             {

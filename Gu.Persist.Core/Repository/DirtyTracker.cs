@@ -10,8 +10,8 @@
     public sealed class DirtyTracker : IDirtyTracker
     {
         private readonly ICloner cloner;
-        private readonly ConcurrentDictionary<string, object?> clones = new ConcurrentDictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
-        private readonly object gate = new object();
+        private readonly ConcurrentDictionary<string, object?> clones = new(StringComparer.OrdinalIgnoreCase);
+        private readonly object gate = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DirtyTracker"/> class.

@@ -8,7 +8,7 @@ namespace Gu.Persist.Core
     internal sealed class RenameTransaction : IDisposable
     {
         private readonly IReadOnlyList<RenamePair> pairs;
-        private readonly List<RenamePair<LockedFile>> lockedPairs = new List<RenamePair<LockedFile>>();
+        private readonly List<RenamePair<LockedFile>> lockedPairs = new();
 
         internal RenameTransaction(IReadOnlyList<RenamePair> pairs)
         {
@@ -62,7 +62,7 @@ namespace Gu.Persist.Core
 
         private sealed class RenamePairComparer : IEqualityComparer<RenamePair>
         {
-            internal static readonly RenamePairComparer Default = new RenamePairComparer();
+            internal static readonly RenamePairComparer Default = new();
 
             private static readonly StringComparer StringComparer = StringComparer.OrdinalIgnoreCase;
 

@@ -14,7 +14,7 @@
     {
         private static readonly ComparerData[] ComparerSource =
         {
-            new ComparerData(XmlEqualsComparer<TypicalSetting>.Default, 1000),
+            new(XmlEqualsComparer<TypicalSetting>.Default, 1000),
         };
 
         [TestCaseSource(nameof(ComparerSource))]

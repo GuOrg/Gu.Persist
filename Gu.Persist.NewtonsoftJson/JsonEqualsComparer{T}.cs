@@ -10,7 +10,7 @@
         /// <summary>
         /// Returns the default instance.
         /// </summary>
-        public static new readonly JsonEqualsComparer<T> Default = new JsonEqualsComparer<T>(null);
+        public static new readonly JsonEqualsComparer<T> Default = new(null);
 
         private readonly JsonSerializerSettings? settings;
 

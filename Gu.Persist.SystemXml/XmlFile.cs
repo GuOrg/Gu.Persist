@@ -14,7 +14,7 @@
     /// </summary>
     public static class XmlFile
     {
-        private static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new ConcurrentDictionary<Type, XmlSerializer>();
+        private static readonly ConcurrentDictionary<Type, XmlSerializer> Serializers = new();
 
         /// <summary>
         /// Serializes to <see cref="MemoryStream"/>, then returns the deserialized object.

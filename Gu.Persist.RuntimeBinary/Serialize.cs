@@ -12,7 +12,7 @@
         /// <summary>
         /// The default instance.
         /// </summary>
-        internal static readonly Serialize<TSetting> Default = new Serialize<TSetting>();
+        internal static readonly Serialize<TSetting> Default = new();
 
         /// <inheritdoc/>
         public override Stream ToStream<T>(T item, TSetting setting)

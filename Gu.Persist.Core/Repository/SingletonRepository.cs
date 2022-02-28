@@ -12,8 +12,8 @@
     public abstract class SingletonRepository<TSetting> : Repository<TSetting>, ISingletonRepository
         where TSetting : IRepositorySettings
     {
-        private readonly object gate = new object();
-        private readonly FileCache fileCache = new FileCache();
+        private readonly object gate = new();
+        private readonly FileCache fileCache = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingletonRepository{TSetting}"/> class.

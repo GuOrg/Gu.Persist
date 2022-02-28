@@ -10,7 +10,7 @@
         /// <summary>
         /// The default instance.
         /// </summary>
-        public static new readonly DirectoryInfoComparer Default = new DirectoryInfoComparer();
+        public static new readonly DirectoryInfoComparer Default = new();
         private static readonly StringComparer OrdinalIgnoreCaseComparer = StringComparer.OrdinalIgnoreCase;
         private static readonly char[] BackSlash = { '\\' };
 
