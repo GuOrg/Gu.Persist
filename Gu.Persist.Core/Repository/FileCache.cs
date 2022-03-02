@@ -18,7 +18,7 @@
         /// </summary>
         /// <typeparam name="T">The type of <paramref name="cached"/>.</typeparam>
         /// <param name="fullFileName">The file name.</param>
-        /// <param name="cached">The cahced instance.</param>
+        /// <param name="cached">The cached instance.</param>
         /// <returns>True if a cached instance for a <paramref name="fullFileName"/> exists.</returns>
         public bool TryGetValue<T>(string fullFileName, [MaybeNullWhen(false)] out T cached)
         {
