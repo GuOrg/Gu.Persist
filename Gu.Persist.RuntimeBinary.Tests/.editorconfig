@@ -10,3 +10,6 @@ dotnet_diagnostic.CA2300.severity = none
 
 # CA2301: Do not call BinaryFormatter.Deserialize without first setting BinaryFormatter.Binder
 dotnet_diagnostic.CA2301.severity = none
+
+# SYSLIB0011: Type or member is obsolete
+dotnet_diagnostic.SYSLIB0011.severity = none

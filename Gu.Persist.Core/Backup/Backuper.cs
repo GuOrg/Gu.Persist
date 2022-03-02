@@ -204,20 +204,20 @@
                 }
             }
 
-            if (this.Setting.MaxAgeInDays > 0 && this.Setting.MaxAgeInDays < int.MaxValue)
+            if (this.Setting.MaxAgeInDays is > 0 and < int.MaxValue)
             {
                 // this is not efficient but the number of backups should be low
                 while (true)
                 {
-                    var backupToBurge = allBackups.MinBy(x => x.TimeStamp);
-                    var days = (DateTime.Now - backupToBurge.TimeStamp).Days;
+                    var backupToPurge = allBackups.MinBy(x => x.TimeStamp);
+                    var days = (DateTime.Now - backupToPurge.TimeStamp).Days;
                     if (days < this.Setting.MaxAgeInDays)
                     {
                         break;
                     }
 
-                    backupToBurge.File.HardDelete();
-                    allBackups.Remove(backupToBurge);
+                    backupToPurge.File.HardDelete();
+                    allBackups.Remove(backupToPurge);
                 }
             }
         }

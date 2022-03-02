@@ -14,7 +14,7 @@ namespace Gu.Persist.Core.Tests.Backup
     {
         private static readonly DirectoryInfo Directory = Directories.TempDirectory
                                                                      .CreateSubdirectory("Gu.Persist.Tests")
-                                                                     .CreateSubdirectory(typeof(BackuperTests).FullName);
+                                                                     .CreateSubdirectory(typeof(BackuperTests).FullName!);
 
         [SetUp]
         public static void SetUp()

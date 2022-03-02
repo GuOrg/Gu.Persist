@@ -62,7 +62,7 @@
         {
             this.file.Refresh();
             this.fileExistedBefore = this.file.Exists;
-            this.file.Directory.CreateIfNotExists();
+            this.file.Directory!.CreateIfNotExists();
             this.lockedFile?.Dispose();
             this.lockedFile = LockedFile.Create(this.file, x => x.Open(FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Delete));
             this.lockedSoftDelete?.Dispose();

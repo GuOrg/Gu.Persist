@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -103,9 +104,9 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (this.fileCache.TryGetValue(file.FullName, out T value))
+            if (this.fileCache.TryGetValue(file.FullName, out T? value))
             {
-                return value;
+                return value ?? throw new InvalidOperationException("cached was null");
             }
 
             // can't await  inside the lock.
@@ -115,9 +116,9 @@
 
             lock (this.gate)
             {
-                if (this.fileCache.TryGetValue(file.FullName, out T cached))
+                if (this.fileCache.TryGetValue(file.FullName, out T? cached))
                 {
-                    return cached;
+                    return cached ?? throw new InvalidOperationException("cached was null");
                 }
 
                 this.fileCache.Add(file.FullName, value);
@@ -174,16 +175,16 @@
                 throw new ArgumentNullException(nameof(file));
             }
 
-            if (this.fileCache.TryGetValue(file.FullName, out T value))
+            if (this.fileCache.TryGetValue(file.FullName, out T? value))
             {
-                return value;
+                return value ?? throw new InvalidOperationException("cached was null");
             }
 
             lock (this.gate)
             {
                 if (this.fileCache.TryGetValue(file.FullName, out value))
                 {
-                    return value;
+                    return value ?? throw new InvalidOperationException("cached was null");
                 }
 
                 value = base.ReadCore<T>(file, migration);

@@ -59,7 +59,9 @@
         {
             unchecked
             {
+#pragma warning disable CA1307 // Specify StringComparison for clarity
                 return (this.Directory.GetHashCode() * 397) ^ this.Extension.GetHashCode();
+#pragma warning restore CA1307 // Specify StringComparison for clarity
             }
         }
     }
