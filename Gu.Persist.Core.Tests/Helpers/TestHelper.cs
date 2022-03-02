@@ -15,6 +15,7 @@
         }
 
         public static void Save<T>(this FileInfo file, T o)
+            where T : notnull
         {
             var formatter = new BinaryFormatter();
 

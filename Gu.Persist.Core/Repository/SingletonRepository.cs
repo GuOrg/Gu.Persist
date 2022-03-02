@@ -228,7 +228,7 @@
                 throw new ArgumentNullException(nameof(item));
             }
 
-            if (this.fileCache.TryGetValue(file.FullName, out T cached))
+            if (this.fileCache.TryGetValue(file.FullName, out T? cached))
             {
                 if (!ReferenceEquals(item, cached))
                 {
