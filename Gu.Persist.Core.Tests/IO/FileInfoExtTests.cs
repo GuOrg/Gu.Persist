@@ -21,7 +21,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void ChangeExtension(string extension)
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             var file = directory.CreateFileInfoInDirectory(nameof(this.ChangeExtension) + ".cfg");
             var newFile = file.WithNewExtension(extension);
             var expected = directory.CreateFileInfoInDirectory(nameof(this.ChangeExtension) + ".bak");
@@ -33,7 +33,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void AppendExtension(string extension)
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             var file = directory.CreateFileInfoInDirectory(nameof(this.AppendExtension) + ".cfg");
             var newFile = file.WithAppendedExtension(extension);
             var expected = directory.CreateFileInfoInDirectory(nameof(this.AppendExtension) + ".cfg.delete");
@@ -47,7 +47,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void RemoveExtension(string extension)
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             if (extension.EndsWith("cfg", StringComparison.Ordinal))
             {
                 var file = directory.CreateFileInfoInDirectory(nameof(this.AppendExtension) + ".cfg");
@@ -71,7 +71,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void WithNewNameTimeStamped(string oldName, string newName, string expected)
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
             var oldFile = directory.CreateFileInfoInDirectory(oldName);
             var newFile = oldFile.WithNewName(newName, settings);
@@ -87,7 +87,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void WithNewNameNoTimestampBackup(string oldName, string newName, string expected)
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             var settings = new BackupSettings(directory.FullName, ".bak", null, 1, int.MaxValue);
             var oldFile = directory.CreateFileInfoInDirectory(oldName);
             var newFile = oldFile.WithNewName(newName, settings);
@@ -102,7 +102,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void WithNewNameNoTimestamp(string oldName, string newName, string expected)
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             var settings = new FileSettings(directory.FullName, ".cfg");
             var oldFile = directory.CreateFileInfoInDirectory(oldName);
             var newFile = oldFile.WithNewName(newName, settings);
@@ -114,7 +114,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void AddTimeStamp()
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
             var time = new DateTime(2015, 06, 14, 16, 54, 12);
             var file = directory.CreateFileInfoInDirectory(nameof(this.AddTimeStamp) + ".cfg");
@@ -127,7 +127,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void GetTimeStamp()
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             var file = directory.CreateFileInfoInDirectory(nameof(this.AddTimeStamp) + ".2015_06_14_16_54_12.bak");
             var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
             var actual = file.GetTimeStamp(settings);
@@ -139,7 +139,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void TimeStampRoundtrip()
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
             var file = directory.CreateFileInfoInDirectory(nameof(this.TimeStampRoundtrip) + ".bak");
             var time = new DateTime(2015, 06, 14, 16, 54, 12);
@@ -155,7 +155,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void TimeStampRoundtrip2()
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
             var file = directory.CreateFileInfoInDirectory(nameof(this.TimeStampRoundtrip) + ".bak");
             var time = new DateTime(2015, 06, 14, 16, 54, 12);
@@ -171,7 +171,7 @@ namespace Gu.Persist.Core.Tests.IO
         public void RemoveTimeStamp()
         {
             var directory = Directories.TempDirectory.CreateSubdirectory("Gu.Persist.Tests")
-                                       .CreateSubdirectory(this.GetType().FullName);
+                                       .CreateSubdirectory(this.GetType().FullName!);
             var settings = new BackupSettings(directory.FullName, ".bak", BackupSettings.DefaultTimeStampFormat, 3, int.MaxValue);
             var file = directory.CreateFileInfoInDirectory(nameof(this.TimeStampRoundtrip) + ".2015_06_14_16_54_12.bak");
 

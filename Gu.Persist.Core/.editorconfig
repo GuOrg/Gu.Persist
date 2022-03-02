@@ -5,3 +5,6 @@ dotnet_diagnostic.SA1633.severity = none
 
 # CA1825: Avoid zero-length array allocations
 dotnet_diagnostic.CA1825.severity = none
+
+# SYSLIB0003: Type or member is obsolete
+dotnet_diagnostic.SYSLIB0003.severity = none
