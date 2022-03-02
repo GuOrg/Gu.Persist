@@ -1,1 +1,1 @@
-﻿Gu.Persist.Core.TempFileSettings.TempFileSettings() -> void
+﻿

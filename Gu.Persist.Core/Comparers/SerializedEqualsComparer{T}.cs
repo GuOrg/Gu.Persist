@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// A base class for comparers using serialization.
@@ -11,7 +10,7 @@
     public abstract class SerializedEqualsComparer<T> : EqualityComparer<T>
     {
         /// <inheritdoc />
-        public override bool Equals([AllowNull] T x, [AllowNull] T y)
+        public override bool Equals(T? x, T? y)
         {
             if (x is null && y is null)
             {
