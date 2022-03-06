@@ -69,7 +69,7 @@
             ////Console.Write(xml);
             using var stringReader = new StringReader(xml);
             using var xmlReader = XmlReader.Create(stringReader);
-            var roundtripped = (DataRepositorySettings)serializer.Deserialize(xmlReader);
+            var roundtripped = (DataRepositorySettings?)serializer.Deserialize(xmlReader);
             AssertProperties(settings, roundtripped);
         }
 
@@ -94,7 +94,7 @@
             ////Console.Write(xml);
             using var stringReader = new StringReader(xml);
             using var xmlReader = XmlReader.Create(stringReader);
-            var roundtripped = (DataRepositorySettings)serializer.Deserialize(xmlReader);
+            var roundtripped = (DataRepositorySettings?)serializer.Deserialize(xmlReader);
             AssertProperties(settings, roundtripped);
         }
 

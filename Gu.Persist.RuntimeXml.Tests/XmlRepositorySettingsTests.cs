@@ -51,7 +51,7 @@
             using Stream stream = PooledMemoryStream.Borrow();
             serializer.WriteObject(stream, settings);
             stream.Position = 0;
-            var roundtripped = (RepositorySettings)serializer.ReadObject(stream);
+            var roundtripped = (RepositorySettings?)serializer.ReadObject(stream);
             AssertProperties(settings, roundtripped);
         }
 
@@ -68,7 +68,7 @@
             using Stream stream = PooledMemoryStream.Borrow();
             serializer.WriteObject(stream, settings);
             stream.Position = 0;
-            var roundtripped = (RepositorySettings)serializer.ReadObject(stream);
+            var roundtripped = (RepositorySettings?)serializer.ReadObject(stream);
             AssertProperties(settings, roundtripped);
         }
 
