@@ -59,7 +59,7 @@ namespace Gu.Persist.Core.Tests.IO
             {
                 var file = directory.CreateFileInfoInDirectory(nameof(this.AppendExtension) + ".cfg");
                 var exception = Assert.Throws<ArgumentException>(() => file.WithRemovedExtension(extension));
-                Assert.AreEqual("Fail\r\nParameter name: extension", exception!.Message);
+                Assert.AreEqual("Fail (Parameter 'extension')", exception!.Message);
             }
         }
 
